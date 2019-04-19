@@ -30,13 +30,13 @@
 				</swiper>
 			</uni-swiper-dot>
 		</view>
-		<view class="m-container m-hotsell">
+		<view class="m-container">
 			<m-title title="超值热卖" @titleHandle="titleHandle">
 				<view slot="right" class="">
 					换一换
 				</view>
 			</m-title>
-			<view class="m-content">
+			<view class="m-content m-hotsell">
 				<m-home-pro></m-home-pro>
 				<m-home-pro></m-home-pro>
 				<m-home-pro></m-home-pro>
@@ -52,8 +52,9 @@
 				</view>
 			</m-title>
 			<!-- <view class="m-content m-togethoer"> -->
-				<scroll-view class="scroll-view_H" scroll-x="true" @scroll="rowScroll" scroll-left="120">
-					<view class="m-content m-togethoer">
+			<view class="m-content">
+				<scroll-view class="scroll-view" scroll-x="true" @scroll="rowScroll" scroll-left="120">
+					<view class="m-togethoer">
 					<m-home-pro></m-home-pro>
 					<m-home-pro></m-home-pro>
 					<m-home-pro></m-home-pro>
@@ -62,6 +63,7 @@
 					<m-home-pro></m-home-pro>
 					</view>
 				</scroll-view>
+			</view>
 			<!-- </view> -->
 		</view>
 		<view class="m-container">
@@ -70,13 +72,9 @@
 					查看全部>>
 				</view>
 			</m-title>
-			<view class="m-content">
-				<m-home-pro></m-home-pro>
-				<m-home-pro></m-home-pro>
-				<m-home-pro></m-home-pro>
-				<m-home-pro></m-home-pro>
-				<m-home-pro></m-home-pro>
-				<m-home-pro></m-home-pro>
+			<view class="m-content m-store">
+				<m-home-store></m-home-store>
+				<m-home-store></m-home-store>
 			</view>
 		</view>
 		
@@ -88,6 +86,7 @@
 	import uniSwiperDot from '@/components/uni-swiper-dot/uni-swiper-dot'
 	import mTitle from '@/components/m-title'
 	import mHomePro from '@/components/m-home-pro'
+	import mHomeStore from '@/components/m-home-store'
 	export default {
 		data() {
 			return {
@@ -110,7 +109,8 @@
 		components: {
 			uniSwiperDot,
 			mTitle,
-			mHomePro
+			mHomePro,
+			mHomeStore
 		},
 		methods:{
 			//搜索跳转
@@ -478,15 +478,31 @@ page{position: relative;}
 		}
 	}
 }
+.scroll-view{
+	// padding: 10upx;
+}
 .m-content{
-	display: flex;
-	flex-direction: row;
+	
+	
+	padding: 20upx;
+	box-sizing: border-box;
+	// overflow: hidden
 	// 热
 	&.m-hotsell{
+		display: flex;
 		flex-wrap: wrap;
+		flex-direction: row;
+	}
+	&.m-store{
+		
+		display: block;
+		// flex-wrap: nowrap;
 	}
 	// 拼
-	&.m-togethoer{
+	.m-togethoer{
+		display: flex;
+		display: flex;
+		flex-direction: row;
 		flex-wrap: nowrap;
 	}
 }

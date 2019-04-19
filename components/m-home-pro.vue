@@ -1,4 +1,5 @@
 <template>
+	<!-- 首页产品图文 -->
 	<view class="m-pro-item">
 		<view class="m-img">
 			<!-- <image src=""></image> -->
@@ -30,8 +31,9 @@
 .m-pro-item{
 	display: flex;
 	flex-direction: column;
-	min-width: 214upx;
-	margin-left: 30upx;
+	min-width: 215upx;
+	margin-left: 8upx;
+	margin-right: 8upx;
 	margin-bottom: 30upx;
 	box-shadow: 0px 1px 3px rgba(0,0,0,0.1);
 	padding: 20upx;
