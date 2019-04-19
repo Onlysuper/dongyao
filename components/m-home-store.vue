@@ -2,21 +2,21 @@
 	<!-- 首页门店图文 -->
 	<view class="m-store-item">
 		<view class="m-img">
-			<!-- <image src=""></image> -->
+			<image style="width: 100%;height: 100%;" :src="rowData.img" mode="aspectFit"></image>
 		</view>
 		<view class="m-text">
 			<view class="m-title">
-				东尧蔬菜001号（中关村店）
+				{{rowData.title}}
 			</view>
 			<view class="m-discount">
-				 买就送  优惠多多
+				{{rowData.describel}}
 			</view>
 			<view class="m-address">
-				北京市海淀区中关村大街15号
+				{{rowData.address}}
 			</view>
 		</view>
 		<view class="m-distance">
-			1.3km
+			{{rowData.distance}}
 		</view>
 	</view>
 </template>
@@ -24,6 +24,21 @@
 <script>
 	export default {
 		name:"m-home-store",
+		props:{
+			rowData:{
+				type:Object,
+				 // 对象或数组默认值必须从一个工厂函数获取
+				default: function () {
+					return { 
+						img:"",
+						title:"",
+						distance:"",
+						describel:"",
+						address:"",
+					}
+				}
+			}
+		},
 		data() {
 			return {
 				
@@ -41,8 +56,8 @@
 	align-items: center;
 	margin-bottom: 20upx;
 	.m-img{
-		flex: 0 0 200upx;
-		height: 200upx;
+		flex: 0 0 120upx;
+		height: 120upx;
 		background: #eee;
 	}
 	.m-text{

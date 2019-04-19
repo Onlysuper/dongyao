@@ -12,7 +12,8 @@
 	}
 </script>
 
-<style>
-	
-	/*每个页面公共css */
+<style lang="scss">
+	body {
+		font-family: -apple-system-font,Helvetica Neue,Helvetica,sans-serif;
+	}
 </style>

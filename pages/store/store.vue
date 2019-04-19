@@ -52,11 +52,8 @@
 			<scroll-view  scroll-y="true" class="right" >
 			    <view class="category" v-for="(category,index) in categoryList" :key="category.id" v-show="index==showCategoryIndex" >
 					<view class="list">
-						<view class="box" v-for="(box,i) in category.list" :key="i" @tap="toCategory(box)">
-							<!-- {{box}} -->
-							<m-store-pro :rowData="box"></m-store-pro>
-							<!-- <image :src="'../../static/img/category/list/'+box.img"></image>
-							<view class="text">{{box.name}}</view> -->
+						<view class="box" v-for="(box,i) in category.list" :key="i" @tap="goDetail(box)">
+							<m-store-pro  :rowData="box"></m-store-pro>
 						</view>
 					</view>
 				</view>
@@ -178,6 +175,12 @@
 			specCallback(){
 				return;
 			},
+			goDetail(pro){
+				// 跳转商品详情
+				uni.navigateTo({
+					url:"/pages/product/product"
+				})
+			}
 		},
 	}
 </script>

@@ -4,7 +4,11 @@
 			{{title}}
 		</view>
 		<view class="m-right" @click="titleHandle">
-			<slot name="right"></slot>
+			<slot name='leftIcon'></slot>
+			<view :style="{color:labelColor?labelColor:'#999999'}">
+				{{label}}
+			</view>
+			<slot name='rightIcon'></slot>
 		</view>
 	</view>
 </template>
@@ -14,6 +18,14 @@
 		name:"m-title",
 		props:{
 			title:{
+				type:String,
+				value:"",
+			},
+			label:{
+				type:String,
+				value:"",
+			},
+			labelColor:{
 				type:String,
 				value:"",
 			}
@@ -38,11 +50,16 @@
 	display: flex;
 	justify-content: space-between;
 	.m-title{
+		color:#333333;
 		font-size: 32upx;
 	}
 	.m-right{
+		display: flex;
 		font-size: 24upx;
-		color:#b5b5b5
+		color:#666;
+		cursor: pointer;
+		justify-content: center;
+		align-items: center;
 	}
 }
 </style>

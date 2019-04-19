@@ -1,6 +1,8 @@
 <template>
 	<view @click="goStore" class="m-store-list">
-		<m-home-store></m-home-store>
+		<template v-for="(item,index) in nearStoreList">
+			<m-home-store :key="index" :rowData="item"></m-home-store>
+		</template>
 	</view>
 </template>
 <script>
@@ -9,12 +11,19 @@
 	export default {
 		data() {
 			return {
-				
+				// 附近门店
+				nearStoreList:[{
+					img:"../../static/img/2.jpg",
+					title:"老萌1号店",
+					distance:"13km",
+					describel:"优惠优惠优惠",
+					address:"北京市海淀区中关村大街15号"
+				}]
 			}
 		},
 		methods:{
+				//跳转到商家
 				goStore(){
-					console.log(111);
 					uni.navigateTo({
 						url:"/pages/store/store"
 					})
