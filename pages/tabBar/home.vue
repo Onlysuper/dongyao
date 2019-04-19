@@ -5,8 +5,8 @@
 		<!-- 顶部导航栏 -->
 		<view class="header" :style="{ position: headerPosition,top:headerTop,opacity: afterHeaderOpacity }">
 			<!-- 定位城市 -->
-			<view class="addr">
-				<view class="icon location"></view>
+			<view class="addr" @tap="choseStore">
+				<view  class="icon location"></view>
 				请选择门店
 			</view>
 			<!-- 搜索框 -->
@@ -116,6 +116,13 @@
 			//搜索跳转
 			toSearch() {
 				uni.showToast({ title: '建议跳转到新页面做搜索功能' });
+			},
+			// 选择门店
+			choseStore(){
+			
+				uni.navigateTo({
+					url:"/pages/store/list"
+				})
 			},
 			swiperChange(e) {
 				this.current = e.detail.current;
@@ -482,11 +489,8 @@ page{position: relative;}
 	// padding: 10upx;
 }
 .m-content{
-	
-	
 	padding: 20upx;
 	box-sizing: border-box;
-	// overflow: hidden
 	// 热
 	&.m-hotsell{
 		display: flex;
