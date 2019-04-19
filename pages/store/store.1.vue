@@ -67,28 +67,6 @@
 							清空购物车
 						</view>
 					</view>
-					<view class="m-shopcar-item">
-						<view class="m-title">
-							无公害小油菜/500g
-						</view>
-						<view class="m-price">
-							￥12.99
-						</view>
-						<view class="m-controne">
-							<uni-number-box :min="0" :max="9"></uni-number-box>
-						</view>
-					</view>
-					<view class="m-shopcar-item">
-						<view class="m-title">
-							无公害小油菜/500g
-						</view>
-						<view class="m-price">
-							￥12.99
-						</view>
-						<view class="m-controne">
-							<uni-number-box :min="0" :max="9"></uni-number-box>
-						</view>
-					</view>
 				</view>
 				<m-shop-car @handleFn="showSpec(false)" :price="'￥30.97'" :num="'10'"></m-shop-car>
 			</view>

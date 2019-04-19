@@ -2,24 +2,24 @@
 	<!-- 门店商品图文 -->
 	<view class="m-store-item">
 		<view class="m-img">
-			<!-- <image src=""></image> -->
+			<image style="width: 100%;height: 100%;" :src="rowData.img" mode="aspectFit"></image>
 		</view>
 		<view class="m-text">
 			<view class="m-title">
-				{{rowData}}
+				{{rowData.name}}
 			</view>
-			<view class="m-discount">
-				精品秋葵600g
+			<view class="m-descripe">
+				{{rowData.descripe}}
 			</view>
-			<view class="m-prece">
-				￥9.99
+			<view class="m-price">
+				{{rowData.price}}
 			</view>
-			<view class="m-address">
-				非会员价￥9.99
+			<view class="m-old-price">
+				非会员价{{rowData.oldPrice}}
 			</view>
 		</view>
 		<view class="m-distance">
-			1.3km
+			<image style="width:40upx;height: 40upx;" src="../../static/img/icon/shop_icon_buy.png" mode="aspectFit"></image>
 		</view>
 	</view>
 </template>
@@ -46,28 +46,33 @@
 	display: flex;
 	flex-direction: row;
 	width: 100%;
-	justify-content: center;
-	align-items: center;
-	margin-bottom: 20upx;
+	justify-content: space-between;
+	align-items: flex-end;
+	margin-top: 30upx;
+	margin-bottom: 30upx;
 	.m-img{
-		flex: 0 0 100upx;
-		height: 100upx;
+		flex: 0 0 170upx;
+		height: 170upx;
 		background: #eee;
 	}
 	.m-text{
 		flex:1;
 		padding: 0 20upx;
 		.m-title{
-			font-size: 32upx;
-			color:#333333;
-		}
-		.m-discount{
-			font-size: 20upx;
-			color:#808080;
-		}
-		.m-address{
 			font-size: 24upx;
-			color:#808080;
+			color:#4c4c4c;
+		}
+		.m-descripe{
+			font-size: 18upx;
+			color:#999999;
+		}
+		.m-price{
+			font-size: 24upx;
+			color:#ff582b
+		}
+		.m-old-price{
+			font-size: 18upx;
+			color:#999999;
 		}
 	}
 	.m-distance{
