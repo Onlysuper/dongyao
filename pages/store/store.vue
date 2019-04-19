@@ -4,7 +4,6 @@
 			<view class="m-content">
 				<view class="m-message">
 					<view class="m-img">
-						
 					</view>
 					<view class="m-body">
 						<view class="m-title">
@@ -18,25 +17,11 @@
 						</view>
 					</view>
 					<view class="m-phone">
-						图标
+						<image style="width: 40upx;height:40upx;" src="../../static/img/icon/shop_icon_phone.png" mode="aspectFit"></image>
 					</view>
 				</view>
 			</view>
 		</view>
-		<!-- 状态栏 -->
-		<!-- <view class="status" :style="{position:headerPosition}"></view>
-		<view class="header" :style="{position:headerPosition}">
-			<view class="addr"><view class="icon location"></view>{{city}}</view>
-			<view class="input-box">
-				<input placeholder="默认关键字" placeholder-style="color:#c0c0c0;" @tap="toSearch()"/>
-				<view class="icon search"></view>
-			</view>
-			<view class="icon-btn">
-				<view class="icon tongzhi" @tap="toMsg"></view>
-			</view>
-		</view> -->
-		<!-- 占位 -->
-		<!-- <view class="place"></view> -->
 		<view class="category-list">
 			<!-- 左侧分类导航 -->
 			<scroll-view  scroll-y="true" class="left" >
@@ -53,58 +38,77 @@
 			    <view class="category" v-for="(category,index) in categoryList" :key="category.id" v-show="index==showCategoryIndex" >
 					<view class="list">
 						<view class="box" v-for="(box,i) in category.list" :key="i" @tap="goDetail(box)">
-							<m-store-pro  :rowData="box"></m-store-pro>
+							<m-store-pro :rowData="box"></m-store-pro>
 						</view>
 					</view>
 				</view>
 			</scroll-view>
 		</view>
 	
-		<view class="m-footer">
-			<view @tap="showSpec(false)" class="m-icon">
-				购物车
-			</view>
-			<view class="m-price">
-				￥30.97
-			</view>
-			<view class="">
-				选好了
-			</view>
-		</view>
+		<m-shop-car @handleFn="showSpec(false)"  :price="carPrice" :num="carNum"></m-shop-car>
 		
+		{{carNum}}
 		<!-- 规格-模态层弹窗 -->
 		<view class="popup spec" :class="specClass" @touchmove.stop.prevent="discard" @tap="hideSpec">
 			<!-- 遮罩层 -->
 			<view class="mask"></view>
 			<view class="layer" @tap.stop="discard">
-				<view class="content">
-					feawfewa
-					feawfewa
+				<view class="m-shopcar-box">
+					<view class="m-header">
+						<view class="m-line">
+							<view class="">
+								购物车
+							</view>
+							<view class="m-light">
+								共5件商品
+							</view>
+						</view>
+						<view class="m-clear-car">
+							清空购物车
+						</view>
+					</view>
+					<view class="m-shopcar-item">
+						<view class="m-title">
+							无公害小油菜/500g
+						</view>
+						<view class="m-price">
+							￥12.99
+						</view>
+						<view class="m-controne">
+							<uni-number-box :min="0" :max="9"></uni-number-box>
+						</view>
+					</view>
+					<view class="m-shopcar-item">
+						<view class="m-title">
+							无公害小油菜/500g
+						</view>
+						<view class="m-price">
+							￥12.99
+						</view>
+						<view class="m-controne">
+							<uni-number-box :min="0" :max="9"></uni-number-box>
+						</view>
+					</view>
 				</view>
-				<view class="m-footer">
-					<view @tap="showSpec(false)" class="m-icon">
-						购物车
-					</view>
-					<view class="m-price">
-						￥30.97
-					</view>
-					<view class="">
-						选好了
-					</view>
-				</view>
+				<m-shop-car @handleFn="showSpec(false)" :price="'￥30.97'" :num="'10'"></m-shop-car>
 			</view>
 		</view>
 	</view>
 </template>
 <script>
 	import mStorePro from '@/components/m-store-pro'
-	
+	import mShopCar from '@/components/m-shop-car'
+	import uniNumberBox from "@/components/uni-number-box/uni-number-box.vue"
 	export default {
 		components:{
-			mStorePro
+			mStorePro,
+			mShopCar,
+			uniNumberBox
 		},
 		data() {
 			return {
+				carPrice:"10",
+				carNum:"10",
 				specClass: '',//规格弹窗css类，控制开关动画
 				showCategoryIndex:0,
 				//分类列表
@@ -180,6 +184,9 @@
 				uni.navigateTo({
 					url:"/pages/product/product"
 				})
+			},
+			discard(){
+				
 			}
 		},
 	}
@@ -242,7 +249,7 @@
 					display: flex;
 					flex-direction: row;
 					justify-content: space-between;
-					align-items: center;
+					align-items: flex-end;
 					.m-img{
 						flex:0 0 180upx;
 						height: 180upx;
@@ -250,6 +257,7 @@
 					}
 					.m-body{
 						padding: 20upx;
+						padding-bottom: 0;
 						.m-title{
 							font-size: 32upx;
 							color:#333333
@@ -274,20 +282,6 @@
 				}
 			}
 		}
-		// 底部
-		.m-footer {
-			position: fixed;
-			bottom: 0upx;
-			width: 92%;
-			padding: 0 4%;
-			height: 99upx;
-			border-top: solid 1upx #eee;
-			background-color: #fff;
-			z-index: 2;
-			display: flex;
-			justify-content: space-between;
-			align-items: center;
-		}
 	}
 	.popup {
 		position: fixed;
@@ -308,17 +302,62 @@
 			position: fixed;
 			z-index: 22;
 			bottom: -70%;
-			width: 92%;
-			padding: 0 4%;
+			width: 100%;
+			padding: 0;
 			height: 70%;
 			border-radius: 20upx 20upx 0 0;
 			background-color: #fff;
 			display: flex;
 			flex-wrap: wrap;
 			align-content: space-between;
-			.content {
+			// 购物车
+			.m-shopcar-box {
 				width: 100%;
-				padding: 20upx 0;
+				// padding: 30upx 0;
+				.m-header{
+					padding: 30upx 30upx;
+					display: flex;
+					flex-direction: row;
+					justify-content: space-between;
+					.m-line{
+						display: flex;
+						color:#333333;
+						font-size: 30upx;
+						.m-light{
+							color:#333333;
+							font-size: 22upx;
+							padding-left: 10upx;
+						}
+					}
+					.m-clear-car{
+						color:#333333;
+						font-size:22upx;
+					}
+				}
+				.m-shopcar-item{
+					margin-left: 30upx;
+					margin-right: 30upx;
+					display: flex;
+					flex-direction: row;
+					justify-content: space-between;
+					align-items:center;
+					border-top: 1px solid #eee;
+					padding: 20upx;
+					&:last-of-type{
+						border-bottom: 1px solid #eee;
+					}
+					.m-title{
+						color:#4c4c4c;
+						font-size: 26upx;
+					}
+					.m-price{
+						color:#ff582b;
+						font-size: 26upx;
+					}
+					.m-controne{
+						// flex: 
+					}
+				}
 			}
 			.btn {
 				width: 100%;
