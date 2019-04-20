@@ -18,7 +18,7 @@
 					placeholder-style="color:#c0c0c0;"
 					@tap="toSearch()"
 				/>
-				<view class="icon search"></view>
+				<image class="icon" style="width:13px;height:100%" src="../../static/img/icon/home_icon_search.png" mode="aspectFit"></image>
 			</view>
 		</view>
 		<!-- 占位 -->
@@ -34,7 +34,7 @@
 		</view>
 		<view class="m-container">
 			<m-title title="超值热卖" labelColor="#666666" label="换一换" @titleHandle="titleHandle">
-					<image slot="leftIcon" style="width:30upx;height:20upx;margin-right:10upx;" src="../../static/img/icon/home_icon_refresh.png" mode="aspectFit"></image>
+					<image style="width:30upx;height:20upx;margin-right:10upx;" src="../../static/img/icon/home_icon_refresh.png" mode="aspectFit"></image>
 			</m-title>
 			<view class="m-content m-hotsell">
 				<template v-for="(item,index) in hotProList">
@@ -43,7 +43,7 @@
 			</view>
 		</view>
 		<view class="m-container">
-			<m-title title="今日必拼" label="查看详情 >" @titleHandle="titleHandle"></m-title>
+			<m-title title="今日必拼" label="查看详情 >" @titleHandle="pintuanHandle"></m-title>
 			<view class="m-content">
 				<scroll-view class="scroll-view" scroll-x="true" @scroll="rowScroll" scroll-left="120">
 					<view class="m-togethoer">
@@ -55,10 +55,10 @@
 			</view>
 		</view>
 		<view class="m-container">
-			<m-title title="附近门店" label="查看全部 >" @titleHandle="titleHandle"></m-title>
+			<m-title title="附近门店" label="查看全部 >" @titleHandle="storeHandle"></m-title>
 			<view class="m-content m-store">
 				<template v-for="(item,index) in nearStoreList">
-					<m-home-store :key="index" :rowData="item"></m-home-store>
+					<m-home-store :tips="item.tips" :key="index" :rowData="item"></m-home-store>
 				</template>
 			</view>
 		</view>
@@ -114,7 +114,8 @@
 					title:"老萌1号店",
 					distance:"13km",
 					describel:"优惠优惠优惠",
-					address:"北京市海淀区中关村大街15号"
+					address:"北京市海淀区中关村大街15号",
+					tips:['优惠']
 				}],
 				current: 0,
 				mode: 'long',
@@ -145,6 +146,18 @@
 			},
 			rowScroll(e){
 				 // this.old.scrollTop = e.detail.scrollTop
+			},
+			// 拼团
+			pintuanHandle(){
+				uni.navigateTo({
+					url:"/pages/groupbuy/groupbuy"
+				})
+			},
+			//附近门店
+			storeHandle(){
+				uni.navigateTo({
+					url:"/pages/store/list"
+				})
 			}
 		}
 	}
@@ -210,7 +223,7 @@
 .header {
 	box-sizing: border-box;
 	width: 100%;
-	padding: 0 30upx;
+	padding: 0 20upx;
 	height: 100upx;
 	display: flex;
 	align-items: center;
@@ -224,7 +237,7 @@
 	/*  #endif  */
 
 	.addr {
-		margin-right: 30upx;
+		margin-right: 20upx;
 		// width: 120upx;
 		height: 60upx;
 		flex-shrink: 0;
@@ -479,7 +492,7 @@
 .scroll-view{
 }
 .m-content{
-	padding: 20upx;
+	padding: 10upx;
 	padding-top: 0;
 	box-sizing: border-box;
 	// 热

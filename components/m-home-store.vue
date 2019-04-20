@@ -9,6 +9,10 @@
 				{{rowData.title}}
 			</view>
 			<view class="m-discount">
+				<view v-for="(item,index) in tips" :key="index" class="m-tip">
+					{{item}}
+				</view>
+				<slot name="tip"></slot>
 				{{rowData.describel}}
 			</view>
 			<view class="m-address">
@@ -37,6 +41,12 @@
 						address:"",
 					}
 				}
+			},
+			tips:{
+				type:Array,
+				default:function () {
+					return []
+				}
 			}
 		},
 		data() {
@@ -51,10 +61,12 @@
 .m-store-item{
 	display: flex;
 	flex-direction: row;
-	width: 100%;
+	// width: 100%;
 	justify-content: center;
 	align-items: center;
 	margin-bottom: 20upx;
+	margin-left: 10upx;
+	margin-right: 10upx;
 	.m-img{
 		flex: 0 0 120upx;
 		height: 120upx;
@@ -70,9 +82,20 @@
 		.m-discount{
 			font-size: 20upx;
 			color:#808080;
+			margin-top: 8upx;
+			display: flex;
+			flex-direction: row;
+			.m-tip{
+				background:#ffddb9;
+				color:#fe8d4e;
+				padding:0 10upx;
+				border-radius: 5upx;
+				margin-right: 5upx;
+			}
 		}
 		.m-address{
 			font-size: 24upx;
+			margin-top: 15upx;
 			color:#808080;
 		}
 	}

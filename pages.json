@@ -5,6 +5,7 @@
             // 首页
             "path" : "pages/tabBar/home",
             "style" : {
+                "navigationBarTitleText" : "东尧蔬菜",
                 "navigationBarTextStyle" : "black",
                 "enablePullDownRefresh" : true,
                 "onReachBottomDistance" : 50,
@@ -18,6 +19,7 @@
             // 商家列表
             "path" : "pages/store/list",
             "style" : {
+                "navigationBarTitleText" : "东尧蔬菜",
                 "navigationBarTextStyle" : "black",
                 "app-plus" : {
                     "titleNView" : false, //禁用原生导航栏
@@ -29,6 +31,7 @@
             // 商家主页
             "path" : "pages/store/store",
             "style" : {
+                "navigationBarTitleText" : "东尧蔬菜",
                 "navigationBarTextStyle" : "black",
                 "app-plus" : {
                     "titleNView" : false, //禁用原生导航栏
@@ -40,12 +43,31 @@
             // 商家商品
             "path" : "pages/product/product",
             "style" : {
+                "navigationBarTitleText" : "东尧蔬菜",
                 "navigationBarTextStyle" : "black",
                 "app-plus" : {
                     "titleNView" : false, //禁用原生导航栏
                     "bounce" : "none"
                 }
             }
+        },
+        {
+            // 订单--------------------------------
+            "path" : "pages/tabBar/order",
+            "style" : {
+                "navigationBarTitleText" : "东尧蔬菜",
+                "navigationBarTextStyle" : "black",
+                "enablePullDownRefresh" : true,
+                "onReachBottomDistance" : 50,
+                "app-plus" : {
+                    "titleNView" : false, //禁用原生导航栏
+                    "softinputNavBar" : "none"
+                }
+            }
+        },
+        {
+            "path" : "pages/groupbuy/groupbuy",
+            "style" : {}
         }
     ],
     // 	"globalStyle": {
@@ -75,17 +97,18 @@
                 "text" : "首页"
             },
             {
-                "pagePath" : "pages/tabBar/category",
+                "pagePath" : "pages/tabBar/order",
                 "iconPath" : "static/img/tabBar/order.png",
                 "selectedIconPath" : "static/img/tabBar/order-on.png",
                 "text" : "订单"
-            },
-            {
-                "pagePath" : "pages/tabBar/user",
-                "iconPath" : "static/img/tabBar/user.png",
-                "selectedIconPath" : "static/img/tabBar/user-on.png",
-                "text" : "我的"
             }
         ]
     }
 }
+//             {
+//                 "pagePath" : "pages/tabBar/user",
+//                 "iconPath" : "static/img/tabBar/user.png",
+//                 "selectedIconPath" : "static/img/tabBar/user-on.png",
+//                 "text" : "我的"
+//             }
+

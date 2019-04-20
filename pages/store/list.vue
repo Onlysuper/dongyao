@@ -1,12 +1,12 @@
 <template>
 	<view @click="goStore" class="m-store-list">
 		<template v-for="(item,index) in nearStoreList">
-			<m-home-store :key="index" :rowData="item"></m-home-store>
+			<m-store-list :key="index" :rowData="item"></m-store-list>
 		</template>
 	</view>
 </template>
 <script>
-	import mHomeStore from '@/components/m-home-store'
+	import mStoreList from '@/components/m-store-list'
 	
 	export default {
 		data() {
@@ -14,9 +14,17 @@
 				// 附近门店
 				nearStoreList:[{
 					img:"../../static/img/2.jpg",
-					title:"老萌1号店",
-					distance:"13km",
-					describel:"优惠优惠优惠",
+					title:"东尧蔬菜002号（望京店）",
+					address:"北京市海淀区中关村大街15号"
+				},
+				{
+					img:"../../static/img/2.jpg",
+					title:"东尧蔬菜002号（望京店）",
+					address:"北京市海淀区中关村大街15号"
+				},
+				{
+					img:"../../static/img/2.jpg",
+					title:"东尧蔬菜002号（望京店）",
 					address:"北京市海淀区中关村大街15号"
 				}]
 			}
@@ -30,12 +38,12 @@
 				}
 		},
 		components: {
-			mHomeStore
+			mStoreList
 		},
 	}
 </script>
 <style lang="scss">
 	.m-store-list{
-		padding: 30upx;
+		// padding: 30upx;
 	}
 </style>

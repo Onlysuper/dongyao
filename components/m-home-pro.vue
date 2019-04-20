@@ -64,7 +64,8 @@
 	.m-price{
 		display: flex;
 		margin-top: 10upx;
-		
+		justify-content: flex-start;
+		align-items: center;
 		.new{
 			font-size: 26upx;
 			font-weight: bold;

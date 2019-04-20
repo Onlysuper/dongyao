@@ -4,11 +4,13 @@
 			{{title}}
 		</view>
 		<view class="m-right" @click="titleHandle">
-			<slot name='leftIcon'></slot>
+			<!-- <image style="width:30upx;height:20upx;margin-right:10upx;" src="../../static/img/icon/home_icon_refresh.png" mode="aspectFit"></image> -->
+			<slot></slot>
+		 <!-- <slot name="lefticon"></slot> -->
 			<view :style="{color:labelColor?labelColor:'#999999'}">
 				{{label}}
 			</view>
-			<slot name='rightIcon'></slot>
+			 <!-- <slot name="righticon"></slot> -->
 		</view>
 	</view>
 </template>
@@ -45,8 +47,7 @@
 
 <style lang="scss">
 .m-title-box{
-	padding: 30upx 4%;
-	/* width:100%; */
+	padding: 20upx 20upx;
 	display: flex;
 	justify-content: space-between;
 	.m-title{
@@ -55,6 +56,7 @@
 	}
 	.m-right{
 		display: flex;
+		flex-direction: row;
 		font-size: 24upx;
 		color:#666;
 		cursor: pointer;

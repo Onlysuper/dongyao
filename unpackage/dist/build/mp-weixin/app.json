@@ -1,0 +1,39 @@
+{
+  "pages": [
+    "pages/tabBar/home",
+    "pages/store/list",
+    "pages/store/store",
+    "pages/product/product",
+    "pages/tabBar/order"
+  ],
+  "subPackages": [],
+  "window": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "",
+    "navigationBarBackgroundColor": "#ffffff",
+    "backgroundColor": "#ffffff",
+    "backgroundColorTop": "#ffffff",
+    "backgroundColorBottom": "#ffffff"
+  },
+  "usingComponents": {},
+  "tabBar": {
+    "color": "#333333",
+    "selectedColor": "#44b78d",
+    "borderStyle": "black",
+    "backgroundColor": "#ffffff",
+    "list": [
+      {
+        "pagePath": "pages/tabBar/home",
+        "iconPath": "static/img/tabBar/home.png",
+        "selectedIconPath": "static/img/tabBar/home-on.png",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/tabBar/order",
+        "iconPath": "static/img/tabBar/order.png",
+        "selectedIconPath": "static/img/tabBar/order-on.png",
+        "text": "订单"
+      }
+    ]
+  }
+}

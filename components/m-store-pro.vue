@@ -15,7 +15,11 @@
 				{{rowData.price}}
 			</view>
 			<view class="m-old-price">
-				非会员价{{rowData.oldPrice}}
+				非会员价
+				<view class="m-num">
+					{{rowData.oldprice}}
+				</view>
+				
 			</view>
 		</view>
 		<view class="m-distance">
@@ -59,20 +63,29 @@
 		flex:1;
 		padding: 0 20upx;
 		.m-title{
-			font-size: 24upx;
+			font-size: 32upx;
 			color:#4c4c4c;
 		}
 		.m-descripe{
-			font-size: 18upx;
+			font-size: 24upx;
 			color:#999999;
+			margin-top: 10upx;
 		}
 		.m-price{
-			font-size: 24upx;
-			color:#ff582b
+			font-size: 28upx;
+			color:#ff582b;
+			font-weight: bold;
+			margin-top: 5upx;
 		}
 		.m-old-price{
+			display: flex;
+			flex-direction: row;
 			font-size: 18upx;
 			color:#999999;
+			margin-top: 5upx;
+			.m-num{
+				// font-size:  20upx;
+			}
 		}
 	}
 	.m-distance{

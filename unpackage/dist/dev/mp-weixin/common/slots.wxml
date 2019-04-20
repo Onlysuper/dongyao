@@ -1,0 +1,11 @@
+<import src="/components/uni-swiper-dot/uni-swiper-dot.vue.wxml" />
+<import src="/components/m-title.vue.wxml" />
+<import src="/components/m-home-pro.vue.wxml" />
+<import src="/components/m-home-store.vue.wxml" />
+
+<template name="09c88d5b-default-09c88d5b-1"><swiper style="height: 250rpx" class="_swiper 09c88d5b swiper-box" bindchange="handleProxy" data-eventid="{{'09c88d5b-2'}}" data-comkey="{{$k}}"><swiper-item style="height: auto;" wx:key="index" key="{{index}}" wx:for="{{swiperList}}" wx:for-index="index" wx:for-item="item" class="_swiper-item 09c88d5b"><image style="width: 100%;" src="{{item.src}}" mode="widthFix" class="_image 09c88d5b"></image></swiper-item></swiper></template>
+
+<template name="09c88d5b-default-09c88d5b-2"></template>
+
+<template src="../../static/img/icon/home_icon_refresh.png" mode="aspectFit" name="09c88d5b-leftIcon-09c88d5b-2"></template>
+

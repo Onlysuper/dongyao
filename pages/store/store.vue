@@ -45,9 +45,8 @@
 			</scroll-view>
 		</view>
 	
-		<m-shop-car @handleFn="showSpec(false)"  :price="carPrice" :num="carNum"></m-shop-car>
 		
-		{{carNum}}
+		<m-footer-car price="￥30.97" num="10" @handleFn="showSpec(false)"></m-footer-car>
 		<!-- 规格-模态层弹窗 -->
 		<view class="popup spec" :class="specClass" @touchmove.stop.prevent="discard" @tap="hideSpec">
 			<!-- 遮罩层 -->
@@ -90,20 +89,20 @@
 						</view>
 					</view>
 				</view>
-				<m-shop-car @handleFn="showSpec(false)" :price="'￥30.97'" :num="'10'"></m-shop-car>
+				<m-footer-car price="￥30.97" num="10" @handleFn="showSpec(false)"></m-footer-car>
 			</view>
 		</view>
 	</view>
 </template>
 <script>
+	import mFooterCar from '@/components/m-footer-car'
 	import mStorePro from '@/components/m-store-pro'
-	import mShopCar from '@/components/m-shop-car'
 	import uniNumberBox from "@/components/uni-number-box/uni-number-box.vue"
 	export default {
 		components:{
 			mStorePro,
-			mShopCar,
-			uniNumberBox
+			uniNumberBox,
+			mFooterCar
 		},
 		data() {
 			return {
@@ -257,9 +256,10 @@
 		.m-store-banner{
 			min-height: 270upx;
 			position: relative;
-			padding-top: 30upx;
-			background:url('../../static/img/1.jpg');
-			background-size: 100% 198upx;
+			padding-top: 20upx;
+			background:#eee;
+			background:url('../../static/img/storebanner.png');
+			background-size: 100% 200upx;
 			background-repeat: no-repeat;
 			.m-content{
 				width: 690upx;
@@ -267,24 +267,26 @@
 				bottom: 10upx;
 				left: 30upx;
 				right: 30upx;
-				margin-top: 50upx;
+				margin-top: 30upx;
 				background:#fff;
 				border-radius: 15upx;
 				box-shadow: 0upx 5upx 20upx rgba(0,0,0,0.1);
 				z-index: 100;
 				.m-message{
-					padding:30upx 20upx;
+					padding:20upx;
 					display: flex;
 					flex-direction: row;
 					justify-content: space-between;
 					align-items: flex-end;
 					.m-img{
-						flex:0 0 180upx;
-						height: 180upx;
+						flex:0 0 135upx;
+						height: 135upx;
 						background:#eee;
 					}
 					.m-body{
-						padding: 20upx;
+						flex: 1;
+						// padding: 20upx;
+						padding-left: 10upx;
 						padding-bottom: 0;
 						.m-title{
 							font-size: 32upx;
@@ -303,7 +305,7 @@
 						}
 					}
 					.m-phone{
-						flex:0 0 90upx;
+						flex:0 0 40upx;
 						text-align: right
 					}
 // 					box-shadow:none;
@@ -629,12 +631,13 @@
 	}
 	.category-list{
 		width: 100%;
+		// height:900upx;
 		background-color: #fff;
 		display: flex;
 		padding-bottom: 99upx;
 		.left,.right{
-			// position: absolute;
-			top: 298upx;
+			position: absolute;
+			top: 268upx;
 			/*  #ifdef  APP-PLUS  */
 			top: calc(100upx + var(--status-bar-height));
 			/*  #endif  */
@@ -643,7 +646,8 @@
 		.left{
 			width: 24%;
 			left: 0upx;
-			background-color: #f2f2f2;
+			background-color: #f6f3f3;
+			
 			.row{
 				width: 100%;
 				height: 90upx;
@@ -655,7 +659,7 @@
 					font-size: 28upx;
 					display: flex;
 					justify-content: center;
-					color: #3c3c3c;
+					color:#999999;
 					.block{
 						position: absolute;
 						width: 0upx;
@@ -667,13 +671,13 @@
 					background-color: #fff;
 					.text{
 						font-size: 30upx;
-						font-weight: 600;
-						color: #2d2d2d;
+						// font-weight: 600;
+						// color: #2d2d2d;
 						.block{
 							width: 10upx;
 							height: 80%;
 							top: 10%;
-							background-color: #f06c7a;
+							// background-color: #f06c7a;
 						}
 					}
 				}
@@ -683,8 +687,9 @@
 		   width: 76%;
 			left: 24%;
 			.category{
-				width: 94%;
-				padding: 20upx 3%;
+// 				width: 94%;
+				padding: 20upx 30upx;
+			
 				.list{
 					margin-top: 40upx;
 					width: 100%;
