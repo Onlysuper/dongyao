@@ -127,6 +127,23 @@
 			mHomeStore
 		},
 		methods:{
+			// /server/b/banners
+			getBanners(){
+				uni.request({
+					url: "/server/b/banners",
+					method: 'GET',
+					header:{
+						"Cache-Control": "no-cache",
+						"Content-Type": "application/json;charset=UTF-8",
+					},
+					data: {},
+					// dataType:JSON,
+					success: res => {
+						console.log(res);
+					},
+					complete: res => {}
+				});
+			},
 			//搜索跳转商品列表
 			toSearch() {
 				uni.navigateTo({
@@ -160,6 +177,9 @@
 					url:"/pages/store/list"
 				})
 			}
+		},
+		onLoad(){
+			this.getBanners()
 		}
 	}
 </script>

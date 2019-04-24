@@ -14,6 +14,7 @@
 
 <style lang="scss">
 	body {
+		background:#f9f9f9;
 		font-family: -apple-system-font,Helvetica Neue,Helvetica,sans-serif;
 	}
 </style>
