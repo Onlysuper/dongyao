@@ -63,7 +63,7 @@
 	justify-content: space-between;
 	align-items: flex-end;
 	padding:40upx 20upx 40upx 40upx;
-	border-bottom: 1px solid #ebebeb;
+	// border-bottom: 1px solid #ebebeb;
 	&:last-of-type{
 		border: 0px;
 	}

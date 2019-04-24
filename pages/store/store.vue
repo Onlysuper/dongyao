@@ -37,8 +37,10 @@
 			<scroll-view  scroll-y="true" class="right" >
 			    <view class="category" v-for="(category,index) in categoryList" :key="category.id" v-show="index==showCategoryIndex" >
 					<view class="list">
-						<view class="box" v-for="(box,i) in category.list" :key="i" @tap="goDetail(box)">
-							<m-store-pro :rowData="box"></m-store-pro>
+						<!-- <view class="box" v-for="(box,i) in category.list" :key="i" @tap="goDetail(box)"> -->
+						<view class="box" v-for="(box,i) in category.list" :key="i">
+							<!-- 商品列表 -->
+							<m-store-pro @touchOnGoods="touchOnGoods" :rowData="box"></m-store-pro>
 						</view>
 					</view>
 				</view>
@@ -89,15 +91,64 @@
 						</view>
 					</view>
 				</view>
+				
 				<m-footer-car price="￥30.97" num="10" @handleFn="showSpec(false)"></m-footer-car>
 			</view>
 		</view>
+		
+		  <!--小球的实现-->
+	  <!-- <view class="good_box" v-show="hide_good_box"  :style="left: "+bus_x+"px; top: {{bus_y}}px;"> -->
+		<view class="good_box" v-show="!hide_good_box"  :style="'left:'+bus_x+'px;top:'+bus_y+'px'"></view>
+		<!-- <view class="good_box" >fewafewa{{bus_x}}	</view> -->
+			
 	</view>
 </template>
 <script>
 	import mFooterCar from '@/components/m-footer-car'
 	import mStorePro from '@/components/m-store-pro'
 	import uniNumberBox from "@/components/uni-number-box/uni-number-box.vue"
+	// 抛物线计算
+	function bezier (pots, amount) {
+	  var pot;
+	  var lines;
+	  var ret = [];
+	  var points;
+	  for (var i = 0; i <= amount; i++) {
+	    points = pots.slice(0);
+	    lines = [];
+	    while (pot = points.shift()) {
+	      if (points.length) {
+	        lines.push(pointLine([pot, points[0]], i / amount));
+	      } else if (lines.length > 1) {
+	        points = lines;
+	        lines = [];
+	      } else {
+	        break;
+	      }
+	    }
+	    ret.push(lines[0]);
+	  }
+	  function pointLine(points, rate) {
+	    var pointA, pointB, pointDistance, xDistance, yDistance, tan, radian, tmpPointDistance;
+	    var ret = [];
+	    pointA = points[0];//点击
+	    pointB = points[1];//中间
+	    xDistance = pointB.x - pointA.x;
+	    yDistance = pointB.y - pointA.y;
+	    pointDistance = Math.pow(Math.pow(xDistance, 2) + Math.pow(yDistance, 2), 1 / 2);
+	    tan = yDistance / xDistance;
+	    radian = Math.atan(tan);
+	    tmpPointDistance = pointDistance * rate;
+	    ret = {
+	      x: pointA.x + tmpPointDistance * Math.cos(radian),
+	      y: pointA.y + tmpPointDistance * Math.sin(radian)
+	    };
+	    return ret;
+	  }
+	  return {
+	    'bezier_points': ret
+	  };
+	}
 	export default {
 		components:{
 			mStorePro,
@@ -106,6 +157,15 @@
 		},
 		data() {
 			return {
+				// 购物车动画start
+				 hide_good_box: false,
+				 bus_x:0,
+				 bus_y:0,
+				 finger:{},
+				 busPos:{},
+				 linePos:[],
+				 timer:null,
+				// 购物车动画end
 				carPrice:"10",
 				carNum:"10",
 				specClass: '',//规格弹窗css类，控制开关动画
@@ -182,6 +242,57 @@
 		},
 		
 		methods:{
+			halfWidth(num){
+				 return num*2+'px';
+			},
+			// 加入购物车
+			touchOnGoods(obj){
+				const e = obj.elem;
+				const data = obj.data;
+				if(this.timer){ // 清除一下动画
+					clearInterval(this.timer);
+				}
+				this.finger = {}; var topPoint = {};
+				this.finger['x'] = e.target.x;//点击的位置
+				this.finger['y'] = e.target.y;
+				if (this.finger['y'] < this.busPos['y']) {
+				  topPoint['y'] = this.finger['y'] - 150;
+				} else {
+				  topPoint['y'] = this.busPos['y'] - 150;
+				}
+				topPoint['x'] = Math.abs(this.finger['x'] - this.busPos['x']) / 2;
+
+				if (this.finger['x'] > this.busPos['x']) {
+				  topPoint['x'] = (this.finger['x'] - this.busPos['x']) / 2 + this.busPos['x'];
+				} else {//
+				  topPoint['x'] = (this.busPos['x'] - this.finger['x']) / 2 + this.finger['x'];
+				}
+				this.linePos = bezier([this.busPos, topPoint, this.finger], 30);
+				this.startAnimation(e,data);
+			},
+			startAnimation: function (e,data) {
+				var index = 0, that = this,
+				bezier_points = that.linePos['bezier_points'];
+				that.hide_good_box= false
+				that.bus_x=that.finger['x'];
+			    that.bus_y=that.finger['y'];
+				var len = bezier_points.length;
+				index = len;
+				that.timer = setInterval(function () {
+					index--;
+					that.bus_x= bezier_points[index]['x'];
+					that.bus_y= bezier_points[index]['y'];
+					if (index < 1) {
+					  clearInterval(that.timer);
+					  that.hide_good_box= true;
+					  // 数据计算
+					  that.addGoodSum(e,data);
+					}
+				}, 25);
+			},
+			addGoodSum(e,data){
+				console.log(data);
+			},
 			//分类切换显示
 			showCategory(index){
 				this.showCategoryIndex = index;
@@ -216,9 +327,28 @@
 				
 			}
 		},
+		onLoad() {
+			let ww = document.body.clientWidth;
+			let hh = document.body.clientHeight;
+			this.busPos['x'] = 45;//购物车的位置
+			this.busPos['y'] = hh - 56;
+		}
+		
 	}
 </script>
 <style lang="scss">
+	/*抛物线动画*/
+	.good_box{
+	  width: 10px;
+	  height: 10px;
+	  position: fixed;
+	  border-radius: 50%;
+	  overflow: hidden;
+	  left: 50%;
+	  top: 50%;
+	  z-index: +99;
+	  background:#ff582b;
+	}
 	@keyframes showPopup {
 			0% {
 				opacity: 0;

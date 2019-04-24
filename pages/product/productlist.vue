@@ -1,15 +1,19 @@
 <template>
-	<view @click="goStore" class="m-groupbuy-list">
+	<view @click="goStore" class="m-product-list">
 		<view class="m-page-title">
-			<image style="width:148upx;height:46upx;" src="../../static/img/icon/purchase_icon_title.png" mode="aspectFit"></image>
+			东尧蔬菜001号（中关村店）
 		</view>
 		<template v-for="(item,index) in nearStoreList">
-			<view class="m-list">
-				<m-groupbuy-list :key="index" :rowData="item">
-					<image style="width:164upx;height:60upx;" src="../../static/img/icon/purchase_button_buy.png" mode="aspectFit"></image>
-				</m-groupbuy-list>
-			</view>
+			<m-groupbuy-list :key="index" :rowData="item"></m-groupbuy-list>
 		</template>
+		<!-- <view class="m-page-title">
+			东尧蔬菜001号（中关村店）
+		</view> -->
+		<!-- <template v-for="(item,index) in nearStoreList">
+			<m-groupbuy-list :key="index" :rowData="item">
+				<image style="width:164upx;height:60upx;" src="../../static/img/icon/purchase_button_buy.png" mode="aspectFit"></image>
+			</m-groupbuy-list>
+		</template> -->
 	</view>
 </template>
 <script>
@@ -56,14 +60,17 @@
 	}
 </script>
 <style lang="scss">
-	.m-groupbuy-list{
+	.m-product-list{
 		// padding: 30upx;
 		.m-page-title{
-			margin-bottom: 30upx;
-			padding-left: 40upx;
-		}
-		.m-list{
+			margin-top: 28upx;
+			// margin-bottom: 30upx;
+			margin-left: 20upx;
+			margin-right: 20upx;
 			border-bottom: 1px solid #ebebeb;
+			padding:34upx 0;
+			font-size: 32upx;
+			color:#333333;
 		}
 	}
 </style>

@@ -68,6 +68,10 @@
         {
             "path" : "pages/groupbuy/groupbuy",
             "style" : {}
+        },
+        {
+            "path" : "pages/product/productlist",
+            "style" : {}
         }
     ],
     // 	"globalStyle": {

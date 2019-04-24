@@ -23,7 +23,7 @@
 			</view>
 		</view>
 		<view class="m-distance">
-			<image style="width:40upx;height: 40upx;" src="../../static/img/icon/shop_icon_buy.png" mode="aspectFit"></image>
+			<image @tap="touchOnGoods" style="width:40upx;height: 40upx;" src="../../static/img/icon/shop_icon_buy.png" mode="aspectFit"></image>
 		</view>
 	</view>
 </template>
@@ -36,6 +36,14 @@
 				type:Object,
 				rowData:{}
 			}
+		},
+		methods:{
+		 touchOnGoods(e){
+			 this.$emit("touchOnGoods",{
+				 data:this.rowData,
+				 elem : e,
+			 })
+		 }
 		},
 		data() {
 			return {

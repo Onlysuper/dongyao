@@ -16,9 +16,8 @@
 				<input
 					placeholder="默认关键字"
 					placeholder-style="color:#c0c0c0;"
-					@tap="toSearch()"
 				/>
-				<image class="icon" style="width:13px;height:100%" src="../../static/img/icon/home_icon_search.png" mode="aspectFit"></image>
+				<image @tap="toSearch()" class="icon" style="width:13px;height:100%" src="../../static/img/icon/home_icon_search.png" mode="aspectFit"></image>
 			</view>
 		</view>
 		<!-- 占位 -->
@@ -128,9 +127,11 @@
 			mHomeStore
 		},
 		methods:{
-			//搜索跳转
+			//搜索跳转商品列表
 			toSearch() {
-				uni.showToast({ title: '建议跳转到新页面做搜索功能' });
+				uni.navigateTo({
+					url:"/pages/product/productlist"
+				})
 			},
 			// 选择门店
 			choseStore(){

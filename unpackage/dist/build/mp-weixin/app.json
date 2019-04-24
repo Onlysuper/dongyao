@@ -4,7 +4,8 @@
     "pages/store/list",
     "pages/store/store",
     "pages/product/product",
-    "pages/tabBar/order"
+    "pages/tabBar/order",
+    "pages/groupbuy/groupbuy"
   ],
   "subPackages": [],
   "window": {
