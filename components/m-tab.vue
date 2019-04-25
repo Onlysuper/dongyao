@@ -36,16 +36,14 @@
 
 
 <style lang="scss">
+@import "../common/globel.scss";
 .m-tab{
 	display: flex;
 	flex-direction: row;
-	// padding: 10upx;
 	text-align: center;
 	justify-content: space-around;
-	font-size: 32upx;
-	
+	font-size: $fontsize-2;
 	color:#666666;
-	
 	.m-item{
 		padding: 30upx;
 		position: relative;

@@ -59,6 +59,7 @@
 </script>
 
 <style lang="scss">
+@import "../common/globel.scss";
 .m-pro-list{
 	background:#fff;
 	padding:0 30upx;
@@ -68,7 +69,7 @@
 		flex-direction: row;
 		justify-content: space-between;
 		color:#333333;
-		font-size: 32upx;
+		font-size: $fontsize-2;
 		height: 86upx;
 		line-height: 86upx;
 		border-bottom:1px solid #ebebeb;
@@ -83,19 +84,19 @@
 		align-items: center;
 		margin-top: 40upx;
 		.m-img-box{
-			flex: 0 0 170upx;
-			height: 170upx;
+			flex: 0 0 130upx;
+			height: 130upx;
 			background: #eee;
 		}
 		.m-text-box{
 			flex:1;
 			padding-left: 15upx;
 			.m-name{
-				font-size: 28upx;
+				font-size: $fontsize-3;
 				color:#4c4c4c;
 			}
 			.m-describe{
-				font-size: 26upx;
+				font-size: $fontsize-4;
 				color:#999999;
 			}
 		}

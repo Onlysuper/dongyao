@@ -3,7 +3,7 @@
 		<view class="fixedit">
 			<m-tab @handleFn="tabChange" :tabActive="tabActive" :rowdata="tabList"></m-tab>
 		</view>
-		<view style="height:50px;"></view>
+		<view style="height:60px;"></view>
 		<view class="m-order-body">
 			<m-product-list v-for="(item,index) in artList" :key="index">
 				<view slot="title">{{item.store}}</view>
@@ -130,7 +130,10 @@
 <style lang="scss">
 .m-order{
 	backgroun:#f9f9f9;
-	.fixedit{width:100%; position:fixed; z-index:99; left:0; top:0;background: #fff;}
+	.fixedit{width:100%; position:fixed; z-index:99; left:0; top:0;background: #fff;
+	// border-top:10upx solid #f9f9f9;
+	box-sizing: border-box;
+	}
 }
 
 </style>

@@ -65,27 +65,62 @@
                 }
             }
         },
-		{
-		    // 我的--------------------------------
-		    "path" : "pages/tabBar/user",
-		    "style" : {
-		        "navigationBarTitleText" : "东尧蔬菜",
-		        "navigationBarTextStyle" : "black",
-		        "enablePullDownRefresh" : true,
-		        "onReachBottomDistance" : 50,
-		        "app-plus" : {
-		            "titleNView" : false, //禁用原生导航栏
-		            "softinputNavBar" : "none"
-		        }
-		    }
-		},
         {
+            // 我的--------------------------------
+            "path" : "pages/tabBar/user",
+            "style" : {
+                "navigationBarTitleText" : "东尧蔬菜",
+                "navigationBarTextStyle" : "black",
+                "enablePullDownRefresh" : true,
+                "onReachBottomDistance" : 50,
+                "app-plus" : {
+                    "titleNView" : false, //禁用原生导航栏
+                    "softinputNavBar" : "none"
+                }
+            }
+        },
+        {
+			// 拼团
             "path" : "pages/groupbuy/groupbuy",
-            "style" : {}
+            "style" : {
+           	"navigationBarTitleText" : "东尧蔬菜",
+               "app-plus" : {
+                   "titleNView" : false, //禁用原生导航栏
+                   "softinputNavBar" : "none"
+               }
+           }
         },
         {
             "path" : "pages/product/productlist",
-            "style" : {}
+            "style" : {
+           	"navigationBarTitleText" : "东尧蔬菜",
+               "app-plus" : {
+                   "titleNView" : false, //禁用原生导航栏
+                   "softinputNavBar" : "none"
+               }
+           }
+        },
+        // 优惠券
+        {
+            "path" : "pages/user/tokencard/tokencard",
+            "style" : {
+				"navigationBarTitleText" : "东尧蔬菜",
+                "app-plus" : {
+                    "titleNView" : false, //禁用原生导航栏
+                    "softinputNavBar" : "none"
+                }
+            }
+        },
+		// 关于我
+        {
+            "path" : "pages/user/aboutme/aboutme",
+		    "style" : {
+			   "navigationBarTitleText" : "东尧蔬菜",
+			   "app-plus" : {
+				   "titleNView" : false, //禁用原生导航栏
+				   "softinputNavBar" : "none"
+			   }
+		    }
         }
     ],
     // 	"globalStyle": {
@@ -120,14 +155,12 @@
                 "selectedIconPath" : "static/img/tabBar/order-on.png",
                 "text" : "订单"
             },
-			{
-			    "pagePath" : "pages/tabBar/user",
-			    "iconPath" : "static/img/tabBar/user.png",
-			    "selectedIconPath" : "static/img/tabBar/user-on.png",
-			    "text" : "我的"
-			}
+            {
+                "pagePath" : "pages/tabBar/user",
+                "iconPath" : "static/img/tabBar/user.png",
+                "selectedIconPath" : "static/img/tabBar/user-on.png",
+                "text" : "我的"
+            }
         ]
     }
 }
-           
-
