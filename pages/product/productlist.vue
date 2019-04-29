@@ -1,6 +1,6 @@
 <template>
 	<view  class="m-product-list">
-		<view  v-for="(item,index) in nearStoreList" @click="goStore(item.id)" :key="index">
+		<view  v-for="(item,index) in nearStoreList" @click="goPro(item.id)" :key="index">
 			<view class="m-page-title">
 				{{item.sName}}
 			</view>
@@ -40,11 +40,11 @@
 		},
 		
 		methods:{
-				//跳转到商家
-				goStore(id){
+				//跳转到商品详情
+				goPro(id){
 					console.log(id);
 					uni.navigateTo({
-						url:"/pages/store/store?id="+id
+						url:"/pages/product/product?id="+id
 					})
 				}
 		},
@@ -80,7 +80,7 @@
 			margin-right: 40upx;
 			border-bottom: 1px solid #ebebeb;
 			padding:34upx 0;
-			font-size: $fontsize-1;
+			font-size: $fontsize-2;
 			color:#333333;
 		}
 	}

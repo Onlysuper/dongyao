@@ -86,7 +86,8 @@
 		<view class="swiper-box">
 			<swiper circular="true" autoplay="true" @change="swiperChange">
 				<swiper-item v-for="swiper in swiperList" :key="swiper.id">
-					<image :src="swiper.img" @tap="toSwiper(swiper)"></image>
+					<video style="" objectFit="fill" v-if="swiper.type=='1'?true:false" :src="swiper.pictureUrl" @tap="toSwiper(swiper)" controls></video>
+					<image v-if="swiper.type=='0'" :src="swiper.pictureUrl" @tap="toSwiper(swiper)"></image>
 				</swiper-item>
 			</swiper>
 			<view class="indicator">{{currentSwiper+1}}/{{swiperList.length}}</view>
@@ -94,24 +95,18 @@
 		<!-- 标题 价格 -->
 		<view class="info-box goods-info">
 			<view class="title">
-				{{goodsData.name}}
+				{{goodsData.synopsis}}
 			</view>
 			<view class="tip-box">
 				<view class="item">
-					美味
-				</view>
-				<view class="item">
-					特价
-				</view>
-				<view class="item">
-					新鲜
+					{{goodsData.describes}}
 				</view>
 			</view>
 			<view class="price-box">
-				<view class="price">￥{{goodsData.price}}</view>
-				<view class="oldprice">￥19.99</view>
+				<view class="price">￥{{goodsData.presentPrice}}</view>
+				<view class="oldprice">￥{{goodsData.originalPrice}}</view>
 				<view class="num">
-					商品库存：10
+					商品库存：{{goodsData.stock}}
 				</view>
 			</view>
 		</view>
@@ -198,12 +193,7 @@ export default {
 			showBack:true,
 			// #endif
 			//轮播主图数据
-			swiperList: [
-				{ id: 1, img: 'https://s2.ax1x.com/2019/03/28/AdOfUJ.jpg' },
-				{ id: 2, img: 'https://s2.ax1x.com/2019/03/28/AdOWE4.jpg' },
-				{ id: 3, img: 'https://s2.ax1x.com/2019/03/28/AdO2bF.jpg' },
-				{ id: 4, img: 'https://s2.ax1x.com/2019/03/28/AdOh59.jpg' }
-			],
+			swiperList: [],
 			//轮播图下标
 			currentSwiper: 0,
 			anchorlist:[],//导航条锚点
@@ -212,25 +202,26 @@ export default {
 			specClass: '',//规格弹窗css类，控制开关动画
 			shareClass:'',//分享弹窗css类，控制开关动画
 			// 商品信息
-			goodsData:{
-				id:1,
-				name:"新鲜小白菜500g",
-				price:"127.00",
-				number:10,
-				service:[
-					{name:"正品保证",description:"此商品官方保证为正品"},
-					{name:"极速退款",description:"此商品享受退货极速退款服务"},
-					{name:"7天退换",description:"此商品享受7天无理由退换服务"}
-				],
-				spec:["XS","S","M","L","XL","XXL"],
-				comment:{
-					number:102,
-					userface:'../../static/img/face.jpg',
-					username:'大黑哥',
-					content:'很不错，之前买了很多次了，很好看，能放很久，和图片色差不大，值得购买！'
-				}
-				
-			},
+			goodsData:{},
+// 			goodsData:{
+// 				id:1,
+// 				name:"新鲜小白菜500g",
+// 				price:"127.00",
+// 				number:10,
+// 				service:[
+// 					{name:"正品保证",description:"此商品官方保证为正品"},
+// 					{name:"极速退款",description:"此商品享受退货极速退款服务"},
+// 					{name:"7天退换",description:"此商品享受7天无理由退换服务"}
+// 				],
+// 				spec:["XS","S","M","L","XL","XXL"],
+// 				comment:{
+// 					number:102,
+// 					userface:'../../static/img/face.jpg',
+// 					username:'大黑哥',
+// 					content:'很不错，之前买了很多次了，很好看，能放很久，和图片色差不大，值得购买！'
+// 				}
+// 				
+// 			},
 			selectSpec:null,//选中规格
 			//商品描述html
 			descriptionStr:'<div style="text-align:center;"><img width="100%" src="https://s2.ax1x.com/2019/03/28/AdOogx.jpg"/><img width="100%" src="https://s2.ax1x.com/2019/03/28/AdOHKK.jpg"/><img width="100%" src="https://s2.ax1x.com/2019/03/28/AdOTv6.jpg"/></div>'
@@ -245,7 +236,36 @@ export default {
 		console.log(option.cid); //打印出上个页面传递的参数。
 	},
 	onReady(){
-		this.calcAnchor();//计算锚点高度，页面数据是ajax加载时，请把此行放在数据渲染完成事件中执行以保证高度计算正确
+		// this.calcAnchor();//计算锚点高度，页面数据是ajax加载时，请把此行放在数据渲染完成事件中执行以保证高度计算正确
+	},
+	onLoad(option) {
+		let id=option.id;
+		// 商品基本信息
+		this.mPost("/server/p/product",{
+			id:id,
+		}).then(res=>{
+			if(res.code=='1'){
+				if(res.data){
+					let data=res.data;
+					// 轮播图
+					if(data.pictures){
+						console.log(res.data.pictures);
+						this.swiperList=[...res.data.pictures];
+					}
+					this.goodsData=data;
+				}
+			}
+		})
+		// 
+		this.mPost("/server/c/praise/degree",{
+			productid:id,
+		}).then(res=>{
+			if(res.code=='1'){
+				
+			}
+		})
+		// /server/c/praise/degree
+		// this.calcAnchor();//计算锚点高度，页面数据是ajax加载时，请把此行放在数据渲染完成事件中执行以保证高度计算正确
 	},
 	onPageScroll(e) {
 		//锚点切换
