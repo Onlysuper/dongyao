@@ -306,6 +306,18 @@
 /* 垂直间距 */
 /* 透明度 */
 /* 文章场景相关 */
+/*抛物线动画*/
+.good_box {
+  width: 10px;
+  height: 10px;
+  position: fixed;
+  border-radius: 50%;
+  overflow: hidden;
+  left: 50%;
+  top: 50%;
+  z-index: +99;
+  background: #ff582b;
+}
 @-webkit-keyframes showPopup {
 0% {
     opacity: 0;
@@ -383,7 +395,7 @@
   position: relative;
   padding-top: 20rpx;
   background: #eee;
-  background: url(../../static/img/storebanner.363c08e9.png);
+  background: url(../../static/img/storebanner.13c23464.png);
   background-size: 100% 200rpx;
   background-repeat: no-repeat;
 }

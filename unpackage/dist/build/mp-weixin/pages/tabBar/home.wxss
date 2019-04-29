@@ -141,7 +141,7 @@ uni-swiper{
         -ms-flex-direction: row;
             flex-direction: row;
     font-size: 24rpx;
-    color: #666;
+    color: #a7a7a7;
     cursor: pointer;
     -webkit-box-pack: center;
     -webkit-justify-content: center;
@@ -189,7 +189,7 @@ uni-swiper{
   -webkit-flex-direction: column;
       -ms-flex-direction: column;
           flex-direction: column;
-  min-width: 217rpx;
+  min-width: 222rpx;
   margin-left: 10rpx;
   margin-right: 10rpx;
   margin-bottom: 30rpx;
@@ -199,6 +199,10 @@ uni-swiper{
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
   border-radius: 10rpx;
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
 }
 .m-pro-item .m-img {
     -webkit-box-sizing: border-box;
@@ -211,7 +215,7 @@ uni-swiper{
     background: #eee;
 }
 .m-pro-item .m-title {
-    font-size: 20rpx;
+    font-size: 28rpx;
     color: #4c4c4c;
     margin-top: 20rpx;
 }
@@ -371,6 +375,42 @@ uni-swiper{
 /* 垂直间距 */
 /* 透明度 */
 /* 文章场景相关 */
+.swiper-box {
+  position: relative;
+  width: 100%;
+  height: 300rpx;
+}
+.swiper-box swiper {
+    width: 100%;
+    height: 300rpx;
+}
+.swiper-box swiper swiper-item image {
+      width: 100%;
+      height: 300rpx;
+}
+.swiper-box .indicator {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: center;
+    -webkit-justify-content: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+        -ms-flex-align: center;
+            align-items: center;
+    padding: 0 25rpx;
+    height: 40rpx;
+    border-radius: 40rpx;
+    font-size: 22rpx;
+    position: absolute;
+    bottom: 20rpx;
+    right: 20rpx;
+    color: #fff;
+    background-color: rgba(0, 0, 0, 0.2);
+}
 .icon {
   width: 30rpx;
   height: 25rpx;
@@ -504,18 +544,6 @@ uni-swiper{
   background-color: #ffffff;
   height: 100rpx;
 
-}
-.swiper {
-  width: 100%;
-  margin-top: 100rpx;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: center;
-  -webkit-justify-content: center;
-      -ms-flex-pack: center;
-          justify-content: center;
 }
 .category-list {
   width: 92%;

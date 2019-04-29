@@ -5,7 +5,11 @@
     "pages/store/store",
     "pages/product/product",
     "pages/tabBar/order",
-    "pages/groupbuy/groupbuy"
+    "pages/tabBar/user",
+    "pages/groupbuy/groupbuy",
+    "pages/product/productlist",
+    "pages/user/tokencard/tokencard",
+    "pages/user/aboutme/aboutme"
   ],
   "subPackages": [],
   "window": {
@@ -34,6 +38,12 @@
         "iconPath": "static/img/tabBar/order.png",
         "selectedIconPath": "static/img/tabBar/order-on.png",
         "text": "订单"
+      },
+      {
+        "pagePath": "pages/tabBar/user",
+        "iconPath": "static/img/tabBar/user.png",
+        "selectedIconPath": "static/img/tabBar/user-on.png",
+        "text": "我的"
       }
     ]
   }

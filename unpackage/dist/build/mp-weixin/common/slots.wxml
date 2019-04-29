@@ -1,17 +1,56 @@
-<import src="/components/uni-swiper-dot/uni-swiper-dot.vue.wxml" />
 <import src="/components/m-title.vue.wxml" />
 <import src="/components/m-home-pro.vue.wxml" />
 <import src="/components/m-home-store.vue.wxml" />
 <import src="/components/m-groupbuy-list.vue.wxml" />
+<import src="/components/m-tab.vue.wxml" />
+<import src="/components/m-product-list.vue.wxml" />
+<import src="/components/uni-load-more/uni-load-more.vue.wxml" />
+<import src="/components/m-vip-card.vue.wxml" />
+<import src="/components/m-cell.vue.wxml" />
 <import src="/components/m-store-list.vue.wxml" />
 <import src="/components/m-store-pro.vue.wxml" />
 <import src="/components/m-footer-car.vue.wxml" />
 <import src="/components/uni-number-box/uni-number-box.vue.wxml" />
+<import src="/components/uni-rate/uni-rate.vue.wxml" />
+<import src="/components/m-token-card.vue.wxml" />
+<import src="/components/uni-icon/uni-icon.vue.wxml" />
 <import src="/common/slots.wxml" />
 
-<template name="09c88d5b-default-09c88d5b-1"><swiper style="height: 250rpx" class="_swiper 09c88d5b swiper-box" bindchange="handleProxy" data-eventid="{{'09c88d5b-2'}}" data-comkey="{{$k}}"><swiper-item style="height: auto;" wx:key="index" key="{{index}}" wx:for="{{swiperList}}" wx:for-index="index" wx:for-item="item" class="_swiper-item 09c88d5b"><image style="width: 100%;" src="{{item.src}}" mode="widthFix" class="_image 09c88d5b"></image></swiper-item></swiper></template>
-
-<template name="09c88d5b-default-09c88d5b-2"><image style="width:30rpx;height:20rpx;margin-right:10rpx;" src="../../static/img/icon/home_icon_refresh.png" mode="aspectFit" class="_image 09c88d5b"></image></template>
+<template name="09c88d5b-default-09c88d5b-1"><image style="width:30rpx;height:20rpx;margin-right:10rpx;" src="../../static/img/icon/home_icon_refresh.png" mode="aspectFit" class="_image 09c88d5b"></image></template>
 
 <template name="02fe9a1a-default-02fe9a1a-0-+index"><image style="width:164rpx;height:60rpx;" src="../../static/img/icon/purchase_button_buy.png" mode="aspectFit" class="_image 02fe9a1a"></image></template>
+
+<template name="2facfe52-default-2facfe52-1-+index"></template>
+
+<template name="2facfe52-title-2facfe52-1-+index">{{item.store}}</template>
+
+<template name="2facfe52-topbut-2facfe52-1-+index">待取货</template>
+
+<template src="../../static/img/icon/home_icon_gps.png" mode="aspectFit" name="2facfe52-img-2facfe52-1-+index"></template>
+
+<template name="2facfe52-proname-2facfe52-1-+index">{{item.name}}</template>
+
+<template name="2facfe52-describe-2facfe52-1-+index">{{item.createtime}}</template>
+
+<template name="2facfe52-footleft-2facfe52-1-+index">应付款：￥{{item.price}}    共{{item.num}}件</template>
+
+<template name="2facfe52-footright-2facfe52-1-+index">再来一单</template>
+
+<template name="09ce8447-default-09ce8447-0"></template>
+
+<template name="09ce8447-name-09ce8447-0">VIP会员</template>
+
+<template name="09ce8447-label-09ce8447-0">（半年卡6折）</template>
+
+<template name="09ce8447-describe-09ce8447-0">享受专属折扣  福利优惠  定制服务</template>
+
+<template name="09ce8447-right-09ce8447-0">立即开通></template>
+
+<template name="09ce8447-default-09ce8447-1"></template>
+
+<template src="../../static/img/icon/me_icon_preferential.png" mode="aspectFit" name="09ce8447-icon-09ce8447-1"></template>
+
+<template name="09ce8447-default-09ce8447-2"></template>
+
+<template src="../../static/img/icon/me_icon_about.png" mode="aspectFit" name="09ce8447-icon-09ce8447-2"></template>
 

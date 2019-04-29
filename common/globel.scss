@@ -1,10 +1,14 @@
 $color-active:#4eb87d;// 活动颜色
-$color-1: #a7a7a7;// cell右侧按钮颜色
+$color-price:#ff582b;// 价钱颜色
+$color-1: #a7a7a7;// 右侧按钮颜色
 $color-2: #333333;// 标题颜色
-$color-3:#eaeaea;// 边框颜色
-$color-4:#999;
+$color-3:#e6e6e6;// 边框颜色
+$color-4:#999; 
+$color-5:#4c4c4c;// 普通文字颜色
+$color-6:#cccccc;//时间颜色
 $color-border1:#f6f6f6;// 虚边颜色；
 $color-border2:#e6e6e6;//边框颜色
+$color-border3:#e9e9e9;// 标题横穿线
 $fontsize-1:36upx;// 大标题大小
 $fontsize-2:32upx;// 标题大小
 $fontsize-3:30upx;// 描述文字大小
@@ -13,4 +17,4 @@ $fontsize-5:24upx;// 描述文字大小
 $fontsize-6:22upx;// 时间大小
 $fontsize-7:20upx;// 时间大小
 $fontsize-8:18upx;
-$fontsize-9:28upx;
+$fontsize-9:28upx;// 普通字体大小

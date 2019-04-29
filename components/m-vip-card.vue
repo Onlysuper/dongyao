@@ -1,21 +1,18 @@
 <template>
-	<view class="m-vip-card">
-		<view class="m-content">
-			<view class="m-left">
-				<view class="m-title">
-					<view class="name">
-						<slot name="name"></slot>
-					</view>
-					<view class="label">
-						<slot name="label"></slot>
-					</view>
-				</view>
-				<view class="m-describe">
-					<slot name="describe"></slot>
-				</view>
+	<view class="m-vip-page">
+		<view class="m-img-box">
+			<image v-if="state=='month'" style="height:100upx;width:100upx;" src="../../../static/img/icon/member_icon_月卡.png" mode=""></image>
+			<image v-if="state=='year'" style="height:100upx;width:100upx;" src="../../../static/img/icon/member_icon_年卡.png" mode=""></image>
+			<image v-if="state=='season'" style="height:100upx;width:100upx;" src="../../../static/img/icon/member_icon_季卡.png" mode=""></image>
+			<image v-if="state=='halfyear'" style="height:100upx;width:100upx;" src="../../../static/img/icon/member_icon_半年卡.png" mode=""></image>
+			
+		</view>
+		<view class="m-text-box">
+			<view class="m-text">
+				全场7.5折优惠
 			</view>
-			<view class="m-right">
-				<slot name="right"></slot>
+			<view class="m-price">
+				￥1000
 			</view>
 		</view>
 	</view>
@@ -23,100 +20,45 @@
 
 <script>
 	export default {
-		name:"m-vip-card",
+		name:"m-vip-page",
 		props:{
-			title:{
-				type:String,
-				value:"",
-			},
-			label:{
-				type:String,
-				value:"",
-			},
-			labelColor:{
+			state:{
 				type:String,
 				value:"",
 			}
 		},
 		data() {
 			return {
-				
+				// describeVisible:false
 			};
 		},
 		methods:{
 			titleHandle(){
-				this.$emit("titleHandle")
+				// this.$emit("titleHandle")
 			}
 		}
 	}
 </script>
 
 <style lang="scss">
-.m-vip-card{
-	width: 695upx;
-	height: 166upx;
-	margin:0 auto;
-	border-radius: 15upx;
-	position: relative;
-	&::before{
-		display: block;
-		content: "";
-		width: 695upx;
-		height: 166upx;
-		background: #4e4e4e;
-		margin:0 auto;
-		border-radius: 15upx;
-		position: absolute;
-		left:0;
-		top:0;
-		z-index: 3;
-	}
-	&::after{
-		display: block;
-		content: "";
-		height: 166upx;
-		background: #977a58;
-		margin:0 auto;
-		border-radius: 15upx;
-		position: absolute;
-		left:10upx;
-		right: 0;
-		top:-10upx;
-		z-index: 0;
-		box-shadow: 0upx 20upx 30upx rgba(78,78,78,0.7);
-	}
-	.m-content{
-		position: relative;
-		z-index: 5;
-		padding:10upx;
-		padding-left: 30upx;
-		display: flex;
-		flex-direction: row;
-		justify-content: space-between;
-		align-items: center;
-		height:100%;
-		box-sizing: border-box;
-		.m-title{
-			display: flex;
-			flex-direction: row;
-			color:#dbbb8d;
-			align-items: center;
-			.name{
-				font-size: 32upx;
-			}
-			.label{
-				font-size: 22upx;
-			}
+@import "../common/globel.scss";
+.m-vip-page{
+	background:#fff;
+	border-radius: 10upx;
+	box-shadow: 0 0 10upx rgba(0,0,0,0.1);
+	padding:30upx;
+	display: flex;
+	// justify-content: center;
+	align-items: center;
+	.m-text-box{
+		margin-left: 20upx;
+		color:#4f3a18;
+		font-size: $fontsize-2;
+		.m-text{
+			// font-size: $fontsize-2;
 		}
-		.m-describe{
-			margin-top: 5upx;
-			font-size: 22upx;
-			color:#fff;
-		}
-		.m-right{
-			text-align: right;
-			font-size: 22upx;
-			color:#dcbc8d;
+		.m-price{
+			
 		}
 	}
 	

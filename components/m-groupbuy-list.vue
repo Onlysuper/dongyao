@@ -1,21 +1,24 @@
 <template>
-	<!-- 首页门店图文 -->
+	<!-- 门店列表 -->
 	<view class="m-groupbuy-list">
 		<view class="m-img">
-			<image style="width: 100%;height: 100%;" :src="rowData.img" mode="aspectFit"></image>
+			<image style="width: 100%;height: 100%;border-radius: 100%;background: #f5f5f5;" :src="rowData.pictureUrl" mode="aspectFit"></image>
+			<view v-if="rowData.isAssemble==1" class="m-pin">
+				可拼团
+			</view>
 		</view>
 		<view class="m-text">
 			<view class="m-title">
-				{{rowData.title}}
+				{{rowData.synopsis}}
 			</view>
 			<view class="m-describe">
-				{{rowData.describe}}
+				{{rowData.labelName}}
 			</view>
 			<view class="m-price">
-				{{rowData.price}}
+				{{rowData.presentPrice}}
 			</view>
 			<view class="m-oldprice">
-				非会员价{{rowData.oldprice}}
+				非会员价{{rowData.originalPrice}}
 			</view>
 		</view>
 		<view class="m-addition">
@@ -57,6 +60,7 @@
 </script>
 
 <style lang="scss">
+@import "../common/globel.scss";
 .m-groupbuy-list{
 	display: flex;
 	flex-direction: row;
@@ -70,30 +74,42 @@
 	.m-img{
 		flex: 0 0 150upx;
 		height: 150upx;
-		background: #f5f5f5;
-		border-radius: 100%;
 		overflow: hidden;
+		position: relative;
+		.m-pin{
+			background:#eb5555;
+			color:#fff;
+			text-align: center;
+			position: absolute;
+			bottom: 0;
+			font-size: $fontsize-7;
+			width:100upx;
+			left: 50%;
+			margin-left:-50upx;
+			border-radius: 5upx;
+		}
 	}
 	.m-text{
 		flex:1;
 		padding: 0 20upx;
 		.m-title{
-			font-size: 32upx;
+			font-size: $fontsize-9;
 			color:#333333;
 		}
 		.m-describe{
-			font-size: 24upx;
-			// margin-top: 10upx;
+			font-size:$fontsize-5;
+			margin-top: 5upx;
 			color:#808080;
 		}
 		.m-price{
 			color:#ff582b;
-			font-size: 26upx;
+			font-size: $fontsize-4;
 			margin-top:10upx;
+			font-weight: bold;
 		}
 		.m-oldprice{
 			color:#999;
-			font-size: 18upx;
+			font-size: $fontsize-6;
 		}
 	}
 }

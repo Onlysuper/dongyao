@@ -1,16 +1,16 @@
 <template>
 	<!-- 首页产品图文 -->
 	<view class="m-pro-item">
-		<view class="m-img">
-			<image style="width: 100%;height: 100%;" :src="rowData.img" mode="aspectFit"></image>
+		<view class="m-img" @tap="handleFn">
+			<image style="width: 100%;height: 100%;" :src="rowData.pictureUrl" mode="aspectFit"></image>
 		</view>
 		<view class="m-pro">
 			<view class="m-title">
-				{{rowData.describel}}
+				{{rowData.synopsis}}
 			</view>
 			<view class="m-price">
-				<view class="new">{{rowData.price}}</view>
-				<view class="old">{{rowData.oldPrice}}</view>
+				<view class="new">{{rowData.presentPrice}}</view>
+				<view class="old">{{rowData.originalPrice}}</view>
 			</view>
 		</view>
 	</view>
@@ -34,15 +34,21 @@
 		},
 		data() {
 			return {};
+		},
+		methods:{
+			handleFn(data){
+				this.$emit("handleFn",this.rowData)
+			}
 		}
 	}
 </script>
 
 <style lang="scss">
+@import "../common/globel.scss";
 .m-pro-item{
 	display: flex;
 	flex-direction: column;
-	min-width: 217upx;
+	min-width: 222upx;
 	margin-left: 10upx;
 	margin-right: 10upx;
 	margin-bottom: 30upx;
@@ -50,14 +56,16 @@
 	padding: 20upx;
 	box-sizing: border-box;
 	border-radius: 10upx;
+	flex:1;
 	.m-img{
 		box-sizing: border-box;
-		flex: 1;
+		flex:1;
 		height: 170upx;
 		background:#eee;
 	}
 	.m-title{
-		font-size: 20upx;
+		font-size: $fontsize-9;
+		// font-size: 20upx;
 		color:#4c4c4c;
 		margin-top: 20upx;
 	}

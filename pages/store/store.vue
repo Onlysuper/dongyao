@@ -158,7 +158,7 @@
 		data() {
 			return {
 				// 购物车动画start
-				 hide_good_box: false,
+				 hide_good_box:true,
 				 bus_x:0,
 				 bus_y:0,
 				 finger:{},
@@ -327,12 +327,27 @@
 				
 			}
 		},
-		onLoad() {
+		onLoad(option) {
 			let ww = document.body.clientWidth;
 			let hh = document.body.clientHeight;
 			this.busPos['x'] = 45;//购物车的位置
 			this.busPos['y'] = hh - 56;
+			let id=option.id;
+				this.mPost("/server/p/product",{
+					id:id,
+					
+				}).then(res=>{
+					if(res.code=='1'){
+						console.log(res);
+						// if(res.data&&res.data.list){
+		// 					this.nearStoreList=res.data.list;
+		// 					console.log(this.nearStoreList);
+						// }
+					}
+				})
+					
 		}
+		
 		
 	}
 </script>

@@ -25,6 +25,7 @@
 /* 透明度 */
 /* 文章场景相关 */
 page {
+  background: #f9f9f9;
   font-family: -apple-system-font,Helvetica Neue,Helvetica,sans-serif;
 }
 

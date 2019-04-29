@@ -14,6 +14,7 @@
 			<!-- 搜索框 -->
 			<view class="input-box">
 				<input
+					v-model="searchValue"
 					placeholder="默认关键字"
 					placeholder-style="color:#c0c0c0;"
 				/>
@@ -21,28 +22,37 @@
 			</view>
 		</view>
 		<!-- 占位 -->
+		<view class="place"></view>
 		<!-- 轮播图 -->
-		<view class="swiper">
-			<uni-swiper-dot :info="swiperList" :current="current" field="content" :mode="mode">
-				<swiper style="height: 250upx" class="swiper-box" @change="swiperChange">
+		<view class="swiper-box">
+			<swiper circular="true" autoplay="true" @change="swiperChange">
+				<swiper-item v-for="swiper in swiperList" :key="swiper.id">
+					<image :src="swiper.imgUrl" @tap="swiperChange(swiper)"></image>
+				</swiper-item>
+			</swiper>
+			<!-- <uni-swiper-dot :info="swiperList" :current="current" field="content" :mode="mode"> -->
+				<!-- <swiper style="height: 250upx" class="swiper-box" @change="swiperChange">
 					<swiper-item style="height: auto;" v-for="(item ,index) in swiperList" :key="index">
-							<image style="width: 100%;" :src="item.src" mode="widthFix"></image>
+						<view class="">
+						</view>
+							<image style="width: 100px;height: 100px;" :src="item.imgUrl" mode="widthFix"></image>
 					</swiper-item>
-				</swiper>
-			</uni-swiper-dot>
+				</swiper> -->
+			<!-- </uni-swiper-dot> -->
 		</view>
+		<!-- 超值热卖 -->
 		<view class="m-container">
-			<m-title title="超值热卖" labelColor="#666666" label="换一换" @titleHandle="titleHandle">
+			<m-title title="超值热卖" labelColor="#666666" label="换一换" @titleHandle="nextHotPage">
 					<image style="width:30upx;height:20upx;margin-right:10upx;" src="../../static/img/icon/home_icon_refresh.png" mode="aspectFit"></image>
 			</m-title>
 			<view class="m-content m-hotsell">
 				<template v-for="(item,index) in hotProList">
-					<m-home-pro :key="index" :rowData="item"></m-home-pro>
+					<m-home-pro @handleFn="hotProDetail" :key="index" :rowData="item"></m-home-pro>
 				</template>
 			</view>
 		</view>
 		<view class="m-container">
-			<m-title title="今日必拼" label="查看详情 >" @titleHandle="pintuanHandle"></m-title>
+			<m-title title="今日必拼" label="查看更多 >" @titleHandle="pintuanHandle"></m-title>
 			<view class="m-content">
 				<scroll-view class="scroll-view" scroll-x="true" @scroll="rowScroll" scroll-left="120">
 					<view class="m-togethoer">
@@ -74,39 +84,16 @@
 	export default {
 		data() {
 			return {
+				searchValue:"",
 				afterHeaderOpacity: 1,//不透明度
 				headerPosition: 'fixed',
 				headerTop:null,
 				statusTop:null,
-				
 				// 轮播图片
-				swiperList: [
-					{ id: 1, src: '../../static/img/2.jpg' },
-					{ id: 2, src: '../../static/img/1.jpg' },
-					// { id: 2, src: 'https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=2042986667,2334195127&fm=26&gp=0.jpg', img: '../../static/img/2.jpg' },
-					// { id: 3, src: 'https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=2042986667,2334195127&fm=26&gp=0.jpg', img: '../../static/img/3.jpg' }
-				],
+				swiperList: [],
 				// 热卖
-				hotProList:[
-					{
-						img:"../../static/img/2.jpg",
-						describel:"特价小白菜",
-						price:"￥2.99",
-						oldPrice:"￥100"
-					},
-					{
-						img:"../../static/img/2.jpg",
-						describel:"特价小白菜",
-						price:"￥2.99",
-						oldPrice:"￥100"
-					},
-					{
-						img:"../../static/img/2.jpg",
-						describel:"特价小白菜",
-						price:"￥2.99",
-						oldPrice:"￥100"
-					}
-				],
+				hotsellPage:1,
+				hotProList:[],
 				// 附近门店
 				nearStoreList:[{
 					img:"../../static/img/2.jpg",
@@ -127,29 +114,53 @@
 			mHomeStore
 		},
 		methods:{
-			// /server/b/banners
-			getBanners(){
-				uni.request({
-					url: "/server/b/banners",
-					method: 'GET',
-					header:{
-						"Cache-Control": "no-cache",
-						"Content-Type": "application/json;charset=UTF-8",
-					},
-					data: {},
-					// dataType:JSON,
-					success: res => {
-						console.log(res);
-					},
-					complete: res => {}
-				});
-			},
-			//搜索跳转商品列表
-			toSearch() {
+			//首页搜索
+			toSearch(){
+				console.log(this.searchValue);
+
 				uni.navigateTo({
-					url:"/pages/product/productlist"
+					url:"/pages/product/productlist?search="+this.searchValue
 				})
 			},
+			// banner图片
+			getBanners(){
+				this.mGet('/server/b/banners',{}).then(res=>{
+					if(res.code=1){
+						this.swiperList=res.data;
+					}
+				}).catch(err=>{
+					console.log(err);
+				});
+			},
+			//超值热卖
+			hotsell(){
+				let page = 0;
+				this.mPost('/server/p/hot/products',{
+					start:this.hotsellPage,
+					length:3
+				}).then(res=>{
+					if(res.code=1){
+						if(res.data&&res.data.list){
+							this.hotProList = res.data.list;
+							console.log(this.hotProList);
+						}
+					}
+				}).catch(err=>{
+					console.log(err);
+				});
+			},
+			//热卖换一换
+			nextHotPage(){
+				
+			},
+			//点击热卖图片
+			hotProDetail(item){
+				uni.navigateTo({
+					url:"/pages/product/product"
+				})
+			},
+
+		
 			// 选择门店
 			choseStore(){
 				uni.navigateTo({
@@ -159,6 +170,7 @@
 			swiperChange(e) {
 				this.current = e.detail.current;
 			},
+			
 			titleHandle(){
 				uni.showToast({ title: '换一换' });
 			},
@@ -179,12 +191,43 @@
 			}
 		},
 		onLoad(){
-			this.getBanners()
+			this.getBanners();
+			this.hotsell();
 		}
 	}
 </script>
 
 <style lang="scss">
+
+.swiper-box {
+	position: relative;
+	width: 100%;
+	height:300upx;
+	swiper {
+		width: 100%;
+		height: 300upx;
+		swiper-item {
+			image {
+				width: 100%;
+				height: 300upx;
+			}
+		}
+	}
+	.indicator{
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		padding: 0 25upx;
+		height: 40upx;
+		border-radius: 40upx;
+		font-size: 22upx;
+		position: absolute;
+		bottom: 20upx;
+		right: 20upx;
+		color: #fff;
+		background-color: rgba(0, 0, 0, 0.2);
+	}
+}
 .icon {
 	width: 30upx;
 	height: 25upx;
@@ -308,12 +351,7 @@
 	margin-top: var(--status-bar-height);
 	/*  #endif  */
 }
-.swiper {
-	width: 100%;
-	margin-top: 100upx;
-	display: flex;
-	justify-content: center;
-}
+
 
 .category-list {
 	width: 92%;

@@ -1,19 +1,11 @@
 <template>
-	<view @click="goStore" class="m-product-list">
-		<view class="m-page-title">
-			东尧蔬菜001号（中关村店）
+	<view  class="m-product-list">
+		<view  v-for="(item,index) in nearStoreList" @click="goStore(item.id)" :key="index">
+			<view class="m-page-title">
+				{{item.sName}}
+			</view>
+			<m-groupbuy-list  :rowData="item"></m-groupbuy-list>
 		</view>
-		<template v-for="(item,index) in nearStoreList">
-			<m-groupbuy-list :key="index" :rowData="item"></m-groupbuy-list>
-		</template>
-		<!-- <view class="m-page-title">
-			东尧蔬菜001号（中关村店）
-		</view> -->
-		<!-- <template v-for="(item,index) in nearStoreList">
-			<m-groupbuy-list :key="index" :rowData="item">
-				<image style="width:164upx;height:60upx;" src="../../static/img/icon/purchase_button_buy.png" mode="aspectFit"></image>
-			</m-groupbuy-list>
-		</template> -->
 	</view>
 </template>
 <script>
@@ -46,13 +38,31 @@
 				}]
 			}
 		},
+		
 		methods:{
 				//跳转到商家
-				goStore(){
+				goStore(id){
+					console.log(id);
 					uni.navigateTo({
-						url:"/pages/store/store"
+						url:"/pages/store/store?id="+id
 					})
 				}
+		},
+		onLoad(option){
+			let search=option.search;
+			this.mPost("/server/p/search/products",{
+				start:0,
+				length:20,
+				name:this.search,
+			}).then(res=>{
+				if(res.code=='1'){
+					if(res.data&&res.data.list){
+						this.nearStoreList=res.data.list;
+						console.log(this.nearStoreList);
+					}
+				}
+				console.log(res);
+			})
 		},
 		components: {
 			mGroupbuyList
@@ -60,16 +70,17 @@
 	}
 </script>
 <style lang="scss">
+	@import "../../common/globel.scss";
 	.m-product-list{
 		// padding: 30upx;
 		.m-page-title{
 			margin-top: 28upx;
 			// margin-bottom: 30upx;
-			margin-left: 20upx;
-			margin-right: 20upx;
+			margin-left: 40upx;
+			margin-right: 40upx;
 			border-bottom: 1px solid #ebebeb;
 			padding:34upx 0;
-			font-size: 32upx;
+			font-size: $fontsize-1;
 			color:#333333;
 		}
 	}

@@ -46,19 +46,20 @@
 </script>
 
 <style lang="scss">
+@import "../common/globel.scss";
 .m-title-box{
-	padding: 20upx 20upx;
+	padding: 30upx 20upx;
 	display: flex;
 	justify-content: space-between;
 	.m-title{
-		color:#333333;
-		font-size: 32upx;
+		color:$color-2;
+		font-size: $fontsize-2;
 	}
 	.m-right{
 		display: flex;
 		flex-direction: row;
-		font-size: 24upx;
-		color:#666;
+		font-size: $fontsize-5;
+		color:$color-1;
 		cursor: pointer;
 		justify-content: center;
 		align-items: center;

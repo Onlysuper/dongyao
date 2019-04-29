@@ -12,22 +12,22 @@
 					<image style="width:57upx;height:33upx" src="../../static/img/icon/me_icon_VIP_lose.png" mode="aspectFit"></image>
 				</view>
 			</view>
-			<view class="m-card">
-				<m-vip-card>
+			<view class="m-card" @tap="linkTo('/pages/user/vip/vip')">
+				<m-vip-top>
 					<view slot="name">VIP会员</view>
 					<view slot="label">（半年卡6折）</view>
 					<view slot="describe">享受专属折扣  福利优惠  定制服务</view>
 					<view slot="right">
 						立即开通>
 					</view>
-				</m-vip-card>
+				</m-vip-top>
 			</view>
 			<view class="m-order-chose">
 				<view class="m-title">
 					<view class="">
 						我的订单
 					</view>
-					<view class="right">
+					<view class="right" @tap="linkTo('/pages/tabBar/order')">
 						查看全部 >
 					</view>
 				</view>
@@ -70,16 +70,22 @@
 	</view>
 </template>
 <script>
-	import mVipCard from '@/components/m-vip-card'
+	import mVipTop from '@/components/m-vip-top'
 	import mCell from '@/components/m-cell'
 	export default {
 		components:{
-			mVipCard,
+			mVipTop,
 			mCell
 		},
 		methods:{
 			// 优惠券
 			linkTo(url){
+				uni.navigateTo({
+					url:url
+				})
+			},
+			// 查看详情
+			vipCardDetail(){
 				uni.navigateTo({
 					url:url
 				})
