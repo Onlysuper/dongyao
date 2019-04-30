@@ -357,12 +357,13 @@
 		position: relative;
 		display: flex;
 		align-items: center;
+		
 		.icon {
 			display: flex;
 			align-items: center;
 			position: absolute;
 			top: 0;
-			right: 0;
+			right: 10upx;
 			width: 60upx;
 			height: 60upx;
 			font-size: 34upx;

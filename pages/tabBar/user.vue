@@ -1,7 +1,7 @@
 <template>
 	<view class="m-user-page">
 		<view class="m-header">
-			<view class="m-user">
+			<view v-if="isLogin" class="m-user">
 				<view class="m-img">
 					<image style="width:100%;height:100%" src="../../static/img/icon/home_icon_gps.png" mode="aspectFit"></image>
 				</view>
@@ -10,6 +10,18 @@
 						小白兔
 					</view>
 					<image style="width:57upx;height:33upx" src="../../static/img/icon/me_icon_VIP_lose.png" mode="aspectFit"></image>
+				</view>
+			</view>
+			<view  @tap="linkTo('/pages/login/login')" v-else class="m-user">
+				<view class="m-img">
+					<image style="width:100%;height:100%" src="../../static/img/icon/home_icon_gps.png" mode="aspectFit"></image>
+				</view>
+				<view class="m-text">
+					<view class="m-username">
+						<view class="m-login-but">
+							登录/注册
+						</view>
+					</view>
 				</view>
 			</view>
 			<view class="m-card" @tap="linkTo('/pages/user/vip/vip')">
@@ -27,7 +39,7 @@
 					<view class="">
 						我的订单
 					</view>
-					<view class="right" @tap="linkTo('/pages/tabBar/order')">
+					<view class="right" @tap="linkToTab('/pages/tabBar/order')">
 						查看全部 >
 					</view>
 				</view>
@@ -77,8 +89,20 @@
 			mVipTop,
 			mCell
 		},
+		data(){
+			return {
+				isLogin: uni.getStorageSync('isLogin')||false//默认为true
+			}
+		},
 		methods:{
-			// 优惠券
+			
+			linkToTab(url){
+				
+				uni.switchTab({
+					url:url
+				})
+			},
+			// 跳转
 			linkTo(url){
 				uni.navigateTo({
 					url:url
@@ -89,7 +113,9 @@
 				uni.navigateTo({
 					url:url
 				})
-			}
+			},
+		},
+		onLoad(){
 		}
 	}
 </script>
@@ -113,6 +139,7 @@
 				border-radius: 100%;
 				overflow: hidden;
 				background: #fff;
+				
 			}
 			.m-text{
 				flex: 1;
@@ -123,6 +150,13 @@
 				align-items: center;
 				.m-username{
 					margin-right: 10upx;
+					.m-login-but{
+						// border:1px solid #fff;
+						padding:5upx 30upx;
+						font-size: 32upx;
+						margin-left: 10upx;
+						background:rgba(255,255,255,0.2)
+					}
 				}
 			}
 		}

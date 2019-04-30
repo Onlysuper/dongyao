@@ -13,7 +13,8 @@
     "pages/user/vip/vip",
     "pages/empty/empty",
     "pages/order/pay",
-    "pages/order/order"
+    "pages/order/order",
+    "pages/login/login"
   ],
   "subPackages": [],
   "window": {
@@ -38,11 +39,22 @@
         "text": "首页"
       },
       {
+        "pagePath": "pages/tabBar/order",
+        "iconPath": "static/img/tabBar/order.png",
+        "selectedIconPath": "static/img/tabBar/order-on.png",
+        "text": "订单"
+      },
+      {
         "pagePath": "pages/tabBar/user",
         "iconPath": "static/img/tabBar/user.png",
         "selectedIconPath": "static/img/tabBar/user-on.png",
         "text": "我的"
       }
     ]
+  },
+  "devServer": {
+    "port": 8081,
+    "disableHostCheck": true,
+    "proxy": "http://39.105.89.138:6090"
   }
 }

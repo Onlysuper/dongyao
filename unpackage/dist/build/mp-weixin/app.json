@@ -9,7 +9,12 @@
     "pages/groupbuy/groupbuy",
     "pages/product/productlist",
     "pages/user/tokencard/tokencard",
-    "pages/user/aboutme/aboutme"
+    "pages/user/aboutme/aboutme",
+    "pages/user/vip/vip",
+    "pages/empty/empty",
+    "pages/order/pay",
+    "pages/order/order",
+    "pages/login/login"
   ],
   "subPackages": [],
   "window": {
@@ -46,5 +51,10 @@
         "text": "我的"
       }
     ]
+  },
+  "devServer": {
+    "port": 8081,
+    "disableHostCheck": true,
+    "proxy": "http://39.105.89.138:6090"
   }
 }

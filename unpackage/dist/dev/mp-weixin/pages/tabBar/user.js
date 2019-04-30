@@ -474,6 +474,18 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 var _mVipTop = _interopRequireDefault(__webpack_require__(/*! @/components/m-vip-top */ "../../../../../../Users/apple/opt/DONGYAO/components/m-vip-top.vue"));
 var _mCell = _interopRequireDefault(__webpack_require__(/*! @/components/m-cell */ "../../../../../../Users/apple/opt/DONGYAO/components/m-cell.vue"));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}var _default =
 {
@@ -481,8 +493,20 @@ var _mCell = _interopRequireDefault(__webpack_require__(/*! @/components/m-cell 
     mVipTop: _mVipTop.default,
     mCell: _mCell.default },
 
+  data: function data() {
+    return {
+      isLogin: uni.getStorageSync('isLogin') || false //默认为true
+    };
+  },
   methods: {
-    // 优惠券
+
+    linkToTab: function linkToTab(url) {
+
+      uni.switchTab({
+        url: url });
+
+    },
+    // 跳转
     linkTo: function linkTo(url) {
       uni.navigateTo({
         url: url });
@@ -493,7 +517,10 @@ var _mCell = _interopRequireDefault(__webpack_require__(/*! @/components/m-cell 
       uni.navigateTo({
         url: url });
 
-    } } };exports.default = _default;
+    } },
+
+  onLoad: function onLoad() {
+  } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ "./node_modules/@dcloudio/uni-mp-weixin/dist/index.js")["default"]))
 
 /***/ }),
@@ -665,12 +692,26 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("view", { staticClass: "m-user-page" }, [
     _c("view", { staticClass: "m-header" }, [
-      _vm._m(0),
+      _vm.isLogin
+        ? _c("view", { staticClass: "m-user" }, [_vm._m(0), _vm._m(1)])
+        : _c(
+            "view",
+            {
+              staticClass: "m-user",
+              attrs: { eventid: "09ce8447-0" },
+              on: {
+                tap: function($event) {
+                  _vm.linkTo("/pages/login/login")
+                }
+              }
+            },
+            [_vm._m(2), _vm._m(3)]
+          ),
       _c(
         "view",
         {
           staticClass: "m-card",
-          attrs: { eventid: "09ce8447-0" },
+          attrs: { eventid: "09ce8447-1" },
           on: {
             tap: function($event) {
               _vm.linkTo("/pages/user/vip/vip")
@@ -696,17 +737,17 @@ var render = function() {
             "view",
             {
               staticClass: "right",
-              attrs: { eventid: "09ce8447-1" },
+              attrs: { eventid: "09ce8447-2" },
               on: {
                 tap: function($event) {
-                  _vm.linkTo("/pages/tabBar/order")
+                  _vm.linkToTab("/pages/tabBar/order")
                 }
               }
             },
             [_vm._v("查看全部 >")]
           )
         ]),
-        _vm._m(1)
+        _vm._m(4)
       ]),
       _c(
         "view",
@@ -718,7 +759,7 @@ var render = function() {
               attrs: {
                 label: "我的优惠券",
                 link: true,
-                eventid: "09ce8447-2",
+                eventid: "09ce8447-3",
                 mpcomid: "09ce8447-1"
               },
               on: {
@@ -744,7 +785,7 @@ var render = function() {
               attrs: {
                 label: "关于我们",
                 link: true,
-                eventid: "09ce8447-3",
+                eventid: "09ce8447-4",
                 mpcomid: "09ce8447-2"
               },
               on: {
@@ -775,25 +816,52 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("view", { staticClass: "m-user" }, [
-      _c("view", { staticClass: "m-img" }, [
-        _c("image", {
-          staticStyle: { width: "100%", height: "100%" },
-          attrs: {
-            src: "../../static/img/icon/home_icon_gps.png",
-            mode: "aspectFit"
-          }
-        })
-      ]),
-      _c("view", { staticClass: "m-text" }, [
-        _c("view", { staticClass: "m-username" }, [_vm._v("小白兔")]),
-        _c("image", {
-          staticStyle: { width: "57rpx", height: "33rpx" },
-          attrs: {
-            src: "../../static/img/icon/me_icon_VIP_lose.png",
-            mode: "aspectFit"
-          }
-        })
+    return _c("view", { staticClass: "m-img" }, [
+      _c("image", {
+        staticStyle: { width: "100%", height: "100%" },
+        attrs: {
+          src: "../../static/img/icon/home_icon_gps.png",
+          mode: "aspectFit"
+        }
+      })
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("view", { staticClass: "m-text" }, [
+      _c("view", { staticClass: "m-username" }, [_vm._v("小白兔")]),
+      _c("image", {
+        staticStyle: { width: "57rpx", height: "33rpx" },
+        attrs: {
+          src: "../../static/img/icon/me_icon_VIP_lose.png",
+          mode: "aspectFit"
+        }
+      })
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("view", { staticClass: "m-img" }, [
+      _c("image", {
+        staticStyle: { width: "100%", height: "100%" },
+        attrs: {
+          src: "../../static/img/icon/home_icon_gps.png",
+          mode: "aspectFit"
+        }
+      })
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("view", { staticClass: "m-text" }, [
+      _c("view", { staticClass: "m-username" }, [
+        _c("view", { staticClass: "m-login-but" }, [_vm._v("登录/注册")])
       ])
     ])
   },

@@ -24,6 +24,70 @@
 /* 垂直间距 */
 /* 透明度 */
 /* 文章场景相关 */
+.m-title-box {
+  padding: 30rpx 20rpx;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+.m-title-box .m-title {
+    color: #333333;
+    font-size: 32rpx;
+}
+.m-title-box .m-right {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: row;
+        -ms-flex-direction: row;
+            flex-direction: row;
+    font-size: 24rpx;
+    color: #a7a7a7;
+    cursor: pointer;
+    -webkit-box-pack: center;
+    -webkit-justify-content: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+        -ms-flex-align: center;
+            align-items: center;
+}
+
+@charset "UTF-8";
+/**
+ * 这里是uni-app内置的常用样式变量
+ *
+ * uni-app 官方扩展插件及插件市场（https://ext.dcloud.net.cn）上很多三方插件均使用了这些样式变量
+ * 如果你是插件开发者，建议你使用scss预处理，并在插件代码中直接使用这些变量（无需 import 这个文件），方便用户通过搭积木的方式开发整体风格一致的App
+ *
+ */
+/**
+ * 如果你是App开发者（插件使用者），你可以通过修改这些变量来定制自己的插件主题，实现自定义主题功能
+ *
+ * 如果你的项目同样使用了scss预处理，你也可以直接在你的 scss 代码中使用如下变量，同时无需 import 这个文件
+ */
+/* 颜色变量 */
+/* 行为相关颜色 */
+/* 文字基本颜色 */
+/* 背景颜色 */
+/* 边框颜色 */
+/* 尺寸变量 */
+/* 文字尺寸 */
+/* 图片尺寸 */
+/* Border Radius */
+/* 水平间距 */
+/* 垂直间距 */
+/* 透明度 */
+/* 文章场景相关 */
 .m-tab {
   display: -webkit-box;
   display: -webkit-flex;
@@ -121,9 +185,20 @@
         -ms-flex: 0 0 150rpx;
             flex: 0 0 150rpx;
     height: 150rpx;
-    background: #f5f5f5;
-    border-radius: 100%;
     overflow: hidden;
+    position: relative;
+}
+.m-groupbuy-list .m-img .m-pin {
+      background: #eb5555;
+      color: #fff;
+      text-align: center;
+      position: absolute;
+      bottom: 0;
+      font-size: 20rpx;
+      width: 100rpx;
+      left: 50%;
+      margin-left: -50rpx;
+      border-radius: 5rpx;
 }
 .m-groupbuy-list .m-text {
     -webkit-box-flex: 1;
@@ -133,20 +208,141 @@
     padding: 0 20rpx;
 }
 .m-groupbuy-list .m-text .m-title {
-      font-size: 32rpx;
+      font-size: 28rpx;
       color: #333333;
 }
 .m-groupbuy-list .m-text .m-describe {
       font-size: 24rpx;
+      margin-top: 5rpx;
       color: #808080;
 }
 .m-groupbuy-list .m-text .m-price {
       color: #ff582b;
       font-size: 26rpx;
       margin-top: 10rpx;
+      font-weight: bold;
 }
 .m-groupbuy-list .m-text .m-oldprice {
       color: #999;
-      font-size: 18rpx;
+      font-size: 22rpx;
+}
+
+@charset "UTF-8";
+/**
+ * 这里是uni-app内置的常用样式变量
+ *
+ * uni-app 官方扩展插件及插件市场（https://ext.dcloud.net.cn）上很多三方插件均使用了这些样式变量
+ * 如果你是插件开发者，建议你使用scss预处理，并在插件代码中直接使用这些变量（无需 import 这个文件），方便用户通过搭积木的方式开发整体风格一致的App
+ *
+ */
+/**
+ * 如果你是App开发者（插件使用者），你可以通过修改这些变量来定制自己的插件主题，实现自定义主题功能
+ *
+ * 如果你的项目同样使用了scss预处理，你也可以直接在你的 scss 代码中使用如下变量，同时无需 import 这个文件
+ */
+/* 颜色变量 */
+/* 行为相关颜色 */
+/* 文字基本颜色 */
+/* 背景颜色 */
+/* 边框颜色 */
+/* 尺寸变量 */
+/* 文字尺寸 */
+/* 图片尺寸 */
+/* Border Radius */
+/* 水平间距 */
+/* 垂直间距 */
+/* 透明度 */
+/* 文章场景相关 */
+.m-pro-list {
+  background: #fff;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: row;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  padding: 30rpx;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  border-bottom: 1px solid #e6e6e6;
+}
+.m-pro-list:last-child {
+    border: 0;
+}
+.m-pro-list .m-img-box {
+    -webkit-box-flex: 0;
+    -webkit-flex: 0 0 130rpx;
+        -ms-flex: 0 0 130rpx;
+            flex: 0 0 130rpx;
+    height: 130rpx;
+}
+.m-pro-list .m-text-box {
+    -webkit-box-flex: 1;
+    -webkit-flex: 1;
+        -ms-flex: 1;
+            flex: 1;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: row;
+        -ms-flex-direction: row;
+            flex-direction: row;
+    -webkit-box-align: end;
+    -webkit-align-items: flex-end;
+        -ms-flex-align: end;
+            align-items: flex-end;
+    padding-left: 20rpx;
+}
+.m-pro-list .m-text-box .m-body {
+      -webkit-box-flex: 1;
+      -webkit-flex: 1;
+          -ms-flex: 1;
+              flex: 1;
+}
+.m-pro-list .m-text-box .m-body .m-pro-title {
+        font-size: 32rpx;
+        color: #333333;
+}
+.m-pro-list .m-text-box .m-body .m-price-box {
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-orient: horizontal;
+        -webkit-box-direction: normal;
+        -webkit-flex-direction: row;
+            -ms-flex-direction: row;
+                flex-direction: row;
+        -webkit-box-align: center;
+        -webkit-align-items: center;
+            -ms-flex-align: center;
+                align-items: center;
+        margin-top: 20rpx;
+}
+.m-pro-list .m-text-box .m-body .m-price-box .m-price {
+          color: #ff582b;
+          font-size: 24rpx;
+}
+.m-pro-list .m-text-box .m-body .m-price-box .m-oldprice {
+          padding-left: 20rpx;
+          color: #999;
+          font-size: 22rpx;
+          text-decoration: line-through;
+}
+.m-pro-list .m-text-box .m-num-box {
+      -webkit-box-flex: 0;
+      -webkit-flex: 0;
+          -ms-flex: 0;
+              flex: 0;
+      font-size: 32rpx;
+      color: #4d4d4d;
 }
 

@@ -24,14 +24,14 @@
 /* 垂直间距 */
 /* 透明度 */
 /* 文章场景相关 */
-.m-vip-card {
+.m-vip-top {
   width: 695rpx;
   height: 166rpx;
   margin: 0 auto;
   border-radius: 15rpx;
   position: relative;
 }
-.m-vip-card::before {
+.m-vip-top::before {
     display: block;
     content: "";
     width: 695rpx;
@@ -44,7 +44,7 @@
     top: 0;
     z-index: 3;
 }
-.m-vip-card::after {
+.m-vip-top::after {
     display: block;
     content: "";
     height: 166rpx;
@@ -59,7 +59,7 @@
     -webkit-box-shadow: 0rpx 20rpx 30rpx rgba(78, 78, 78, 0.7);
             box-shadow: 0rpx 20rpx 30rpx rgba(78, 78, 78, 0.7);
 }
-.m-vip-card .m-content {
+.m-vip-top .m-content {
     position: relative;
     z-index: 5;
     padding: 10rpx;
@@ -85,7 +85,7 @@
     -webkit-box-sizing: border-box;
             box-sizing: border-box;
 }
-.m-vip-card .m-content .m-title {
+.m-vip-top .m-content .m-title {
       display: -webkit-box;
       display: -webkit-flex;
       display: -ms-flexbox;
@@ -101,18 +101,18 @@
           -ms-flex-align: center;
               align-items: center;
 }
-.m-vip-card .m-content .m-title .name {
+.m-vip-top .m-content .m-title .name {
         font-size: 32rpx;
 }
-.m-vip-card .m-content .m-title .label {
+.m-vip-top .m-content .m-title .label {
         font-size: 22rpx;
 }
-.m-vip-card .m-content .m-describe {
+.m-vip-top .m-content .m-describe {
       margin-top: 5rpx;
       font-size: 22rpx;
       color: #fff;
 }
-.m-vip-card .m-content .m-right {
+.m-vip-top .m-content .m-right {
       text-align: right;
       font-size: 22rpx;
       color: #dcbc8d;
@@ -251,6 +251,12 @@
 }
 .m-user-page .m-user .m-text .m-username {
       margin-right: 10rpx;
+}
+.m-user-page .m-user .m-text .m-username .m-login-but {
+        padding: 5rpx 30rpx;
+        font-size: 32rpx;
+        margin-left: 10rpx;
+        background: rgba(255, 255, 255, 0.2);
 }
 .m-user-page .m-order-chose {
   margin: 30rpx;

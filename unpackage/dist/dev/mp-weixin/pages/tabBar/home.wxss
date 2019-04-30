@@ -465,7 +465,7 @@ uni-swiper{
               align-items: center;
       position: absolute;
       top: 0;
-      right: 0;
+      right: 10rpx;
       width: 60rpx;
       height: 60rpx;
       font-size: 34rpx;

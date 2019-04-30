@@ -1,0 +1,1 @@
+<template name="8ff3bae4"><view class="_view 8ff3bae4 m-login-page"><view class="_view 8ff3bae4 m-img-box">东尧蔬菜</view><view class="_view 8ff3bae4"><button class="_button 8ff3bae4 m-but" type="primary" open-type="getUserInfo" withCredentials="true" lang="zh_CN" bindgetuserinfo="handleProxy" data-eventid="{{'8ff3bae4-0'}}" data-comkey="{{$k}}">授权登录</button></view></view></template>

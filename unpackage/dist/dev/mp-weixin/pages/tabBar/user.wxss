@@ -252,6 +252,12 @@
 .m-user-page .m-user .m-text .m-username {
       margin-right: 10rpx;
 }
+.m-user-page .m-user .m-text .m-username .m-login-but {
+        padding: 5rpx 30rpx;
+        font-size: 32rpx;
+        margin-left: 10rpx;
+        background: rgba(255, 255, 255, 0.2);
+}
 .m-user-page .m-order-chose {
   margin: 30rpx;
   -webkit-box-shadow: 0 0 20rpx rgba(0, 0, 0, 0.3);

@@ -56,7 +56,12 @@
         "appid" : "wxf3953fb8242b9ecc",
         "setting" : {
             "urlCheck" : true
-        }
+        },
+		"devServer": {
+		    "port": 8081,
+		    "disableHostCheck": true,
+			"proxy": "http://39.105.89.138:6090"
+		}
     },
 	"h5": {
         "devServer": {
