@@ -3,7 +3,17 @@
     "pages/tabBar/home",
     "pages/store/list",
     "pages/store/store",
-    "pages/product/product"
+    "pages/product/product",
+    "pages/tabBar/order",
+    "pages/tabBar/user",
+    "pages/groupbuy/groupbuy",
+    "pages/product/productlist",
+    "pages/user/tokencard/tokencard",
+    "pages/user/aboutme/aboutme",
+    "pages/user/vip/vip",
+    "pages/empty/empty",
+    "pages/order/pay",
+    "pages/order/order"
   ],
   "subPackages": [],
   "window": {
@@ -26,12 +36,6 @@
         "iconPath": "static/img/tabBar/home.png",
         "selectedIconPath": "static/img/tabBar/home-on.png",
         "text": "首页"
-      },
-      {
-        "pagePath": "pages/tabBar/category",
-        "iconPath": "static/img/tabBar/order.png",
-        "selectedIconPath": "static/img/tabBar/order-on.png",
-        "text": "订单"
       },
       {
         "pagePath": "pages/tabBar/user",

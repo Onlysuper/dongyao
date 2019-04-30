@@ -25,6 +25,7 @@
 /* 透明度 */
 /* 文章场景相关 */
 page {
-  font-family: -apple-system-font,Helvetica Neue,Helvetica,sans-serif;
+  background: #f9f9f9;
+  font-family: PingFang SC Medium,-apple-system-font,Helvetica Neue,Helvetica,sans-serif;
 }
 

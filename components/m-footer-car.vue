@@ -9,8 +9,8 @@
 		<view class="m-price">
 			{{price}}
 		</view>
-		<view class="m-but">
-			选好了
+		<view @tap="payFn" class="m-but">
+			{{title}}
 		</view>
 	</view>
 </template>
@@ -19,6 +19,10 @@
 	export default {
 		name:"m-footer-car",
 		props:{
+			title:{
+				type:String,
+				value:"",
+			},
 			price:{
 				type:String,
 				value:"",
@@ -36,6 +40,9 @@
 		methods:{
 			handleFn(){
 				this.$emit("handleFn")
+			},
+			payFn(){
+				this.$emit("payFn")
 			}
 		}
 	}

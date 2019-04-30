@@ -122,7 +122,7 @@
                 }
             }
         },
-		// 会员
+        // 会员
         {
             "path" : "pages/user/vip/vip",
             "style" : {
@@ -132,7 +132,45 @@
                     "softinputNavBar" : "none"
                 }
             }
-        }
+        },
+        // 找不到内容
+        {
+            "path" : "pages/empty/empty",
+            "style" : {
+                "navigationBarTitleText" : "东尧蔬菜",
+                "app-plus" : {
+                    "titleNView" : false, //禁用原生导航栏
+                    "softinputNavBar" : "none"
+                }
+            }
+        },
+		//支付
+        {
+            "path" : "pages/order/pay",
+            "style" : {
+                "navigationBarTitleText" : "东尧蔬菜",
+                "app-plus" : {
+                    "titleNView" : false, //禁用原生导航栏
+                    "softinputNavBar" : "none"
+                }
+            },
+			"permission": { 
+				"scope.userLocation": {
+				  "desc": "你的位置信息将用于小程序位置接口的效果展示"
+				}
+			 }
+        },
+		// 订单详情
+		{
+		    "path" : "pages/order/order",
+		    "style" : {
+		        "navigationBarTitleText" : "东尧蔬菜",
+		        "app-plus" : {
+		            "titleNView" : false, //禁用原生导航栏
+		            "softinputNavBar" : "none"
+		        }
+		    }
+		}
     ],
     // 	"globalStyle": {
     // 		"navigationBarTextStyle": "black",
@@ -160,12 +198,12 @@
                 "selectedIconPath" : "static/img/tabBar/home-on.png",
                 "text" : "首页"
             },
-//             {
-//                 "pagePath" : "pages/tabBar/order",
-//                 "iconPath" : "static/img/tabBar/order.png",
-//                 "selectedIconPath" : "static/img/tabBar/order-on.png",
-//                 "text" : "订单"
-//             },
+            //             {
+            //                 "pagePath" : "pages/tabBar/order",
+            //                 "iconPath" : "static/img/tabBar/order.png",
+            //                 "selectedIconPath" : "static/img/tabBar/order-on.png",
+            //                 "text" : "订单"
+            //             },
             {
                 "pagePath" : "pages/tabBar/user",
                 "iconPath" : "static/img/tabBar/user.png",

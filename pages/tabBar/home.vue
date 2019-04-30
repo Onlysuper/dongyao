@@ -30,34 +30,25 @@
 					<image :src="swiper.imgUrl" @tap="swiperChange(swiper)"></image>
 				</swiper-item>
 			</swiper>
-			<!-- <uni-swiper-dot :info="swiperList" :current="current" field="content" :mode="mode"> -->
-				<!-- <swiper style="height: 250upx" class="swiper-box" @change="swiperChange">
-					<swiper-item style="height: auto;" v-for="(item ,index) in swiperList" :key="index">
-						<view class="">
-						</view>
-							<image style="width: 100px;height: 100px;" :src="item.imgUrl" mode="widthFix"></image>
-					</swiper-item>
-				</swiper> -->
-			<!-- </uni-swiper-dot> -->
 		</view>
 		<!-- 超值热卖 -->
 		<view class="m-container">
-			<m-title title="超值热卖" labelColor="#666666" label="换一换" @titleHandle="nextHotPage">
+			<m-title title="超值热卖" labelColor="#666666" label="换一换" @titleHandle="getHotsellList">
 					<image style="width:30upx;height:20upx;margin-right:10upx;" src="../../static/img/icon/home_icon_refresh.png" mode="aspectFit"></image>
 			</m-title>
 			<view class="m-content m-hotsell">
 				<template v-for="(item,index) in hotProList">
-					<m-home-pro @handleFn="hotProDetail" :key="index" :rowData="item"></m-home-pro>
+					<m-home-pro @handleFn="hotProDetail(item)" :key="index" :rowData="item"></m-home-pro>
 				</template>
 			</view>
 		</view>
 		<view class="m-container">
 			<m-title title="今日必拼" label="查看更多 >" @titleHandle="pintuanHandle"></m-title>
 			<view class="m-content">
-				<scroll-view class="scroll-view" scroll-x="true" @scroll="rowScroll" scroll-left="120">
+				<scroll-view class="scroll-view" scroll-x="true"  scroll-left="120">
 					<view class="m-togethoer">
-						<template v-for="(item,index) in hotProList">
-							<m-home-pro :key="index" :rowData="item"></m-home-pro>
+						<template v-for="(item,index) in groupsellList">
+							<m-home-pro  @handleFn="groupProDetail" :key="index" :rowData="item"></m-home-pro>
 						</template>
 					</view>
 				</scroll-view>
@@ -67,7 +58,7 @@
 			<m-title title="附近门店" label="查看全部 >" @titleHandle="storeHandle"></m-title>
 			<view class="m-content m-store">
 				<template v-for="(item,index) in nearStoreList">
-					<m-home-store :tips="item.tips" :key="index" :rowData="item"></m-home-store>
+					<m-home-store @handleFn="storeDetail" :tips="item.tips" :key="index" :rowData="item"></m-home-store>
 				</template>
 			</view>
 		</view>
@@ -94,14 +85,16 @@
 				// 热卖
 				hotsellPage:1,
 				hotProList:[],
+				// 拼团列表
+				groupsellList:[],
 				// 附近门店
 				nearStoreList:[{
-					img:"../../static/img/2.jpg",
-					title:"老萌1号店",
-					distance:"13km",
-					describel:"优惠优惠优惠",
-					address:"北京市海淀区中关村大街15号",
-					tips:['优惠']
+// 					img:"../../static/img/2.jpg",
+// 					title:"老萌1号店",
+// 					distance:"13km",
+// 					describel:"优惠优惠优惠",
+// 					address:"北京市海淀区中关村大街15号",
+// 					tips:['优惠']
 				}],
 				current: 0,
 				mode: 'long',
@@ -132,50 +125,85 @@
 					console.log(err);
 				});
 			},
-			//超值热卖
-			hotsell(){
-				let page = 0;
+			//热卖列表
+			getHotsellList(){
 				this.mPost('/server/p/hot/products',{
 					start:this.hotsellPage,
 					length:3
 				}).then(res=>{
 					if(res.code=1){
-						if(res.data&&res.data.list){
-							this.hotProList = res.data.list;
-							console.log(this.hotProList);
+						if(res.data){
+							let data = res.data;
+							this.hotProList = data.list;
+							this.hotsellPage=data.nextPage;
 						}
 					}
 				}).catch(err=>{
 					console.log(err);
 				});
 			},
-			//热卖换一换
-			nextHotPage(){
-				
+			//拼团列表
+			getGroupsellList(){
+				this.mPost('/server/p/group/products',{
+					start:this.hotsellPage,
+					length:3
+				}).then(res=>{
+					if(res.code=1){
+						if(res.data){
+							let data = res.data;
+							if(data.list){
+								this.groupsellList = data.list;
+							}
+						}
+					}
+				}).catch(err=>{
+					console.log(err);
+				});
 			},
-			//点击热卖图片
-			hotProDetail(item){
-				uni.navigateTo({
-					url:"/pages/product/product"
-				})
+			//门店列表
+			getStoreList(){
+				this.mPost('/server/s/vicinity/stores',{
+					lng:116.206845,//经度
+					length:39.762155 //纬度
+				}).then(res=>{
+					if(res.code=1){
+						if(res.data){
+							let data = res.data;
+							if(data.list){
+								this.nearStoreList = data.list;
+							}
+						}
+					}
+				}).catch(err=>{
+					console.log(err);
+				});
 			},
-
-		
-			// 选择门店
+			// 门店更多
 			choseStore(){
 				uni.navigateTo({
 					url:"/pages/store/list"
 				})
 			},
+			//点击热卖图片
+			hotProDetail(item){
+				uni.navigateTo({
+					url:"/pages/store/store?"+item.id
+				})
+			},
+			// 点击拼团图片
+			groupProDetail(){
+				uni.navigateTo({
+					url:"/pages/product/product"
+				})
+			},
+			//点击门店图片
+			storeDetail(){
+				uni.navigateTo({
+					url:"/pages/store/store"
+				})
+			},
 			swiperChange(e) {
 				this.current = e.detail.current;
-			},
-			
-			titleHandle(){
-				uni.showToast({ title: '换一换' });
-			},
-			rowScroll(e){
-				 // this.old.scrollTop = e.detail.scrollTop
 			},
 			// 拼团
 			pintuanHandle(){
@@ -192,7 +220,10 @@
 		},
 		onLoad(){
 			this.getBanners();
-			this.hotsell();
+			this.getHotsellList();
+			this.getGroupsellList();
+			this.getStoreList();
+			
 		}
 	}
 </script>

@@ -14,7 +14,6 @@
 </template>
 <script>
 	import mGroupbuyList from '@/components/m-groupbuy-list'
-	
 	export default {
 		data() {
 			return {
