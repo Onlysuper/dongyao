@@ -30,7 +30,7 @@
 		<view class="category-list">
 			<!-- 左侧分类导航 -->
 			<scroll-view  scroll-y="true" class="left" >
-		        <view class="row" v-for="(item,index) in storeMenu" :key="item.id" :class="[index==showCategoryIndex?'on':'']" @tap="showCategory(item.id)">
+		        <view class="row" v-for="(item,index) in storeMenu" :key="item.id" :class="[item.id==showCategoryIndex?'on':'']" @tap="showCategory(item.id)">
 					<view class="text">
 						<view class="block"></view>
 						{{item.name}}
@@ -39,10 +39,12 @@
 		    </scroll-view>
 			<!-- 右侧子导航 -->
 			<scroll-view  scroll-y="true" class="right" >
-			    <view class="category" v-for="(category,index) in storeMenu" :key="category.id" v-show="index==showCategoryIndex" >
+				<!-- {{productList}} -->
+<!-- 			   <view class="category"  v-show="index==showCategoryIndex"> -->
+				<view class="category">
 					<view class="list">
-						<view class="box" v-for="(box,i) in category.list" :key="i">
-							<m-store-pro @touchOnGoods="touchOnGoods" :rowData="box"></m-store-pro>
+						<view class="box" v-for="(category,index) in productList"  :key="category.id">
+							<m-store-pro @touchOnGoods="touchOnGoods" :rowData="category"></m-store-pro>
 						</view>
 					</view>
 				</view>
@@ -158,9 +160,9 @@
 		},
 		data() {
 			return {
+				storeid:0,
 				//商家基本信息
 				storeData:{},
-				
 				// 购物车动画start
 				 hide_good_box:true,
 				 bus_x:0,
@@ -185,6 +187,9 @@
 							oldprice:"￥9.99"
 						}
 					]}
+				],
+				productList:[
+					
 				]
 			}
 		},
@@ -255,6 +260,20 @@
 			},
 			//分类切换显示
 			showCategory(index){
+				this.mPost("/server/p/search/products",{
+					start:0,
+					length:200,
+					typeId:index,
+					storeId:this.storeId
+				}).then(res=>{
+					if(res.code=='1'){
+						if(res.data&&res.data.list){
+							this.productList=res.data.list;
+							console.log(this.productList);
+						}
+					}
+				})
+				// /server/p/search/products
 				this.showCategoryIndex = index;
 			},
 			//关闭规格弹窗
@@ -287,18 +306,38 @@
 				
 			},
 			busHandle(){
-				let ww = document.body.clientWidth;
-				let hh = document.body.clientHeight;
-				this.busPos['x'] = 45;//购物车的位置
-				this.busPos['y'] = hh - 56;
+				let hh = 0;
+				const that = this;
+				that.busPos['x'] = 45;//购物车的位置
+				//  #ifdef H5
+				hh = document.body.clientHeight;
+				that.busPos['y'] = hh - 56;
+				//  #endif  
+				
+				//  #ifdef MP-WEIXIN  
+				wx.getSystemInfo({
+					success: function(res) {
+						hh = res.windowHeight;
+						that.busPos['y'] = hh - 56;
+					}
+				})
+				//  #endif  
+				
+// 				let ww = document.body.clientWidth;
+// 				let hh = document.body.clientHeight;
+// 				this.busPos['x'] = 45;//购物车的位置
+// 				this.busPos['y'] = hh - 56;
 			}
 		},
 		
 		onLoad(option) {
+			
+			this.storeid=option.storeid;
+			console.log("storeid:"+this.storeid);
 			this.busHandle();
 			// 商家基本信息
 			this.mPost("/server/s/storeById",{
-				id:1,//userid
+				id:option.storeid
 			}).then(res=>{
 				if(res.code=='1'){
 					this.storeData=res.data;
@@ -306,13 +345,12 @@
 			})
 			//商品分类
 			this.mPost("/server/t/types",{
-				// id:1,//userid
 			}).then(res=>{
 				if(res.code=='1'){
-					console.log(res);
 					this.storeMenu=res.data;
 				}
 			})
+			this.showCategory(1)
 		}
 		
 		

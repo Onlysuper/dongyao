@@ -53,8 +53,13 @@
     ]
   },
   "devServer": {
-    "port": 8081,
+    "port": 30902,
     "disableHostCheck": true,
     "proxy": "http://39.105.89.138:6090"
-  }
+  },
+  "permission": {
+		"scope.userLocation":{
+			"desc":"你的位置信息将用于位置接口的显示效果"
+		}
+	}
 }

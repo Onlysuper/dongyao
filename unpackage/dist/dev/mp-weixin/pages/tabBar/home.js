@@ -729,6 +729,7 @@ var _mHomeStore = _interopRequireDefault(__webpack_require__(/*! @/components/m-
     },
     //热卖列表
     getHotsellList: function getHotsellList() {var _this2 = this;
+      console.log('热卖');
       this.mPost('/server/p/hot/products', {
         start: this.hotsellPage,
         length: 3 }).

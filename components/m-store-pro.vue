@@ -2,24 +2,23 @@
 	<!-- 门店商品图文 -->
 	<view class="m-store-item">
 		<view class="m-img">
-			<image style="width: 100%;height: 100%;" :src="rowData.img" mode="aspectFit"></image>
+			<image style="width: 100%;height: 100%;" :src="rowData.pictureUrl" mode="aspectFit"></image>
 		</view>
 		<view class="m-text">
 			<view class="m-title">
-				{{rowData.name}}
+				{{rowData.synopsis}}
 			</view>
 			<view class="m-descripe">
-				{{rowData.descripe}}
+				{{rowData.labelName}}
 			</view>
 			<view class="m-price">
-				{{rowData.price}}
+				{{rowData.presentPrice}}
 			</view>
 			<view class="m-old-price">
 				非会员价
 				<view class="m-num">
-					{{rowData.oldprice}}
+					{{rowData.originalPrice}}
 				</view>
-				
 			</view>
 		</view>
 		<view class="m-distance">

@@ -470,7 +470,6 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 
 
 
-
 {
   name: "m-store-pro",
   props: {
@@ -721,6 +720,8 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 
 
 
+
+
 var _mFooterCar = _interopRequireDefault(__webpack_require__(/*! @/components/m-footer-car */ "../../../../../../Users/apple/opt/DONGYAO/components/m-footer-car.vue"));
 var _mStorePro = _interopRequireDefault(__webpack_require__(/*! @/components/m-store-pro */ "../../../../../../Users/apple/opt/DONGYAO/components/m-store-pro.vue"));
 var _uniNumberBox = _interopRequireDefault(__webpack_require__(/*! @/components/uni-number-box/uni-number-box.vue */ "../../../../../../Users/apple/opt/DONGYAO/components/uni-number-box/uni-number-box.vue"));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}
@@ -774,9 +775,9 @@ function bezier(pots, amount) {
 
   data: function data() {
     return {
+      storeid: 0,
       //商家基本信息
       storeData: {},
-
       // 购物车动画start
       hide_good_box: true,
       bus_x: 0,
@@ -798,8 +799,11 @@ function bezier(pots, amount) {
           descripe: "脆糯营养，口感好，健康绿色",
           img: '../../static/img/1.jpg',
           price: "￥9.99",
-          oldprice: "￥9.99" }] }] };
+          oldprice: "￥9.99" }] }],
 
+
+
+      productList: [] };
 
 
 
@@ -870,18 +874,32 @@ function bezier(pots, amount) {
       console.log(data);
     },
     //分类切换显示
-    showCategory: function showCategory(index) {
+    showCategory: function showCategory(index) {var _this = this;
+      this.mPost("/server/p/search/products", {
+        start: 0,
+        length: 200,
+        typeId: index,
+        storeId: this.storeId }).
+      then(function (res) {
+        if (res.code == '1') {
+          if (res.data && res.data.list) {
+            _this.productList = res.data.list;
+            console.log(_this.productList);
+          }
+        }
+      });
+      // /server/p/search/products
       this.showCategoryIndex = index;
     },
     //关闭规格弹窗
-    hideSpec: function hideSpec() {var _this = this;
+    hideSpec: function hideSpec() {var _this2 = this;
       this.specClass = 'hide';
       //回调
 
       this.selectSpec && this.specCallback && this.specCallback();
       this.specCallback = false;
       setTimeout(function () {
-        _this.specClass = 'none';
+        _this2.specClass = 'none';
       }, 200);
     },
     //规格弹窗
@@ -903,32 +921,51 @@ function bezier(pots, amount) {
 
     },
     busHandle: function busHandle() {
-      var ww = document.body.clientWidth;
-      var hh = document.body.clientHeight;
-      this.busPos['x'] = 45; //购物车的位置
-      this.busPos['y'] = hh - 56;
+      var hh = 0;
+      var that = this;
+      that.busPos['x'] = 45; //购物车的位置
+
+
+
+
+
+
+      wx.getSystemInfo({
+        success: function success(res) {
+          hh = res.windowHeight;
+          that.busPos['y'] = hh - 56;
+        } });
+
+
+
+      // 				let ww = document.body.clientWidth;
+      // 				let hh = document.body.clientHeight;
+      // 				this.busPos['x'] = 45;//购物车的位置
+      // 				this.busPos['y'] = hh - 56;
     } },
 
 
-  onLoad: function onLoad(option) {var _this2 = this;
+  onLoad: function onLoad(option) {var _this3 = this;
+
+    this.storeid = option.storeid;
+    console.log("storeid:" + this.storeid);
     this.busHandle();
     // 商家基本信息
     this.mPost("/server/s/storeById", {
-      id: 1 //userid
-    }).then(function (res) {
+      id: option.storeid }).
+    then(function (res) {
       if (res.code == '1') {
-        _this2.storeData = res.data;
+        _this3.storeData = res.data;
       }
     });
     //商品分类
-    this.mPost("/server/t/types", {
-      // id:1,//userid
-    }).then(function (res) {
+    this.mPost("/server/t/types", {}).
+    then(function (res) {
       if (res.code == '1') {
-        console.log(res);
-        _this2.storeMenu = res.data;
+        _this3.storeMenu = res.data;
       }
     });
+    this.showCategory(1);
   } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ "./node_modules/@dcloudio/uni-mp-weixin/dist/index.js")["default"]))
 
@@ -1050,23 +1087,23 @@ var render = function() {
     _c("view", { staticClass: "m-img" }, [
       _c("image", {
         staticStyle: { width: "100%", height: "100%" },
-        attrs: { src: _vm.rowData.img, mode: "aspectFit" }
+        attrs: { src: _vm.rowData.pictureUrl, mode: "aspectFit" }
       })
     ]),
     _c("view", { staticClass: "m-text" }, [
       _c("view", { staticClass: "m-title" }, [
-        _vm._v(_vm._s(_vm.rowData.name))
+        _vm._v(_vm._s(_vm.rowData.synopsis))
       ]),
       _c("view", { staticClass: "m-descripe" }, [
-        _vm._v(_vm._s(_vm.rowData.descripe))
+        _vm._v(_vm._s(_vm.rowData.labelName))
       ]),
       _c("view", { staticClass: "m-price" }, [
-        _vm._v(_vm._s(_vm.rowData.price))
+        _vm._v(_vm._s(_vm.rowData.presentPrice))
       ]),
       _c("view", { staticClass: "m-old-price" }, [
         _vm._v("非会员价"),
         _c("view", { staticClass: "m-num" }, [
-          _vm._v(_vm._s(_vm.rowData.oldprice))
+          _vm._v(_vm._s(_vm.rowData.originalPrice))
         ])
       ])
     ]),
@@ -1235,7 +1272,7 @@ var render = function() {
                 {
                   key: item.id,
                   staticClass: "row",
-                  class: [index == _vm.showCategoryIndex ? "on" : ""],
+                  class: [item.id == _vm.showCategoryIndex ? "on" : ""],
                   attrs: { eventid: "05dd8904-1-" + index },
                   on: {
                     tap: function($event) {
@@ -1255,46 +1292,31 @@ var render = function() {
           _c(
             "scroll-view",
             { staticClass: "right", attrs: { "scroll-y": "true" } },
-            _vm._l(_vm.storeMenu, function(category, index) {
-              return _c(
-                "view",
-                {
-                  directives: [
-                    {
-                      name: "show",
-                      rawName: "v-show",
-                      value: index == _vm.showCategoryIndex,
-                      expression: "index==showCategoryIndex"
-                    }
-                  ],
-                  key: category.id,
-                  staticClass: "category"
-                },
-                [
-                  _c(
-                    "view",
-                    { staticClass: "list" },
-                    _vm._l(category.list, function(box, i) {
-                      return _c(
-                        "view",
-                        { key: i, staticClass: "box" },
-                        [
-                          _c("m-store-pro", {
-                            attrs: {
-                              rowData: box,
-                              eventid: "05dd8904-2-" + index + "-" + i,
-                              mpcomid: "05dd8904-0-" + index + "-" + i
-                            },
-                            on: { touchOnGoods: _vm.touchOnGoods }
-                          })
-                        ],
-                        1
-                      )
-                    })
-                  )
-                ]
-              )
-            })
+            [
+              _c("view", { staticClass: "category" }, [
+                _c(
+                  "view",
+                  { staticClass: "list" },
+                  _vm._l(_vm.productList, function(category, index) {
+                    return _c(
+                      "view",
+                      { key: category.id, staticClass: "box" },
+                      [
+                        _c("m-store-pro", {
+                          attrs: {
+                            rowData: category,
+                            eventid: "05dd8904-2-" + index,
+                            mpcomid: "05dd8904-0-" + index
+                          },
+                          on: { touchOnGoods: _vm.touchOnGoods }
+                        })
+                      ],
+                      1
+                    )
+                  })
+                )
+              ])
+            ]
           )
         ],
         1

@@ -89,7 +89,7 @@ _vue.default.prototype.apiurl = 'http://39.105.89.138:6090';
 _vue.default.prototype.mGet = function (url, data) {
   return new Promise(function (resolve, reject) {
     uni.request({
-      url: url,
+      url: 'http://39.105.89.138:6090' + url,
       method: 'GET',
       header: {
         "Cache-Control": "no-cache",
@@ -112,7 +112,7 @@ _vue.default.prototype.mGet = function (url, data) {
 _vue.default.prototype.mPost = function (url, data) {
   return new Promise(function (resolve, reject) {
     uni.request({
-      url: url,
+      url: 'http://39.105.89.138:6090' + url,
       method: 'POST',
       header: {
         "Cache-Control": "no-cache",
@@ -150,7 +150,7 @@ app.$mount();
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _default =
+/* WEBPACK VAR INJECTION */(function(uni, global) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _default =
 {
   onLaunch: function onLaunch() {
     console.log('App Launch');
@@ -161,6 +161,34 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
   onHide: function onHide() {
     console.log('App Hide');
   } };exports.default = _default;
+
+global.isLogin = function () {
+  try {
+    var suid = uni.getStorageSync('suid');
+    var srand = uni.getStorageSync('srand');
+  } catch (e) {
+    //TODO handle the exception
+  }
+  if (suid == '' || srand == '') {
+    return false;
+  } else {
+    return [suid, srand];
+  }
+};
+//需要登录的页面判断
+// 	var res = global.isLogin();
+//   if(!res){
+//    uni.showModal({
+//     title:'请登录',
+//     content:"请登录",
+//     success:function(){
+//      uni.navigateTo({
+//       url:"/pages/login"
+//      });
+//     }
+//    })
+//   }
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ "./node_modules/@dcloudio/uni-mp-weixin/dist/index.js")["default"], __webpack_require__(/*! ./../../../../Applications/HBuilderX.app/Contents/HBuilderX/plugins/uniapp-cli/node_modules/webpack/buildin/global.js */ "./node_modules/webpack/buildin/global.js")))
 
 /***/ }),
 

@@ -7,7 +7,7 @@ Vue.prototype.apiurl = 'http://39.105.89.138:6090';
 Vue.prototype.mGet = function(url,data){
 	return new Promise(function(resolve, reject){
 		uni.request({
-			url: url,
+			url: 'http://39.105.89.138:6090'+url,
 			method: 'GET',
 			header:{
 				"Cache-Control": "no-cache",
@@ -30,7 +30,7 @@ Vue.prototype.mGet = function(url,data){
 Vue.prototype.mPost = function(url,data){
 	return new Promise(function(resolve, reject){
 		uni.request({
-			url: url,
+			url: 'http://39.105.89.138:6090'+url,
 			method: 'POST',
 			header:{
 				"Cache-Control": "no-cache",

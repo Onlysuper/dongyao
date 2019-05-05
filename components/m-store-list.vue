@@ -2,14 +2,14 @@
 	<!-- 首页门店图文 -->
 	<view class="m-store-list-box">
 		<view class="m-img">
-			<image style="width: 100%;height: 100%;" :src="rowData.img" mode="aspectFit"></image>
+			<image style="width: 100%;height: 100%;" :src="img" mode="aspectFit"></image>
 		</view>
 		<view class="m-text">
 			<view class="m-title">
-				{{rowData.title}}
+				{{title}}
 			</view>
 			<view class="m-address">
-				{{rowData.address}}
+				{{address}}
 			</view>
 		</view>
 	</view>
@@ -19,25 +19,37 @@
 	export default {
 		name:"m-store-list",
 		props:{
-			rowData:{
-				type:Object,
-				 // 对象或数组默认值必须从一个工厂函数获取
-				default: function () {
-					return { 
-						img:"",
-						title:"",
-						distance:"",
-						describel:"",
-						address:"",
-					}
-				}
+			img:{
+				type:String,
+				default:"",
 			},
-			tips:{
-				type:Array,
-				default:function () {
-					return []
-				}
-			}
+			title:{
+				type:String,
+				default:"",
+			},
+			address:{
+				type:String,
+				default:"",
+			},
+// 			rowData:{
+// 				type:Object,
+// 				 // 对象或数组默认值必须从一个工厂函数获取
+// 				default: function () {
+// 					return { 
+// 						img:"",
+// 						title:"",
+// 						distance:"",
+// 						describel:"",
+// 						address:"",
+// 					}
+// 				}
+// 			},
+// 			tips:{
+// 				type:Array,
+// 				default:function () {
+// 					return []
+// 				}
+// 			}
 		},
 		data() {
 			return {

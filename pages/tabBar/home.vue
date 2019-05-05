@@ -127,6 +127,7 @@
 			},
 			//热卖列表
 			getHotsellList(){
+				console.log('热卖');
 				this.mPost('/server/p/hot/products',{
 					start:this.hotsellPage,
 					length:3

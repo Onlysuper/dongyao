@@ -203,7 +203,7 @@ __webpack_require__.r(__webpack_exports__);
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _default2 =
+Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _default =
 
 
 
@@ -224,31 +224,43 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 {
   name: "m-store-list",
   props: {
-    rowData: {
-      type: Object,
-      // 对象或数组默认值必须从一个工厂函数获取
-      default: function _default() {
-        return {
-          img: "",
-          title: "",
-          distance: "",
-          describel: "",
-          address: "" };
+    img: {
+      type: String,
+      default: "" },
 
-      } },
+    title: {
+      type: String,
+      default: "" },
 
-    tips: {
-      type: Array,
-      default: function _default() {
-        return [];
-      } } },
+    address: {
+      type: String,
+      default: "" }
 
-
+    // 			rowData:{
+    // 				type:Object,
+    // 				 // 对象或数组默认值必须从一个工厂函数获取
+    // 				default: function () {
+    // 					return { 
+    // 						img:"",
+    // 						title:"",
+    // 						distance:"",
+    // 						describel:"",
+    // 						address:"",
+    // 					}
+    // 				}
+    // 			},
+    // 			tips:{
+    // 				type:Array,
+    // 				default:function () {
+    // 					return []
+    // 				}
+    // 			}
+  },
   data: function data() {
     return {};
 
 
-  } };exports.default = _default2;
+  } };exports.default = _default;
 
 /***/ }),
 
@@ -261,6 +273,9 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;
+
+
+
 
 
 
@@ -293,12 +308,51 @@ var _mStoreList = _interopRequireDefault(__webpack_require__(/*! @/components/m-
   },
   methods: {
     //跳转到商家
-    goStore: function goStore() {
+    goStore: function goStore(item) {
       uni.navigateTo({
-        url: "/pages/store/store" });
+        url: "/pages/store/store?storeid=" + item.id });
 
     } },
 
+  onLoad: function onLoad() {
+    var _that = this;
+    uni.authorize({
+      scope: 'scope.userLocation',
+      success: function success() {
+        uni.getLocation({ //获取当前的位置坐标
+          type: 'wgs84',
+          success: function success(res) {
+            _that.mPost('/server/s/vicinity/stores', {
+              // 								"lng":res.longitude || 116.206845,
+              // 								"lat":res.latitude || 39.762155
+              "lng": 116.206845,
+              "lat": 39.762155 }).
+            then(function (res) {
+              if (res.code = 1) {
+                if (res.data) {
+                  var data = res.data;
+                  // console.log(data);
+                  _that.nearStoreList = data;
+                  // 										this.hotProList = data.list;
+                  // 										this.hotsellPage=data.nextPage;
+                }
+              }
+            }).catch(function (err) {
+              console.log(err);
+            });
+          } });
+
+      } });
+
+    // 			uni.getLocation({//获取当前的位置坐标
+    // 				type: 'wgs84',
+    // 				success: function (res) {
+    // 					console.log('当前位置的经度：' + res.longitude);
+    // 					console.log('当前位置的纬度：' + res.latitude);
+    // 				}
+    // 			});  
+    // /server/s/vicinity/stores
+  },
   components: {
     mStoreList: _mStoreList.default } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ "./node_modules/@dcloudio/uni-mp-weixin/dist/index.js")["default"]))
@@ -346,16 +400,12 @@ var render = function() {
     _c("view", { staticClass: "m-img" }, [
       _c("image", {
         staticStyle: { width: "100%", height: "100%" },
-        attrs: { src: _vm.rowData.img, mode: "aspectFit" }
+        attrs: { src: _vm.img, mode: "aspectFit" }
       })
     ]),
     _c("view", { staticClass: "m-text" }, [
-      _c("view", { staticClass: "m-title" }, [
-        _vm._v(_vm._s(_vm.rowData.title))
-      ]),
-      _c("view", { staticClass: "m-address" }, [
-        _vm._v(_vm._s(_vm.rowData.address))
-      ])
+      _c("view", { staticClass: "m-title" }, [_vm._v(_vm._s(_vm.title))]),
+      _c("view", { staticClass: "m-address" }, [_vm._v(_vm._s(_vm.address))])
     ])
   ])
 }
@@ -383,22 +433,34 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "view",
-    {
-      staticClass: "m-store-list",
-      attrs: { eventid: "5abb2661-0" },
-      on: { click: _vm.goStore }
-    },
-    [
-      _vm._l(_vm.nearStoreList, function(item, index) {
-        return [
-          _c("m-store-list", {
-            key: index,
-            attrs: { rowData: item, mpcomid: "5abb2661-0-" + index }
-          })
-        ]
-      })
-    ],
-    2
+    {},
+    _vm._l(_vm.nearStoreList, function(item, index) {
+      return _c("view", { key: index }, [
+        _c(
+          "view",
+          {
+            staticClass: "m-store-list",
+            attrs: { eventid: "5abb2661-0-" + index },
+            on: {
+              tap: function($event) {
+                _vm.goStore(item)
+              }
+            }
+          },
+          [
+            _c("m-store-list", {
+              attrs: {
+                title: item.name,
+                img: item.imgUrl,
+                address: item.address,
+                mpcomid: "5abb2661-0-" + index
+              }
+            })
+          ],
+          1
+        )
+      ])
+    })
   )
 }
 var staticRenderFns = []

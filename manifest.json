@@ -53,21 +53,22 @@
     "quickapp" : {},
     /* 快应用特有相关 */
     "mp-weixin" : {
-        "appid" : "wxf3953fb8242b9ecc",
+        "appid" : "wxbc74db663579fa39",
         "setting" : {
             "urlCheck" : true
         },
-		"devServer": {
-		    "port": 8081,
-		    "disableHostCheck": true,
-			"proxy": "http://39.105.89.138:6090"
-		}
+        "devServer" : {
+            "port" : 30902,
+            "disableHostCheck" : true,
+            "proxy" : "http://39.105.89.138:6090"
+        },
+        "permission" : {}
     },
-	"h5": {
-        "devServer": {
-            "port": 8081,
-            "disableHostCheck": true,
-			"proxy": "http://39.105.89.138:6090"
+    "h5" : {
+        "devServer" : {
+            "port" : 8081,
+            "disableHostCheck" : true,
+            "proxy" : "http://39.105.89.138:6090"
         }
-    } 
+    }
 }
