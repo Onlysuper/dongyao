@@ -269,12 +269,18 @@
 					if(res.code=='1'){
 						if(res.data&&res.data.list){
 							this.productList=res.data.list;
-							console.log(this.productList);
 						}
 					}
 				})
-				// /server/p/search/products
 				this.showCategoryIndex = index;
+			},
+			// 购物车列表
+			showShopCar(){
+				this.mPost("/server/sc/find/cart",{
+					userId:1
+				}).then(res=>{
+					console.log(res)
+				})
 			},
 			//关闭规格弹窗
 			hideSpec() {
@@ -350,7 +356,10 @@
 					this.storeMenu=res.data;
 				}
 			})
-			this.showCategory(1)
+			// 默认显示第一个分类的产品
+			this.showCategory(1);
+			// 当前购物车信息
+			this.showShopCar();
 		}
 		
 		

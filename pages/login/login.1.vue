@@ -5,12 +5,8 @@
 		</view>
 		<view class="">
 			<button class='m-but' type='primary' open-type="getUserInfo" withCredentials="true" lang="zh_CN" @getuserinfo="wxGetUserInfo">
-				微信手机号快捷登录
+				授权登录
 			</button>
-		<!-- 	<button class='m-but' type='primary' open-type="getPhoneNumber" withCredentials="true" lang="zh_CN" @getuserinfo="wxGetUserInfo">
-				微信手机号快捷登录
-			</button> -->
-			<!-- <button open-type="getPhoneNumber" @getphonenumber="getPhoneNumber">获取电话号码</button>  -->
 		</view>
 	</view>
 </template>
@@ -41,13 +37,13 @@
 							title: code,
 							icon: "none"
 						});
-						_this.mPost('/auth//wxLogin',{ //存储登录code
+						_this.mPost('/auth/wxLogin',{
 							code:code
 						}).then(res=>{
 							uni.showToast({
 									title:JSON.stringify(res)
 							})
-							if(res.code=1){
+							// if(res.code=1){
 								if(res.data){
 									let data = res.data;
 									uni.setStorageSync('authToken', data.authToken);
@@ -56,7 +52,7 @@
 										icon: "none"
 									});
 								}
-							}
+							// }
 							uni.hideLoading();
 						}).catch(err=>{
 							console.log(err);
@@ -78,39 +74,20 @@
 				uni.getUserInfo({
 			        provider: 'weixin',
 			        success: function(infoRes) {
-						_this.mPost('/auth/wxUserInfo',{// 	储存用户信息
-							...infoRes.userInfo
-						}).then(res=>{
-							uni.showToast({
-									title:JSON.stringify(res)
-							})
-							if(res.code=1){
-								if(res.data){
-									let data = res.data;
-									uni.setStorageSync('authToken', data.authToken);
-									uni.showToast({
-										title:  'authToken'+uni.getStorageSync('authToken'),
-										icon: "none"
-									});
-								}
-							}
-							uni.hideLoading();
-						}).catch(err=>{
-							console.log(err);
-							uni.hideLoading();
+			            let nickName = infoRes.userInfo.nickName; //昵称
+			            let avatarUrl = infoRes.userInfo.avatarUrl; //头像
+						uni.showToast({
+							title: nickName,
+							icon: "none"
 						});
+			            try {
+			                uni.setStorageSync('isCanUse', false);//记录是否第一次授权  false:表示不是第一次授权
+			                _this.updateUserInfo();
+			            } catch (e) {}
 			        },
 			        fail(res) {}
 			    });
 			},
-			getPhoneNumber: function(e) {  
-                console.log(e);  
-                if (e.detail.errMsg == 'getPhoneNumber:fail user deny') {  
-
-                } else {  
-
-                }  
-            },  
 			 //向后台更新信息
 			updateUserInfo() {
 			}

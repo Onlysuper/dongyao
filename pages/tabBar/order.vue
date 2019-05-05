@@ -1,23 +1,20 @@
 <template>
-	<view class="m-order">
+	<view class="m-order-page">
 		<view class="fixedit">
 			<m-tab @handleFn="tabChange" :tabActive="tabActive" :rowdata="tabList"></m-tab>
 		</view>
 		<view style="height:60px;"></view>
 		<view class="m-order-body">
-			<m-product-list v-for="(item,index) in artList" :key="index">
-				<view slot="title">{{item.store}}</view>
-				<view slot="topbut">待取货</view>
-				<image slot="img" style="width:100%;height:100%" src="../../static/img/icon/home_icon_gps.png" mode="aspectFit"></image>
-				<view slot="proname">{{item.name}}</view>
-				<view slot="describe">{{item.extrctime}}</view>
-				<view slot="describe">{{item.createtime}}</view>
-				<view slot="footleft" class="footleft">
-					应付款：￥{{item.price}}    共{{item.num}}件
-				</view>
-				<view slot="footright">
-						再来一单
-				</view>
+			<m-product-list v-for="(item,index) in artList" :key="index"
+				:title="item.name"
+				:topbut="item.topbut"
+				:img="item.img"
+				:proname="item.proname"
+				:extrctime="item.extrctime"
+				:describe="item.describe"
+				:price="item.price"
+				:num="item.num"
+			>
 			</m-product-list>
 		</view>
 		<template>
@@ -124,11 +121,24 @@
 			this.mloading='loading';
 			this.getNewsList();
 		},
-		
+		onLoad(){
+// 			var res = global.isLogin();
+// 			if(!res){
+// 			   uni.showModal({
+// 				title:'请登录',
+// 				content:"请登录",
+// 				success:function(){
+// 				 uni.navigateTo({
+// 				  url:"/pages/login/login"
+// 				 });
+// 				}
+// 			   })
+// 			}
+		}
 	}
 </script>
 <style lang="scss">
-.m-order{
+.m-order-page{
 	backgroun:#f9f9f9;
 	.fixedit{width:100%; position:fixed; z-index:99; left:0; top:0;background: #fff;
 	// border-top:10upx solid #f9f9f9;

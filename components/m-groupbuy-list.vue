@@ -2,23 +2,23 @@
 	<!-- 门店列表 -->
 	<view class="m-groupbuy-list">
 		<view class="m-img">
-			<image style="width: 100%;height: 100%;border-radius: 100%;background: #f5f5f5;" :src="rowData.pictureUrl" mode="aspectFit"></image>
-			<view v-if="rowData.isAssemble==1" class="m-pin">
+			<image style="width: 100%;height: 100%;border-radius: 100%;background: #f5f5f5;" :src="img" mode="aspectFit"></image>
+			<view v-if="isAssemble==1" class="m-pin">
 				可拼团
 			</view>
 		</view>
 		<view class="m-text">
 			<view class="m-title">
-				{{rowData.synopsis}}
+				{{title}}
 			</view>
 			<view class="m-describe">
-				{{rowData.labelName}}
+				{{labelName}}
 			</view>
 			<view class="m-price">
-				{{rowData.presentPrice}}
+				{{price}}
 			</view>
 			<view class="m-oldprice">
-				非会员价{{rowData.originalPrice}}
+				非会员价{{oldprice}}
 			</view>
 		</view>
 		<view class="m-addition">
@@ -31,25 +31,49 @@
 	export default {
 		name:"m-groupbuy-list",
 		props:{
-			rowData:{
-				type:Object,
-				 // 对象或数组默认值必须从一个工厂函数获取
-				default: function () {
-					return { 
-						img:"",
-						title:"",
-						distance:"",
-						describel:"",
-						address:"",
-					}
-				}
+			title:{
+			 type:String,
+			 default:""
 			},
-			tips:{
-				type:Array,
-				default:function () {
-					return []
-				}
+			labelName:{
+			 type:String,
+			 default:""
+			},
+			img:{
+				type:String,
+				default:""
+			},
+			price:{
+			 type:[String,Number],
+			 default:""
+			},
+			oldprice:{
+			 type:[String,Number],
+			 default:""
+			},
+			isAssemble:{
+				type:[String,Number],
+				default:0
 			}
+// 			rowData:{
+// 				type:Object,
+// 				 // 对象或数组默认值必须从一个工厂函数获取
+// 				default: function () {
+// 					return { 
+// 						img:"",
+// 						title:"",
+// 						distance:"",
+// 						describel:"",
+// 						address:"",
+// 					}
+// 				}
+// 			},
+// 			tips:{
+// 				type:Array,
+// 				default:function () {
+// 					return []
+// 				}
+// 			}
 		},
 		data() {
 			return {

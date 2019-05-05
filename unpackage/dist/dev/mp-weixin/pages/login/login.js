@@ -113,7 +113,11 @@ __webpack_require__.r(__webpack_exports__);
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _default =
+/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;function _objectSpread(target) {for (var i = 1; i < arguments.length; i++) {var source = arguments[i] != null ? arguments[i] : {};var ownKeys = Object.keys(source);if (typeof Object.getOwnPropertySymbols === 'function') {ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) {return Object.getOwnPropertyDescriptor(source, sym).enumerable;}));}ownKeys.forEach(function (key) {_defineProperty(target, key, source[key]);});}return target;}function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}var _default =
+
+
+
+
 
 
 
@@ -152,22 +156,22 @@ __webpack_require__.r(__webpack_exports__);
             title: code,
             icon: "none" });
 
-          _this.mPost('/auth/wxLogin', {
+          _this.mPost('/auth//wxLogin', { //存储登录code
             code: code }).
           then(function (res) {
             uni.showToast({
               title: JSON.stringify(res) });
 
-            // if(res.code=1){
-            if (res.data) {
-              var data = res.data;
-              uni.setStorageSync('authToken', data.authToken);
-              uni.showToast({
-                title: 'authToken' + uni.getStorageSync('authToken'),
-                icon: "none" });
+            if (res.code = 1) {
+              if (res.data) {
+                var data = res.data;
+                uni.setStorageSync('authToken', data.authToken);
+                uni.showToast({
+                  title: 'authToken' + uni.getStorageSync('authToken'),
+                  icon: "none" });
 
+              }
             }
-            // }
             uni.hideLoading();
           }).catch(function (err) {
             console.log(err);
@@ -189,19 +193,38 @@ __webpack_require__.r(__webpack_exports__);
       uni.getUserInfo({
         provider: 'weixin',
         success: function success(infoRes) {
-          var nickName = infoRes.userInfo.nickName; //昵称
-          var avatarUrl = infoRes.userInfo.avatarUrl; //头像
-          uni.showToast({
-            title: nickName,
-            icon: "none" });
+          _this.mPost('/auth/wxUserInfo', _objectSpread({},
+          infoRes.userInfo)).
+          then(function (res) {
+            uni.showToast({
+              title: JSON.stringify(res) });
 
-          try {
-            uni.setStorageSync('isCanUse', false); //记录是否第一次授权  false:表示不是第一次授权
-            _this.updateUserInfo();
-          } catch (e) {}
+            if (res.code = 1) {
+              if (res.data) {
+                var data = res.data;
+                uni.setStorageSync('authToken', data.authToken);
+                uni.showToast({
+                  title: 'authToken' + uni.getStorageSync('authToken'),
+                  icon: "none" });
+
+              }
+            }
+            uni.hideLoading();
+          }).catch(function (err) {
+            console.log(err);
+            uni.hideLoading();
+          });
         },
         fail: function fail(res) {} });
 
+    },
+    getPhoneNumber: function getPhoneNumber(e) {
+      console.log(e);
+      if (e.detail.errMsg == 'getPhoneNumber:fail user deny') {
+
+      } else {
+
+      }
     },
     //向后台更新信息
     updateUserInfo: function updateUserInfo() {
@@ -259,7 +282,7 @@ var render = function() {
             },
             on: { getuserinfo: _vm.wxGetUserInfo }
           },
-          [_vm._v("授权登录")]
+          [_vm._v("微信手机号快捷登录")]
         )
       ],
       1

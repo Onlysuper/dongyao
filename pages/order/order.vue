@@ -112,6 +112,7 @@
 			}	
 		},
 		onLoad(){
+			
 			uni.getLocation({//获取当前的位置坐标
 				type: 'wgs84',
 				success: function (res) {

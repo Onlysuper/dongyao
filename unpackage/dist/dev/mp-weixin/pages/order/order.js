@@ -227,6 +227,7 @@ var _mOrderPro = _interopRequireDefault(__webpack_require__(/*! @/components/m-o
     } },
 
   onLoad: function onLoad() {
+
     uni.getLocation({ //获取当前的位置坐标
       type: 'wgs84',
       success: function success(res) {

@@ -12,7 +12,7 @@
 	}
 	global.isLogin = function(){
 	 try{
-	  var suid  = uni.getStorageSync('suid');
+	  var suid  = uni.getStorageSync('authToken');
 	  var srand = uni.getStorageSync('srand');
 	 }catch(e){
 	  //TODO handle the exception

@@ -6576,7 +6576,7 @@ try {
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _default2 =
+Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _default =
 
 
 
@@ -6609,31 +6609,55 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 {
   name: "m-groupbuy-list",
   props: {
-    rowData: {
-      type: Object,
-      // 对象或数组默认值必须从一个工厂函数获取
-      default: function _default() {
-        return {
-          img: "",
-          title: "",
-          distance: "",
-          describel: "",
-          address: "" };
+    title: {
+      type: String,
+      default: "" },
 
-      } },
+    labelName: {
+      type: String,
+      default: "" },
 
-    tips: {
-      type: Array,
-      default: function _default() {
-        return [];
-      } } },
+    img: {
+      type: String,
+      default: "" },
 
+    price: {
+      type: [String, Number],
+      default: "" },
 
+    oldprice: {
+      type: [String, Number],
+      default: "" },
+
+    isAssemble: {
+      type: [String, Number],
+      default: 0
+
+      // 			rowData:{
+      // 				type:Object,
+      // 				 // 对象或数组默认值必须从一个工厂函数获取
+      // 				default: function () {
+      // 					return { 
+      // 						img:"",
+      // 						title:"",
+      // 						distance:"",
+      // 						describel:"",
+      // 						address:"",
+      // 					}
+      // 				}
+      // 			},
+      // 			tips:{
+      // 				type:Array,
+      // 				default:function () {
+      // 					return []
+      // 				}
+      // 			}
+    } },
   data: function data() {
     return {};
 
 
-  } };exports.default = _default2;
+  } };exports.default = _default;
 
 /***/ }),
 
@@ -6979,24 +7003,20 @@ var render = function() {
           "border-radius": "100%",
           background: "#f5f5f5"
         },
-        attrs: { src: _vm.rowData.pictureUrl, mode: "aspectFit" }
+        attrs: { src: _vm.img, mode: "aspectFit" }
       }),
-      _vm.rowData.isAssemble == 1
+      _vm.isAssemble == 1
         ? _c("view", { staticClass: "m-pin" }, [_vm._v("可拼团")])
         : _vm._e()
     ]),
     _c("view", { staticClass: "m-text" }, [
-      _c("view", { staticClass: "m-title" }, [
-        _vm._v(_vm._s(_vm.rowData.synopsis))
-      ]),
+      _c("view", { staticClass: "m-title" }, [_vm._v(_vm._s(_vm.title))]),
       _c("view", { staticClass: "m-describe" }, [
-        _vm._v(_vm._s(_vm.rowData.labelName))
+        _vm._v(_vm._s(_vm.labelName))
       ]),
-      _c("view", { staticClass: "m-price" }, [
-        _vm._v(_vm._s(_vm.rowData.presentPrice))
-      ]),
+      _c("view", { staticClass: "m-price" }, [_vm._v(_vm._s(_vm.price))]),
       _c("view", { staticClass: "m-oldprice" }, [
-        _vm._v("非会员价" + _vm._s(_vm.rowData.originalPrice))
+        _vm._v("非会员价" + _vm._s(_vm.oldprice))
       ])
     ]),
     _c(

@@ -884,12 +884,18 @@ function bezier(pots, amount) {
         if (res.code == '1') {
           if (res.data && res.data.list) {
             _this.productList = res.data.list;
-            console.log(_this.productList);
           }
         }
       });
-      // /server/p/search/products
       this.showCategoryIndex = index;
+    },
+    // 购物车列表
+    showShopCar: function showShopCar() {
+      this.mPost("/server/sc/find/cart", {
+        userId: 1 }).
+      then(function (res) {
+        console.log(res);
+      });
     },
     //关闭规格弹窗
     hideSpec: function hideSpec() {var _this2 = this;
@@ -965,7 +971,10 @@ function bezier(pots, amount) {
         _this3.storeMenu = res.data;
       }
     });
+    // 默认显示第一个分类的产品
     this.showCategory(1);
+    // 当前购物车信息
+    this.showShopCar();
   } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ "./node_modules/@dcloudio/uni-mp-weixin/dist/index.js")["default"]))
 

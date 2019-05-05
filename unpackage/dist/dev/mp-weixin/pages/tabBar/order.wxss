@@ -24,12 +24,12 @@
 /* 垂直间距 */
 /* 透明度 */
 /* 文章场景相关 */
-.m-pro-list {
+.m-order-pro-list {
   background: #fff;
   padding: 0 30rpx;
   margin-bottom: 20rpx;
 }
-.m-pro-list .m-header {
+.m-order-pro-list .m-header {
     display: -webkit-box;
     display: -webkit-flex;
     display: -ms-flexbox;
@@ -49,10 +49,10 @@
     line-height: 86rpx;
     border-bottom: 1px solid #ebebeb;
 }
-.m-pro-list .m-header .but {
+.m-order-pro-list .m-header .but {
       color: #4eb87d;
 }
-.m-pro-list .m-body {
+.m-order-pro-list .m-body {
     display: -webkit-box;
     display: -webkit-flex;
     display: -ms-flexbox;
@@ -72,7 +72,7 @@
             align-items: center;
     margin-top: 40rpx;
 }
-.m-pro-list .m-body .m-img-box {
+.m-order-pro-list .m-body .m-img-box {
       -webkit-box-flex: 0;
       -webkit-flex: 0 0 130rpx;
           -ms-flex: 0 0 130rpx;
@@ -80,22 +80,22 @@
       height: 130rpx;
       background: #eee;
 }
-.m-pro-list .m-body .m-text-box {
+.m-order-pro-list .m-body .m-text-box {
       -webkit-box-flex: 1;
       -webkit-flex: 1;
           -ms-flex: 1;
               flex: 1;
       padding-left: 15rpx;
 }
-.m-pro-list .m-body .m-text-box .m-name {
+.m-order-pro-list .m-body .m-text-box .m-name {
         font-size: 30rpx;
         color: #4c4c4c;
 }
-.m-pro-list .m-body .m-text-box .m-describe {
+.m-order-pro-list .m-body .m-text-box .m-describe {
         font-size: 26rpx;
         color: #999999;
 }
-.m-pro-list .m-footer {
+.m-order-pro-list .m-footer {
     display: -webkit-box;
     display: -webkit-flex;
     display: -ms-flexbox;
@@ -115,7 +115,7 @@
         -ms-flex-align: center;
             align-items: center;
 }
-.m-pro-list .m-footer .footleft {
+.m-order-pro-list .m-footer .footleft {
       -webkit-box-flex: 1;
       -webkit-flex: 1;
           -ms-flex: 1;
@@ -123,7 +123,7 @@
       font-size: 26rpx;
       color: #333333;
 }
-.m-pro-list .m-footer .footright {
+.m-order-pro-list .m-footer .footright {
       -webkit-box-flex: 1;
       -webkit-flex: 1;
           -ms-flex: 1;
@@ -131,7 +131,7 @@
       font-size: 26rpx;
       text-align: right;
 }
-.m-pro-list .m-footer .footright .but {
+.m-order-pro-list .m-footer .footright .but {
         display: inline-block;
         padding: 10rpx 20rpx;
         border-radius: 80rpx;
@@ -335,10 +335,10 @@
 /* 垂直间距 */
 /* 透明度 */
 /* 文章场景相关 */
-.m-order {
+.m-order-page {
   backgroun: #f9f9f9;
 }
-.m-order .fixedit {
+.m-order-page .fixedit {
     width: 100%;
     position: fixed;
     z-index: 99;

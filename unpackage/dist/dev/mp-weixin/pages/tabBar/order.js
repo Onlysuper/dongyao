@@ -293,7 +293,17 @@ __webpack_require__.r(__webpack_exports__);
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _default2 =
+Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _default =
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -330,11 +340,37 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 {
   name: "m-product-list",
   props: {
-    rowdata: {
-      type: Array,
-      default: function _default() {
-        return [];
-      } } },
+    title: {
+      type: [String, Number],
+      default: "" },
+
+    topbut: {
+      type: [String, Number],
+      default: "" },
+
+    img: {
+      type: [String, Number],
+      default: "" },
+
+    proname: {
+      type: [String, Number],
+      default: "" },
+
+    extrctime: {
+      type: [String, Number],
+      default: "" },
+
+    describe: {
+      type: [String, Number],
+      default: "" },
+
+    price: {
+      type: [String, Number],
+      default: "" },
+
+    num: {
+      type: [String, Number],
+      default: "" } },
 
 
   methods: {
@@ -349,7 +385,7 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
     return {};
 
 
-  } };exports.default = _default2;
+  } };exports.default = _default;
 
 /***/ }),
 
@@ -430,9 +466,6 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;
-
-
-
 
 
 
@@ -554,6 +587,20 @@ var page = 1,cate = 0;var _default =
   onReachBottom: function onReachBottom() {
     this.mloading = 'loading';
     this.getNewsList();
+  },
+  onLoad: function onLoad() {
+    // 			var res = global.isLogin();
+    // 			if(!res){
+    // 			   uni.showModal({
+    // 				title:'请登录',
+    // 				content:"请登录",
+    // 				success:function(){
+    // 				 uni.navigateTo({
+    // 				  url:"/pages/login/login"
+    // 				 });
+    // 				}
+    // 			   })
+    // 			}
   } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ "./node_modules/@dcloudio/uni-mp-weixin/dist/index.js")["default"]))
 
@@ -607,57 +654,51 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("view", { staticClass: "m-pro-list" }, [
-    _c(
-      "view",
-      { staticClass: "m-header" },
-      [
-        _vm._t("title", null, { mpcomid: "ef2eb56a-0" }),
-        _vm._t("topbut", null, { mpcomid: "ef2eb56a-1" })
-      ],
-      2
-    ),
+  return _c("view", { staticClass: "m-order-pro-list" }, [
+    _c("view", { staticClass: "m-header" }, [
+      _c("view", {}, [_vm._v(_vm._s(_vm.title))]),
+      _c("view", [_vm._v(_vm._s(_vm.topbut))])
+    ]),
     _c("view", { staticClass: "m-body" }, [
-      _c(
-        "view",
-        { staticClass: "m-img-box" },
-        [_vm._t("img", null, { mpcomid: "ef2eb56a-2" })],
-        2
-      ),
+      _c("view", { staticClass: "m-img-box" }, [
+        _c("image", {
+          staticStyle: { width: "100%", height: "100%" },
+          attrs: { src: _vm.img, mode: "aspectFit" },
+          slot: "img"
+        })
+      ]),
       _c("view", { staticClass: "m-text-box" }, [
-        _c(
-          "view",
-          { staticClass: "m-name" },
-          [_vm._t("proname", null, { mpcomid: "ef2eb56a-3" })],
-          2
-        ),
-        _c(
-          "view",
-          { staticClass: "m-describe" },
-          [_vm._t("describe", null, { mpcomid: "ef2eb56a-4" })],
-          2
-        )
+        _c("view", { staticClass: "m-name" }, [_vm._v(_vm._s(_vm.proname))]),
+        _c("view", { staticClass: "m-describe" }, [
+          _vm._v(_vm._s(_vm.extrctime))
+        ]),
+        _c("view", { staticClass: "m-describe" }, [
+          _vm._v(_vm._s(_vm.describe))
+        ])
       ])
     ]),
     _c("view", { staticClass: "m-footer" }, [
-      _c(
-        "view",
-        { staticClass: "footleft" },
-        [_vm._t("footleft", null, { mpcomid: "ef2eb56a-5" })],
-        2
-      ),
-      _c("view", { staticClass: "footright" }, [
-        _c(
-          "view",
-          { staticClass: "but" },
-          [_vm._t("footright", null, { mpcomid: "ef2eb56a-6" })],
-          2
-        )
-      ])
+      _c("view", { staticClass: "footleft" }, [
+        _c("view", { staticClass: "footleft", slot: "footleft" }, [
+          _vm._v(
+            "应付款：￥" + _vm._s(_vm.price) + "    共" + _vm._s(_vm.num) + "件"
+          )
+        ])
+      ]),
+      _vm._m(0)
     ])
   ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("view", { staticClass: "footright" }, [
+      _c("view", { staticClass: "but" }, [_c("view", [_vm._v("再来一单")])])
+    ])
+  }
+]
 render._withStripped = true
 
 
@@ -755,7 +796,7 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "view",
-    { staticClass: "m-order" },
+    { staticClass: "m-order-page" },
     [
       _c(
         "view",
@@ -778,39 +819,20 @@ var render = function() {
         "view",
         { staticClass: "m-order-body" },
         _vm._l(_vm.artList, function(item, index) {
-          return _c(
-            "m-product-list",
-            { key: index, attrs: { mpcomid: "2facfe52-1-" + index } },
-            [
-              _c("view", { slot: "title" }, [_vm._v(_vm._s(item.store))]),
-              _c("view", { slot: "topbut" }, [_vm._v("待取货")]),
-              _c("image", {
-                staticStyle: { width: "100%", height: "100%" },
-                attrs: {
-                  src: "../../static/img/icon/home_icon_gps.png",
-                  mode: "aspectFit"
-                },
-                slot: "img"
-              }),
-              _c("view", { slot: "proname" }, [_vm._v(_vm._s(item.name))]),
-              _c("view", { slot: "describe" }, [
-                _vm._v(_vm._s(item.extrctime))
-              ]),
-              _c("view", { slot: "describe" }, [
-                _vm._v(_vm._s(item.createtime))
-              ]),
-              _c("view", { staticClass: "footleft", slot: "footleft" }, [
-                _vm._v(
-                  "应付款：￥" +
-                    _vm._s(item.price) +
-                    "    共" +
-                    _vm._s(item.num) +
-                    "件"
-                )
-              ]),
-              _c("view", { slot: "footright" }, [_vm._v("再来一单")])
-            ]
-          )
+          return _c("m-product-list", {
+            key: index,
+            attrs: {
+              title: item.name,
+              topbut: item.topbut,
+              img: item.img,
+              proname: item.proname,
+              extrctime: item.extrctime,
+              describe: item.describe,
+              price: item.price,
+              num: item.num,
+              mpcomid: "2facfe52-1-" + index
+            }
+          })
         })
       ),
       [

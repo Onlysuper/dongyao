@@ -1,30 +1,40 @@
 <template>
 	<!-- 公用商品列表 -->
-	<view class="m-pro-list">
+	<view class="m-order-pro-list">
 		<view class="m-header">
-			<slot name="title"></slot>
-			<slot name="topbut"></slot>
+			<view class="">
+				{{title}}
+			</view>
+			<view>{{topbut}}</view>
 		</view>
 		<view class="m-body">
 			<view class="m-img-box">
-				<slot name="img"></slot>
+				<image slot="img" style="width:100%;height:100%" :src="img" mode="aspectFit"></image>
 			</view>
 			<view class="m-text-box">
 				<view class="m-name">
-					<slot name="proname"></slot>
+					{{proname}}
 				</view>
 				<view class="m-describe">
-					<slot name="describe"></slot>
+					{{extrctime}}
+				</view>
+				<view class="m-describe">
+					{{describe}}
 				</view>
 			</view>
 		</view>
 		<view class="m-footer">
 			<view class="footleft">
-				<slot name="footleft"></slot>
+				<view slot="footleft" class="footleft">
+					应付款：￥{{price}}    共{{num}}件
+				</view> 
+				<!-- <slot name="footleft"></slot> -->
 			</view>
 			<view class="footright">
 				<view class="but">
-					<slot name="footright"></slot>
+					<view>
+							再来一单
+					</view>
 				</view>
 			</view>
 		</view>
@@ -35,11 +45,37 @@
 	export default {
 		name:"m-product-list",
 		props:{
-			rowdata:{
-				type:Array,
-				default: function () {
-					return []
-				}
+			title:{
+				type:[String,Number],
+				default:""
+			},
+			topbut:{
+				type:[String,Number],
+				default:""
+			},
+			img:{
+				type:[String,Number],
+				default:""
+			},
+			proname:{
+				type:[String,Number],
+				default:""
+			},
+			extrctime:{
+				type:[String,Number],
+				default:""
+			},
+			describe:{
+				type:[String,Number],
+				default:""
+			},
+			price:{
+				type:[String,Number],
+				default:""
+			},
+			num:{
+				type:[String,Number],
+				default:""
 			}
 		},
 		methods:{
@@ -60,7 +96,7 @@
 
 <style lang="scss">
 @import "../common/globel.scss";
-.m-pro-list{
+.m-order-pro-list{
 	background:#fff;
 	padding:0 30upx;
 	margin-bottom:20upx;

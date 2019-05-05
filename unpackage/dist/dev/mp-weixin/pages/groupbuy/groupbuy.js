@@ -128,12 +128,45 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 var _mGroupbuyList = _interopRequireDefault(__webpack_require__(/*! @/components/m-groupbuy-list */ "../../../../../../Users/apple/opt/DONGYAO/components/m-groupbuy-list.vue"));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}var _default =
 {
   data: function data() {
     return {
+      page: 0, //当前页数
       // 附近门店
-      nearStoreList: [{
+      groupsellList: [{
         img: "../../static/img/2.jpg",
         title: "精品秋葵600g",
         describe: "特价小白菜",
@@ -157,6 +190,24 @@ var _mGroupbuyList = _interopRequireDefault(__webpack_require__(/*! @/components
 
   },
   methods: {
+    getGroupsellList: function getGroupsellList() {var _this = this;
+      this.mPost('/server/p/group/products', {
+        start: this.page,
+        length: 1000 }).
+      then(function (res) {
+        if (res.code = 1) {
+          if (res.data) {
+            var data = res.data;
+            if (data.list) {
+              console.log(data.list);
+              _this.groupsellList = data.list;
+            }
+          }
+        }
+      }).catch(function (err) {
+        console.log(err);
+      });
+    },
     //跳转到商家
     goStore: function goStore() {
       uni.navigateTo({
@@ -165,7 +216,11 @@ var _mGroupbuyList = _interopRequireDefault(__webpack_require__(/*! @/components
     } },
 
   components: {
-    mGroupbuyList: _mGroupbuyList.default } };exports.default = _default;
+    mGroupbuyList: _mGroupbuyList.default },
+
+  onLoad: function onLoad() {
+    this.getGroupsellList();
+  } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ "./node_modules/@dcloudio/uni-mp-weixin/dist/index.js")["default"]))
 
 /***/ }),
@@ -199,38 +254,43 @@ var render = function() {
   return _c(
     "view",
     {
-      staticClass: "m-groupbuy-list",
+      staticClass: "m-groupbuy-page",
       attrs: { eventid: "02fe9a1a-0" },
       on: { click: _vm.goStore }
     },
     [
       _vm._m(0),
-      _vm._l(_vm.nearStoreList, function(item, index) {
-        return [
-          _c(
-            "view",
-            { staticClass: "m-list" },
-            [
-              _c(
-                "m-groupbuy-list",
-                {
-                  key: index,
-                  attrs: { rowData: item, mpcomid: "02fe9a1a-0-" + index }
-                },
-                [
-                  _c("image", {
-                    staticStyle: { width: "164rpx", height: "60rpx" },
-                    attrs: {
-                      src: "../../static/img/icon/purchase_button_buy.png",
-                      mode: "aspectFit"
-                    }
-                  })
-                ]
-              )
-            ],
-            1
-          )
-        ]
+      _vm._l(_vm.groupsellList, function(item, index) {
+        return _c(
+          "view",
+          { key: index, staticClass: "m-list" },
+          [
+            _c(
+              "m-groupbuy-list",
+              {
+                attrs: {
+                  title: item.synopsis,
+                  labelName: item.labelName,
+                  img: item.pictureUrl,
+                  price: item.presentPrice,
+                  oldpric: item.originalPrice,
+                  isAssemble: item.isAssemble,
+                  mpcomid: "02fe9a1a-0-" + index
+                }
+              },
+              [
+                _c("image", {
+                  staticStyle: { width: "164rpx", height: "60rpx" },
+                  attrs: {
+                    src: "../../static/img/icon/purchase_button_buy.png",
+                    mode: "aspectFit"
+                  }
+                })
+              ]
+            )
+          ],
+          1
+        )
       })
     ],
     2
