@@ -9,11 +9,9 @@
 	export default {
 		name: 'uni-number-box',
 		props: {
-			rowData:{
-				type:Object,
-				default:function(){
-					return {}
-				}
+			id: {
+				type: [Number,String],
+				default: 1
 			},
 			value: {
 				type: Number,
@@ -55,7 +53,7 @@
 				this.inputValue = val;
 			},
 			inputValue(val) {
-				this.$emit('change', {val:val,rowData:this.rowData});
+				this.$emit('change', {num:val,id:this.id});
 			}
 		},
 		methods: {

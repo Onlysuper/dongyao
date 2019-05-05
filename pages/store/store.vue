@@ -39,8 +39,6 @@
 		    </scroll-view>
 			<!-- 右侧子导航 -->
 			<scroll-view  scroll-y="true" class="right" >
-				<!-- {{productList}} -->
-<!-- 			   <view class="category"  v-show="index==showCategoryIndex"> -->
 				<view class="category">
 					<view class="list">
 						<view class="box" v-for="(category,index) in productList"  :key="category.id">
@@ -50,12 +48,10 @@
 				</view>
 			</scroll-view>
 		</view>
-	
-		
-		<m-footer-car  title='去结算' price="￥30.97" num="10" @handleFn="showSpec(false)" @payFn="payFn"></m-footer-car>
+		<m-footer-car  title='去结算' :price="shopCarListPrice" :num="shopCarListLength" @handleFn="showSpec(false)" @payFn="payFn"></m-footer-car>
 		<!-- 规格-模态层弹窗 -->
 		<view class="popup spec" :class="specClass" @touchmove.stop.prevent="discard" @tap="hideSpec">
-			<!-- 遮罩层 -->
+		<!-- 遮罩层 -->
 			<view class="mask"></view>
 			<view class="layer" @tap.stop="discard">
 				<view class="m-shopcar-box">
@@ -65,44 +61,32 @@
 								购物车
 							</view>
 							<view class="m-light">
-								共5件商品
+								共{{shopCarListLength}}件商品
 							</view>
 						</view>
 						<view class="m-clear-car">
 							清空购物车
 						</view>
 					</view>
-					<view class="m-shopcar-item">
+					<view v-for="(item,index) in shopCarList" :key="index" class="m-shopcar-item">
 						<view class="m-title">
-							无公害小油菜/500g
+							{{item.synopsis}}
 						</view>
 						<view class="m-price">
-							￥12.99
+							￥{{item.originalPrice}}
 						</view>
 						<view class="m-controne">
-							<uni-number-box :min="0" :max="9"></uni-number-box>
-						</view>
-					</view>
-					<view class="m-shopcar-item">
-						<view class="m-title">
-							无公害小油菜/500g
-						</view>
-						<view class="m-price">
-							￥12.99
-						</view>
-						<view class="m-controne">
-							<uni-number-box :min="0" :max="9"></uni-number-box>
+							<uni-number-box @change="buyNumChange" :value="item.buyCount" :min="0" :max="9" :id="item.id"></uni-number-box>
 						</view>
 					</view>
 				</view>
-				<m-footer-car title='去结算' price="￥30.97" num="10" @handleFn="showSpec(false)" @payFn="payFn"></m-footer-car>
+				<m-footer-car title='去结算' :price="shopCarListPrice" :num="shopCarListLength" @handleFn="showSpec(false)" @payFn="payFn"></m-footer-car>
 			</view>
+			
 		</view>
 		
 		  <!--小球的实现-->
-	  <!-- <view class="good_box" v-show="hide_good_box"  :style="left: "+bus_x+"px; top: {{bus_y}}px;"> -->
 		<view class="good_box" v-show="!hide_good_box"  :style="'left:'+bus_x+'px;top:'+bus_y+'px'"></view>
-		<!-- <view class="good_box" >fewafewa{{bus_x}}	</view> -->
 			
 	</view>
 </template>
@@ -160,6 +144,9 @@
 		},
 		data() {
 			return {
+				shopCarList:[],
+				shopCarListLength:0,
+				shopCarListPrice:0,
 				storeid:0,
 				//商家基本信息
 				storeData:{},
@@ -212,6 +199,7 @@
 			},
 			// 加入购物车
 			touchOnGoods(obj){
+				console.log(obj);
 				const e = obj.elem;
 				const data = obj.data;
 				if(this.timer){ // 清除一下动画
@@ -251,13 +239,11 @@
 					  clearInterval(that.timer);
 					  that.hide_good_box= true;
 					  // 数据计算
-					  that.addGoodSum(e,data);
+					  that.addGoodSum(data,1,'add');
 					}
 				}, 25);
 			},
-			addGoodSum(e,data){
-				console.log(data);
-			},
+			
 			//分类切换显示
 			showCategory(index){
 				this.mPost("/server/p/search/products",{
@@ -279,14 +265,20 @@
 				this.mPost("/server/sc/find/cart",{
 					userId:1
 				}).then(res=>{
-					console.log(res)
+					console.log(res);
+					if(res.code=='1'){
+						if(res.data){
+							this.shopCarList=res.data;
+							// 购物车总商品数，与总价格计算
+							this.shopCarCount();
+						}
+					}
 				})
 			},
 			//关闭规格弹窗
 			hideSpec() {
 				this.specClass = 'hide';
 				//回调
-			
 				this.selectSpec&&this.specCallback&&this.specCallback();
 				this.specCallback = false;
 				setTimeout(() => {
@@ -328,16 +320,46 @@
 					}
 				})
 				//  #endif  
+			},
+			// 加入购物车
+			addGoodSum(data,num=1,type){
+				let buyCount=num;
+				let objIndex = this.shopCarList.findIndex(item=>item.id=data.id);
+				if(objIndex!=-1 && type=='add'){
+					console.log(this.shopCarList[objIndex].buyCount);
+					buyCount=this.shopCarList[objIndex].buyCount+1;
+					console.log(buyCount);
+				}
+				this.mPost("/server/sc/add/product",{
+					userId:1,
+					productId:data.id,
+					buyCount:buyCount
+				}).then(res=>{
+					if(res.code==1){
+						this.showShopCar();
+					}
+				}).catch(err=>{
+					console.log(err)
+				})
+			},
+			buyNumChange(data){
+				this.addGoodSum({id:data.id},data.num,'change')
+			},
+			//购物车总价格，总数量计算
+			shopCarCount(){
+				let num = 0;
+				let price=0;
+				this.shopCarList.forEach(item=>{
+					num+=item.buyCount;
+					price+=this.accMul(item.presentPrice,item.buyCount);
+					this.shopCarListLength=num;
+					this.shopCarListPrice=price;
+				})
 				
-// 				let ww = document.body.clientWidth;
-// 				let hh = document.body.clientHeight;
-// 				this.busPos['x'] = 45;//购物车的位置
-// 				this.busPos['y'] = hh - 56;
 			}
 		},
 		
 		onLoad(option) {
-			
 			this.storeid=option.storeid;
 			console.log("storeid:"+this.storeid);
 			this.busHandle();
@@ -360,8 +382,13 @@
 			this.showCategory(1);
 			// 当前购物车信息
 			this.showShopCar();
+			
+		},
+		watch:{
+			shopCarList(val){
+				
+			}
 		}
-		
 		
 	}
 </script>
@@ -634,6 +661,7 @@
 					justify-content: space-between;
 					.m-line{
 						display: flex;
+						align-items: center;
 						color:#333333;
 						font-size: 30upx;
 						.m-light{

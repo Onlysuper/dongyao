@@ -502,7 +502,7 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _default2 =
+Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _default =
 
 
 
@@ -513,11 +513,9 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 {
   name: 'uni-number-box',
   props: {
-    rowData: {
-      type: Object,
-      default: function _default() {
-        return {};
-      } },
+    id: {
+      type: [Number, String],
+      default: 1 },
 
     value: {
       type: Number,
@@ -559,7 +557,7 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
       this.inputValue = val;
     },
     inputValue: function inputValue(val) {
-      this.$emit('change', { val: val, rowData: this.rowData });
+      this.$emit('change', { num: val, id: this.id });
     } },
 
   methods: {
@@ -601,7 +599,7 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
         value = this.min;
       }
       this.inputValue = value;
-    } } };exports.default = _default2;
+    } } };exports.default = _default;
 
 /***/ }),
 
@@ -614,22 +612,6 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -775,6 +757,9 @@ function bezier(pots, amount) {
 
   data: function data() {
     return {
+      shopCarList: [],
+      shopCarListLength: 0,
+      shopCarListPrice: 0,
       storeid: 0,
       //商家基本信息
       storeData: {},
@@ -827,6 +812,7 @@ function bezier(pots, amount) {
     },
     // 加入购物车
     touchOnGoods: function touchOnGoods(obj) {
+      console.log(obj);
       var e = obj.elem;
       var data = obj.data;
       if (this.timer) {// 清除一下动画
@@ -866,13 +852,11 @@ function bezier(pots, amount) {
           clearInterval(that.timer);
           that.hide_good_box = true;
           // 数据计算
-          that.addGoodSum(e, data);
+          that.addGoodSum(data, 1, 'add');
         }
       }, 25);
     },
-    addGoodSum: function addGoodSum(e, data) {
-      console.log(data);
-    },
+
     //分类切换显示
     showCategory: function showCategory(index) {var _this = this;
       this.mPost("/server/p/search/products", {
@@ -890,22 +874,28 @@ function bezier(pots, amount) {
       this.showCategoryIndex = index;
     },
     // 购物车列表
-    showShopCar: function showShopCar() {
+    showShopCar: function showShopCar() {var _this2 = this;
       this.mPost("/server/sc/find/cart", {
         userId: 1 }).
       then(function (res) {
         console.log(res);
+        if (res.code == '1') {
+          if (res.data) {
+            _this2.shopCarList = res.data;
+            // 购物车总商品数，与总价格计算
+            _this2.shopCarCount();
+          }
+        }
       });
     },
     //关闭规格弹窗
-    hideSpec: function hideSpec() {var _this2 = this;
+    hideSpec: function hideSpec() {var _this3 = this;
       this.specClass = 'hide';
       //回调
-
       this.selectSpec && this.specCallback && this.specCallback();
       this.specCallback = false;
       setTimeout(function () {
-        _this2.specClass = 'none';
+        _this3.specClass = 'none';
       }, 200);
     },
     //规格弹窗
@@ -943,16 +933,46 @@ function bezier(pots, amount) {
         } });
 
 
+    },
+    // 加入购物车
+    addGoodSum: function addGoodSum(data) {var _this4 = this;var num = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1;var type = arguments.length > 2 ? arguments[2] : undefined;
+      var buyCount = num;
+      var objIndex = this.shopCarList.findIndex(function (item) {return item.id = data.id;});
+      if (objIndex != -1 && type == 'add') {
+        console.log(this.shopCarList[objIndex].buyCount);
+        buyCount = this.shopCarList[objIndex].buyCount + 1;
+        console.log(buyCount);
+      }
+      this.mPost("/server/sc/add/product", {
+        userId: 1,
+        productId: data.id,
+        buyCount: buyCount }).
+      then(function (res) {
+        if (res.code == 1) {
+          _this4.showShopCar();
+        }
+      }).catch(function (err) {
+        console.log(err);
+      });
+    },
+    buyNumChange: function buyNumChange(data) {
+      this.addGoodSum({ id: data.id }, data.num, 'change');
+    },
+    //购物车总价格，总数量计算
+    shopCarCount: function shopCarCount() {var _this5 = this;
+      var num = 0;
+      var price = 0;
+      this.shopCarList.forEach(function (item) {
+        num += item.buyCount;
+        price += _this5.accMul(item.presentPrice, item.buyCount);
+        _this5.shopCarListLength = num;
+        _this5.shopCarListPrice = price;
+      });
 
-      // 				let ww = document.body.clientWidth;
-      // 				let hh = document.body.clientHeight;
-      // 				this.busPos['x'] = 45;//购物车的位置
-      // 				this.busPos['y'] = hh - 56;
     } },
 
 
-  onLoad: function onLoad(option) {var _this3 = this;
-
+  onLoad: function onLoad(option) {var _this6 = this;
     this.storeid = option.storeid;
     console.log("storeid:" + this.storeid);
     this.busHandle();
@@ -961,21 +981,26 @@ function bezier(pots, amount) {
       id: option.storeid }).
     then(function (res) {
       if (res.code == '1') {
-        _this3.storeData = res.data;
+        _this6.storeData = res.data;
       }
     });
     //商品分类
     this.mPost("/server/t/types", {}).
     then(function (res) {
       if (res.code == '1') {
-        _this3.storeMenu = res.data;
+        _this6.storeMenu = res.data;
       }
     });
     // 默认显示第一个分类的产品
     this.showCategory(1);
     // 当前购物车信息
     this.showShopCar();
-  } };exports.default = _default;
+
+  },
+  watch: {
+    shopCarList: function shopCarList(val) {
+
+    } } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ "./node_modules/@dcloudio/uni-mp-weixin/dist/index.js")["default"]))
 
 /***/ }),
@@ -1333,8 +1358,8 @@ var render = function() {
       _c("m-footer-car", {
         attrs: {
           title: "去结算",
-          price: "￥30.97",
-          num: "10",
+          price: _vm.shopCarListPrice,
+          num: _vm.shopCarListLength,
           eventid: "05dd8904-3",
           mpcomid: "05dd8904-1"
         },
@@ -1350,7 +1375,7 @@ var render = function() {
         {
           staticClass: "popup spec",
           class: _vm.specClass,
-          attrs: { eventid: "05dd8904-6" },
+          attrs: { eventid: "05dd8904-7" },
           on: {
             touchmove: function($event) {
               $event.stopPropagation()
@@ -1366,7 +1391,7 @@ var render = function() {
             "view",
             {
               staticClass: "layer",
-              attrs: { eventid: "05dd8904-5" },
+              attrs: { eventid: "05dd8904-6" },
               on: {
                 tap: function($event) {
                   $event.stopPropagation()
@@ -1375,48 +1400,63 @@ var render = function() {
               }
             },
             [
-              _c("view", { staticClass: "m-shopcar-box" }, [
-                _vm._m(0),
-                _c("view", { staticClass: "m-shopcar-item" }, [
-                  _c("view", { staticClass: "m-title" }, [
-                    _vm._v("无公害小油菜/500g")
+              _c(
+                "view",
+                { staticClass: "m-shopcar-box" },
+                [
+                  _c("view", { staticClass: "m-header" }, [
+                    _c("view", { staticClass: "m-line" }, [
+                      _c("view", {}, [_vm._v("购物车")]),
+                      _c("view", { staticClass: "m-light" }, [
+                        _vm._v("共" + _vm._s(_vm.shopCarListLength) + "件商品")
+                      ])
+                    ]),
+                    _c("view", { staticClass: "m-clear-car" }, [
+                      _vm._v("清空购物车")
+                    ])
                   ]),
-                  _c("view", { staticClass: "m-price" }, [_vm._v("￥12.99")]),
-                  _c(
-                    "view",
-                    { staticClass: "m-controne" },
-                    [
-                      _c("uni-number-box", {
-                        attrs: { min: 0, max: 9, mpcomid: "05dd8904-2" }
-                      })
-                    ],
-                    1
-                  )
-                ]),
-                _c("view", { staticClass: "m-shopcar-item" }, [
-                  _c("view", { staticClass: "m-title" }, [
-                    _vm._v("无公害小油菜/500g")
-                  ]),
-                  _c("view", { staticClass: "m-price" }, [_vm._v("￥12.99")]),
-                  _c(
-                    "view",
-                    { staticClass: "m-controne" },
-                    [
-                      _c("uni-number-box", {
-                        attrs: { min: 0, max: 9, mpcomid: "05dd8904-3" }
-                      })
-                    ],
-                    1
-                  )
-                ])
-              ]),
+                  _vm._l(_vm.shopCarList, function(item, index) {
+                    return _c(
+                      "view",
+                      { key: index, staticClass: "m-shopcar-item" },
+                      [
+                        _c("view", { staticClass: "m-title" }, [
+                          _vm._v(_vm._s(item.synopsis))
+                        ]),
+                        _c("view", { staticClass: "m-price" }, [
+                          _vm._v("￥" + _vm._s(item.originalPrice))
+                        ]),
+                        _c(
+                          "view",
+                          { staticClass: "m-controne" },
+                          [
+                            _c("uni-number-box", {
+                              attrs: {
+                                value: item.buyCount,
+                                min: 0,
+                                max: 9,
+                                id: item.id,
+                                eventid: "05dd8904-4-" + index,
+                                mpcomid: "05dd8904-2-" + index
+                              },
+                              on: { change: _vm.buyNumChange }
+                            })
+                          ],
+                          1
+                        )
+                      ]
+                    )
+                  })
+                ],
+                2
+              ),
               _c("m-footer-car", {
                 attrs: {
                   title: "去结算",
-                  price: "￥30.97",
-                  num: "10",
-                  eventid: "05dd8904-4",
-                  mpcomid: "05dd8904-4"
+                  price: _vm.shopCarListPrice,
+                  num: _vm.shopCarListLength,
+                  eventid: "05dd8904-5",
+                  mpcomid: "05dd8904-3"
                 },
                 on: {
                   handleFn: function($event) {
@@ -1446,20 +1486,7 @@ var render = function() {
     1
   )
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("view", { staticClass: "m-header" }, [
-      _c("view", { staticClass: "m-line" }, [
-        _c("view", {}, [_vm._v("购物车")]),
-        _c("view", { staticClass: "m-light" }, [_vm._v("共5件商品")])
-      ]),
-      _c("view", { staticClass: "m-clear-car" }, [_vm._v("清空购物车")])
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 

@@ -132,6 +132,24 @@ _vue.default.prototype.mPost = function (url, data) {
   });
 };
 
+/**
+        * 乘法，解决js精度损失问题
+        * @param {*} arg1 
+        * @param {*} arg2 
+        */
+_vue.default.prototype.accMul = function (arg1, arg2) {
+  arg1 = arg1 || 0;
+  var m = 0,
+  s1 = arg1.toString(),
+  s2 = arg2.toString();
+  try {
+    m += s1.split(".")[1].length;
+  } catch (e) {}
+  try {
+    m += s2.split(".")[1].length;
+  } catch (e) {}
+  return Number(s1.replace(".", "")) * Number(s2.replace(".", "")) / Math.pow(10, m);
+};
 // my config end
 _App.default.mpType = 'app';
 var app = new _vue.default(_objectSpread({},
