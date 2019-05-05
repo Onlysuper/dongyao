@@ -858,7 +858,7 @@ function bezier(pots, amount) {
     },
 
     //分类切换显示
-    showCategory: function showCategory(index) {var _this = this;
+    showCategory: function showCategory(index) {var _this2 = this;
       this.mPost("/server/p/search/products", {
         start: 0,
         length: 200,
@@ -867,23 +867,24 @@ function bezier(pots, amount) {
       then(function (res) {
         if (res.code == '1') {
           if (res.data && res.data.list) {
-            _this.productList = res.data.list;
+            _this2.productList = res.data.list;
           }
         }
       });
       this.showCategoryIndex = index;
     },
-    // 购物车列表
-    showShopCar: function showShopCar() {var _this2 = this;
+    // 获取购物车列表信息
+    showShopCar: function showShopCar() {
+      var _this = this;
       this.mPost("/server/sc/find/cart", {
         userId: 1 }).
       then(function (res) {
         console.log(res);
         if (res.code == '1') {
           if (res.data) {
-            _this2.shopCarList = res.data;
+            _this.shopCarList = res.data;
             // 购物车总商品数，与总价格计算
-            _this2.shopCarCount();
+            _this.shopCarCount();
           }
         }
       });
@@ -935,21 +936,20 @@ function bezier(pots, amount) {
 
     },
     // 加入购物车
-    addGoodSum: function addGoodSum(data) {var _this4 = this;var num = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1;var type = arguments.length > 2 ? arguments[2] : undefined;
+    addGoodSum: function addGoodSum(data) {var num = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1;var type = arguments.length > 2 ? arguments[2] : undefined;
+      var _this = this;
       var buyCount = num;
       var objIndex = this.shopCarList.findIndex(function (item) {return item.id = data.id;});
       if (objIndex != -1 && type == 'add') {
-        console.log(this.shopCarList[objIndex].buyCount);
         buyCount = this.shopCarList[objIndex].buyCount + 1;
-        console.log(buyCount);
       }
-      this.mPost("/server/sc/add/product", {
+      _this.mPost("/server/sc/add/product", {
         userId: 1,
         productId: data.id,
         buyCount: buyCount }).
       then(function (res) {
         if (res.code == 1) {
-          _this4.showShopCar();
+          _this.showShopCar();
         }
       }).catch(function (err) {
         console.log(err);
@@ -959,36 +959,35 @@ function bezier(pots, amount) {
       this.addGoodSum({ id: data.id }, data.num, 'change');
     },
     //购物车总价格，总数量计算
-    shopCarCount: function shopCarCount() {var _this5 = this;
+    shopCarCount: function shopCarCount() {var _this4 = this;
       var num = 0;
       var price = 0;
       this.shopCarList.forEach(function (item) {
         num += item.buyCount;
-        price += _this5.accMul(item.presentPrice, item.buyCount);
-        _this5.shopCarListLength = num;
-        _this5.shopCarListPrice = price;
+        price += _this4.accMul(item.presentPrice, item.buyCount);
+        _this4.shopCarListLength = num;
+        _this4.shopCarListPrice = price;
       });
 
     } },
 
 
-  onLoad: function onLoad(option) {var _this6 = this;
+  onLoad: function onLoad(option) {var _this5 = this;
     this.storeid = option.storeid;
-    console.log("storeid:" + this.storeid);
     this.busHandle();
     // 商家基本信息
     this.mPost("/server/s/storeById", {
       id: option.storeid }).
     then(function (res) {
       if (res.code == '1') {
-        _this6.storeData = res.data;
+        _this5.storeData = res.data;
       }
     });
     //商品分类
     this.mPost("/server/t/types", {}).
     then(function (res) {
       if (res.code == '1') {
-        _this6.storeMenu = res.data;
+        _this5.storeMenu = res.data;
       }
     });
     // 默认显示第一个分类的产品
@@ -996,11 +995,7 @@ function bezier(pots, amount) {
     // 当前购物车信息
     this.showShopCar();
 
-  },
-  watch: {
-    shopCarList: function shopCarList(val) {
-
-    } } };exports.default = _default;
+  } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ "./node_modules/@dcloudio/uni-mp-weixin/dist/index.js")["default"]))
 
 /***/ }),

@@ -260,17 +260,18 @@
 				})
 				this.showCategoryIndex = index;
 			},
-			// 购物车列表
+			// 获取购物车列表信息
 			showShopCar(){
+				let _this = this;
 				this.mPost("/server/sc/find/cart",{
 					userId:1
 				}).then(res=>{
 					console.log(res);
 					if(res.code=='1'){
 						if(res.data){
-							this.shopCarList=res.data;
+							_this.shopCarList=res.data;
 							// 购物车总商品数，与总价格计算
-							this.shopCarCount();
+							_this.shopCarCount();
 						}
 					}
 				})
@@ -323,20 +324,19 @@
 			},
 			// 加入购物车
 			addGoodSum(data,num=1,type){
+				let _this=this;
 				let buyCount=num;
 				let objIndex = this.shopCarList.findIndex(item=>item.id=data.id);
 				if(objIndex!=-1 && type=='add'){
-					console.log(this.shopCarList[objIndex].buyCount);
 					buyCount=this.shopCarList[objIndex].buyCount+1;
-					console.log(buyCount);
 				}
-				this.mPost("/server/sc/add/product",{
+				_this.mPost("/server/sc/add/product",{
 					userId:1,
 					productId:data.id,
 					buyCount:buyCount
 				}).then(res=>{
 					if(res.code==1){
-						this.showShopCar();
+						_this.showShopCar();
 					}
 				}).catch(err=>{
 					console.log(err)
@@ -361,7 +361,6 @@
 		
 		onLoad(option) {
 			this.storeid=option.storeid;
-			console.log("storeid:"+this.storeid);
 			this.busHandle();
 			// 商家基本信息
 			this.mPost("/server/s/storeById",{
@@ -383,11 +382,6 @@
 			// 当前购物车信息
 			this.showShopCar();
 			
-		},
-		watch:{
-			shopCarList(val){
-				
-			}
 		}
 		
 	}
