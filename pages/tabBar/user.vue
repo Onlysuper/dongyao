@@ -124,7 +124,7 @@
 	.m-user-page{
 		.m-header{
 			width: 100%;
-			background: url("../../static/img/me_bg_top.png") no-repeat top left;
+			background: url("http://dongyaoxiaoxiaochegnxu.oss-cn-beijing.aliyuncs.com/banners/me_bg_top.png") no-repeat top left;
 			background-size: 100% 238upx;
 		}
 		.m-user{

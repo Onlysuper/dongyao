@@ -1,12 +1,12 @@
 <template>
 	<!-- 首页门店图文 -->
 	<view class="m-store-item">
-		<view class="m-img" v-if="rowData.img">
+		<view class="m-img" v-if="rowData.imgUrl">
 			<image style="width:100%;height: 100%;" :src="rowData.img" mode="aspectFit"></image>
 		</view>
 		<view class="m-text">
 			<view class="m-title">
-				{{rowData.title}}
+				{{rowData.name}}
 			</view>
 			<view class="m-discount">
 				<view v-for="(item,index) in tips" :key="index" class="m-tip">

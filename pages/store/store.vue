@@ -39,10 +39,10 @@
 		    </scroll-view>
 			<!-- 右侧子导航 -->
 			<scroll-view  scroll-y="true" class="right" >
-				<view class="category">
+				<view class="category"> 
 					<view class="list">
-						<view class="box" v-for="(category,index) in productList"  :key="category.id">
-							<m-store-pro @touchOnGoods="touchOnGoods" :rowData="category"></m-store-pro>
+						<view class="box" v-for="(category) in productList" :key="category.id">
+							<m-store-pro @proDetail="proDetail" @touchOnGoods="touchOnGoods" :rowData="category"></m-store-pro>
 						</view>
 					</view>
 				</view>
@@ -182,6 +182,12 @@
 		},
 		
 		methods:{
+			//产品详情
+			proDetail(data){
+				uni.navigateTo({
+					url:"/pages/product/product?id="+data.id
+				})
+			},
 			//拨打电话
 			callPhone(phone){
 				uni.makePhoneCall({
@@ -470,7 +476,7 @@
 			position: relative;
 			padding-top: 20upx;
 			background:#eee;
-			background:url('../../static/img/storebanner.png');
+			background:url('http://dongyaoxiaoxiaochegnxu.oss-cn-beijing.aliyuncs.com/banners/shop_top_bg.png');
 			background-size: 100% 200upx;
 			background-repeat: no-repeat;
 			.m-content{

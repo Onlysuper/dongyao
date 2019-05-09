@@ -437,7 +437,7 @@
     position: relative;
     padding-top: 20rpx;
     background: #eee;
-    background: url(../../static/img/storebanner.13c23464.png);
+    background: url("http://dongyaoxiaoxiaochegnxu.oss-cn-beijing.aliyuncs.com/banners/shop_top_bg.png");
     background-size: 100% 200rpx;
     background-repeat: no-repeat;
 }

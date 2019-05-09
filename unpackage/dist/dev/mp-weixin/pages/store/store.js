@@ -479,6 +479,9 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 
 
   methods: {
+    proDetail: function proDetail(e) {
+      this.$emit("proDetail", this.rowData);
+    },
     touchOnGoods: function touchOnGoods(e) {
       this.$emit("touchOnGoods", {
         data: this.rowData,
@@ -795,6 +798,12 @@ function bezier(pots, amount) {
   },
 
   methods: {
+    //产品详情
+    proDetail: function proDetail(data) {
+      uni.navigateTo({
+        url: "/pages/product/product?id=" + data.id });
+
+    },
     //拨打电话
     callPhone: function callPhone(phone) {
       uni.makePhoneCall({
@@ -1113,36 +1122,52 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("view", { staticClass: "m-store-item" }, [
-    _c("view", { staticClass: "m-img" }, [
-      _c("image", {
-        staticStyle: { width: "100%", height: "100%" },
-        attrs: { src: _vm.rowData.pictureUrl, mode: "aspectFit" }
-      })
-    ]),
-    _c("view", { staticClass: "m-text" }, [
-      _c("view", { staticClass: "m-title" }, [
-        _vm._v(_vm._s(_vm.rowData.synopsis))
-      ]),
-      _c("view", { staticClass: "m-descripe" }, [
-        _vm._v(_vm._s(_vm.rowData.labelName))
-      ]),
-      _c("view", { staticClass: "m-price" }, [
-        _vm._v(_vm._s(_vm.rowData.presentPrice))
-      ]),
-      _c("view", { staticClass: "m-old-price" }, [
-        _vm._v("非会员价"),
-        _c("view", { staticClass: "m-num" }, [
-          _vm._v(_vm._s(_vm.rowData.originalPrice))
+    _c(
+      "view",
+      {
+        staticClass: "m-img",
+        attrs: { eventid: "6c868792-0" },
+        on: { tap: _vm.proDetail }
+      },
+      [
+        _c("image", {
+          staticStyle: { width: "100%", height: "100%" },
+          attrs: { src: _vm.rowData.pictureUrl, mode: "aspectFit" }
+        })
+      ]
+    ),
+    _c(
+      "view",
+      {
+        staticClass: "m-text",
+        attrs: { eventid: "6c868792-1" },
+        on: { tap: _vm.proDetail }
+      },
+      [
+        _c("view", { staticClass: "m-title" }, [
+          _vm._v(_vm._s(_vm.rowData.synopsis))
+        ]),
+        _c("view", { staticClass: "m-descripe" }, [
+          _vm._v(_vm._s(_vm.rowData.labelName))
+        ]),
+        _c("view", { staticClass: "m-price" }, [
+          _vm._v(_vm._s(_vm.rowData.presentPrice))
+        ]),
+        _c("view", { staticClass: "m-old-price" }, [
+          _vm._v("非会员价"),
+          _c("view", { staticClass: "m-num" }, [
+            _vm._v(_vm._s(_vm.rowData.originalPrice))
+          ])
         ])
-      ])
-    ]),
+      ]
+    ),
     _c("view", { staticClass: "m-distance" }, [
       _c("image", {
         staticStyle: { width: "40rpx", height: "40rpx" },
         attrs: {
           src: "../../static/img/icon/shop_icon_buy.png",
           mode: "aspectFit",
-          eventid: "6c868792-0"
+          eventid: "6c868792-2"
         },
         on: { tap: _vm.touchOnGoods }
       })
@@ -1337,7 +1362,10 @@ var render = function() {
                             eventid: "05dd8904-2-" + index,
                             mpcomid: "05dd8904-0-" + index
                           },
-                          on: { touchOnGoods: _vm.touchOnGoods }
+                          on: {
+                            proDetail: _vm.proDetail,
+                            touchOnGoods: _vm.touchOnGoods
+                          }
                         })
                       ],
                       1

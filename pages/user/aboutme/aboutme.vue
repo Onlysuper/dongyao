@@ -50,7 +50,7 @@
 	.m-banner{
 		width: 100%;
 		height:300upx;
-		background:url("../../../static/img/about_bg.png") no-repeat;
+		background:url("http://dongyaoxiaoxiaochegnxu.oss-cn-beijing.aliyuncs.com/banners/about_bg.png") no-repeat;
 		background-size: 100% 100%;
 	}
 	.m-body{

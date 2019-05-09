@@ -1,10 +1,10 @@
 <template>
 	<!-- 门店商品图文 -->
 	<view class="m-store-item">
-		<view class="m-img">
+		<view class="m-img" @tap="proDetail">
 			<image style="width: 100%;height: 100%;" :src="rowData.pictureUrl" mode="aspectFit"></image>
 		</view>
-		<view class="m-text">
+		<view class="m-text"  @tap="proDetail">
 			<view class="m-title">
 				{{rowData.synopsis}}
 			</view>
@@ -37,6 +37,9 @@
 			}
 		},
 		methods:{
+			proDetail(e){
+				this.$emit("proDetail",this.rowData)
+			},
 		 touchOnGoods(e){
 			 this.$emit("touchOnGoods",{
 				 data:this.rowData,

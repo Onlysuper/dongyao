@@ -22,13 +22,13 @@
 		<!-- 底部菜单 -->
 		<view class="footer">
 			<view class="icons">
-				<view class="box" @tap="goHome">
+				<view class="box" @tap="share">
 					<view class="icon home">
 						<image style="width:38upx;height:100%" src="../../static/img/icon/goods_icon_house.png" mode="aspectFit"></image>
 					</view>
 					<view class="text">首页</view>
 				</view>
-				<view class="box" @tap="goStore">
+				<view class="box" @tap="toChat">
 					<view class="icon store">
 						<image style="width:38upx;height:100%" src="../../static/img/icon/goods_icon_shop.png" mode="aspectFit"></image>
 					</view>
@@ -129,25 +129,22 @@
 						35
 					</view>
 				</view>
-				<view class="text-box">
-					已有3人下单 可直接参与
-				</view>
-			</view>
-			<view class="user-list-box">
-				<view class="item-box" v-for="item in pintuanData" :key="item.id">
-					<view class="img-box">
-						<image style="width:80upx;height:80upx" :src="item.headAddress" mode="aspectFit"></image>
-					</view>
-					<view class="body-box">
-						{{item.nickname}}
-					</view>
-					<view class="time-box">
-						<view class="">
-							{{item.pickingTime}}下单
+				<view class="user-list-box">
+					<view class="item">
+						<view class="img-box">
+							<image style="width:38upx;height:100%" src="../../static/img/icon/goods_icon_house.png" mode="aspectFit"></image>
 						</view>
-						<!-- <view class="">
-							第一位用户
-						</view> -->
+						<view class="body-box">
+							一只老萌
+						</view>
+						<view class="time-box">
+							<view class="">
+								04.16 08:34:56下单
+							</view>
+							<view class="">
+								第一位用户
+							</view>
+						</view>
 					</view>
 				</view>
 			</view>
@@ -159,37 +156,55 @@
 					商品评价
 				</view>
 				<view class="m-detail">
-					好评度 {{degreeData}}%>
+					好评度 98%>
 				</view>
 			</view>
-			<view class="m-body" v-for="item in commentData" :key="item.id">
+			<view class="m-body">
 				<view class="img-box">
-					<image v-if="item.anonymous==0" style="width:80upx;height:80upx" :src="item.headAddress" mode="aspectFit"></image>
-					<image v-else style="width:80upx;height:80upx" src="../../static/img/icon/goods_icon_Avatar.png" mode="aspectFit"></image>
+					<image style="width:80upx;height:80upx" src="../../static/img/icon/home_icon_gps.png" mode="aspectFit"></image>
 				</view>
 				<view class="container">
 					<view class="user-box">
 						<view class="">
 							<view class="user-name">
-								{{item.userId}}
+								宝宝熊
 							</view>
 							<view class="time">
-								{{item.commentTime}}
+								2019年03月20
 							</view>
 						</view>
-						<uni-rate size="5" :value="item.starLevel"></uni-rate>
+						<uni-rate size="5" value="4"></uni-rate>
 					</view>
 					<view class="content">
-						<view class="">
-							{{item.commentContent}}
-						</view>
-						<view v-if="item.replyContent!=''" class="m-reply">
-							{{item.replyContent}}
-						</view>
+						真是特别鲜嫩，这个季节很适宜，推荐推荐。
+						真是特别鲜嫩，这个季节很适宜，推荐推荐。
+						真是特别鲜嫩，这个季节很适宜，推荐推荐。
 					</view>
 				</view>
 			</view>
-			
+			<view class="m-body">
+				<view class="img-box">
+					<image style="width:80upx;height:80upx" src="../../static/img/icon/home_icon_gps.png" mode="aspectFit"></image>
+				</view>
+				<view class="container">
+					<view class="user-box">
+						<view class="">
+							<view class="user-name">
+								宝宝熊
+							</view>
+							<view class="time">
+								2019年03月20
+							</view>
+						</view>
+						<uni-rate size="5" value="4"></uni-rate>
+					</view>
+					<view class="content">
+						真是特别鲜嫩，这个季节很适宜，推荐推荐。
+						真是特别鲜嫩，这个季节很适宜，推荐推荐。
+						真是特别鲜嫩，这个季节很适宜，推荐推荐。
+					</view>
+				</view>
+			</view>
 		</view>
 		<!-- 详情 -->
 		<view class="description">
@@ -226,12 +241,8 @@ export default {
 			specClass: '',//规格弹窗css类，控制开关动画
 			shareClass:'',//分享弹窗css类，控制开关动画
 			// 商品信息
-			storeId:"",
 			goodsData:{},
 			isAssemble:false,// 是否拼团
-			pintuanData:{},
-			commentData:{},//评论列表
-			degreeData:"",//好评度
 // 			goodsData:{
 // 				id:1,
 // 				name:"新鲜小白菜500g",
@@ -275,23 +286,27 @@ export default {
 				if(res.data){
 					let data=res.data;
 					_this.goodsData=data;
-					_this.storeId = data.storeId;
 					// 轮播图
 					if(data.pictures){
-						_this.swiperList=[...data.pictures];
-					}
-					//是否可拼团
-					_this.isAssemble=(data.isAssemble==1);
-					if(_this.isAssemble){
-						_this.getPintuanUsers(id);
+						_this.swiperList=[...res.data.pictures];
+						//是否可拼团
+						_this.isAssemble=(res.data.isAssemble==1);
+						if(_this.isAssemble){
+							_this.getPintuanUsers(id);
+						}
 					}
 				}
 			}
 		})
-		// 商品评论列表
-		_this.getComments(id);
-		//好评度
-		_this.getDegree(id);
+		// 
+		this.mPost("/server/c/praise/degree",{
+			productid:id,
+		}).then(res=>{
+			if(res.code=='1'){
+				
+			}
+		})
+		// /server/c/praise/degree
 		// this.calcAnchor();//计算锚点高度，页面数据是ajax加载时，请把此行放在数据渲染完成事件中执行以保证高度计算正确
 	},
 	onPageScroll(e) {
@@ -311,78 +326,34 @@ export default {
 		uni.showToast({ title: '触发上拉加载' });
 	},
 	methods: {
-		goHome(){
-			uni.switchTab({  
-                url: '/pages/tabBar/home'  
-            });  
-		},
-		//进店
-		goStore(){
-			console.log('进店');
-			uni.navigateTo({
-				url:"/pages/store/store?storeid="+this.storeId
-			})
-		},
 		// 拼团用户列表
 		getPintuanUsers(id){
-			let _this = this;
-			this.mPost("/server/g/group/buy/users",{
+			this.mPost("server/g/group/buy/users",{
 				start:0,
 				length:100,
-				productId:id
+				productId:id,
 			}).then(res=>{
 				console.log(res);
-				if(res.code=='1'){
-					if(res.data){
-						_this.pintuanData=res.data.list;
-					}
-				}
-			})
-		},
-		//评论列表
-		getComments(id){
-			let _this = this;
-			this.mPost("/server/c/comments",{
-				start:0,
-				length:100,
-				productId:id
-			}).then(res=>{
-				if(res.code=='1'){
-					if(res.data){
-						_this.commentData=res.data.list;
-					}
-				}
-			})
-		},
-		//好评度
-		getDegree(id){
-			let _this = this;
-			this.mPost("/server/c/praise/degree",{
-				productId:id
-			}).then(res=>{
-				if(res.code=='1'){
-					if(res.data){
-						_this.degreeData=res.data;
-					}
-				}
+			}).catch(err=>{
+				console.log(err);
 			})
 		},
 		//轮播图指示器
 		swiperChange(event) {
 			this.currentSwiper = event.detail.current;
 		},
-// 		//消息列表
-// 		toMsg(){
-// 			uni.navigateTo({
-// 				url:'../msg/msg'
-// 			})
-// 		},
-// 		// 客服
-// 		toChat(){
-// 			uni.navigateTo({
-// 				url:"../msg/chat/chat?name=客服008"
-// 			})
-// 		},
+		//消息列表
+		toMsg(){
+			uni.navigateTo({
+				url:'../msg/msg'
+			})
+		},
+		// 客服
+		toChat(){
+			uni.navigateTo({
+				url:"../msg/chat/chat?name=客服008"
+			})
+		},
 		// 分享
 		share(){
 			this.shareClass = 'show';
@@ -729,7 +700,36 @@ page {
 	background-color: #fff;
 	margin-bottom: 20upx;
 }
-
+//拼团start
+.pintuan{
+	.m-header{
+		.time-box{
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			justify-content: flex-start;
+		}
+	}
+	.user-list{
+		.item-box{
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			justify-content: space-between;
+			.img-box{
+				flex:0 0 120upx;
+				height: 120upx;
+			}
+			.body-box{
+				flex:1;
+			}
+			.time-box{
+				flex: 1 1 200upx;
+			}
+		}
+	}
+}
+// 拼团end
 .goods-info {
 	.title {
 		font-size: $fontsize-2;
@@ -815,61 +815,6 @@ page {
 		}
 	}
 }
-//拼团start
-.pintuan{
-	// padding: 0;
-	background:#fff;
-	.m-header{
-		border-bottom: 1px solid $color-border2;
-		padding: 30upx 0;
-		.time-box{
-			display: flex;
-			flex-direction: row;
-			align-items: center;
-			justify-content: flex-start;
-			font-size:$fontsize-9;
-			color:$color-2;
-		}
-		.text-box{
-			color:$color-6;
-			font-size: $fontsize-3;
-		}
-	}
-	.user-list-box{
-		
-		.item-box{
-			display: flex;
-			flex-direction: row;
-			align-items: center;
-			justify-content: space-between;
-			padding: 30upx 0;
-			font-size: $fontsize-9;
-			color:$color-5;
-			border-bottom: 1px solid $color-border1;
-			&:last-child{
-				border:0;
-			}
-			.img-box{
-				flex:0 0 80upx;
-				height: 80upx;
-				border-radius: 100%;
-				overflow: hidden;
-			}
-			.body-box{
-				flex:1;
-				padding-left: 20upx;
-			}
-			.time-box{
-				flex: 1 1 200upx;
-				color:$color-6;
-				font-size:$fontsize-5;
-				text-align:right;
-			}
-		}
-	}
-}
-// 拼团end
-// 评论start
 .comments {
 	.m-header{
 		display: flex;
@@ -877,7 +822,6 @@ page {
 		justify-content: space-between;
 		padding:30upx 0;
 		align-items: center;
-		border-bottom: 1px solid $color-border2;
 		.m-label{
 			font-size: $fontsize-2;
 			color:$color-2;
@@ -888,22 +832,15 @@ page {
 		}
 	}
 	.m-body{
+		border-top:1px solid $color-border2;
 		padding-top:30upx;
 		padding-bottom:30upx;
 		display: flex;
 		flex-direction: row;
-		border-bottom: 1px solid $color-border1;
-		&:last-child{
-			border:0;
-		}
 		.img-box{
-			flex:0 1 80upx;
-			height: 80upx;
-			border-radius: 100%;
-			overflow: hidden;
+			flex:0 1 100upx;
 		}
 		.container{
-			flex:1;
 			padding-left:20upx;
 			.user-box{
 				display: flex;
@@ -920,13 +857,6 @@ page {
 				padding-top: 10upx;
 				color:$color-5;
 				font-size: $fontsize-9;
-				.m-reply{
-					background:#f7f7f7;
-					color:#666;
-					font-size: $fontsize-4;
-					padding:20upx;
-					margin-top: 20upx;
-				}
 			}
 		}
 	}

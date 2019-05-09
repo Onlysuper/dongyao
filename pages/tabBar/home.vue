@@ -145,6 +145,7 @@
 			},
 			//拼团列表
 			getGroupsellList(){
+				let _this=this;
 				this.mPost('/server/p/group/products',{
 					start:this.hotsellPage,
 					length:3
@@ -153,7 +154,7 @@
 						if(res.data){
 							let data = res.data;
 							if(data.list){
-								this.groupsellList = data.list;
+								_this.groupsellList = data.list;
 							}
 						}
 					}
@@ -163,16 +164,15 @@
 			},
 			//门店列表
 			getStoreList(){
-				this.mPost('/server/s/vicinity/stores',{
-					lng:116.206845,//经度
-					length:39.762155 //纬度
+				let _this=this;
+				_this.mPost('/server/s/vicinity/stores',{
+					"lng":116.206845,
+					"lat":39.762155
 				}).then(res=>{
 					if(res.code=1){
 						if(res.data){
 							let data = res.data;
-							if(data.list){
-								this.nearStoreList = data.list;
-							}
+								_this.nearStoreList = data;
 						}
 					}
 				}).catch(err=>{
@@ -188,7 +188,7 @@
 			//点击热卖图片
 			hotProDetail(item){
 				uni.navigateTo({
-					url:"/pages/store/store?"+item.id
+					url:"/pages/store/store?storeid="+item.storeId
 				})
 			},
 			// 点击拼团图片

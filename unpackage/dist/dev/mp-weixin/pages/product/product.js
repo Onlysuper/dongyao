@@ -619,8 +619,32 @@ var _uniIcon = _interopRequireDefault(__webpack_require__(/*! ../uni-icon/uni-ic
 
 
 
-var _uniRate = _interopRequireDefault(__webpack_require__(/*! @/components/uni-rate/uni-rate.vue */ "../../../../../../Users/apple/opt/DONGYAO/components/uni-rate/uni-rate.vue"));var _components$data$onLo;function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}function _toConsumableArray(arr) {return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread();}function _nonIterableSpread() {throw new TypeError("Invalid attempt to spread non-iterable instance");}function _iterableToArray(iter) {if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter);}function _arrayWithoutHoles(arr) {if (Array.isArray(arr)) {for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) {arr2[i] = arr[i];}return arr2;}}var _default = (_components$data$onLo = {
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+var _uniRate = _interopRequireDefault(__webpack_require__(/*! @/components/uni-rate/uni-rate.vue */ "../../../../../../Users/apple/opt/DONGYAO/components/uni-rate/uni-rate.vue"));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function _toConsumableArray(arr) {return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread();}function _nonIterableSpread() {throw new TypeError("Invalid attempt to spread non-iterable instance");}function _iterableToArray(iter) {if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter);}function _arrayWithoutHoles(arr) {if (Array.isArray(arr)) {for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) {arr2[i] = arr[i];}return arr2;}}var _default =
+{
   components: { uniRate: _uniRate.default },
   data: function data() {
     return {
@@ -643,7 +667,12 @@ var _uniRate = _interopRequireDefault(__webpack_require__(/*! @/components/uni-r
       specClass: '', //规格弹窗css类，控制开关动画
       shareClass: '', //分享弹窗css类，控制开关动画
       // 商品信息
+      storeId: "",
       goodsData: {},
+      isAssemble: false, // 是否拼团
+      pintuanData: {},
+      commentData: {}, //评论列表
+      degreeData: "", //好评度
       // 			goodsData:{
       // 				id:1,
       // 				name:"新鲜小白菜500g",
@@ -668,209 +697,263 @@ var _uniRate = _interopRequireDefault(__webpack_require__(/*! @/components/uni-r
       descriptionStr: '<div style="text-align:center;"><img width="100%" src="https://s2.ax1x.com/2019/03/28/AdOogx.jpg"/><img width="100%" src="https://s2.ax1x.com/2019/03/28/AdOHKK.jpg"/><img width="100%" src="https://s2.ax1x.com/2019/03/28/AdOTv6.jpg"/></div>' };
 
   },
+  onReady: function onReady() {
+    this.calcAnchor(); //计算锚点高度，页面数据是ajax加载时，请把此行放在数据渲染完成事件中执行以保证高度计算正确
+  },
   onLoad: function onLoad(option) {
+    var _this = this;
 
     //小程序隐藏返回按钮
-    this.showBack = false;
+    _this.showBack = false;
 
     //option为object类型，会序列化上个页面传递的参数
-    console.log(option.cid); //打印出上个页面传递的参数。
-  },
-  onReady: function onReady() {
-    // this.calcAnchor();//计算锚点高度，页面数据是ajax加载时，请把此行放在数据渲染完成事件中执行以保证高度计算正确
-  } }, _defineProperty(_components$data$onLo, "onLoad", function onLoad(
-option) {var _this = this;
-  var id = option.id;
-  // 商品基本信息
-  this.mPost("/server/p/product", {
-    id: id }).
-  then(function (res) {
-    if (res.code == '1') {
-      if (res.data) {
-        var data = res.data;
-        // 轮播图
-        if (data.pictures) {
-          console.log(res.data.pictures);
-          _this.swiperList = _toConsumableArray(res.data.pictures);
+    var id = option.id;
+    // 商品基本信息
+    _this.mPost("/server/p/product", {
+      id: id }).
+    then(function (res) {
+      if (res.code == '1') {
+        if (res.data) {
+          var data = res.data;
+          _this.goodsData = data;
+          _this.storeId = data.storeId;
+          // 轮播图
+          if (data.pictures) {
+            _this.swiperList = _toConsumableArray(data.pictures);
+          }
+          //是否可拼团
+          _this.isAssemble = data.isAssemble == 1;
+          if (_this.isAssemble) {
+            _this.getPintuanUsers(id);
+          }
         }
-        _this.goodsData = data;
       }
-    }
-  });
-  // 
-  this.mPost("/server/c/praise/degree", {
-    productid: id }).
-  then(function (res) {
-    if (res.code == '1') {
+    });
+    // 商品评论列表
+    _this.getComments(id);
+    //好评度
+    _this.getDegree(id);
+    // this.calcAnchor();//计算锚点高度，页面数据是ajax加载时，请把此行放在数据渲染完成事件中执行以保证高度计算正确
+  },
+  onPageScroll: function onPageScroll(e) {
+    //锚点切换
+    this.selectAnchor = e.scrollTop >= this.anchorlist[2].top ? 2 : e.scrollTop >= this.anchorlist[1].top ? 1 : 0;
+    //导航栏渐变
+    var tmpY = 375;
+    e.scrollTop = e.scrollTop > tmpY ? 375 : e.scrollTop;
+    this.afterHeaderOpacity = e.scrollTop * (1 / tmpY);
+    this.beforeHeaderOpacity = 1 - this.afterHeaderOpacity;
+    //切换层级
+    this.beforeHeaderzIndex = e.scrollTop > 0 ? 10 : 11;
+    this.afterHeaderzIndex = e.scrollTop > 0 ? 11 : 10;
+  },
+  //上拉加载，需要自己在page.json文件中配置"onReachBottomDistance"
+  onReachBottom: function onReachBottom() {
+    uni.showToast({ title: '触发上拉加载' });
+  },
+  methods: {
+    goHome: function goHome() {
+      uni.switchTab({
+        url: '/pages/tabBar/home' });
 
-    }
-  });
-  // /server/c/praise/degree
-  // this.calcAnchor();//计算锚点高度，页面数据是ajax加载时，请把此行放在数据渲染完成事件中执行以保证高度计算正确
-}), _defineProperty(_components$data$onLo, "onPageScroll", function onPageScroll(
-e) {
-  //锚点切换
-  this.selectAnchor = e.scrollTop >= this.anchorlist[2].top ? 2 : e.scrollTop >= this.anchorlist[1].top ? 1 : 0;
-  //导航栏渐变
-  var tmpY = 375;
-  e.scrollTop = e.scrollTop > tmpY ? 375 : e.scrollTop;
-  this.afterHeaderOpacity = e.scrollTop * (1 / tmpY);
-  this.beforeHeaderOpacity = 1 - this.afterHeaderOpacity;
-  //切换层级
-  this.beforeHeaderzIndex = e.scrollTop > 0 ? 10 : 11;
-  this.afterHeaderzIndex = e.scrollTop > 0 ? 11 : 10;
-}), _defineProperty(_components$data$onLo, "onReachBottom", function onReachBottom()
+    },
+    //进店
+    goStore: function goStore() {
+      console.log('进店');
+      uni.navigateTo({
+        url: "/pages/store/store?storeid=" + this.storeId });
 
-{
-  uni.showToast({ title: '触发上拉加载' });
-}), _defineProperty(_components$data$onLo, "methods",
-{
-  //轮播图指示器
-  swiperChange: function swiperChange(event) {
-    this.currentSwiper = event.detail.current;
-  },
-  //消息列表
-  toMsg: function toMsg() {
-    uni.navigateTo({
-      url: '../msg/msg' });
-
-  },
-  // 客服
-  toChat: function toChat() {
-    uni.navigateTo({
-      url: "../msg/chat/chat?name=客服008" });
-
-  },
-  // 分享
-  share: function share() {
-    this.shareClass = 'show';
-  },
-  hideShare: function hideShare() {var _this2 = this;
-    this.shareClass = 'hide';
-    setTimeout(function () {
-      _this2.shareClass = 'none';
-    }, 150);
-  },
-  // 加入购物车
-  joinCart: function joinCart() {
-    if (this.selectSpec == null) {
-      return this.showSpec(function () {
-        uni.showToast({ title: "已加入购物车" });
+    },
+    // 拼团用户列表
+    getPintuanUsers: function getPintuanUsers(id) {
+      var _this = this;
+      this.mPost("/server/g/group/buy/users", {
+        start: 0,
+        length: 100,
+        productId: id }).
+      then(function (res) {
+        console.log(res);
+        if (res.code == '1') {
+          if (res.data) {
+            _this.pintuanData = res.data.list;
+          }
+        }
       });
-    }
-    uni.showToast({ title: "已加入购物车" });
-  },
-  //立即购买
-  buy: function buy() {var _this3 = this;
-    if (this.selectSpec == null) {
-      return this.showSpec(function () {
-        _this3.toConfirmation();
+    },
+    //评论列表
+    getComments: function getComments(id) {
+      var _this = this;
+      this.mPost("/server/c/comments", {
+        start: 0,
+        length: 100,
+        productId: id }).
+      then(function (res) {
+        if (res.code == '1') {
+          if (res.data) {
+            _this.commentData = res.data.list;
+          }
+        }
       });
-    }
-    this.toConfirmation();
-  },
-  //跳转确认订单页面
-  toConfirmation: function toConfirmation() {
-    var tmpList = [];
-    var goods = { id: this.goodsData.id, img: '../../static/img/goods/p1.jpg', name: this.goodsData.name, spec: '规格:' + this.goodsData.spec[this.selectSpec], price: this.goodsData.price, number: this.goodsData.number };
-    tmpList.push(goods);
-    uni.setStorage({
-      key: 'buylist',
-      data: tmpList,
-      success: function success() {
-        uni.navigateTo({
-          url: '../order/confirmation' });
+    },
+    //好评度
+    getDegree: function getDegree(id) {
+      var _this = this;
+      this.mPost("/server/c/praise/degree", {
+        productId: id }).
+      then(function (res) {
+        if (res.code == '1') {
+          if (res.data) {
+            _this.degreeData = res.data;
+          }
+        }
+      });
+    },
+    //轮播图指示器
+    swiperChange: function swiperChange(event) {
+      this.currentSwiper = event.detail.current;
+    },
+    // 		//消息列表
+    // 		toMsg(){
+    // 			uni.navigateTo({
+    // 				url:'../msg/msg'
+    // 			})
+    // 		},
+    // 		// 客服
+    // 		toChat(){
+    // 			uni.navigateTo({
+    // 				url:"../msg/chat/chat?name=客服008"
+    // 			})
+    // 		},
+    // 分享
+    share: function share() {
+      this.shareClass = 'show';
+    },
+    hideShare: function hideShare() {var _this2 = this;
+      this.shareClass = 'hide';
+      setTimeout(function () {
+        _this2.shareClass = 'none';
+      }, 150);
+    },
+    // 加入购物车
+    joinCart: function joinCart() {
+      if (this.selectSpec == null) {
+        return this.showSpec(function () {
+          uni.showToast({ title: "已加入购物车" });
+        });
+      }
+      uni.showToast({ title: "已加入购物车" });
+    },
+    //立即购买
+    buy: function buy() {var _this3 = this;
+      if (this.selectSpec == null) {
+        return this.showSpec(function () {
+          _this3.toConfirmation();
+        });
+      }
+      this.toConfirmation();
+    },
+    //跳转确认订单页面
+    toConfirmation: function toConfirmation() {
+      var tmpList = [];
+      var goods = { id: this.goodsData.id, img: '../../static/img/goods/p1.jpg', name: this.goodsData.name, spec: '规格:' + this.goodsData.spec[this.selectSpec], price: this.goodsData.price, number: this.goodsData.number };
+      tmpList.push(goods);
+      uni.setStorage({
+        key: 'buylist',
+        data: tmpList,
+        success: function success() {
+          uni.navigateTo({
+            url: '../order/confirmation' });
 
-      } });
+        } });
 
-  },
-  //跳转评论列表
-  showComments: function showComments(goodsid) {
+    },
+    //跳转评论列表
+    showComments: function showComments(goodsid) {
 
-  },
-  //选择规格
-  setSelectSpec: function setSelectSpec(index) {
-    this.selectSpec = index;
-  },
-  //减少数量
-  sub: function sub() {
-    if (this.goodsData.number <= 1) {
+    },
+    //选择规格
+    setSelectSpec: function setSelectSpec(index) {
+      this.selectSpec = index;
+    },
+    //减少数量
+    sub: function sub() {
+      if (this.goodsData.number <= 1) {
+        return;
+      }
+      this.goodsData.number--;
+    },
+    //增加数量
+    add: function add() {
+      this.goodsData.number++;
+    },
+    //跳转锚点
+    toAnchor: function toAnchor(index) {
+      this.selectAnchor = index;
+      uni.pageScrollTo({ scrollTop: this.anchorlist[index].top, duration: 200 });
+    },
+    //计算锚点高度
+    calcAnchor: function calcAnchor() {var _this4 = this;
+      this.anchorlist = [
+      { name: '主图', top: 0 },
+      { name: '评价', top: 0 },
+      { name: '详情', top: 0 }];
+
+      var commentsView = uni.createSelectorQuery().select("#comments");
+      commentsView.boundingClientRect(function (data) {
+        var statusbarHeight = 0;
+        //APP内还要计算状态栏高度
+
+
+
+        var headerHeight = uni.upx2px(100);
+        _this4.anchorlist[1].top = data.top - headerHeight - statusbarHeight;
+        _this4.anchorlist[2].top = data.bottom - headerHeight - statusbarHeight;
+
+      }).exec();
+    },
+    //返回上一页
+    back: function back() {
+      uni.navigateBack();
+    },
+    //服务弹窗
+    showService: function showService() {
+      console.log('show');
+      this.serviceClass = 'show';
+    },
+    //关闭服务弹窗
+    hideService: function hideService() {var _this5 = this;
+      this.serviceClass = 'hide';
+      setTimeout(function () {
+        _this5.serviceClass = 'none';
+      }, 200);
+    },
+    //规格弹窗
+    showSpec: function showSpec(fun) {
+      console.log('show');
+      this.specClass = 'show';
+      this.specCallback = fun;
+    },
+    specCallback: function specCallback() {
       return;
-    }
-    this.goodsData.number--;
-  },
-  //增加数量
-  add: function add() {
-    this.goodsData.number++;
-  },
-  //跳转锚点
-  toAnchor: function toAnchor(index) {
-    this.selectAnchor = index;
-    uni.pageScrollTo({ scrollTop: this.anchorlist[index].top, duration: 200 });
-  },
-  //计算锚点高度
-  calcAnchor: function calcAnchor() {var _this4 = this;
-    this.anchorlist = [
-    { name: '主图', top: 0 },
-    { name: '评价', top: 0 },
-    { name: '详情', top: 0 }];
+    },
+    //关闭规格弹窗
+    hideSpec: function hideSpec() {var _this6 = this;
+      this.specClass = 'hide';
+      //回调
 
-    var commentsView = uni.createSelectorQuery().select("#comments");
-    commentsView.boundingClientRect(function (data) {
-      var statusbarHeight = 0;
-      //APP内还要计算状态栏高度
+      this.selectSpec && this.specCallback && this.specCallback();
+      this.specCallback = false;
+      setTimeout(function () {
+        _this6.specClass = 'none';
+      }, 200);
+    },
+    discard: function discard() {
+      //丢弃
+    } },
 
+  mounted: function mounted() {
 
-
-      var headerHeight = uni.upx2px(100);
-      _this4.anchorlist[1].top = data.top - headerHeight - statusbarHeight;
-      _this4.anchorlist[2].top = data.bottom - headerHeight - statusbarHeight;
-
-    }).exec();
-  },
-  //返回上一页
-  back: function back() {
-    uni.navigateBack();
-  },
-  //服务弹窗
-  showService: function showService() {
-    console.log('show');
-    this.serviceClass = 'show';
-  },
-  //关闭服务弹窗
-  hideService: function hideService() {var _this5 = this;
-    this.serviceClass = 'hide';
-    setTimeout(function () {
-      _this5.serviceClass = 'none';
-    }, 200);
-  },
-  //规格弹窗
-  showSpec: function showSpec(fun) {
-    console.log('show');
-    this.specClass = 'show';
-    this.specCallback = fun;
-  },
-  specCallback: function specCallback() {
-    return;
-  },
-  //关闭规格弹窗
-  hideSpec: function hideSpec() {var _this6 = this;
-    this.specClass = 'hide';
-    //回调
-
-    this.selectSpec && this.specCallback && this.specCallback();
-    this.specCallback = false;
-    setTimeout(function () {
-      _this6.specClass = 'none';
-    }, 200);
-  },
-  discard: function discard() {
-    //丢弃
-  } }), _defineProperty(_components$data$onLo, "mounted", function mounted()
-
-{
-
-}), _components$data$onLo);exports.default = _default;
+  } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ "./node_modules/@dcloudio/uni-mp-weixin/dist/index.js")["default"]))
 
 /***/ }),
@@ -1111,7 +1194,7 @@ var render = function() {
           {
             staticClass: "box",
             attrs: { eventid: "655b68cc-3" },
-            on: { tap: _vm.share }
+            on: { tap: _vm.goHome }
           },
           [_vm._m(0), _c("view", { staticClass: "text" }, [_vm._v("首页")])]
         ),
@@ -1120,7 +1203,7 @@ var render = function() {
           {
             staticClass: "box",
             attrs: { eventid: "655b68cc-4" },
-            on: { tap: _vm.toChat }
+            on: { tap: _vm.goStore }
           },
           [_vm._m(1), _c("view", { staticClass: "text" }, [_vm._v("进店")])]
         )
@@ -1366,6 +1449,7 @@ var render = function() {
                 ? true
                 : false)
                   ? _c("video", {
+                      staticClass: "mvideo",
                       attrs: {
                         objectFit: "fill",
                         src: swiper.pictureUrl,
@@ -1425,54 +1509,93 @@ var render = function() {
         ])
       ])
     ]),
+    _vm.isAssemble
+      ? _c("view", { staticClass: "info-box pintuan" }, [
+          _vm._m(2),
+          _c(
+            "view",
+            { staticClass: "user-list-box" },
+            _vm._l(_vm.pintuanData, function(item, index) {
+              return _c("view", { key: item.id, staticClass: "item-box" }, [
+                _c("view", { staticClass: "img-box" }, [
+                  _c("image", {
+                    staticStyle: { width: "80rpx", height: "80rpx" },
+                    attrs: { src: item.headAddress, mode: "aspectFit" }
+                  })
+                ]),
+                _c("view", { staticClass: "body-box" }, [
+                  _vm._v(_vm._s(item.nickname))
+                ]),
+                _c("view", { staticClass: "time-box" }, [
+                  _c("view", {}, [_vm._v(_vm._s(item.pickingTime) + "下单")])
+                ])
+              ])
+            })
+          )
+        ])
+      : _vm._e(),
     _c(
       "view",
       { staticClass: "info-box comments", attrs: { id: "comments" } },
       [
-        _vm._m(2),
-        _c("view", { staticClass: "m-body" }, [
-          _vm._m(3),
-          _c("view", { staticClass: "container" }, [
-            _c(
-              "view",
-              { staticClass: "user-box" },
-              [
-                _vm._m(4),
-                _c("uni-rate", {
-                  attrs: { size: "5", value: "4", mpcomid: "655b68cc-1" }
-                })
-              ],
-              1
-            ),
-            _c("view", { staticClass: "content" }, [
-              _vm._v(
-                "真是特别鲜嫩，这个季节很适宜，推荐推荐。\n\t\t\t\t\t真是特别鲜嫩，这个季节很适宜，推荐推荐。\n\t\t\t\t\t真是特别鲜嫩，这个季节很适宜，推荐推荐。"
-              )
-            ])
+        _c("view", { staticClass: "m-header" }, [
+          _c("view", { staticClass: "m-label" }, [_vm._v("商品评价")]),
+          _c("view", { staticClass: "m-detail" }, [
+            _vm._v("好评度 " + _vm._s(_vm.degreeData) + "%>")
           ])
         ]),
-        _c("view", { staticClass: "m-body" }, [
-          _vm._m(5),
-          _c("view", { staticClass: "container" }, [
-            _c(
-              "view",
-              { staticClass: "user-box" },
-              [
-                _vm._m(6),
-                _c("uni-rate", {
-                  attrs: { size: "5", value: "4", mpcomid: "655b68cc-2" }
-                })
-              ],
-              1
-            ),
-            _c("view", { staticClass: "content" }, [
-              _vm._v(
-                "真是特别鲜嫩，这个季节很适宜，推荐推荐。\n\t\t\t\t\t真是特别鲜嫩，这个季节很适宜，推荐推荐。\n\t\t\t\t\t真是特别鲜嫩，这个季节很适宜，推荐推荐。"
-              )
+        _vm._l(_vm.commentData, function(item, index) {
+          return _c("view", { key: item.id, staticClass: "m-body" }, [
+            _c("view", { staticClass: "img-box" }, [
+              item.anonymous == 0
+                ? _c("image", {
+                    staticStyle: { width: "80rpx", height: "80rpx" },
+                    attrs: { src: item.headAddress, mode: "aspectFit" }
+                  })
+                : _c("image", {
+                    staticStyle: { width: "80rpx", height: "80rpx" },
+                    attrs: {
+                      src: "../../static/img/icon/goods_icon_Avatar.png",
+                      mode: "aspectFit"
+                    }
+                  })
+            ]),
+            _c("view", { staticClass: "container" }, [
+              _c(
+                "view",
+                { staticClass: "user-box" },
+                [
+                  _c("view", {}, [
+                    _c("view", { staticClass: "user-name" }, [
+                      _vm._v(_vm._s(item.userId))
+                    ]),
+                    _c("view", { staticClass: "time" }, [
+                      _vm._v(_vm._s(item.commentTime))
+                    ])
+                  ]),
+                  _c("uni-rate", {
+                    attrs: {
+                      size: "5",
+                      value: item.starLevel,
+                      mpcomid: "655b68cc-1-" + index
+                    }
+                  })
+                ],
+                1
+              ),
+              _c("view", { staticClass: "content" }, [
+                _c("view", {}, [_vm._v(_vm._s(item.commentContent))]),
+                item.replyContent != ""
+                  ? _c("view", { staticClass: "m-reply" }, [
+                      _vm._v(_vm._s(item.replyContent))
+                    ])
+                  : _vm._e()
+              ])
             ])
           ])
-        ])
-      ]
+        })
+      ],
+      2
     ),
     _c("view", { staticClass: "description" }, [
       _c(
@@ -1480,7 +1603,7 @@ var render = function() {
         { staticClass: "content" },
         [
           _c("rich-text", {
-            attrs: { nodes: _vm.descriptionStr, mpcomid: "655b68cc-3" }
+            attrs: { nodes: _vm.descriptionStr, mpcomid: "655b68cc-2" }
           })
         ],
         1
@@ -1522,54 +1645,17 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("view", { staticClass: "m-header" }, [
-      _c("view", { staticClass: "m-label" }, [_vm._v("商品评价")]),
-      _c("view", { staticClass: "m-detail" }, [_vm._v("好评度 98%>")])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("view", { staticClass: "img-box" }, [
-      _c("image", {
-        staticStyle: { width: "80rpx", height: "80rpx" },
-        attrs: {
-          src: "../../static/img/icon/home_icon_gps.png",
-          mode: "aspectFit"
-        }
-      })
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("view", {}, [
-      _c("view", { staticClass: "user-name" }, [_vm._v("宝宝熊")]),
-      _c("view", { staticClass: "time" }, [_vm._v("2019年03月20")])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("view", { staticClass: "img-box" }, [
-      _c("image", {
-        staticStyle: { width: "80rpx", height: "80rpx" },
-        attrs: {
-          src: "../../static/img/icon/home_icon_gps.png",
-          mode: "aspectFit"
-        }
-      })
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("view", {}, [
-      _c("view", { staticClass: "user-name" }, [_vm._v("宝宝熊")]),
-      _c("view", { staticClass: "time" }, [_vm._v("2019年03月20")])
+      _c("view", { staticClass: "time-box" }, [
+        _c("view", {}, [_vm._v("距团购结束")]),
+        _c("view", { staticClass: "time" }, [_vm._v("03")]),
+        _vm._v(":"),
+        _c("view", { staticClass: "time" }, [_vm._v("56")]),
+        _vm._v(":"),
+        _c("view", { staticClass: "time" }, [_vm._v("35")])
+      ]),
+      _c("view", { staticClass: "text-box" }, [
+        _vm._v("已有3人下单 可直接参与")
+      ])
     ])
   }
 ]

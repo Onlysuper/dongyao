@@ -718,17 +718,17 @@ var _mHomeStore = _interopRequireDefault(__webpack_require__(/*! @/components/m-
 
     },
     // banner图片
-    getBanners: function getBanners() {var _this = this;
+    getBanners: function getBanners() {var _this2 = this;
       this.mGet('/server/b/banners', {}).then(function (res) {
         if (res.code = 1) {
-          _this.swiperList = res.data;
+          _this2.swiperList = res.data;
         }
       }).catch(function (err) {
         console.log(err);
       });
     },
     //热卖列表
-    getHotsellList: function getHotsellList() {var _this2 = this;
+    getHotsellList: function getHotsellList() {var _this3 = this;
       console.log('热卖');
       this.mPost('/server/p/hot/products', {
         start: this.hotsellPage,
@@ -737,8 +737,8 @@ var _mHomeStore = _interopRequireDefault(__webpack_require__(/*! @/components/m-
         if (res.code = 1) {
           if (res.data) {
             var data = res.data;
-            _this2.hotProList = data.list;
-            _this2.hotsellPage = data.nextPage;
+            _this3.hotProList = data.list;
+            _this3.hotsellPage = data.nextPage;
           }
         }
       }).catch(function (err) {
@@ -746,7 +746,8 @@ var _mHomeStore = _interopRequireDefault(__webpack_require__(/*! @/components/m-
       });
     },
     //拼团列表
-    getGroupsellList: function getGroupsellList() {var _this3 = this;
+    getGroupsellList: function getGroupsellList() {
+      var _this = this;
       this.mPost('/server/p/group/products', {
         start: this.hotsellPage,
         length: 3 }).
@@ -755,7 +756,7 @@ var _mHomeStore = _interopRequireDefault(__webpack_require__(/*! @/components/m-
           if (res.data) {
             var data = res.data;
             if (data.list) {
-              _this3.groupsellList = data.list;
+              _this.groupsellList = data.list;
             }
           }
         }
@@ -764,17 +765,16 @@ var _mHomeStore = _interopRequireDefault(__webpack_require__(/*! @/components/m-
       });
     },
     //门店列表
-    getStoreList: function getStoreList() {var _this4 = this;
-      this.mPost('/server/s/vicinity/stores', {
-        lng: 116.206845, //经度
-        length: 39.762155 //纬度
-      }).then(function (res) {
+    getStoreList: function getStoreList() {
+      var _this = this;
+      _this.mPost('/server/s/vicinity/stores', {
+        "lng": 116.206845,
+        "lat": 39.762155 }).
+      then(function (res) {
         if (res.code = 1) {
           if (res.data) {
             var data = res.data;
-            if (data.list) {
-              _this4.nearStoreList = data.list;
-            }
+            _this.nearStoreList = data;
           }
         }
       }).catch(function (err) {
@@ -790,7 +790,7 @@ var _mHomeStore = _interopRequireDefault(__webpack_require__(/*! @/components/m-
     //点击热卖图片
     hotProDetail: function hotProDetail(item) {
       uni.navigateTo({
-        url: "/pages/store/store?" + item.id });
+        url: "/pages/store/store?storeid=" + item.storeId });
 
     },
     // 点击拼团图片
@@ -944,7 +944,7 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("view", { staticClass: "m-store-item" }, [
-    _vm.rowData.img
+    _vm.rowData.imgUrl
       ? _c("view", { staticClass: "m-img" }, [
           _c("image", {
             staticStyle: { width: "100%", height: "100%" },
@@ -954,7 +954,7 @@ var render = function() {
       : _vm._e(),
     _c("view", { staticClass: "m-text" }, [
       _c("view", { staticClass: "m-title" }, [
-        _vm._v(_vm._s(_vm.rowData.title))
+        _vm._v(_vm._s(_vm.rowData.name))
       ]),
       _c(
         "view",

@@ -58,8 +58,8 @@
     "proxy": "http://39.105.89.138:6090"
   },
   "permission": {
-		"scope.userLocation":{
-			"desc":"你的位置信息将用于位置接口的显示效果"
-		}
-	}
+    "scope.userLocation": {
+      "desc": "您的位置信息将用户小程序接口的展示效果"
+    }
+  }
 }

@@ -30,7 +30,7 @@
 .m-about-page .m-banner {
     width: 100%;
     height: 300rpx;
-    background: url(../../static/img/about_bg.463c6fca.png) no-repeat;
+    background: url("http://dongyaoxiaoxiaochegnxu.oss-cn-beijing.aliyuncs.com/banners/about_bg.png") no-repeat;
     background-size: 100% 100%;
 }
 .m-about-page .m-body {
