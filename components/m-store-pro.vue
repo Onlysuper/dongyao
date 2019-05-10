@@ -2,7 +2,10 @@
 	<!-- 门店商品图文 -->
 	<view class="m-store-item">
 		<view class="m-img" @tap="proDetail">
-			<image style="width: 100%;height: 100%;" :src="rowData.pictureUrl" mode="aspectFit"></image>
+			<image style="width: 100%;height: 100%;border-radius: 100%;" :src="rowData.pictureUrl" mode="aspectFill"></image>
+			<view v-if="isAssemble==1" class="m-pin">
+				可拼团
+			</view>
 		</view>
 		<view class="m-text"  @tap="proDetail">
 			<view class="m-title">
@@ -56,6 +59,7 @@
 </script>
 
 <style lang="scss">
+@import "../common/globel.scss";
 .m-store-item{
 	display: flex;
 	flex-direction: row;
@@ -67,7 +71,22 @@
 	.m-img{
 		flex: 0 0 170upx;
 		height: 170upx;
-		background: #eee;
+		background: $back1;
+		border-radius: 100%;
+		// overflow: hidden;
+		position: relative;
+		.m-pin{
+			background:#eb5555;
+			color:#fff;
+			text-align:center;
+			position:absolute;
+			bottom:0;
+			font-size:20rpx;
+			width:100rpx;
+			left:50%;
+			margin-left:-50rpx;
+			border-radius:5rpx;
+		}
 	}
 	.m-text{
 		flex:1;

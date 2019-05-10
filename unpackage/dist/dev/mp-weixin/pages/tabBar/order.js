@@ -663,7 +663,7 @@ var render = function() {
       _c("view", { staticClass: "m-img-box" }, [
         _c("image", {
           staticStyle: { width: "100%", height: "100%" },
-          attrs: { src: _vm.img, mode: "aspectFit" },
+          attrs: { src: _vm.img, mode: "aspectFill" },
           slot: "img"
         })
       ]),

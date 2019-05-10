@@ -470,6 +470,9 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 
 
 
+
+
+
 {
   name: "m-store-pro",
   props: {
@@ -615,6 +618,7 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;
+
 
 
 
@@ -1131,9 +1135,16 @@ var render = function() {
       },
       [
         _c("image", {
-          staticStyle: { width: "100%", height: "100%" },
-          attrs: { src: _vm.rowData.pictureUrl, mode: "aspectFit" }
-        })
+          staticStyle: {
+            width: "100%",
+            height: "100%",
+            "border-radius": "100%"
+          },
+          attrs: { src: _vm.rowData.pictureUrl, mode: "aspectFill" }
+        }),
+        _vm.isAssemble == 1
+          ? _c("view", { staticClass: "m-pin" }, [_vm._v("可拼团")])
+          : _vm._e()
       ]
     ),
     _c(

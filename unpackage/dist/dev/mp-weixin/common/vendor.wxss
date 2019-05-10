@@ -38,6 +38,7 @@
 .m-title-box .m-title {
     color: #333333;
     font-size: 32rpx;
+    font-weight: bold;
 }
 .m-title-box .m-right {
     display: -webkit-box;

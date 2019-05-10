@@ -124,6 +124,45 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 var _mGroupbuyList = _interopRequireDefault(__webpack_require__(/*! @/components/m-groupbuy-list */ "../../../../../../Users/apple/opt/DONGYAO/components/m-groupbuy-list.vue"));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}var _default =
 
 {
@@ -173,7 +212,6 @@ var _mGroupbuyList = _interopRequireDefault(__webpack_require__(/*! @/components
       if (res.code == '1') {
         if (res.data && res.data.list) {
           _this.nearStoreList = res.data.list;
-          console.log(_this.nearStoreList);
         }
       }
       console.log(res);
@@ -231,7 +269,15 @@ var render = function() {
             _vm._v(_vm._s(item.sName))
           ]),
           _c("m-groupbuy-list", {
-            attrs: { rowData: item, mpcomid: "043cc190-0-" + index }
+            attrs: {
+              title: item.synopsis,
+              labelName: item.labelName,
+              img: item.pictureUrl,
+              price: item.presentPrice,
+              oldpric: item.originalPrice,
+              isAssemble: item.isAssemble,
+              mpcomid: "043cc190-0-" + index
+            }
           })
         ],
         1

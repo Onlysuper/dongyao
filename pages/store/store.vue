@@ -6,6 +6,7 @@
 					<view class="m-img">
 						<!-- imgUrl -->
 						<image style="width:100%;height: 100%;" :src="storeData.imgUrl" mode="aspectFit"></image>
+	
 					</view>
 					<view class="m-body">
 						<view class="m-text-box">

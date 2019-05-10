@@ -2,7 +2,7 @@
 	<!-- 门店列表 -->
 	<view class="m-groupbuy-list">
 		<view class="m-img">
-			<image style="width: 100%;height: 100%;border-radius: 100%;background: #f5f5f5;" :src="img" mode="aspectFit"></image>
+			<image style="width: 100%;height: 100%;border-radius: 100%;background: #f5f5f5;" :src="img" mode="aspectFill"></image>
 			<view v-if="isAssemble==1" class="m-pin">
 				可拼团
 			</view>

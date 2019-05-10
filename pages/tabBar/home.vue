@@ -148,7 +148,7 @@
 				let _this=this;
 				this.mPost('/server/p/group/products',{
 					start:this.hotsellPage,
-					length:3
+					length:500
 				}).then(res=>{
 					if(res.code=1){
 						if(res.data){
@@ -584,7 +584,9 @@
 .scroll-view{
 }
 .m-content{
-	padding: 10upx;
+	// padding: 10upx;
+	width: 96%;
+	margin-left: 2%;
 	padding-top: 0;
 	box-sizing: border-box;
 	// 热
@@ -595,13 +597,28 @@
 	}
 	&.m-store{
 		display: block;
+		// padding:20upx;
 	}
+// 	&.m-today-pin{
+// 		padding-left: 20upx;
+// 		padding-right: 20upx;
+// 	}
 	// 拼
 	.m-togethoer{
 		display: flex;
 		display: flex;
 		flex-direction: row;
 		flex-wrap: nowrap;
+		// overflow: hidden;
+		.m-pro-item{
+// 			&:first-of-type{
+// 				margin-left:0px;
+// 			}
+// 			&:last-of-type{
+// 				margin-right:0px;
+// 			}
+// 			
+		}
 	}
 }
 </style>

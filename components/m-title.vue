@@ -54,6 +54,7 @@
 	.m-title{
 		color:$color-2;
 		font-size: $fontsize-2;
+		font-weight: bold;
 	}
 	.m-right{
 		display: flex;

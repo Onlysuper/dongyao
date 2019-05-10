@@ -750,7 +750,7 @@ var _mHomeStore = _interopRequireDefault(__webpack_require__(/*! @/components/m-
       var _this = this;
       this.mPost('/server/p/group/products', {
         start: this.hotsellPage,
-        length: 3 }).
+        length: 500 }).
       then(function (res) {
         if (res.code = 1) {
           if (res.data) {
@@ -975,7 +975,7 @@ var render = function() {
       ])
     ]),
     _c("view", { staticClass: "m-distance" }, [
-      _vm._v(_vm._s(_vm.rowData.distance))
+      _vm._v(_vm._s(_vm.rowData.fencingRange) + "km")
     ])
   ])
 }

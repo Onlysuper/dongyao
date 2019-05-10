@@ -7003,7 +7003,7 @@ var render = function() {
           "border-radius": "100%",
           background: "#f5f5f5"
         },
-        attrs: { src: _vm.img, mode: "aspectFit" }
+        attrs: { src: _vm.img, mode: "aspectFill" }
       }),
       _vm.isAssemble == 1
         ? _c("view", { staticClass: "m-pin" }, [_vm._v("可拼团")])

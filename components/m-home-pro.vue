@@ -52,16 +52,17 @@
 	margin-left: 10upx;
 	margin-right: 10upx;
 	margin-bottom: 30upx;
-	box-shadow: 0px 1px 3px rgba(0,0,0,0.1);
+	box-shadow: 0px 1px 3px rgba(0,0,0,0.2);
 	padding: 20upx;
 	box-sizing: border-box;
 	border-radius: 10upx;
 	flex:1;
+	margin-top: 2px;
 	.m-img{
 		box-sizing: border-box;
-		flex:1;
+		flex:0 0 170upx;
 		height: 170upx;
-		background:#eee;
+		// background:#eee;
 	}
 	.m-title{
 		font-size: $fontsize-9;

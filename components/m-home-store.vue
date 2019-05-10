@@ -20,7 +20,7 @@
 			</view>
 		</view>
 		<view class="m-distance">
-			{{rowData.distance}}
+			{{rowData.fencingRange}}km
 		</view>
 	</view>
 </template>
@@ -66,7 +66,7 @@
 	.m-img{
 		flex: 0 0 120upx;
 		height: 120upx;
-		background: #eee;
+		// background: #eee;
 	}
 	.m-text{
 		flex:1;

@@ -1,10 +1,49 @@
-<template>
+<template> 
 	<view  class="m-product-list">
 		<view  v-for="(item,index) in nearStoreList" @click="goPro(item.id)" :key="index">
 			<view class="m-page-title">
 				{{item.sName}}
 			</view>
-			<m-groupbuy-list  :rowData="item"></m-groupbuy-list>
+			<m-groupbuy-list
+			:title="item.synopsis" 
+			:labelName="item.labelName" 
+			:img="item.pictureUrl" 
+			:price="item.presentPrice" 
+			:oldpric="item.originalPrice"
+			:isAssemble="item.isAssemble"
+			></m-groupbuy-list>
+		<!-- 	title:{
+				type:[String,Number],
+				default:""
+			},
+			topbut:{
+				type:[String,Number],
+				default:""
+			},
+			img:{
+				type:[String,Number],
+				default:""
+			},
+			proname:{
+				type:[String,Number],
+				default:""
+			},
+			extrctime:{
+				type:[String,Number],
+				default:""
+			},
+			describe:{
+				type:[String,Number],
+				default:""
+			},
+			price:{
+				type:[String,Number],
+				default:""
+			},
+			num:{
+				type:[String,Number],
+				default:""
+			} -->
 		</view>
 	</view>
 </template>
@@ -58,7 +97,6 @@
 				if(res.code=='1'){
 					if(res.data&&res.data.list){
 						this.nearStoreList=res.data.list;
-						console.log(this.nearStoreList);
 					}
 				}
 				console.log(res);

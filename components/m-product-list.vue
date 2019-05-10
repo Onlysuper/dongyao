@@ -9,7 +9,7 @@
 		</view>
 		<view class="m-body">
 			<view class="m-img-box">
-				<image slot="img" style="width:100%;height:100%" :src="img" mode="aspectFit"></image>
+				<image slot="img" style="width:100%;height:100%" :src="img" mode="aspectFill"></image>
 			</view>
 			<view class="m-text-box">
 				<view class="m-name">
