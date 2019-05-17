@@ -160,9 +160,9 @@ __webpack_require__.r(__webpack_exports__);
     // 
     saveCode: function saveCode() {
       var _this = this;
-      uni.showLoading({
-        title: '登录中...' });
-
+      // 			    uni.showLoading({
+      // 			        title: '登录中...'
+      // 			    });
       // 1.wx获取登录用户code
       uni.login({
         provider: 'weixin',
@@ -207,11 +207,15 @@ __webpack_require__.r(__webpack_exports__);
           // 	储存用户信息
           uni.setStorageSync('userData', JSON.stringify(infoRes.userInfo));
           _this.mPost('/auth/wxUserInfo', infoRes.userInfo, "https://dy.gantangerbus.com/da").then(function (res) {
+            console.log(res);
             if (res.code = 1) {
-              _this.goback();
-              uni.showToast({
-                title: "已授权" });
+              // _this.goback();
+              uni.navigateTo({
+                url: '/pages/login/register' });
 
+              // 								uni.showToast({
+              // 										title:"已授权"
+              // 								})
             } else {
               uni.showToast({
                 title: res.message,

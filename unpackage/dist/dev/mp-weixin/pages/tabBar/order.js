@@ -647,7 +647,13 @@ var page = 1,cate = 0;var _default =
     this.getNewsList();
   },
   onLoad: function onLoad() {
-    this.getOrders();
+    this.isLogin().then(function (res) {
+      if (res = 'success') {
+
+      }
+    }).catch(function (err) {
+      console.log(err);
+    });
   } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ "./node_modules/@dcloudio/uni-mp-weixin/dist/index.js")["default"]))
 

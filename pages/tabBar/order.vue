@@ -160,7 +160,13 @@
 			this.getNewsList();
 		},
 		onLoad(){
-			this.getOrders();
+			this.isLogin().then(res=>{
+				if(res='success'){
+					
+				}
+			}).catch(err=>{
+				console.log(err);
+			});
 		}
 	}
 </script>

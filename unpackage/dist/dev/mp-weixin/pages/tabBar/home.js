@@ -971,7 +971,7 @@ var _mHomeStore = _interopRequireDefault(__webpack_require__(/*! @/components/m-
     uni.getLocation({ //获取当前的位置坐标
       type: 'wgs84',
       success: function success(res) {
-        this.getStoreList(res.longitude, res.latitude);
+        _this.getStoreList(res.longitude, res.latitude);
         console.log('当前位置的经度：' + res.longitude);
         console.log('当前位置的纬度：' + res.latitude);
       } });

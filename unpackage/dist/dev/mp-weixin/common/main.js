@@ -194,6 +194,25 @@ _vue.default.prototype.accMul = function (arg1, arg2) {
   } catch (e) {}
   return Number(s1.replace(".", "")) * Number(s2.replace(".", "")) / Math.pow(10, m);
 };
+
+//判断是否登录
+_vue.default.prototype.isLogin = function () {
+
+  var phone = uni.getStorageSync('phone');
+  return new Promise(function (resolve, reject) {
+    wx.checkSession({
+      success: function success() {
+        resolve('success');
+      },
+      fail: function fail() {
+        reject('error');
+      } });
+
+  });
+
+
+
+};
 // my config end
 _App.default.mpType = 'app';
 var app = new _vue.default(_objectSpread({},

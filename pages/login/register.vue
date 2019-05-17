@@ -3,15 +3,11 @@
 		<view class="m-img-box">
 			东尧蔬菜登录
 		</view>
-		<view class="">
-			东尧蔬菜登录将使用：
-			<view class="">
-				您的公开信息（昵称，头像，地区及性别）
-			</view>
-		</view>
+
 		<view class="">
 			<!-- #ifdef MP-WEIXIN -->  
-			<button type="primary" open-type="getUserInfo" @getuserinfo="getuserinfo" withCredentials="true">允许</button>
+			<button style="margin-top:20upx;" type="primary" open-type="getPhoneNumber" @getphonenumber="getPhoneNumber">微信手机号快捷登录</button>
+			<!-- <button type="primary" open-type="getUserInfo" @getuserinfo="getuserinfo" withCredentials="true">允许</button> -->
 			<button @tap="goback" style="margin-top: 20upx;">取消</button>
 			<!-- #endif -->  
 			
@@ -33,90 +29,41 @@
 		methods:{
 			// 返回
 			goback(){
-				let currentIndex= uni.getCurrentPages();
+				let currentIndex= getCurrentPages();
 				uni.navigateBack({
-					delta:currentIndex-1
+					delta:currentIndex-2
 				})
 			},
-			//注册
-			register(){
-				uni.switchTab({  
-				    url: '/pages/login/register'  
-				});  
-			},
-			// 
-			 saveCode() {
-			    let _this = this;
-			    uni.showLoading({
-			        title: '登录中...'
-			    });
-			   // 1.wx获取登录用户code
-			    uni.login({
-			        provider: 'weixin',
-			        success: function(loginRes) {
-			            let code = loginRes.code;
-						//存储登录code
-						_this.mPost('/auth/wxLogin',code,"https://dy.gantangerbus.com/da"
-						).then(res=>{
-							if(res.code==1){
-								if(res.data){
-									let data = res.data;
-									uni.setStorageSync('Authorization', data.authToken);
-								}
-							}else{
-								uni.showToast({
-									title:  res.message,
-									icon: "none"
-								});
-							}
-							uni.hideLoading();
-						}).catch(err=>{
-							uni.hideLoading();
-						});
-			        },
-			    });
-			},
-			//第一授权获取用户信息===》按钮触发
-			getuserinfo:function(res){
-				console.log(res);
+		
+			//手机号储存
+			getPhoneNumber: function(e) {   
 				let _this = this;
-				if (!res.detail.iv) {
-					uni.showToast({
-						title: "您取消了授权,登录失败",
-						icon: "none"
+			    if (e.detail.errMsg == 'getPhoneNumber:fail user deny') {  
+			    } else {  
+					_this.mPost('/auth/wxBindPhone',{// 	储存用户信息
+						...e.detail
+					},"https://dy.gantangerbus.com/da").then(res=>{
+						if(res.code=1){
+							uni.setStorageSync('phone', res.data.phone);
+							uni.showToast({
+									title:"已授权",
+							})
+							_this.goback()
+						}else{
+							uni.showToast({
+								title:  res.message,
+								icon: "none"
+							});
+						}
+
+					}).catch(err=>{
+
 					});
-					return false;
-				}
-				uni.getUserInfo({
-			        provider: 'weixin',
-			        success: function(infoRes) {
-						console.log(infoRes);
-						// 	储存用户信息
-						uni.setStorageSync('userData', JSON.stringify(infoRes.userInfo));
-						_this.mPost('/auth/wxUserInfo',infoRes.userInfo,"https://dy.gantangerbus.com/da").then(res=>{
-							if(res.code=1){
-								_this.goback();
-								uni.showToast({
-										title:"已授权"
-								})
-							}else{
-								uni.showToast({
-									title:  res.message,
-									icon: "none"
-								});
-							}
-							uni.hideLoading();
-						}).catch(err=>{
-							console.log(err);
-							uni.hideLoading();
-						});
-			        },
-			        fail(res) {}
-			    });
+			    }  
 			}
 		},
 		onLoad(){
-			this.saveCode()
+			
 		}
 	}
 </script>

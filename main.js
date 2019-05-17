@@ -112,6 +112,25 @@ Vue.prototype.accMul = function(arg1, arg2) {
 	} catch (e) { }
 	return Number(s1.replace(".", "")) * Number(s2.replace(".", "")) / Math.pow(10, m)
 }
+
+//判断是否登录
+Vue.prototype.isLogin=function(){
+	// #ifdef MP-WEIXIN
+	let phone = uni.getStorageSync('phone');
+	return new Promise(function(resolve, reject){
+		wx.checkSession({
+			success() {
+				resolve('success')
+			},
+			fail() {
+				reject('error')
+			}
+		})
+	})
+	
+	// #endif
+	
+}
 // my config end
 App.mpType = 'app'
 const app = new Vue({
