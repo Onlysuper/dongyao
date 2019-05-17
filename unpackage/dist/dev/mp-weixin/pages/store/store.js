@@ -764,6 +764,7 @@ function bezier(pots, amount) {
 
   data: function data() {
     return {
+      userid: 0,
       shopCarList: [],
       shopCarListLength: 0,
       shopCarListPrice: 0,
@@ -816,8 +817,9 @@ function bezier(pots, amount) {
     },
     // 去结算
     payFn: function payFn() {
+      var type = "0";
       uni.navigateTo({
-        url: "/pages/order/pay" });
+        url: "/pages/order/pay?storeid=" + this.storeid + "&totalCount=" + this.carNum + "&type" + type + "&userid" + this.userid });
 
     },
     halfWidth: function halfWidth(num) {
@@ -902,6 +904,20 @@ function bezier(pots, amount) {
         }
       });
     },
+    // 清空购物车
+    clearShopcar: function clearShopcar() {
+      var _this = this;
+      _this.mPost("/server/sc/delete/all", {
+        userId: 1 }).
+      then(function (res) {
+        if (res.code == '1') {
+          console.log('这里');
+          _this.shopCarList = [];
+          // 购物车总商品数，与总价格计算
+          _this.shopCarCountClear();
+        }
+      });
+    },
     //关闭规格弹窗
     hideSpec: function hideSpec() {var _this3 = this;
       this.specClass = 'hide';
@@ -969,23 +985,44 @@ function bezier(pots, amount) {
       });
     },
     buyNumChange: function buyNumChange(data) {
+      console.log(data.num);
       this.addGoodSum({ id: data.id }, data.num, 'change');
     },
     //购物车总价格，总数量计算
-    shopCarCount: function shopCarCount() {var _this4 = this;
-      var num = 0;
-      var price = 0;
-      this.shopCarList.forEach(function (item) {
-        num += item.buyCount;
-        price += _this4.accMul(item.presentPrice, item.buyCount);
-        _this4.shopCarListLength = num;
-        _this4.shopCarListPrice = price;
+    shopCarCount: function shopCarCount() {
+      var _this = this;
+      var products = this.shopCarList.map(function (val, index, arrs) {
+        var obj = {};
+        obj.productId = val.id;
+        obj.cou = val.buyCount;
+        return obj;
       });
-
+      products = JSON.stringify(products);
+      console.log(products);
+      _this.mPost("/server/p/calProductsPrice", { products: products }).then(function (res) {
+        console.log(res);
+        // 					if(res.code==1){
+        // 						_this.showShopCar();
+        // 					}
+      }).catch(function (err) {
+        console.log(err);
+      });
+      // 				let num = 0;
+      // 				let price=0;
+      // 				this.shopCarList.forEach(item=>{
+      // 					num+=item.buyCount;
+      // 					price+=this.accMul(item.presentPrice,item.buyCount);
+      // 					this.shopCarListLength=num;
+      // 					this.shopCarListPrice=price;
+      // 				})
+    },
+    shopCarCountClear: function shopCarCountClear() {
+      this.shopCarListLength = 0;
+      this.shopCarListPrice = 0;
     } },
 
 
-  onLoad: function onLoad(option) {var _this5 = this;
+  onLoad: function onLoad(option) {var _this4 = this;
     this.storeid = option.storeid;
     this.busHandle();
     // 商家基本信息
@@ -993,14 +1030,14 @@ function bezier(pots, amount) {
       id: option.storeid }).
     then(function (res) {
       if (res.code == '1') {
-        _this5.storeData = res.data;
+        _this4.storeData = res.data;
       }
     });
     //商品分类
     this.mPost("/server/t/types", {}).
     then(function (res) {
       if (res.code == '1') {
-        _this5.storeMenu = res.data;
+        _this4.storeMenu = res.data;
       }
     });
     // 默认显示第一个分类的产品
@@ -1409,7 +1446,7 @@ var render = function() {
         {
           staticClass: "popup spec",
           class: _vm.specClass,
-          attrs: { eventid: "05dd8904-7" },
+          attrs: { eventid: "05dd8904-8" },
           on: {
             touchmove: function($event) {
               $event.stopPropagation()
@@ -1425,7 +1462,7 @@ var render = function() {
             "view",
             {
               staticClass: "layer",
-              attrs: { eventid: "05dd8904-6" },
+              attrs: { eventid: "05dd8904-7" },
               on: {
                 tap: function($event) {
                   $event.stopPropagation()
@@ -1445,9 +1482,15 @@ var render = function() {
                         _vm._v("共" + _vm._s(_vm.shopCarListLength) + "件商品")
                       ])
                     ]),
-                    _c("view", { staticClass: "m-clear-car" }, [
-                      _vm._v("清空购物车")
-                    ])
+                    _c(
+                      "view",
+                      {
+                        staticClass: "m-clear-car",
+                        attrs: { eventid: "05dd8904-4" },
+                        on: { tap: _vm.clearShopcar }
+                      },
+                      [_vm._v("清空购物车")]
+                    )
                   ]),
                   _vm._l(_vm.shopCarList, function(item, index) {
                     return _c(
@@ -1470,7 +1513,7 @@ var render = function() {
                                 min: 0,
                                 max: 9,
                                 id: item.id,
-                                eventid: "05dd8904-4-" + index,
+                                eventid: "05dd8904-5-" + index,
                                 mpcomid: "05dd8904-2-" + index
                               },
                               on: { change: _vm.buyNumChange }
@@ -1489,7 +1532,7 @@ var render = function() {
                   title: "去结算",
                   price: _vm.shopCarListPrice,
                   num: _vm.shopCarListLength,
-                  eventid: "05dd8904-5",
+                  eventid: "05dd8904-6",
                   mpcomid: "05dd8904-3"
                 },
                 on: {

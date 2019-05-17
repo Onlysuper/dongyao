@@ -129,7 +129,8 @@
 				this.paytype=type;
 			}	
 		},
-		onLoad(){
+		onLoad(option){
+			this.storeid=option.storeid;
 			uni.getLocation({//获取当前的位置坐标
 				type: 'wgs84',
 				success: function (res) {
@@ -137,6 +138,18 @@
 					alert('当前位置的纬度：' + res.latitude);
 				}
 			});  
+			this.mPost("/server/sc/find/cart",{
+				userId:1
+			}).then(res=>{
+				console.log(res);
+				if(res.code=='1'){
+					if(res.data){
+						_this.shopCarList=res.data;
+						// 购物车总商品数，与总价格计算
+						_this.shopCarCount();
+					}
+				}
+			})
 		}
 	}
 </script>

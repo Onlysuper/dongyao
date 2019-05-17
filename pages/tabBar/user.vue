@@ -72,10 +72,10 @@
 			</view>
 			<view class="m-cell-list">
 				<m-cell @handleFn="linkTo('/pages/user/tokencard/tokencard')" label="我的优惠券" :link='true'>
-					<image slot="icon" style="width:30upx;height:30upx;" src="../../static/img/icon/me_icon_preferential.png" mode="aspectFit"></image>
+					<image  style="width:30upx;height:30upx;" src="../../static/img/icon/me_icon_preferential.png" mode="aspectFit"></image>
 				</m-cell>
 				<m-cell @handleFn="linkTo('/pages/user/aboutme/aboutme')" label="关于我们" :link='true'>
-					<image slot="icon" style="width:30upx;height:30upx;" src="../../static/img/icon/me_icon_about.png" mode="aspectFit"></image>
+					<image  style="width:30upx;height:30upx;" src="../../static/img/icon/me_icon_about.png" mode="aspectFit"></image>
 				</m-cell>
 			</view>
 		</view>

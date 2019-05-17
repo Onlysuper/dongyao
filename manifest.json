@@ -53,26 +53,26 @@
     "quickapp" : {},
     /* 快应用特有相关 */
     "mp-weixin" : {
-        "appid" : "wxbc74db663579fa39",
+        "appid" : "wx3310c8b66487c71a",
         "setting" : {
             "urlCheck" : true
         },
-        "devServer" : {
-            "port" : 30902,
-            "disableHostCheck" : true,
-            "proxy" : "http://39.105.89.138:6090"
-        },
-        "permission": {
-			"scope.userLocation":{
-				"desc":"您的位置信息将用户小程序接口的展示效果"
-			}
-		}
-    },
-    "h5" : {
-        "devServer" : {
-            "port" : 8081,
-            "disableHostCheck" : true,
-            "proxy" : "http://39.105.89.138:6090"
+        // "devServer" : {
+        // "port" : 8080,
+        //             "disableHostCheck" : true,
+        //             "proxy" : "https://dy.gantangerbus.com/dy"
+        //         },
+        "permission" : {
+            "scope.userLocation" : {
+                "desc" : "您的位置信息将用户小程序接口的展示效果"
+            }
         }
-    }
+    },
+    "h5" : {}
 }
+//         "devServer" : {
+//             // "port" : 8081,
+//             "disableHostCheck" : true,
+//             "proxy" : "https://dy.gantangerbus.com/dy"
+//         }
+

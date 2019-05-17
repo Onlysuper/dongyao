@@ -48,7 +48,7 @@
 .m-pro-item{
 	display: flex;
 	flex-direction: column;
-	min-width: 222upx;
+	min-width: 220upx;
 	margin-left: 10upx;
 	margin-right: 10upx;
 	margin-bottom: 30upx;

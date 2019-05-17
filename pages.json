@@ -180,7 +180,17 @@
                     "softinputNavBar" : "none"
                 }
             }
-        }
+        },
+		{
+		    "path" : "pages/login/register",
+		    "style" : {
+		        "navigationBarTitleText" : "东尧蔬菜",
+		        "app-plus" : {
+		            "titleNView" : false, //禁用原生导航栏
+		            "softinputNavBar" : "none"
+		        }
+		    }
+		}
     ],
     // 	"globalStyle": {
     // 		"navigationBarTextStyle": "black",

@@ -22,15 +22,15 @@
 				tabList:[
 					{
 						label:"未使用",
+						id:"0",
+					},
+					{
+						label:"已使用",
 						id:"1",
 					},
 					{
-						label:"使用记录",
+						label:"已失效",
 						id:"2",
-					},
-					{
-						label:"已过期",
-						id:"3",
 					}
 				]
 			};
@@ -43,7 +43,26 @@
 			// tab栏点击
 			tabChange(item){
 				this.tabActive= item.id;
-			}
+				this.getTokencards(item.id);
+			},
+			// 获取订单
+			getTokencards(type){
+				this.mGet('/server/co/myCoupons',{
+					type:type,
+					start:1,
+					length:1000
+				}).then(res=>{
+					if(res.code=='1'){
+						
+					}
+					console.log(res);
+				}).catch(err=>{
+					console.log(err);
+				});
+			},
+		},
+		onLoad(){
+			this.getTokencards(0)
 		}
 	}
 </script>

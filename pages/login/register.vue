@@ -1,16 +1,18 @@
 <template>
 	<view class="m-login-page">
 		<view class="m-img-box">
-			东尧蔬菜
+			东尧蔬菜登录
 		</view>
 		<view class="">
-			您暂未授权'东尧蔬菜'小程序获取你的信息，讲无法正常使用小程序的功能。
-			如果需要正常使用，请点击"授权"按钮，打开头像，昵称等信息的权限
+			东尧蔬菜登录将使用：
+			<view class="">
+				您的公开信息（昵称，头像，地区及性别）
+			</view>
 		</view>
 		<view class="">
 			<!-- #ifdef MP-WEIXIN -->  
-			<button type="primary" open-type="getUserInfo" @getuserinfo="getuserinfo" withCredentials="true">授权</button>
-			<!-- <button @tap="goback" style="margin-top: 20upx;">取消</button> -->
+			<button type="primary" open-type="getUserInfo" @getuserinfo="getuserinfo" withCredentials="true">允许</button>
+			<button @tap="goback" style="margin-top: 20upx;">取消</button>
 			<!-- #endif -->  
 			
 		</view>
@@ -29,13 +31,13 @@
 			};
 		},
 		methods:{
-// 			// 返回
-// 			goback(){
-// 				let currentIndex= uni.getCurrentPages();
-// 				uni.navigateBack({
-// 					delta:currentIndex-1
-// 				})
-// 			},
+			// 返回
+			goback(){
+				let currentIndex= uni.getCurrentPages();
+				uni.navigateBack({
+					delta:currentIndex-1
+				})
+			},
 			//注册
 			register(){
 				uni.switchTab({  
@@ -108,7 +110,6 @@
 							console.log(err);
 							uni.hideLoading();
 						});
-						
 			        },
 			        fail(res) {}
 			    });

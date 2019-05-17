@@ -5,9 +5,9 @@
 		</view>
 		<view style="height:60px;"></view>
 		<view class="m-order-body">
-			<m-product-list v-for="(item,index) in artList" :key="index"
+			<m-order-list v-for="(item,index) in artList" :key="index"
+				:status="1"
 				:title="item.name"
-				:topbut="item.topbut"
 				:img="item.img"
 				:proname="item.proname"
 				:extrctime="item.extrctime"
@@ -15,7 +15,30 @@
 				:price="item.price"
 				:num="item.num"
 			>
-			</m-product-list>
+			</m-order-list>
+			<m-order-list v-for="(item,index) in artList" :key="index"
+				:status="2"
+				:title="item.name"
+
+				:img="item.img"
+				:proname="item.proname"
+				:extrctime="item.extrctime"
+				:describe="item.describe"
+				:price="item.price"
+				:num="item.num"
+			>
+			</m-order-list>
+			<m-order-list v-for="(item,index) in artList" :key="index"
+				:status="3"
+				:title="item.name"
+				:img="item.img"
+				:proname="item.proname"
+				:extrctime="item.extrctime"
+				:describe="item.describe"
+				:price="item.price"
+				:num="item.num"
+			>
+			</m-order-list>
 		</view>
 		<template>
 			<uni-load-more :status="mloading"></uni-load-more>
@@ -24,7 +47,7 @@
 </template>
 <script>
 	import mTab from "@/components/m-tab.vue";
-	import mProductList from "@/components/m-product-list.vue";
+	import mOrderList from "@/components/m-order-list.vue";
 	import uniLoadMore from "@/components/uni-load-more/uni-load-more.vue";
 	var page = 1, cate = 0;
 	export default {
@@ -33,7 +56,7 @@
 		components:{
 			mTab,
 			uniLoadMore,
-			mProductList
+			mOrderList
 		},
 		data(){
 			return{
@@ -78,6 +101,21 @@
 			}
 		},
 		methods:{
+			// 获取订单
+			getOrders(){
+				this.mGet('/user/register',{
+					state:4,
+					start:1,
+					length:1000
+				}).then(res=>{
+					console.log(res);
+// 					if(res.code=1){
+// 						this.swiperList=res.data;
+// 					}
+				}).catch(err=>{
+					console.log(err);
+				});
+			},
 			// tab栏点击
 			tabChange(item){
 				this.tabActive= item.id;
@@ -122,18 +160,7 @@
 			this.getNewsList();
 		},
 		onLoad(){
-// 			var res = global.isLogin();
-// 			if(!res){
-// 			   uni.showModal({
-// 				title:'请登录',
-// 				content:"请登录",
-// 				success:function(){
-// 				 uni.navigateTo({
-// 				  url:"/pages/login/login"
-// 				 });
-// 				}
-// 			   })
-// 			}
+			this.getOrders();
 		}
 	}
 </script>

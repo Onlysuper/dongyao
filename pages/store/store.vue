@@ -65,7 +65,7 @@
 								共{{shopCarListLength}}件商品
 							</view>
 						</view>
-						<view class="m-clear-car">
+						<view @tap="clearShopcar" class="m-clear-car">
 							清空购物车
 						</view>
 					</view>
@@ -145,6 +145,7 @@
 		},
 		data() {
 			return {
+				userid:0,
 				shopCarList:[],
 				shopCarListLength:0,
 				shopCarListPrice:0,
@@ -197,8 +198,9 @@
 			},
 			// 去结算
 			payFn(){
+				let type="0"
 				uni.navigateTo({
-					url:"/pages/order/pay"
+					url:"/pages/order/pay?storeid="+this.storeid+"&totalCount="+this.carNum+"&type"+type+"&userid"+this.userid
 				})
 			},
 			halfWidth(num){
@@ -283,6 +285,20 @@
 					}
 				})
 			},
+			// 清空购物车
+			clearShopcar(){
+				let _this = this;
+				_this.mPost("/server/sc/delete/all",{
+					userId:1
+				}).then(res=>{
+					if(res.code=='1'){
+						console.log('这里');
+							_this.shopCarList=[];
+							// 购物车总商品数，与总价格计算
+							_this.shopCarCountClear();
+					}
+				})
+			},
 			//关闭规格弹窗
 			hideSpec() {
 				this.specClass = 'hide';
@@ -350,19 +366,40 @@
 				})
 			},
 			buyNumChange(data){
+				console.log(data.num);
 				this.addGoodSum({id:data.id},data.num,'change')
 			},
 			//购物车总价格，总数量计算
 			shopCarCount(){
-				let num = 0;
-				let price=0;
-				this.shopCarList.forEach(item=>{
-					num+=item.buyCount;
-					price+=this.accMul(item.presentPrice,item.buyCount);
-					this.shopCarListLength=num;
-					this.shopCarListPrice=price;
+				let _this=this;
+				let products = this.shopCarList.map((val,index,arrs)=>{  
+							  var obj={};  
+							  obj.productId=val.id;  
+							  obj.cou=val.buyCount;  
+							  return obj  
+							});  
+				products = JSON.stringify(products);
+				console.log(products);
+				_this.mPost("/server/p/calProductsPrice",{products:products}).then(res=>{
+					console.log(res);
+// 					if(res.code==1){
+// 						_this.showShopCar();
+// 					}
+				}).catch(err=>{
+					console.log(err)
 				})
-				
+// 				let num = 0;
+// 				let price=0;
+// 				this.shopCarList.forEach(item=>{
+// 					num+=item.buyCount;
+// 					price+=this.accMul(item.presentPrice,item.buyCount);
+// 					this.shopCarListLength=num;
+// 					this.shopCarListPrice=price;
+// 				})
+			},
+			shopCarCountClear(){
+				this.shopCarListLength=0;
+				this.shopCarListPrice=0;
 			}
 		},
 		

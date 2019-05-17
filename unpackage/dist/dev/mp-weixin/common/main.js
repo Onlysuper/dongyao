@@ -85,19 +85,23 @@ var _App = _interopRequireDefault(__webpack_require__(/*! ./App */ "../../../../
 
 _vue.default.config.productionTip = false;
 // my config start
-_vue.default.prototype.apiurl = 'http://39.105.89.138:6090';
+// Vue.prototype.apiurl = 'http://39.105.89.138:6090'; 
+_vue.default.prototype.apiurl = 'https://dy.gantangerbus.com/dy';
+var Authorization = uni.getStorageSync('Authorization');
+console.log(Authorization);
 _vue.default.prototype.mGet = function (url, data) {
+  var _this = this;
   return new Promise(function (resolve, reject) {
     uni.request({
-      url: 'http://39.105.89.138:6090' + url,
+      url: _this.apiurl + url,
       method: 'GET',
       header: {
         "Cache-Control": "no-cache",
-        "Content-Type": "application/json;charset=UTF-8" },
+        "Content-Type": "application/json;charset=UTF-8",
+        "Authorization": Authorization },
 
       data: _objectSpread({}, data),
       success: function success(res) {
-        console.log(res);
         resolve(res.data);
       },
       fail: function fail(error) {
@@ -109,23 +113,63 @@ _vue.default.prototype.mGet = function (url, data) {
 
   });
 };
-_vue.default.prototype.mPost = function (url, data) {
+_vue.default.prototype.mPost = function (url, data, host) {
+  var _this = this;
+  var baseurl = _this.apiurl + url;
+  if (host) {
+    baseurl = host + url;
+  }
+
   return new Promise(function (resolve, reject) {
     uni.request({
-      url: 'http://39.105.89.138:6090' + url,
+      url: baseurl,
       method: 'POST',
       header: {
         "Cache-Control": "no-cache",
-        "Content-Type": "application/json;charset=UTF-8" },
+        "Content-Type": "application/json;charset=UTF-8",
+        "Authorization": Authorization },
 
-      data: _objectSpread({}, data),
+      data: data,
       success: function success(res) {
         resolve(res.data);
       },
       fail: function fail(error) {
+        console.log(error);
         reject(error);
       },
       complete: function complete(res) {
+        console.log(res);
+        // resolve(res)
+      } });
+
+  });
+};
+_vue.default.prototype.mPostForm = function (url, data, host) {
+  var _this = this;
+  var baseurl = _this.apiurl + url;
+  if (host) {
+    baseurl = host + url;
+  }
+
+  return new Promise(function (resolve, reject) {
+    uni.request({
+      url: baseurl,
+      method: 'POST',
+      header: {
+        "Cache-Control": "no-cache",
+        "Content-Type": "application/x-www-form-urlencoded",
+        "Authorization": Authorization },
+
+      data: data,
+      success: function success(res) {
+        resolve(res.data);
+      },
+      fail: function fail(error) {
+        console.log(error);
+        reject(error);
+      },
+      complete: function complete(res) {
+        console.log(res);
         // resolve(res)
       } });
 

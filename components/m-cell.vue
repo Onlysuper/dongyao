@@ -1,7 +1,7 @@
 <template>
 	<view class="m-cell">
 		<view class="m-icon">
-			<slot name="icon"></slot>
+			<slot></slot>
 		</view>
 		<view @tap="handleFn" class="m-label">
 			{{label}}

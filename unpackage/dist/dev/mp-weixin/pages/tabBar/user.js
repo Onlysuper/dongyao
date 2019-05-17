@@ -577,7 +577,7 @@ var render = function() {
     _c(
       "view",
       { staticClass: "m-icon" },
-      [_vm._t("icon", null, { mpcomid: "3dcd2a1e-0" })],
+      [_vm._t("default", null, { mpcomid: "3dcd2a1e-0" })],
       2
     ),
     _c(
@@ -774,8 +774,7 @@ var render = function() {
                 attrs: {
                   src: "../../static/img/icon/me_icon_preferential.png",
                   mode: "aspectFit"
-                },
-                slot: "icon"
+                }
               })
             ]
           ),
@@ -800,8 +799,7 @@ var render = function() {
                 attrs: {
                   src: "../../static/img/icon/me_icon_about.png",
                   mode: "aspectFit"
-                },
-                slot: "icon"
+                }
               })
             ]
           )

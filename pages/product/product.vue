@@ -170,8 +170,11 @@
 				<view class="container">
 					<view class="user-box">
 						<view class="">
-							<view class="user-name">
-								{{item.userId}}
+							<view v-if="item.anonymous==0" class="user-name">
+								{{item.nickname}}
+							</view>
+							<view v-else class="user-name">
+								匿名
 							</view>
 							<view class="time">
 								{{item.commentTime}}

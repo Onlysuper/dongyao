@@ -14,7 +14,8 @@
     "pages/empty/empty",
     "pages/order/pay",
     "pages/order/order",
-    "pages/login/login"
+    "pages/login/login",
+    "pages/login/register"
   ],
   "subPackages": [],
   "window": {
@@ -51,11 +52,6 @@
         "text": "我的"
       }
     ]
-  },
-  "devServer": {
-    "port": 30902,
-    "disableHostCheck": true,
-    "proxy": "http://39.105.89.138:6090"
   },
   "permission": {
     "scope.userLocation": {

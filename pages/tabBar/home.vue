@@ -26,7 +26,7 @@
 		<!-- 轮播图 -->
 		<view class="swiper-box">
 			<swiper circular="true" autoplay="true" @change="swiperChange">
-				<swiper-item v-for="swiper in swiperList" :key="swiper.id">
+				<swiper-item v-for="swiper in swiperList" :key="swiper.id" wx:key="swiper.id">
 					<image :src="swiper.imgUrl" @tap="swiperChange(swiper)"></image>
 				</swiper-item>
 			</swiper>
@@ -38,7 +38,7 @@
 			</m-title>
 			<view class="m-content m-hotsell">
 				<template v-for="(item,index) in hotProList">
-					<m-home-pro @handleFn="hotProDetail(item)" :key="index" :rowData="item"></m-home-pro>
+					<m-home-hotpro @handleFn="hotProDetail(item)"  :key="index" :rowData="item"></m-home-hotpro>
 				</template>
 			</view>
 		</view>
@@ -71,6 +71,7 @@
 	import uniSwiperDot from '@/components/uni-swiper-dot/uni-swiper-dot'
 	import mTitle from '@/components/m-title'
 	import mHomePro from '@/components/m-home-pro'
+	import mHomeHotpro from '@/components/m-home-hotpro'
 	import mHomeStore from '@/components/m-home-store'
 	export default {
 		data() {
@@ -104,13 +105,13 @@
 			uniSwiperDot,
 			mTitle,
 			mHomePro,
+			mHomeHotpro,
 			mHomeStore
 		},
 		methods:{
 			//首页搜索
 			toSearch(){
 				console.log(this.searchValue);
-
 				uni.navigateTo({
 					url:"/pages/product/productlist?search="+this.searchValue
 				})
@@ -132,6 +133,8 @@
 					start:this.hotsellPage,
 					length:3
 				}).then(res=>{
+					console.log('这里');
+					console.log(res);
 					if(res.code=1){
 						if(res.data){
 							let data = res.data;
@@ -163,11 +166,11 @@
 				});
 			},
 			//门店列表
-			getStoreList(){
+			getStoreList(lng,lat){
 				let _this=this;
 				_this.mPost('/server/s/vicinity/stores',{
-					"lng":116.206845,
-					"lat":39.762155
+					"lng":lng || 116.206845,
+					"lat":lat || 39.762155
 				}).then(res=>{
 					if(res.code=1){
 						if(res.data){
@@ -220,11 +223,18 @@
 			}
 		},
 		onLoad(){
+			let _this = this;
+			uni.getLocation({//获取当前的位置坐标
+				type: 'wgs84',
+				success: function (res) {
+					this.getStoreList(res.longitude,res.latitude);
+					console.log('当前位置的经度：' + res.longitude);
+					console.log('当前位置的纬度：' + res.latitude);
+				}
+			}); 
 			this.getBanners();
 			this.getHotsellList();
 			this.getGroupsellList();
-			this.getStoreList();
-			
 		}
 	}
 </script>

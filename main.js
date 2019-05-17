@@ -3,19 +3,23 @@ import App from './App'
 
 Vue.config.productionTip = false
 // my config start
-Vue.prototype.apiurl = 'http://39.105.89.138:6090'; 
+// Vue.prototype.apiurl = 'http://39.105.89.138:6090'; 
+Vue.prototype.apiurl = 'https://dy.gantangerbus.com/dy'; 
+var Authorization =uni.getStorageSync('Authorization');
+console.log(Authorization);
 Vue.prototype.mGet = function(url,data){
+	let _this=this;
 	return new Promise(function(resolve, reject){
 		uni.request({
-			url: 'http://39.105.89.138:6090'+url,
+			url: _this.apiurl+url,
 			method: 'GET',
 			header:{
 				"Cache-Control": "no-cache",
 				"Content-Type": "application/json;charset=UTF-8",
+				"Authorization":Authorization
 			},
 			data: {...data},
 			success: res => {
-				console.log(res);
 				resolve(res.data)
 			},
 			fail:error=>{
@@ -27,23 +31,63 @@ Vue.prototype.mGet = function(url,data){
 		})
 	});
 }
-Vue.prototype.mPost = function(url,data){
+Vue.prototype.mPost = function(url,data,host){
+	let _this=this;
+	let baseurl = _this.apiurl+url;
+	if(host){
+		baseurl=host+url
+	}
+	
 	return new Promise(function(resolve, reject){
 		uni.request({
-			url: 'http://39.105.89.138:6090'+url,
+			url:baseurl,
 			method: 'POST',
 			header:{
 				"Cache-Control": "no-cache",
 				"Content-Type": "application/json;charset=UTF-8",
+				"Authorization":Authorization
 			},
-			data: {...data},
+			data: data,
 			success: res => {
 				resolve(res.data)
 			},
 			fail:error=>{
+				console.log(error);
 				reject(error)
 			},
 			complete: res => {
+				console.log(res);
+				// resolve(res)
+			}
+		})
+	});
+}
+Vue.prototype.mPostForm = function(url,data,host){
+	let _this=this;
+	let baseurl = _this.apiurl+url;
+	if(host){
+		baseurl=host+url
+	}
+	
+	return new Promise(function(resolve, reject){
+		uni.request({
+			url:baseurl,
+			method: 'POST',
+			header:{
+				"Cache-Control": "no-cache",
+				"Content-Type": "application/x-www-form-urlencoded",
+				"Authorization":Authorization
+			},
+			data: data,
+			success: res => {
+				resolve(res.data)
+			},
+			fail:error=>{
+				console.log(error);
+				reject(error)
+			},
+			complete: res => {
+				console.log(res);
 				// resolve(res)
 			}
 		})

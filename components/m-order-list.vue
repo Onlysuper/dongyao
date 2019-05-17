@@ -5,11 +5,19 @@
 			<view class="">
 				{{title}}
 			</view>
-			<view>{{topbut}}</view>
+			<view style="color:#ee6641" v-if="status==1">
+				待取货
+			</view>
+			<view style="color:#b2aaaa" v-else-if="status==2">
+				等待付款
+			</view>
+			<view style="color:#b2aaaa" v-else-if="status==3">
+				待评论
+			</view>
 		</view>
 		<view class="m-body">
 			<view class="m-img-box">
-				<image slot="img" style="width:100%;height:100%" :src="img" mode="aspectFill"></image>
+				<image style="width:100%;height:100%" :src="img" mode="aspectFill"></image>
 			</view>
 			<view class="m-text-box">
 				<view class="m-name">
@@ -25,15 +33,27 @@
 		</view>
 		<view class="m-footer">
 			<view class="footleft">
-				<view slot="footleft" class="footleft">
+				<view class="footleft">
 					应付款：￥{{price}}    共{{num}}件
 				</view> 
-				<!-- <slot name="footleft"></slot> -->
 			</view>
 			<view class="footright">
-				<view class="but">
-					<view>
-							再来一单
+				<view v-if="status==1">
+					<view class="but" style="color:#333333;border:1px solid #333333">
+						取货
+					</view>
+				</view>
+				<view  v-else-if="status==2">
+					<view  class="but" style="color:#ef7251;border:1px solid #ef7251">
+						立即付款
+					</view>
+				</view>
+				<view  v-else-if="status==3">
+					<view class="but" style="color:#333333;border:1px solid #333333">
+						再来一单
+					</view>
+					<view class="but" style="color:#ef7251;border:1px solid #ef7251;margin-left: 10upx;">
+						评论
 					</view>
 				</view>
 			</view>
@@ -45,11 +65,11 @@
 	export default {
 		name:"m-product-list",
 		props:{
-			title:{
+			status:{
 				type:[String,Number],
 				default:""
 			},
-			topbut:{
+			title:{
 				type:[String,Number],
 				default:""
 			},

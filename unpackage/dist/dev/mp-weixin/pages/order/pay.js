@@ -244,7 +244,8 @@ var _mOrderPro = _interopRequireDefault(__webpack_require__(/*! @/components/m-o
       this.paytype = type;
     } },
 
-  onLoad: function onLoad() {
+  onLoad: function onLoad(option) {
+    this.storeid = option.storeid;
     uni.getLocation({ //获取当前的位置坐标
       type: 'wgs84',
       success: function success(res) {
@@ -252,6 +253,18 @@ var _mOrderPro = _interopRequireDefault(__webpack_require__(/*! @/components/m-o
         alert('当前位置的纬度：' + res.latitude);
       } });
 
+    this.mPost("/server/sc/find/cart", {
+      userId: 1 }).
+    then(function (res) {
+      console.log(res);
+      if (res.code == '1') {
+        if (res.data) {
+          _this.shopCarList = res.data;
+          // 购物车总商品数，与总价格计算
+          _this.shopCarCount();
+        }
+      }
+    });
   } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ "./node_modules/@dcloudio/uni-mp-weixin/dist/index.js")["default"]))
 

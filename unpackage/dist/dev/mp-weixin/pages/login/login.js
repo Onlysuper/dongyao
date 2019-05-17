@@ -113,7 +113,9 @@ __webpack_require__.r(__webpack_exports__);
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;function _objectSpread(target) {for (var i = 1; i < arguments.length; i++) {var source = arguments[i] != null ? arguments[i] : {};var ownKeys = Object.keys(source);if (typeof Object.getOwnPropertySymbols === 'function') {ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) {return Object.getOwnPropertyDescriptor(source, sym).enumerable;}));}ownKeys.forEach(function (key) {_defineProperty(target, key, source[key]);});}return target;}function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}var _default =
+/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _default =
+
+
 
 
 
@@ -142,7 +144,21 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
-    loginFn: function loginFn() {
+    // 			// 返回
+    // 			goback(){
+    // 				let currentIndex= uni.getCurrentPages();
+    // 				uni.navigateBack({
+    // 					delta:currentIndex-1
+    // 				})
+    // 			},
+    //注册
+    register: function register() {
+      uni.switchTab({
+        url: '/pages/login/register' });
+
+    },
+    // 
+    saveCode: function saveCode() {
       var _this = this;
       uni.showLoading({
         title: '登录中...' });
@@ -152,36 +168,30 @@ __webpack_require__.r(__webpack_exports__);
         provider: 'weixin',
         success: function success(loginRes) {
           var code = loginRes.code;
-          uni.showToast({
-            title: code,
-            icon: "none" });
-
-          _this.mPost('/auth//wxLogin', { //存储登录code
-            code: code }).
+          //存储登录code
+          _this.mPost('/auth/wxLogin', code, "https://dy.gantangerbus.com/da").
           then(function (res) {
-            uni.showToast({
-              title: JSON.stringify(res) });
-
-            if (res.code = 1) {
+            if (res.code == 1) {
               if (res.data) {
                 var data = res.data;
-                uni.setStorageSync('authToken', data.authToken);
-                uni.showToast({
-                  title: 'authToken' + uni.getStorageSync('authToken'),
-                  icon: "none" });
-
+                uni.setStorageSync('Authorization', data.authToken);
               }
+            } else {
+              uni.showToast({
+                title: res.message,
+                icon: "none" });
+
             }
             uni.hideLoading();
           }).catch(function (err) {
-            console.log(err);
             uni.hideLoading();
           });
         } });
 
     },
     //第一授权获取用户信息===》按钮触发
-    wxGetUserInfo: function wxGetUserInfo(res) {
+    getuserinfo: function getuserinfo(res) {
+      console.log(res);
       var _this = this;
       if (!res.detail.iv) {
         uni.showToast({
@@ -193,45 +203,34 @@ __webpack_require__.r(__webpack_exports__);
       uni.getUserInfo({
         provider: 'weixin',
         success: function success(infoRes) {
-          _this.mPost('/auth/wxUserInfo', _objectSpread({},
-          infoRes.userInfo)).
-          then(function (res) {
-            uni.showToast({
-              title: JSON.stringify(res) });
-
+          console.log(infoRes);
+          // 	储存用户信息
+          uni.setStorageSync('userData', JSON.stringify(infoRes.userInfo));
+          _this.mPost('/auth/wxUserInfo', infoRes.userInfo, "https://dy.gantangerbus.com/da").then(function (res) {
             if (res.code = 1) {
-              if (res.data) {
-                var data = res.data;
-                uni.setStorageSync('authToken', data.authToken);
-                uni.showToast({
-                  title: 'authToken' + uni.getStorageSync('authToken'),
-                  icon: "none" });
+              _this.goback();
+              uni.showToast({
+                title: "已授权" });
 
-              }
+            } else {
+              uni.showToast({
+                title: res.message,
+                icon: "none" });
+
             }
             uni.hideLoading();
           }).catch(function (err) {
             console.log(err);
             uni.hideLoading();
           });
+
         },
         fail: function fail(res) {} });
 
-    },
-    getPhoneNumber: function getPhoneNumber(e) {
-      console.log(e);
-      if (e.detail.errMsg == 'getPhoneNumber:fail user deny') {
-
-      } else {
-
-      }
-    },
-    //向后台更新信息
-    updateUserInfo: function updateUserInfo() {
     } },
 
   onLoad: function onLoad() {
-    this.loginFn();
+    this.saveCode();
   } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ "./node_modules/@dcloudio/uni-mp-weixin/dist/index.js")["default"]))
 
@@ -265,6 +264,11 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("view", { staticClass: "m-login-page" }, [
     _c("view", { staticClass: "m-img-box" }, [_vm._v("东尧蔬菜")]),
+    _c("view", {}, [
+      _vm._v(
+        "您暂未授权'东尧蔬菜'小程序获取你的信息，讲无法正常使用小程序的功能。\n\t\t如果需要正常使用，请点击\"授权\"按钮，打开头像，昵称等信息的权限"
+      )
+    ]),
     _c(
       "view",
       {},
@@ -272,17 +276,15 @@ var render = function() {
         _c(
           "button",
           {
-            staticClass: "m-but",
             attrs: {
               type: "primary",
               "open-type": "getUserInfo",
               withCredentials: "true",
-              lang: "zh_CN",
               eventid: "8ff3bae4-0"
             },
-            on: { getuserinfo: _vm.wxGetUserInfo }
+            on: { getuserinfo: _vm.getuserinfo }
           },
-          [_vm._v("微信手机号快捷登录")]
+          [_vm._v("授权")]
         )
       ],
       1
