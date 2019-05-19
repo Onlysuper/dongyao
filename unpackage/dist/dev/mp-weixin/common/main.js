@@ -88,7 +88,7 @@ _vue.default.config.productionTip = false;
 // Vue.prototype.apiurl = 'http://39.105.89.138:6090'; 
 _vue.default.prototype.apiurl = 'https://dy.gantangerbus.com/dy';
 var Authorization = uni.getStorageSync('Authorization');
-console.log(Authorization);
+// console.log(Authorization);
 _vue.default.prototype.mGet = function (url, data) {
   var _this = this;
   return new Promise(function (resolve, reject) {
@@ -105,6 +105,10 @@ _vue.default.prototype.mGet = function (url, data) {
         resolve(res.data);
       },
       fail: function fail(error) {
+        uni.showToast({
+          title: "操作失败，请检查网络",
+          icon: "none" });
+
         reject(error);
       },
       complete: function complete(res) {
@@ -134,11 +138,15 @@ _vue.default.prototype.mPost = function (url, data, host) {
         resolve(res.data);
       },
       fail: function fail(error) {
-        console.log(error);
+        // console.log(error);
+        uni.showToast({
+          title: "操作失败，请检查网络",
+          icon: "none" });
+
         reject(error);
       },
       complete: function complete(res) {
-        console.log(res);
+        // console.log(res);
         // resolve(res)
       } });
 
@@ -165,11 +173,15 @@ _vue.default.prototype.mPostForm = function (url, data, host) {
         resolve(res.data);
       },
       fail: function fail(error) {
-        console.log(error);
+        uni.showToast({
+          title: "操作失败，请检查网络",
+          icon: "none" });
+
         reject(error);
       },
       complete: function complete(res) {
-        console.log(res);
+
+        // console.log(res);
         // resolve(res)
       } });
 
@@ -196,16 +208,21 @@ _vue.default.prototype.accMul = function (arg1, arg2) {
 };
 
 //判断是否登录
-_vue.default.prototype.isLogin = function () {
+_vue.default.prototype.globelIsLogin = function () {
 
   var phone = uni.getStorageSync('phone');
   return new Promise(function (resolve, reject) {
     wx.checkSession({
       success: function success() {
-        resolve('success');
+        if (phone) {
+          resolve('success');
+        } else {
+          reject('fail');
+        }
       },
       fail: function fail() {
-        reject('error');
+        console.log('失败这里这里');
+        reject('fail');
       } });
 
   });

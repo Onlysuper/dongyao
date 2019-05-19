@@ -6,7 +6,7 @@ Vue.config.productionTip = false
 // Vue.prototype.apiurl = 'http://39.105.89.138:6090'; 
 Vue.prototype.apiurl = 'https://dy.gantangerbus.com/dy'; 
 var Authorization =uni.getStorageSync('Authorization');
-console.log(Authorization);
+// console.log(Authorization);
 Vue.prototype.mGet = function(url,data){
 	let _this=this;
 	return new Promise(function(resolve, reject){
@@ -23,6 +23,10 @@ Vue.prototype.mGet = function(url,data){
 				resolve(res.data)
 			},
 			fail:error=>{
+				uni.showToast({
+					title:  "操作失败，请检查网络",
+					icon: "none"
+				});
 				reject(error)
 			},
 			complete: res => {
@@ -52,11 +56,15 @@ Vue.prototype.mPost = function(url,data,host){
 				resolve(res.data)
 			},
 			fail:error=>{
-				console.log(error);
+				// console.log(error);
+				uni.showToast({
+					title:  "操作失败，请检查网络",
+					icon: "none"
+				});
 				reject(error)
 			},
 			complete: res => {
-				console.log(res);
+				// console.log(res);
 				// resolve(res)
 			}
 		})
@@ -83,11 +91,15 @@ Vue.prototype.mPostForm = function(url,data,host){
 				resolve(res.data)
 			},
 			fail:error=>{
-				console.log(error);
+				uni.showToast({
+					title:  "操作失败，请检查网络",
+					icon: "none"
+				});
 				reject(error)
 			},
 			complete: res => {
-				console.log(res);
+				
+				// console.log(res);
 				// resolve(res)
 			}
 		})
@@ -114,16 +126,21 @@ Vue.prototype.accMul = function(arg1, arg2) {
 }
 
 //判断是否登录
-Vue.prototype.isLogin=function(){
+Vue.prototype.globelIsLogin=function(){
 	// #ifdef MP-WEIXIN
 	let phone = uni.getStorageSync('phone');
 	return new Promise(function(resolve, reject){
 		wx.checkSession({
 			success() {
-				resolve('success')
+				if(phone){
+					resolve('success')
+				}else{
+					reject('fail')
+				}
 			},
 			fail() {
-				reject('error')
+				console.log('失败这里这里')
+				reject('fail')
 			}
 		})
 	})

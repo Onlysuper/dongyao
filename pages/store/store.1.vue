@@ -21,8 +21,7 @@
 							</view>
 						</view>
 						<view class="m-phone" @tap='callPhone(storeData.tel)'>
-							<image  style="width: 40upx;height:40upx;margin-left: 20upx;" src="../../static/img/icon/shop_icon_phone.png" mode="aspectFit"></image>
-							
+							<image style="width: 40upx;height:40upx;margin-left: 20upx;" src="../../static/img/icon/shop_icon_phone.png" mode="aspectFit"></image>
 						</view>
 					</view>
 					<!--  -->
@@ -78,7 +77,7 @@
 							￥{{item.originalPrice}}
 						</view>
 						<view class="m-controne">
-							<uni-number-box @change="buyNumChange" :value="item.buyCount" :min="0" :max="item.stock" :id="item.id"></uni-number-box>
+							<uni-number-box @change="buyNumChange" :value="item.buyCount" :min="0" :id="item.id"></uni-number-box>
 						</view>
 					</view>
 				</view>
@@ -178,11 +177,12 @@
 						}
 					]}
 				],
-				productList:[]
+				productList:[
+					
+				]
 			}
 		},
-		computed:{
-		},
+		
 		methods:{
 			//产品详情
 			proDetail(data){
@@ -233,6 +233,7 @@
 				this.startAnimation(e,data);
 			},
 			startAnimation: function (e,data) {
+				console.log(data);
 				var index = 0, that = this,
 				bezier_points = that.linePos['bezier_points'];
 				that.hide_good_box= false
@@ -264,8 +265,6 @@
 					if(res.code=='1'){
 						if(res.data&&res.data.list){
 							this.productList=res.data.list;
-							// 当前购物车信息
-							this.showShopCar();
 						}
 					}
 				})
@@ -277,14 +276,10 @@
 				this.mPost("/server/sc/find/cart",{
 					userId:1
 				}).then(res=>{
+					console.log(res);
 					if(res.code=='1'){
 						if(res.data){
-							let data=[...res.data];
-							data = data.map(item=>{
-								let _id = item.id;
-								return {stock:_this.productList.find(pro=>pro.id==_id)['stock'],...item};
-							})
-							_this.shopCarList=data;
+							_this.shopCarList=res.data;
 							// 购物车总商品数，与总价格计算
 							_this.shopCarCount();
 						}
@@ -298,7 +293,6 @@
 					userId:1
 				}).then(res=>{
 					if(res.code=='1'){
-						console.log('这里');
 							_this.shopCarList=[];
 							// 购物车总商品数，与总价格计算
 							_this.shopCarCountClear();
@@ -352,61 +346,56 @@
 				//  #endif  
 			},
 			// 加入购物车
-			addGoodSum(_data,num=1,type){
-				let _id = _data.id;
-				let data= this.productList.find(item=>item.id==_id);
+			addGoodSum(data,num=1,type){
 				let _this=this;
 				let buyCount=num;
-				let objIndex = this.shopCarList.findIndex(item=>item.id==_id);
+				let objIndex = this.shopCarList.findIndex(item=>item.id=data.id);
 				if(objIndex!=-1 && type=='add'){
-					buyCount=this.shopCarList.find(item=>item.id==_id)['buyCount']+1;
+					buyCount=this.shopCarList[objIndex].buyCount+1;
 				}
-				if(buyCount>data.stock){
+				if(buyCount<=data.stock){
+					_this.mPost("/server/sc/add/product",{
+						userId:1,
+						productId:data.id,
+						buyCount:buyCount
+					}).then(res=>{
+						if(res.code==1){
+							_this.showShopCar();
+						}
+					}).catch(err=>{
+						console.log(err)
+					})
+				}else{
+					
 					uni.showToast({
 						title:  "库存不足",
 						icon: "none"
 					});
-					buyCount=data.stock;
-					// this.shopCarList.find(item=>item.id==_id)['buyCount']=buyCount;
 				}
-				_this.mPost("/server/sc/add/product",{
-					userId:1,
-					productId:data.id,
-					buyCount:buyCount
-				}).then(res=>{
-					if(res.code==1){
-						_this.showShopCar();
-					}
-				}).catch(err=>{
-					console.log(err)
-				})
+				
 			},
 			buyNumChange(data){
-				// console
-				let num = data.num;
-				this.addGoodSum(data,num,'change')
+				this.addGoodSum({id:data.id},data.num,'change')
 			},
 			//购物车总价格，总数量计算
 			shopCarCount(){
 				let _this=this;
 				let pronum=0;
 				let products = this.shopCarList.map((val,index,arrs)=>{  
-							  var obj={};  
-							  obj.productId=val.id;  
-							  obj.cou=val.buyCount;  
-							  pronum+=val.buyCount;
-							  return obj  
-							});  
+				  var obj={};  
+				  obj.productId=val.id;  
+				  obj.cou=val.buyCount;  
+				  pronum+=val.buyCount;
+				  return obj  
+				});  
 				products = JSON.stringify(products);
-				console.log(products);
-				
 				_this.mPost("/server/p/calProductsPrice",products).then(res=>{
 					if(res.code==1){
 						_this.shopCarListPrice=res.data.totalPrice;
 						_this.shopCarListLength=pronum;
-						// if(pronum==0)
+						_this.showShopCar();
 					}
-					console.log(res);
+					
 				}).catch(err=>{
 					console.log(err)
 				})
@@ -438,7 +427,7 @@
 			// 默认显示第一个分类的产品
 			this.showCategory(1);
 			// 当前购物车信息
-			// this.showShopCar();
+			this.showShopCar();
 			
 		}
 		

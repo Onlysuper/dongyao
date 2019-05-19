@@ -1,10 +1,13 @@
 <template>
 	<view class="m-order-page">
+		
 		<view class="fixedit">
 			<m-tab @handleFn="tabChange" :tabActive="tabActive" :rowdata="tabList"></m-tab>
 		</view>
 		<view style="height:60px;"></view>
-		<view class="m-order-body">
+		<m-need-login v-if="!isLogin"></m-need-login>
+		
+		<view v-if="isLogin" class="m-order-body">
 			<m-order-list v-for="(item,index) in artList" :key="index"
 				:status="1"
 				:title="item.name"
@@ -48,6 +51,7 @@
 <script>
 	import mTab from "@/components/m-tab.vue";
 	import mOrderList from "@/components/m-order-list.vue";
+	import mNeedLogin from "@/components/m-need-login.vue";
 	import uniLoadMore from "@/components/uni-load-more/uni-load-more.vue";
 	var page = 1, cate = 0;
 	export default {
@@ -56,10 +60,13 @@
 		components:{
 			mTab,
 			uniLoadMore,
-			mOrderList
+			mOrderList,
+			mNeedLogin
 		},
 		data(){
 			return{
+				
+				isLogin:false,
 				tabActive:"1",
 				tabList:[
 					{
@@ -146,6 +153,19 @@
 						this.mloading='noMore';
 					}
 				});
+			},
+			//是否登录了
+			checkLogin(){
+				let _this = this;
+				_this.globelIsLogin().then(res=>{
+					if(res=='success'){
+						//已登录
+						_this.isLogin=true;
+						
+					}
+				}).catch(err=>{
+					_this.isLogin=false
+				});
 			}
 		},
 		// 重置分页及数据
@@ -160,13 +180,7 @@
 			this.getNewsList();
 		},
 		onLoad(){
-			this.isLogin().then(res=>{
-				if(res='success'){
-					
-				}
-			}).catch(err=>{
-				console.log(err);
-			});
+			this.checkLogin();
 		}
 	}
 </script>

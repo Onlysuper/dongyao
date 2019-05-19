@@ -144,9 +144,9 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     // 返回
     goback: function goback() {
-      var currentIndex = getCurrentPages();
+      var pageIndex = getCurrentPages() - 2;
       uni.navigateBack({
-        delta: currentIndex - 2 });
+        delta: pageIndex });
 
     },
 

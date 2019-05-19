@@ -1,7 +1,7 @@
 <template>
 	<view class="uni-numbox">
 		<view class="uni-numbox__minus" :class="{'uni-numbox--disabled': disableSubtract||disabled}" @click="_calcValue('subtract')">-</view>
-		<input class="uni-numbox__value" type="number" :disabled="disabled" :value="inputValue" @blur="_onBlur">
+		<input class="uni-numbox__value" type="number" :disabled="disabled" @input="inputChange($event)" :value="inputValue" @blur="_onBlur">
 		<view class="uni-numbox__plus" :class="{'uni-numbox--disabled': disableAdd||disabled}" @click="_calcValue('add')">+</view>
 	</view>
 </template>
@@ -57,6 +57,17 @@
 // 			}
 		},
 		methods: {
+			inputChange(ev){
+				let val= ev.detail.value;
+				
+				if(val>this.max){
+					this.inputValue=this.max;
+				}
+// 				console.log();
+// 				console.log(ev.currentTarget.value);
+			//改变值
+				// this.$emit('change', {num:val,id:this.id});
+			},
 			_calcValue(type) {
 				if (this.disabled) {
 					return
@@ -84,20 +95,20 @@
 				return scale
 			},
 			_onBlur(event) {
+				console.log('zzzzz');
 				let value = event.detail.value
 				if (!value) {
 					this.inputValue = 0
 					return
 				}
 				value = +value;
-				if ((value*1) > (this.max*1)) {
-					console.log('这里快点'+this.max);
+				if (value > this.max) {
 					value = this.max
-				} else if ((value*1) < (this.min*1)) {
+				} else if (value < this.min) {
 					value = this.min
 				}
-				this.inputValue = value+"";
-				this.$emit('change', {num:this.inputValue*1,id:this.id});
+				this.inputValue = value;
+				this.$emit('change', {num:this.inputValue,id:this.id});
 			}
 		}
 	}

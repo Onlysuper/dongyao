@@ -495,8 +495,9 @@ var _mCell = _interopRequireDefault(__webpack_require__(/*! @/components/m-cell 
 
   data: function data() {
     return {
-      isLogin: uni.getStorageSync('isLogin') || false //默认为true
-    };
+      isLogin: false,
+      userData: {} };
+
   },
   methods: {
 
@@ -517,9 +518,24 @@ var _mCell = _interopRequireDefault(__webpack_require__(/*! @/components/m-cell 
       uni.navigateTo({
         url: url });
 
+    },
+    //是否登录了
+    checkLogin: function checkLogin() {
+      var _this = this;
+      _this.globelIsLogin().then(function (res) {
+        if (res == 'success') {
+          //已登录
+          _this.isLogin = true;
+          _this.userData = JSON.parse(uni.getStorageSync('userData'));
+        }
+      }).catch(function (err) {
+        //未登录
+        _this.isLogin = false;
+      });
     } },
 
   onLoad: function onLoad() {
+    this.checkLogin();
   } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ "./node_modules/@dcloudio/uni-mp-weixin/dist/index.js")["default"]))
 
@@ -693,7 +709,26 @@ var render = function() {
   return _c("view", { staticClass: "m-user-page" }, [
     _c("view", { staticClass: "m-header" }, [
       _vm.isLogin
-        ? _c("view", { staticClass: "m-user" }, [_vm._m(0), _vm._m(1)])
+        ? _c("view", { staticClass: "m-user" }, [
+            _c("view", { staticClass: "m-img" }, [
+              _c("image", {
+                staticStyle: { width: "100%", height: "100%" },
+                attrs: { src: _vm.userData.avatarUrl, mode: "aspectFit" }
+              })
+            ]),
+            _c("view", { staticClass: "m-text" }, [
+              _c("view", { staticClass: "m-username" }, [
+                _vm._v(_vm._s(_vm.userData.nickName))
+              ]),
+              _c("image", {
+                staticStyle: { width: "57rpx", height: "33rpx" },
+                attrs: {
+                  src: "../../static/img/icon/me_icon_VIP_lose.png",
+                  mode: "aspectFit"
+                }
+              })
+            ])
+          ])
         : _c(
             "view",
             {
@@ -705,7 +740,7 @@ var render = function() {
                 }
               }
             },
-            [_vm._m(2), _vm._m(3)]
+            [_vm._m(0), _vm._m(1)]
           ),
       _c(
         "view",
@@ -747,7 +782,7 @@ var render = function() {
             [_vm._v("查看全部 >")]
           )
         ]),
-        _vm._m(4)
+        _vm._m(2)
       ]),
       _c(
         "view",
@@ -810,35 +845,6 @@ var render = function() {
   ])
 }
 var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("view", { staticClass: "m-img" }, [
-      _c("image", {
-        staticStyle: { width: "100%", height: "100%" },
-        attrs: {
-          src: "../../static/img/icon/home_icon_gps.png",
-          mode: "aspectFit"
-        }
-      })
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("view", { staticClass: "m-text" }, [
-      _c("view", { staticClass: "m-username" }, [_vm._v("小白兔")]),
-      _c("image", {
-        staticStyle: { width: "57rpx", height: "33rpx" },
-        attrs: {
-          src: "../../static/img/icon/me_icon_VIP_lose.png",
-          mode: "aspectFit"
-        }
-      })
-    ])
-  },
   function() {
     var _vm = this
     var _h = _vm.$createElement

@@ -29,9 +29,9 @@
 		methods:{
 			// 返回
 			goback(){
-				let currentIndex= getCurrentPages();
+				let pageIndex= getCurrentPages()-2;
 				uni.navigateBack({
-					delta:currentIndex-2
+					delta:pageIndex
 				})
 			},
 		

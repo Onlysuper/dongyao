@@ -1,6 +1,7 @@
 <template>
 	<view class="uni-numbox">
 		<view class="uni-numbox__minus" :class="{'uni-numbox--disabled': disableSubtract||disabled}" @click="_calcValue('subtract')">-</view>
+		<!-- <input class="uni-numbox__value" type="number" :disabled="disabled" :value="inputValue" @blur="_onBlur"> -->
 		<input class="uni-numbox__value" type="number" :disabled="disabled" :value="inputValue" @blur="_onBlur">
 		<view class="uni-numbox__plus" :class="{'uni-numbox--disabled': disableAdd||disabled}" @click="_calcValue('add')">+</view>
 	</view>
@@ -17,7 +18,6 @@
 				type: Number,
 				default: 1
 			},
-			
 			min: {
 				type: Number,
 				default: 0
@@ -50,11 +50,20 @@
 		},
 		watch: {
 			value(val) {
+				console.log('改变吗');
 				this.inputValue = val;
 			},
-// 			inputValue(val) {
-// 				this.$emit('change', {num:val,id:this.id});
-// 			}
+			inputValue(val) {
+				console.log('zzz'+val);
+				let _value=val;
+				if (val > this.max) {
+					_value = this.max
+				} else if (val < this.min) {
+					_value = this.min
+				}
+				this.inputValue =_value;
+				this.$emit('change', {num:_value,id:this.id});
+			}
 		},
 		methods: {
 			_calcValue(type) {
@@ -73,7 +82,6 @@
 					return
 				}
 				this.inputValue = value / scale;
-				this.$emit('change', {num:this.inputValue,id:this.id});
 			},
 			_getDecimalScale() {
 				let scale = 1
@@ -84,20 +92,20 @@
 				return scale
 			},
 			_onBlur(event) {
+				console.log('blur');
 				let value = event.detail.value
 				if (!value) {
 					this.inputValue = 0
 					return
 				}
 				value = +value;
-				if ((value*1) > (this.max*1)) {
-					console.log('这里快点'+this.max);
+				if (value > this.max) {
 					value = this.max
-				} else if ((value*1) < (this.min*1)) {
+				} else if (value < this.min) {
 					value = this.min
 				}
-				this.inputValue = value+"";
-				this.$emit('change', {num:this.inputValue*1,id:this.id});
+				this.inputValue = value;
+				this.$emit('change', {num:this.inputValue,id:this.id});
 			}
 		}
 	}
@@ -107,8 +115,7 @@
 	$numbox-input-width:80upx;
 	$numbox-height:70upx;
 	$uni-font-size-xxl:40upx;
-	$uni-text-color:#666666;
-	$uni-border-color:#dadada;
+
 	.uni-numbox {
 		display: inline-flex;
 		flex-direction: row;
@@ -126,6 +133,7 @@
 			left: -50%;
 			right: -50%;
 			bottom: -50%;
+			border: 1px solid $uni-border-color;
 			border-radius: $uni-border-radius-lg;
 			transform: scale(.5);
 		}
@@ -133,8 +141,7 @@
 		&__minus,
 		&__plus {
 			margin: 0;
-			// background-color: $uni-bg-color-grey;
-			background-color: #fff;
+			background-color: $uni-bg-color-grey;
 			width: $numbox-btn-width;
 			font-size: $uni-font-size-xxl;
 			height: 100%;
@@ -142,14 +149,11 @@
 			text-align: center;
 			color: $uni-text-color;
 			position: relative;
-			border-radius: 100%;
-			border: 1px solid $uni-border-color;
 		}
 
 		&__value {
 			position: relative;
-			// background-color: $uni-bg-color;
-			background-color: #fff;
+			background-color: $uni-bg-color;
 			width: $numbox-input-width;
 			height: 100%;
 			text-align: center;
@@ -164,6 +168,12 @@
 				left: -50%;
 				right: -50%;
 				bottom: -50%;
+				border-style: solid;
+				border-color: $uni-border-color;
+				border-left-width: 1px;
+				border-right-width: 1px;
+				border-top-width: 0;
+				border-bottom-width: 0;
 				transform: scale(.5);
 			}
 		}

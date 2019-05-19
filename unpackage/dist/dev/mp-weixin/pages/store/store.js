@@ -486,6 +486,7 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
       this.$emit("proDetail", this.rowData);
     },
     touchOnGoods: function touchOnGoods(e) {
+      console.log(this.rowData.synopsis);
       this.$emit("touchOnGoods", {
         data: this.rowData,
         elem: e });
@@ -561,10 +562,10 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
   watch: {
     value: function value(val) {
       this.inputValue = val;
-    },
-    inputValue: function inputValue(val) {
-      this.$emit('change', { num: val, id: this.id });
     } },
+
+
+
 
   methods: {
     _calcValue: function _calcValue(type) {
@@ -583,6 +584,7 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
         return;
       }
       this.inputValue = value / scale;
+      this.$emit('change', { num: this.inputValue, id: this.id });
     },
     _getDecimalScale: function _getDecimalScale() {
       var scale = 1;
@@ -599,12 +601,14 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
         return;
       }
       value = +value;
-      if (value > this.max) {
+      if (value * 1 > this.max * 1) {
+        console.log('这里快点' + this.max);
         value = this.max;
-      } else if (value < this.min) {
+      } else if (value * 1 < this.min * 1) {
         value = this.min;
       }
-      this.inputValue = value;
+      this.inputValue = value + "";
+      this.$emit('change', { num: this.inputValue * 1, id: this.id });
     } } };exports.default = _default;
 
 /***/ }),
@@ -711,9 +715,10 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 
 
 
+
 var _mFooterCar = _interopRequireDefault(__webpack_require__(/*! @/components/m-footer-car */ "../../../../../../Users/apple/opt/DONGYAO/components/m-footer-car.vue"));
 var _mStorePro = _interopRequireDefault(__webpack_require__(/*! @/components/m-store-pro */ "../../../../../../Users/apple/opt/DONGYAO/components/m-store-pro.vue"));
-var _uniNumberBox = _interopRequireDefault(__webpack_require__(/*! @/components/uni-number-box/uni-number-box.vue */ "../../../../../../Users/apple/opt/DONGYAO/components/uni-number-box/uni-number-box.vue"));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}
+var _uniNumberBox = _interopRequireDefault(__webpack_require__(/*! @/components/uni-number-box/uni-number-box.vue */ "../../../../../../Users/apple/opt/DONGYAO/components/uni-number-box/uni-number-box.vue"));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function _objectSpread(target) {for (var i = 1; i < arguments.length; i++) {var source = arguments[i] != null ? arguments[i] : {};var ownKeys = Object.keys(source);if (typeof Object.getOwnPropertySymbols === 'function') {ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) {return Object.getOwnPropertyDescriptor(source, sym).enumerable;}));}ownKeys.forEach(function (key) {_defineProperty(target, key, source[key]);});}return target;}function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}function _toConsumableArray(arr) {return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread();}function _nonIterableSpread() {throw new TypeError("Invalid attempt to spread non-iterable instance");}function _iterableToArray(iter) {if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter);}function _arrayWithoutHoles(arr) {if (Array.isArray(arr)) {for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) {arr2[i] = arr[i];}return arr2;}}
 // 抛物线计算
 function bezier(pots, amount) {
   var pot;
@@ -798,9 +803,8 @@ function bezier(pots, amount) {
 
       productList: [] };
 
-
-
   },
+  computed: {},
 
   methods: {
     //产品详情
@@ -883,6 +887,8 @@ function bezier(pots, amount) {
         if (res.code == '1') {
           if (res.data && res.data.list) {
             _this2.productList = res.data.list;
+            // 当前购物车信息
+            _this2.showShopCar();
           }
         }
       });
@@ -894,10 +900,14 @@ function bezier(pots, amount) {
       this.mPost("/server/sc/find/cart", {
         userId: 1 }).
       then(function (res) {
-        console.log(res);
         if (res.code == '1') {
           if (res.data) {
-            _this.shopCarList = res.data;
+            var data = _toConsumableArray(res.data);
+            data = data.map(function (item) {
+              var _id = item.id;
+              return _objectSpread({ stock: _this.productList.find(function (pro) {return pro.id == _id;})['stock'] }, item);
+            });
+            _this.shopCarList = data;
             // 购物车总商品数，与总价格计算
             _this.shopCarCount();
           }
@@ -915,6 +925,7 @@ function bezier(pots, amount) {
           _this.shopCarList = [];
           // 购物车总商品数，与总价格计算
           _this.shopCarCountClear();
+          _this.hideSpec();
         }
       });
     },
@@ -930,7 +941,6 @@ function bezier(pots, amount) {
     },
     //规格弹窗
     showSpec: function showSpec(fun) {
-      console.log('show');
       this.specClass = 'show';
       this.specCallback = fun;
     },
@@ -965,12 +975,22 @@ function bezier(pots, amount) {
 
     },
     // 加入购物车
-    addGoodSum: function addGoodSum(data) {var num = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1;var type = arguments.length > 2 ? arguments[2] : undefined;
+    addGoodSum: function addGoodSum(_data) {var num = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1;var type = arguments.length > 2 ? arguments[2] : undefined;
+      var _id = _data.id;
+      var data = this.productList.find(function (item) {return item.id == _id;});
       var _this = this;
       var buyCount = num;
-      var objIndex = this.shopCarList.findIndex(function (item) {return item.id = data.id;});
+      var objIndex = this.shopCarList.findIndex(function (item) {return item.id == _id;});
       if (objIndex != -1 && type == 'add') {
-        buyCount = this.shopCarList[objIndex].buyCount + 1;
+        buyCount = this.shopCarList.find(function (item) {return item.id == _id;})['buyCount'] + 1;
+      }
+      if (buyCount > data.stock) {
+        uni.showToast({
+          title: "库存不足",
+          icon: "none" });
+
+        buyCount = data.stock;
+        // this.shopCarList.find(item=>item.id==_id)['buyCount']=buyCount;
       }
       _this.mPost("/server/sc/add/product", {
         userId: 1,
@@ -985,36 +1005,34 @@ function bezier(pots, amount) {
       });
     },
     buyNumChange: function buyNumChange(data) {
-      console.log(data.num);
-      this.addGoodSum({ id: data.id }, data.num, 'change');
+      // console
+      var num = data.num;
+      this.addGoodSum(data, num, 'change');
     },
     //购物车总价格，总数量计算
     shopCarCount: function shopCarCount() {
       var _this = this;
+      var pronum = 0;
       var products = this.shopCarList.map(function (val, index, arrs) {
         var obj = {};
         obj.productId = val.id;
         obj.cou = val.buyCount;
+        pronum += val.buyCount;
         return obj;
       });
       products = JSON.stringify(products);
       console.log(products);
-      _this.mPost("/server/p/calProductsPrice", { products: products }).then(function (res) {
+
+      _this.mPost("/server/p/calProductsPrice", products).then(function (res) {
+        if (res.code == 1) {
+          _this.shopCarListPrice = res.data.totalPrice;
+          _this.shopCarListLength = pronum;
+          // if(pronum==0)
+        }
         console.log(res);
-        // 					if(res.code==1){
-        // 						_this.showShopCar();
-        // 					}
       }).catch(function (err) {
         console.log(err);
       });
-      // 				let num = 0;
-      // 				let price=0;
-      // 				this.shopCarList.forEach(item=>{
-      // 					num+=item.buyCount;
-      // 					price+=this.accMul(item.presentPrice,item.buyCount);
-      // 					this.shopCarListLength=num;
-      // 					this.shopCarListPrice=price;
-      // 				})
     },
     shopCarCountClear: function shopCarCountClear() {
       this.shopCarListLength = 0;
@@ -1043,7 +1061,7 @@ function bezier(pots, amount) {
     // 默认显示第一个分类的产品
     this.showCategory(1);
     // 当前购物车信息
-    this.showShopCar();
+    // this.showShopCar();
 
   } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ "./node_modules/@dcloudio/uni-mp-weixin/dist/index.js")["default"]))
@@ -1511,7 +1529,7 @@ var render = function() {
                               attrs: {
                                 value: item.buyCount,
                                 min: 0,
-                                max: 9,
+                                max: item.stock,
                                 id: item.id,
                                 eventid: "05dd8904-5-" + index,
                                 mpcomid: "05dd8904-2-" + index

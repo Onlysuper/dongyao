@@ -3,11 +3,11 @@
 		<view class="m-header">
 			<view v-if="isLogin" class="m-user">
 				<view class="m-img">
-					<image style="width:100%;height:100%" src="../../static/img/icon/home_icon_gps.png" mode="aspectFit"></image>
+					<image style="width:100%;height:100%" :src="userData.avatarUrl" mode="aspectFit"></image>
 				</view>
 				<view class="m-text">
 					<view class="m-username">
-						小白兔
+						{{userData.nickName}}
 					</view>
 					<image style="width:57upx;height:33upx" src="../../static/img/icon/me_icon_VIP_lose.png" mode="aspectFit"></image>
 				</view>
@@ -91,7 +91,8 @@
 		},
 		data(){
 			return {
-				isLogin: uni.getStorageSync('isLogin')||false//默认为true
+				isLogin:false,
+				userData:{},
 			}
 		},
 		methods:{
@@ -114,8 +115,23 @@
 					url:url
 				})
 			},
+			//是否登录了
+			checkLogin(){
+				let _this = this;
+				_this.globelIsLogin().then(res=>{
+					if(res=='success'){
+						//已登录
+						_this.isLogin=true;
+						_this.userData = JSON.parse(uni.getStorageSync('userData'));
+					}
+				}).catch(err=>{
+					//未登录
+					_this.isLogin=false
+				});
+			}
 		},
 		onLoad(){
+			this.checkLogin();
 		}
 	}
 </script>

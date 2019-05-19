@@ -44,6 +44,7 @@
 				this.$emit("proDetail",this.rowData)
 			},
 		 touchOnGoods(e){
+			 console.log(this.rowData.synopsis);
 			 this.$emit("touchOnGoods",{
 				 data:this.rowData,
 				 elem : e,
