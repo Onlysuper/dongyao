@@ -1,18 +1,17 @@
 <template>
 	<view class="m-vip-page">
 		<view class="m-img-box">
-			<image v-if="state=='month'" style="height:100upx;width:100upx;" src="../../../static/img/icon/member_icon_月卡.png" mode=""></image>
-			<image v-if="state=='year'" style="height:100upx;width:100upx;" src="../../../static/img/icon/member_icon_年卡.png" mode=""></image>
-			<image v-if="state=='season'" style="height:100upx;width:100upx;" src="../../../static/img/icon/member_icon_季卡.png" mode=""></image>
-			<image v-if="state=='halfyear'" style="height:100upx;width:100upx;" src="../../../static/img/icon/member_icon_半年卡.png" mode=""></image>
-			
+			<image v-if="state=='0'" style="height:100upx;width:100upx;" src="../../../static/img/icon/member_icon_月卡.png" mode=""></image>
+			<image v-if="state=='1'" style="height:100upx;width:100upx;" src="../../../static/img/icon/member_icon_季卡.png" mode=""></image>
+			<image v-if="state=='2'" style="height:100upx;width:100upx;" src="../../../static/img/icon/member_icon_半年卡.png" mode=""></image>
+			<image v-if="state=='3'" style="height:100upx;width:100upx;" src="../../../static/img/icon/member_icon_年卡.png" mode=""></image>
 		</view>
 		<view class="m-text-box">
 			<view class="m-text">
-				全场7.5折优惠
+				{{synopsis}}
 			</view>
 			<view class="m-price">
-				￥1000
+				￥{{price}}
 			</view>
 		</view>
 	</view>
@@ -23,6 +22,14 @@
 		name:"m-vip-page",
 		props:{
 			state:{
+				type:String,
+				value:"",
+			},
+			synopsis:{
+				type:String,
+				value:"",
+			},
+			price:{
 				type:String,
 				value:"",
 			}

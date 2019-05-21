@@ -20,7 +20,15 @@
 									自取时间
 								</view>
 								<view class="m-light">
-									16：30
+									<!-- 16：30 -->
+									<ruiDatePicker
+										fields="minute"
+										:start="today"
+										end="2030-12-30 23:59"
+										:value="aboutPickingTime"
+										@change="bindChange"
+										@cancel="bindCancel"
+									></ruiDatePicker>
 								</view>
 							</view>
 							<view class="m-item">
@@ -28,7 +36,8 @@
 									预留电话
 								</view>
 								<view class="m-light">
-									13519195678
+									<input style="" type="text" :value="reserveTel" />
+									
 								</view>
 							</view>
 						</view>
@@ -37,18 +46,13 @@
 			</view>
 			<!-- 商品列表 -->
 			<view class="m-pro-container">
-				<m-order-pro 
-				title="板栗南瓜800g/份"
-				price="￥4.99"
-				oldprice="￥10.86"
-				imgurl="../../static/img/icon/home_icon_gps.png"
+				<m-order-pro v-for="(item) in shopCarList" :key="item.id"
+				:title="item.synopsis"
+				:price="item.presentPrice"
+				:oldprice="item.originalPrice"
+				:imgurl="item.pictureUrl"
+				:num="item.buyCount"
 				 ></m-order-pro>
-				 <m-order-pro 
-				 title="板栗南瓜800g/份"
-				 price="￥4.99"
-				 oldprice="￥10.86"
-				 imgurl="../../static/img/icon/home_icon_gps.png"
-				  ></m-order-pro>
 			</view>
 			<!-- 价钱 -->
 			<view class="m-pro-message">
@@ -57,7 +61,7 @@
 						商品原价
 					</view>
 					<view class="m-price">
-						¥55.78
+						¥{{totalPrice}}
 					</view>
 				</view>
 				<view class="m-row">
@@ -65,19 +69,22 @@
 						商品优惠
 					</view>
 					<view class="m-discount">
-						-¥55.78
+						-¥{{yhPrice}}
 					</view>
 				</view>
 				<view class="m-row">
 					<view class="m-label">
 						优惠券
 					</view>
-					<view class="m-token">
+					<view @tap="choseTokenFn" v-if="!haveTokenCard" class="m-token" >
 						暂无可用>
+					</view>
+					<view @tap="choseTokenFn" v-else class="m-token active" >
+						选择优惠券>
 					</view>
 				</view>
 				<view class="m-footer">
-					合计<view class="count">￥40.50</view>
+					合计<view class="count">￥{{payPrice}}</view>
 				</view>
 			</view>
 			<!-- 支付方式 -->
@@ -103,53 +110,206 @@
 		<!-- 确定支付按钮 -->
 		<view class="place"></view>
 		<!-- 分割 -->
-		<view class="m-footer-but">
-			立即支付￥40.50
+		<view @tap="payFn" class="m-footer-but">
+			立即支付￥{{payPrice}}
 		</view>
 	</view>
 </template>
 
 <script>
+	/**************************************时间格式化处理************************************/
+	function dateFtt(fmt,date)   
+	{ //author: meizz   
+	  var o = {   
+		"M+" : date.getMonth()+1,                 //月份   
+		"d+" : date.getDate(),                    //日   
+		"h+" : date.getHours(),                   //小时   
+		"m+" : date.getMinutes(),                 //分   
+		"s+" : date.getSeconds(),                 //秒   
+		"q+" : Math.floor((date.getMonth()+3)/3), //季度   
+		"S"  : date.getMilliseconds()             //毫秒   
+	  };   
+	  if(/(y+)/.test(fmt))   
+		fmt=fmt.replace(RegExp.$1, (date.getFullYear()+"").substr(4 - RegExp.$1.length));   
+	  for(var k in o)   
+		if(new RegExp("("+ k +")").test(fmt))   
+	  fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));   
+	  return fmt;   
+	}
 	import mMap from '@/components/m-map'
 	import mOrderPro from '@/components/m-order-pro'
+	import ruiDatePicker from '@/components/rattenking-dtpicker/rattenking-dtpicker.vue';
 	export default {
 		components:{
 			mMap,
-			mOrderPro
+			mOrderPro,
+			ruiDatePicker
 		},
 		data() {
 			return {
-				paytype:"",//支付方式
+				today:dateFtt("yyyy-MM-dd hh:mm",new Date()),
+				aboutPickingTime:dateFtt("yyyy-MM-dd hh:mm",new Date()),//预约时间
+				reserveTel:"17600802360",// 预约手机号
+				paytype:"wx",//支付方式
+				// userid:"",
+				type:"",//是否是拼团订单
 				latitude: 39.909,
 				longitude: 116.39742,
+				
+				shopCarList:[],
+				totalCount:0,
+				//结算start
+				totalPrice:"",
+				couponPrice:"",
+				yhPrice:"",
+				discount:0,
+				payPrice:0,
+				couponId:0,
+				// 结算end
+				// 优惠券start
+				haveTokenCard:false
+				// 优惠券end
 			};
 		},
 		methods:{
+			// 选择优惠券
+			choseTokenFn(){
+				uni.navigateTo({
+					url:"/pages/order/tokens?storeid="+this.storeid
+				})
+			},
 			paytypeFn(type){
 				this.paytype=type;
-			}	
+			},
+			// 购物车数据
+			getData(option){
+				console.log(option);
+				let _this= this;
+				this.storeid=option.storeid;
+				// this.userid=option.userid;
+				this.totalCount=option.totalCount,
+				this.type=option.type
+				_this.mPost("/server/sc/find/cart",{
+					// userId:_this.userid
+				}).then(res=>{
+					if(res.code=='1'){
+						if(res.data){
+							_this.shopCarList=res.data;
+							_this.payInit()
+						}
+					}
+				})
+			},
+			// 优惠券
+			tokenCard(){
+				let _this=this;
+				_this.mPost("/server/co/usableCoupons",{
+					storeId:_this.storeid,
+					start:1,
+					length:1000,
+				}).then(res=>{
+					console.log(res);
+					if(res.code==1){
+						if(res.data.coupons&&res.data.coupons.length>0){
+							_this.haveTokenCard=true
+						}
+					}
+				})
+			},
+			//支付数据
+			payInit(){
+				let _this=this;
+				_this.mPost("/server/pay/calOrderPrice",{
+					storeId:_this.storeid,
+					totalCount:_this.totalCount,
+					type:_this.type,
+					// userId:_this.userid,
+					products:_this.shopCarList,
+					couponId:"",
+				}).then(res=>{
+				
+					if(res.code=='1'){
+						let data= res.data;
+						console.log(data);
+						_this.totalPrice=data.totalPrice;
+						_this.couponPrice=data.couponPrice;
+						_this.yhPrice=data.yhPrice;
+						_this.discount=data.discount;
+						_this.payPrice=data.payPrice;
+					}
+				})
+			},
+			// 立即支付
+			payFn(){
+				let _this=this;
+				let products=_this.shopCarList.map(item=>{return {
+					productId:item.id,
+					cou:item.buyCount,
+				}})
+				let sendData ={
+					storeId:_this.storeid,//门店id
+					totalCount:_this.totalCount,//商品总数量
+					type:_this.type,//标识是普通下单还是拼团下单 1：普通 2：拼团
+					couponId:_this.couponId,//优惠券id,
+					aboutPickingTime:_this.aboutPickingTime?_this.aboutPickingTime+":00":"",//预计取货时间 yyyy-MM-dd hh:mm
+					reserveTel:_this.reserveTel,//预留手机号
+					products:products//商品数组对象
+				}
+				if(_this.couponId){
+					sendData['couponId']=this.couponId;
+				}
+				if(_this.outTradeNo){
+					sendData['outTradeNo']=this.outTradeNo; //订单id，第一次下单不需要，待支付订单支付时需要传入
+				}
+				_this.mPost("/server/pay/wxpay",sendData).then(res=>{
+					if(res.code==1){
+						let data = res.data;
+						// 调起支付
+							let _package = data.prepay_id;
+							console.log('支付');
+							console.log(JSON.stringify({provider: 'wxpay',
+								timeStamp: data.timeStamp+'',
+								nonceStr: data.nonceStr,
+								signType: data.signType,
+								paySign: data.paySign,
+								package: 'prepay_id='+_package,
+								orderNumber:data.orderNumber,
+								// prepay_id:data.prepay_id,
+								appId:data.appId}))
+							uni.requestPayment({
+								provider: 'wxpay',
+								timeStamp: data.timeStamp+'',
+								nonceStr: data.nonceStr,
+								signType: data.signType,
+								paySign: data.paySign,
+								package: 'prepay_id='+_package,
+								orderNumber:data.orderNumber,
+								prepay_id:data.prepay_id,
+								appId:data.appId,
+								success: function(res) {
+									console.log('success:' + JSON.stringify(res));
+								},
+								fail: function(err) {
+									console.log('fail:' + JSON.stringify(err));
+								}
+							});
+					}
+				})
+			}
 		},
 		onLoad(option){
-			this.storeid=option.storeid;
+			let _this = this;
 			uni.getLocation({//获取当前的位置坐标
 				type: 'wgs84',
 				success: function (res) {
-					alert('当前位置的经度：' + res.longitude);
-					alert('当前位置的纬度：' + res.latitude);
+					_this.latitude=res.latitude;
+					_this.longitude=res.longitude
 				}
-			});  
-			this.mPost("/server/sc/find/cart",{
-				userId:1
-			}).then(res=>{
-				console.log(res);
-				if(res.code=='1'){
-					if(res.data){
-						_this.shopCarList=res.data;
-						// 购物车总商品数，与总价格计算
-						_this.shopCarCount();
-					}
-				}
-			})
+			});
+			//购买商品清单
+			this.getData(option);
+			//商家优惠券
+			this.tokenCard();
 		}
 	}
 </script>
@@ -232,6 +392,15 @@
 						.m-light{
 							color:$color-5;
 							font-size: $fontsize-6;
+							height: 40upx;
+							display: flex;
+							justify-content:flex-start;
+							align-items: center;
+							input{
+								height: 40upx;
+								justify-content:flex-start;
+								align-items: center;
+							}
 						}
 						&:last-child{
 							border-left: 1px solid $color-border2;
@@ -323,6 +492,9 @@
 			}
 			.m-token{
 				color:#a7a7a7;
+				&.m-token{
+					color:$color-active;
+				}
 			}
 		}
 		.m-footer{

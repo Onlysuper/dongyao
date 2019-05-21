@@ -4,16 +4,16 @@
 			<view class="m-price">
 				￥
 				<view class="num">
-					25
+					{{price}}
 				</view>
 			</view>
 			<view class="m-time">
 				<view class="m-text">
-					通用卷
+					{{name}}
 				</view>
 				<view class="">
 					<view class="status">
-						还有4天到期
+						还有{{days}}天到期
 					</view>
 				</view>
 			</view>
@@ -23,18 +23,19 @@
 				<view class="">
 					使用规则
 				</view>
-				<view @tap="describeVisible=!describeVisible"class="">
-					<image v-if="describeVisible" style="width: 26upx;height: 12upx;" src="../../../static/img/icon/home_icon_down1.png" mode=""></image>
-					<image v-if="!describeVisible" style="width: 26upx;height: 12upx;" src="../../../static/img/icon/home_icon_down1.png" mode=""></image>
+				<view @tap="describeVisible=!describeVisible" class="icon-box">
+					<image v-if="describeVisible" style="width: 26upx;height: 12upx;" :src="downimg1" mode=""></image>
+					<image v-if="!describeVisible" style="width: 26upx;height: 12upx;" :src="downimg2" mode=""></image>
 				</view>
 			</view>
 			<view v-show="describeVisible" class="m-describe">
+				
 				<view class="">
-					1.请在北京限定地区范围进行使用
+					{{describe}}
 				</view>
-				<view class="">
+				<!-- <view class="">
 					2.请在北京限定地区范围进行使用
-				</view>
+				</view> -->
 			</view>
 		</view>
 	</view>
@@ -47,6 +48,30 @@
 			state:{
 				type:String,
 				value:"",
+			},
+			name:{
+				type:String,
+				value:"",
+			},
+			downimg1:{
+				type:String,
+				value:"",
+			},
+			downimg2:{
+				type:String,
+				value:"",
+			},
+			price:{
+				type:[String,Number],
+				value:"",
+			},
+			days:{
+				type:[String,Number],
+				value:0,
+			},
+			describe:{
+				type:[String,Number,Array],
+				value:0,
 			}
 		},
 		data() {
@@ -144,7 +169,16 @@
 			justify-content: space-between;
 			font-size: $fontsize-6;
 			color:$color-4;
-			padding:20upx 0;
+			height: 50upx;
+			align-items: center;
+			.icon-box{
+				width: 80upx;
+				height: 100%;
+				text-align: right;
+				display: flex;
+				align-items: center;
+				justify-content: flex-end;
+			}
 		}
 		.m-describe{
 			font-size: $fontsize-7;

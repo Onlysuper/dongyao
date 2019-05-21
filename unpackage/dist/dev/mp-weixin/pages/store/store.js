@@ -473,12 +473,41 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 
 
 
+
 {
   name: "m-store-pro",
   props: {
     rowData: {
       type: Object,
-      rowData: {} } },
+      rowData: {} },
+
+    pictureUrl: {
+      type: [String, Number],
+      default: "" },
+
+    isAssemble: {
+      type: [String, Number],
+      default: "" },
+
+    synopsis: {
+      type: [String, Number],
+      default: "" },
+
+    labelNames: {
+      type: [String, Number],
+      default: "" },
+
+    presentPrice: {
+      type: [String, Number],
+      default: "" },
+
+    originalPrice: {
+      type: [String, Number],
+      default: "" },
+
+    isadd: {
+      type: [String, Number],
+      default: "" } },
 
 
   methods: {
@@ -486,7 +515,6 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
       this.$emit("proDetail", this.rowData);
     },
     touchOnGoods: function touchOnGoods(e) {
-      console.log(this.rowData.synopsis);
       this.$emit("touchOnGoods", {
         data: this.rowData,
         elem: e });
@@ -494,8 +522,8 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
     } },
 
   data: function data() {
-    return {};
-
+    return {
+      isAdd: false };
 
   } };exports.default = _default;
 
@@ -716,6 +744,44 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 var _mFooterCar = _interopRequireDefault(__webpack_require__(/*! @/components/m-footer-car */ "../../../../../../Users/apple/opt/DONGYAO/components/m-footer-car.vue"));
 var _mStorePro = _interopRequireDefault(__webpack_require__(/*! @/components/m-store-pro */ "../../../../../../Users/apple/opt/DONGYAO/components/m-store-pro.vue"));
 var _uniNumberBox = _interopRequireDefault(__webpack_require__(/*! @/components/uni-number-box/uni-number-box.vue */ "../../../../../../Users/apple/opt/DONGYAO/components/uni-number-box/uni-number-box.vue"));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function _objectSpread(target) {for (var i = 1; i < arguments.length; i++) {var source = arguments[i] != null ? arguments[i] : {};var ownKeys = Object.keys(source);if (typeof Object.getOwnPropertySymbols === 'function') {ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) {return Object.getOwnPropertyDescriptor(source, sym).enumerable;}));}ownKeys.forEach(function (key) {_defineProperty(target, key, source[key]);});}return target;}function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}function _toConsumableArray(arr) {return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread();}function _nonIterableSpread() {throw new TypeError("Invalid attempt to spread non-iterable instance");}function _iterableToArray(iter) {if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter);}function _arrayWithoutHoles(arr) {if (Array.isArray(arr)) {for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) {arr2[i] = arr[i];}return arr2;}}
@@ -769,7 +835,7 @@ function bezier(pots, amount) {
 
   data: function data() {
     return {
-      userid: 0,
+      // userid:1,
       shopCarList: [],
       shopCarListLength: 0,
       shopCarListPrice: 0,
@@ -786,7 +852,7 @@ function bezier(pots, amount) {
       timer: null,
       // 购物车动画end
       carPrice: "10",
-      carNum: "10",
+      carNum: 10,
       specClass: '', //规格弹窗css类，控制开关动画
       showCategoryIndex: 0,
       //分类列表
@@ -807,6 +873,11 @@ function bezier(pots, amount) {
   computed: {},
 
   methods: {
+    // 			isAdd(id){
+    // 				let _index = this.shopCarList.findIndex(item=>item.id==id);
+    // 				console.log('cunzai'+_index);
+    // 				return (_index!=-1);
+    // 			},
     //产品详情
     proDetail: function proDetail(data) {
       uni.navigateTo({
@@ -821,9 +892,9 @@ function bezier(pots, amount) {
     },
     // 去结算
     payFn: function payFn() {
-      var type = "0";
+      var type = 1;
       uni.navigateTo({
-        url: "/pages/order/pay?storeid=" + this.storeid + "&totalCount=" + this.carNum + "&type" + type + "&userid" + this.userid });
+        url: "/pages/order/pay?storeid=" + this.storeid + "&totalCount=" + this.carNum + "&type=" + type + "&userid=" + this.userid });
 
     },
     halfWidth: function halfWidth(num) {
@@ -831,7 +902,6 @@ function bezier(pots, amount) {
     },
     // 加入购物车
     touchOnGoods: function touchOnGoods(obj) {
-      console.log(obj);
       var e = obj.elem;
       var data = obj.data;
       if (this.timer) {// 清除一下动画
@@ -895,18 +965,23 @@ function bezier(pots, amount) {
       this.showCategoryIndex = index;
     },
     // 获取购物车列表信息
-    showShopCar: function showShopCar() {
+    showShopCar: function showShopCar() {var _this3 = this;
       var _this = this;
       this.mPost("/server/sc/find/cart", {
-        userId: 1 }).
-      then(function (res) {
+        // userId:this.userid
+      }).then(function (res) {
         if (res.code == '1') {
           if (res.data) {
             var data = _toConsumableArray(res.data);
             data = data.map(function (item) {
               var _id = item.id;
+              // 产品列表商品是否出现在购物车中
+              _this3.productList.find(function (pro) {return pro.id = _id;})['isadd'] = true;
+              console.log(_this3.productLis);
+              _this3.productLis = _this3.productLis;
               return _objectSpread({ stock: _this.productList.find(function (pro) {return pro.id == _id;})['stock'] }, item);
             });
+
             _this.shopCarList = data;
             // 购物车总商品数，与总价格计算
             _this.shopCarCount();
@@ -918,8 +993,8 @@ function bezier(pots, amount) {
     clearShopcar: function clearShopcar() {
       var _this = this;
       _this.mPost("/server/sc/delete/all", {
-        userId: 1 }).
-      then(function (res) {
+        // userId:this.userid
+      }).then(function (res) {
         if (res.code == '1') {
           console.log('这里');
           _this.shopCarList = [];
@@ -930,13 +1005,13 @@ function bezier(pots, amount) {
       });
     },
     //关闭规格弹窗
-    hideSpec: function hideSpec() {var _this3 = this;
+    hideSpec: function hideSpec() {var _this4 = this;
       this.specClass = 'hide';
       //回调
       this.selectSpec && this.specCallback && this.specCallback();
       this.specCallback = false;
       setTimeout(function () {
-        _this3.specClass = 'none';
+        _this4.specClass = 'none';
       }, 200);
     },
     //规格弹窗
@@ -976,12 +1051,14 @@ function bezier(pots, amount) {
     },
     // 加入购物车
     addGoodSum: function addGoodSum(_data) {var num = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1;var type = arguments.length > 2 ? arguments[2] : undefined;
+      console.log(_data);
       var _id = _data.id;
       var data = this.productList.find(function (item) {return item.id == _id;});
       var _this = this;
       var buyCount = num;
       var objIndex = this.shopCarList.findIndex(function (item) {return item.id == _id;});
       if (objIndex != -1 && type == 'add') {
+        console.log();
         buyCount = this.shopCarList.find(function (item) {return item.id == _id;})['buyCount'] + 1;
       }
       if (buyCount > data.stock) {
@@ -990,10 +1067,9 @@ function bezier(pots, amount) {
           icon: "none" });
 
         buyCount = data.stock;
-        // this.shopCarList.find(item=>item.id==_id)['buyCount']=buyCount;
       }
       _this.mPost("/server/sc/add/product", {
-        userId: 1,
+        // userId:this.userid,
         productId: data.id,
         buyCount: buyCount }).
       then(function (res) {
@@ -1001,10 +1077,15 @@ function bezier(pots, amount) {
           _this.showShopCar();
         }
       }).catch(function (err) {
-        console.log(err);
+        uni.showToast({
+          title: "操作失败，请检查网络",
+          icon: "none" });
+
       });
     },
     buyNumChange: function buyNumChange(data) {
+      console.log('start');
+      console.log(data);
       // console
       var num = data.num;
       this.addGoodSum(data, num, 'change');
@@ -1021,8 +1102,6 @@ function bezier(pots, amount) {
         return obj;
       });
       products = JSON.stringify(products);
-      console.log(products);
-
       _this.mPost("/server/p/calProductsPrice", products).then(function (res) {
         if (res.code == 1) {
           _this.shopCarListPrice = res.data.totalPrice;
@@ -1040,7 +1119,7 @@ function bezier(pots, amount) {
     } },
 
 
-  onLoad: function onLoad(option) {var _this4 = this;
+  onLoad: function onLoad(option) {var _this5 = this;
     this.storeid = option.storeid;
     this.busHandle();
     // 商家基本信息
@@ -1048,14 +1127,14 @@ function bezier(pots, amount) {
       id: option.storeid }).
     then(function (res) {
       if (res.code == '1') {
-        _this4.storeData = res.data;
+        _this5.storeData = res.data;
       }
     });
     //商品分类
     this.mPost("/server/t/types", {}).
     then(function (res) {
       if (res.code == '1') {
-        _this4.storeMenu = res.data;
+        _this5.storeMenu = res.data;
       }
     });
     // 默认显示第一个分类的产品
@@ -1195,7 +1274,7 @@ var render = function() {
             height: "100%",
             "border-radius": "100%"
           },
-          attrs: { src: _vm.rowData.pictureUrl, mode: "aspectFill" }
+          attrs: { src: _vm.pictureUrl, mode: "aspectFill" }
         }),
         _vm.isAssemble == 1
           ? _c("view", { staticClass: "m-pin" }, [_vm._v("可拼团")])
@@ -1210,33 +1289,41 @@ var render = function() {
         on: { tap: _vm.proDetail }
       },
       [
-        _c("view", { staticClass: "m-title" }, [
-          _vm._v(_vm._s(_vm.rowData.synopsis))
-        ]),
+        _c("view", { staticClass: "m-title" }, [_vm._v(_vm._s(_vm.synopsis))]),
         _c("view", { staticClass: "m-descripe" }, [
-          _vm._v(_vm._s(_vm.rowData.labelName))
+          _vm._v(_vm._s(_vm.labelName))
         ]),
         _c("view", { staticClass: "m-price" }, [
-          _vm._v(_vm._s(_vm.rowData.presentPrice))
+          _vm._v(_vm._s(_vm.presentPrice))
         ]),
         _c("view", { staticClass: "m-old-price" }, [
           _vm._v("非会员价"),
           _c("view", { staticClass: "m-num" }, [
-            _vm._v(_vm._s(_vm.rowData.originalPrice))
+            _vm._v(_vm._s(_vm.originalPrice))
           ])
         ])
       ]
     ),
     _c("view", { staticClass: "m-distance" }, [
-      _c("image", {
-        staticStyle: { width: "40rpx", height: "40rpx" },
-        attrs: {
-          src: "../../static/img/icon/shop_icon_buy.png",
-          mode: "aspectFit",
-          eventid: "6c868792-2"
-        },
-        on: { tap: _vm.touchOnGoods }
-      })
+      !_vm.isAdd
+        ? _c("image", {
+            staticStyle: { width: "40rpx", height: "40rpx" },
+            attrs: {
+              src: "../../static/img/icon/shop_icon_buy.png",
+              mode: "aspectFit",
+              eventid: "6c868792-3"
+            },
+            on: { tap: _vm.touchOnGoods }
+          })
+        : _c("image", {
+            staticStyle: { width: "40rpx", height: "40rpx" },
+            attrs: {
+              src: "../../static/img/icon/shop_icon_buy_chose.png",
+              mode: "aspectFit",
+              eventid: "6c868792-2"
+            },
+            on: { tap: _vm.touchOnGoods }
+          })
     ])
   ])
 }
@@ -1425,6 +1512,13 @@ var render = function() {
                         _c("m-store-pro", {
                           attrs: {
                             rowData: category,
+                            pictureUrl: category.pictureUrl,
+                            isAssemble: category.isAssemble,
+                            synopsis: category.synopsis,
+                            labelName: category.labelName,
+                            presentPrice: category.presentPrice,
+                            originalPrice: category.originalPrice,
+                            isadd: category.isadd,
                             eventid: "05dd8904-2-" + index,
                             mpcomid: "05dd8904-0-" + index
                           },

@@ -268,14 +268,14 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("view", { staticClass: "m-login-page" }, [
     _c("view", { staticClass: "m-img-box" }, [_vm._v("东尧蔬菜")]),
-    _c("view", {}, [
+    _c("view", { staticClass: "describe" }, [
       _vm._v(
         "您暂未授权'东尧蔬菜'小程序获取你的信息，讲无法正常使用小程序的功能。\n\t\t如果需要正常使用，请点击\"授权\"按钮，打开头像，昵称等信息的权限"
       )
     ]),
     _c(
       "view",
-      {},
+      { staticClass: "m-but" },
       [
         _c(
           "button",

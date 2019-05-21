@@ -113,7 +113,7 @@ __webpack_require__.r(__webpack_exports__);
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;function _objectSpread(target) {for (var i = 1; i < arguments.length; i++) {var source = arguments[i] != null ? arguments[i] : {};var ownKeys = Object.keys(source);if (typeof Object.getOwnPropertySymbols === 'function') {ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) {return Object.getOwnPropertyDescriptor(source, sym).enumerable;}));}ownKeys.forEach(function (key) {_defineProperty(target, key, source[key]);});}return target;}function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}var _default =
+/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;
 
 
 
@@ -131,9 +131,11 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+var _event = _interopRequireDefault(__webpack_require__(/*! ../../common/event.js */ "../../../../../../Users/apple/opt/DONGYAO/common/event.js"));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function _objectSpread(target) {for (var i = 1; i < arguments.length; i++) {var source = arguments[i] != null ? arguments[i] : {};var ownKeys = Object.keys(source);if (typeof Object.getOwnPropertySymbols === 'function') {ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) {return Object.getOwnPropertyDescriptor(source, sym).enumerable;}));}ownKeys.forEach(function (key) {_defineProperty(target, key, source[key]);});}return target;}function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}var _default =
 {
   data: function data() {
     return {
+      backurl: '', //返回的路径
       SessionKey: '',
       OpenId: '',
       nickName: null,
@@ -144,12 +146,13 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     // 返回
     goback: function goback() {
-      var pageIndex = getCurrentPages() - 2;
-      uni.navigateBack({
-        delta: pageIndex });
+      // 				console.log('返回');
+      // 				Event.noticeFun(Event.UPDATA_USER, {userdata:"一只老萌"})
+      var backurl = this.backurl || "/pages/tabBar/user";
+      uni.reLaunch({
+        url: backurl });
 
     },
-
     //手机号储存
     getPhoneNumber: function getPhoneNumber(e) {
       var _this = this;
@@ -177,8 +180,11 @@ __webpack_require__.r(__webpack_exports__);
       }
     } },
 
-  onLoad: function onLoad() {
-
+  onLoad: function onLoad(option) {
+    this.backurl = option.backurl;
+  },
+  getCurrentPages: function getCurrentPages() {
+    console.log('这里');
   } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ "./node_modules/@dcloudio/uni-mp-weixin/dist/index.js")["default"]))
 

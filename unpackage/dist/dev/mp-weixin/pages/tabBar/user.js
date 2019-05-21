@@ -487,7 +487,8 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 
 
 var _mVipTop = _interopRequireDefault(__webpack_require__(/*! @/components/m-vip-top */ "../../../../../../Users/apple/opt/DONGYAO/components/m-vip-top.vue"));
-var _mCell = _interopRequireDefault(__webpack_require__(/*! @/components/m-cell */ "../../../../../../Users/apple/opt/DONGYAO/components/m-cell.vue"));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}var _default =
+var _mCell = _interopRequireDefault(__webpack_require__(/*! @/components/m-cell */ "../../../../../../Users/apple/opt/DONGYAO/components/m-cell.vue"));
+var _event = _interopRequireDefault(__webpack_require__(/*! ../../common/event.js */ "../../../../../../Users/apple/opt/DONGYAO/common/event.js"));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}var _default =
 {
   components: {
     mVipTop: _mVipTop.default,
@@ -502,15 +503,22 @@ var _mCell = _interopRequireDefault(__webpack_require__(/*! @/components/m-cell 
   methods: {
 
     linkToTab: function linkToTab(url) {
-
       uni.switchTab({
         url: url });
 
     },
     // 跳转
-    linkTo: function linkTo(url) {
-      uni.navigateTo({
-        url: url });
+    linkTo: function linkTo(url, name) {
+      if (name == 'login') {
+        var backurl = encodeURI("/pages/tabBar/user");
+        uni.redirectTo({
+          url: url + '?back=' + backurl });
+
+      } else {
+        uni.navigateTo({
+          url: url });
+
+      }
 
     },
     // 查看详情
@@ -535,8 +543,19 @@ var _mCell = _interopRequireDefault(__webpack_require__(/*! @/components/m-cell 
     } },
 
   onLoad: function onLoad() {
+    // console.log('1111');
     this.checkLogin();
-  } };exports.default = _default;
+    // Event.addNoticeFun(Event.UPDATA_USER, "TEST", this)
+  },
+  onShow: function onShow() {
+    // console.log('1111');
+    this.checkLogin();
+    // Event.addNoticeFun(Event.UPDATA_USER, "TEST", this)
+  }
+  // 		onUnload(){
+  // 			Event.removeNoticeFun(Event.UPDATA_USER)
+  // 		}
+};exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ "./node_modules/@dcloudio/uni-mp-weixin/dist/index.js")["default"]))
 
 /***/ }),
@@ -709,26 +728,38 @@ var render = function() {
   return _c("view", { staticClass: "m-user-page" }, [
     _c("view", { staticClass: "m-header" }, [
       _vm.isLogin
-        ? _c("view", { staticClass: "m-user" }, [
-            _c("view", { staticClass: "m-img" }, [
-              _c("image", {
-                staticStyle: { width: "100%", height: "100%" },
-                attrs: { src: _vm.userData.avatarUrl, mode: "aspectFit" }
-              })
-            ]),
-            _c("view", { staticClass: "m-text" }, [
-              _c("view", { staticClass: "m-username" }, [
-                _vm._v(_vm._s(_vm.userData.nickName))
-              ]),
-              _c("image", {
-                staticStyle: { width: "57rpx", height: "33rpx" },
-                attrs: {
-                  src: "../../static/img/icon/me_icon_VIP_lose.png",
-                  mode: "aspectFit"
+        ? _c(
+            "view",
+            {
+              staticClass: "m-user",
+              attrs: { eventid: "09ce8447-1" },
+              on: {
+                tap: function($event) {
+                  _vm.linkTo("/pages/login/login", "login")
                 }
-              })
-            ])
-          ])
+              }
+            },
+            [
+              _c("view", { staticClass: "m-img" }, [
+                _c("image", {
+                  staticStyle: { width: "100%", height: "100%" },
+                  attrs: { src: _vm.userData.avatarUrl, mode: "aspectFit" }
+                })
+              ]),
+              _c("view", { staticClass: "m-text" }, [
+                _c("view", { staticClass: "m-username" }, [
+                  _vm._v(_vm._s(_vm.userData.nickName))
+                ]),
+                _c("image", {
+                  staticStyle: { width: "57rpx", height: "33rpx" },
+                  attrs: {
+                    src: "../../static/img/icon/me_icon_VIP_lose.png",
+                    mode: "aspectFit"
+                  }
+                })
+              ])
+            ]
+          )
         : _c(
             "view",
             {
@@ -736,7 +767,7 @@ var render = function() {
               attrs: { eventid: "09ce8447-0" },
               on: {
                 tap: function($event) {
-                  _vm.linkTo("/pages/login/login")
+                  _vm.linkTo("/pages/login/login", "login")
                 }
               }
             },
@@ -746,7 +777,7 @@ var render = function() {
         "view",
         {
           staticClass: "m-card",
-          attrs: { eventid: "09ce8447-1" },
+          attrs: { eventid: "09ce8447-2" },
           on: {
             tap: function($event) {
               _vm.linkTo("/pages/user/vip/vip")
@@ -772,7 +803,7 @@ var render = function() {
             "view",
             {
               staticClass: "right",
-              attrs: { eventid: "09ce8447-2" },
+              attrs: { eventid: "09ce8447-3" },
               on: {
                 tap: function($event) {
                   _vm.linkToTab("/pages/tabBar/order")
@@ -794,7 +825,7 @@ var render = function() {
               attrs: {
                 label: "我的优惠券",
                 link: true,
-                eventid: "09ce8447-3",
+                eventid: "09ce8447-4",
                 mpcomid: "09ce8447-1"
               },
               on: {
@@ -819,7 +850,7 @@ var render = function() {
               attrs: {
                 label: "关于我们",
                 link: true,
-                eventid: "09ce8447-4",
+                eventid: "09ce8447-5",
                 mpcomid: "09ce8447-2"
               },
               on: {

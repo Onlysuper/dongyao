@@ -44,7 +44,45 @@
 				<view class="category"> 
 					<view class="list">
 						<view class="box" v-for="(category) in productList" :key="category.id">
-							<m-store-pro @proDetail="proDetail" @touchOnGoods="touchOnGoods" :rowData="category"></m-store-pro>
+							<!-- aa -->
+							<!-- <view class="m-store-item">
+								<view class="m-img" @tap="proDetail">
+									<image style="width: 100%;height: 100%;border-radius: 100%;" :src="rowData.pictureUrl" mode="aspectFill"></image>
+									<view v-if="isAssemble==1" class="m-pin">
+										可拼团
+									</view>
+								</view>
+								<view class="m-text"  @tap="proDetail">
+									<view class="m-title">
+										{{rowData.synopsis}}
+									</view>
+									<view class="m-descripe">
+										{{rowData.labelName}}
+									</view>
+									<view class="m-price">
+										{{rowData.presentPrice}}
+									</view>
+									<view class="m-old-price">
+										非会员价
+										<view class="m-num">
+											{{rowData.originalPrice}}
+										</view>
+									</view>
+								</view>
+								<view class="m-distance">
+									<image @tap="touchOnGoods" style="width:40upx;height: 40upx;" src="../../static/img/icon/shop_icon_buy.png" mode="aspectFit"></image>
+								</view>
+							</view> -->
+							<m-store-pro
+							 :rowData="category"
+							 :pictureUrl="category.pictureUrl"
+							 :isAssemble="category.isAssemble"
+							 :synopsis="category.synopsis"
+							 :labelName="category.labelName"
+							 :presentPrice="category.presentPrice"
+							 :originalPrice="category.originalPrice"
+							 :isadd="category.isadd"
+							 @proDetail="proDetail" @touchOnGoods="touchOnGoods" ></m-store-pro>
 						</view>
 					</view>
 				</view>
@@ -146,7 +184,7 @@
 		},
 		data() {
 			return {
-				userid:0,
+				// userid:1,
 				shopCarList:[],
 				shopCarListLength:0,
 				shopCarListPrice:0,
@@ -163,7 +201,7 @@
 				 timer:null,
 				// 购物车动画end
 				carPrice:"10",
-				carNum:"10",
+				carNum:10,
 				specClass: '',//规格弹窗css类，控制开关动画
 				showCategoryIndex:0,
 				//分类列表
@@ -184,6 +222,11 @@
 		computed:{
 		},
 		methods:{
+// 			isAdd(id){
+// 				let _index = this.shopCarList.findIndex(item=>item.id==id);
+// 				console.log('cunzai'+_index);
+// 				return (_index!=-1);
+// 			},
 			//产品详情
 			proDetail(data){
 				uni.navigateTo({
@@ -198,9 +241,9 @@
 			},
 			// 去结算
 			payFn(){
-				let type="0"
+				let type=1
 				uni.navigateTo({
-					url:"/pages/order/pay?storeid="+this.storeid+"&totalCount="+this.carNum+"&type"+type+"&userid"+this.userid
+					url:"/pages/order/pay?storeid="+this.storeid+"&totalCount="+this.carNum+"&type="+type+"&userid="+this.userid
 				})
 			},
 			halfWidth(num){
@@ -208,7 +251,6 @@
 			},
 			// 加入购物车
 			touchOnGoods(obj){
-				console.log(obj);
 				const e = obj.elem;
 				const data = obj.data;
 				if(this.timer){ // 清除一下动画
@@ -275,15 +317,20 @@
 			showShopCar(){
 				let _this = this;
 				this.mPost("/server/sc/find/cart",{
-					userId:1
+					// userId:this.userid
 				}).then(res=>{
 					if(res.code=='1'){
 						if(res.data){
 							let data=[...res.data];
 							data = data.map(item=>{
 								let _id = item.id;
+								// 产品列表商品是否出现在购物车中
+								this.productList.find(pro=>pro.id=_id)['isadd']=true;
+								console.log(this.productLis);
+								this.productLis=this.productLis;
 								return {stock:_this.productList.find(pro=>pro.id==_id)['stock'],...item};
 							})
+							
 							_this.shopCarList=data;
 							// 购物车总商品数，与总价格计算
 							_this.shopCarCount();
@@ -295,7 +342,7 @@
 			clearShopcar(){
 				let _this = this;
 				_this.mPost("/server/sc/delete/all",{
-					userId:1
+					// userId:this.userid
 				}).then(res=>{
 					if(res.code=='1'){
 						console.log('这里');
@@ -353,12 +400,14 @@
 			},
 			// 加入购物车
 			addGoodSum(_data,num=1,type){
+				console.log(_data);
 				let _id = _data.id;
 				let data= this.productList.find(item=>item.id==_id);
 				let _this=this;
 				let buyCount=num;
 				let objIndex = this.shopCarList.findIndex(item=>item.id==_id);
 				if(objIndex!=-1 && type=='add'){
+					console.log()
 					buyCount=this.shopCarList.find(item=>item.id==_id)['buyCount']+1;
 				}
 				if(buyCount>data.stock){
@@ -367,10 +416,9 @@
 						icon: "none"
 					});
 					buyCount=data.stock;
-					// this.shopCarList.find(item=>item.id==_id)['buyCount']=buyCount;
 				}
 				_this.mPost("/server/sc/add/product",{
-					userId:1,
+					// userId:this.userid,
 					productId:data.id,
 					buyCount:buyCount
 				}).then(res=>{
@@ -378,10 +426,15 @@
 						_this.showShopCar();
 					}
 				}).catch(err=>{
-					console.log(err)
+					uni.showToast({
+						title:  "操作失败，请检查网络",
+						icon: "none"
+					});
 				})
 			},
 			buyNumChange(data){
+				console.log('start');
+				console.log(data);
 				// console
 				let num = data.num;
 				this.addGoodSum(data,num,'change')
@@ -398,8 +451,6 @@
 							  return obj  
 							});  
 				products = JSON.stringify(products);
-				console.log(products);
-				
 				_this.mPost("/server/p/calProductsPrice",products).then(res=>{
 					if(res.code==1){
 						_this.shopCarListPrice=res.data.totalPrice;

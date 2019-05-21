@@ -36,4 +36,9 @@
     background: #44b78d;
     margin-top: 30rpx;
 }
+.m-login-page .describe {
+    color: #4c4c4c;
+    font-size: 26rpx;
+    padding: 20rpx;
+}
 

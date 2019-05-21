@@ -3,7 +3,11 @@
 		<view class="fixedit">
 			<m-tab @handleFn="tabChange" :tabActive="tabActive" :rowdata="tabList"></m-tab>
 		</view>
-		<m-token-card state="normal"></m-token-card>
+		<m-token-card
+		 state="normal" days="10" price="92" name="通用卷" describe="只在北京可以使用"
+		 downimg1="../../../static/img/icon/home_icon_down1.png"
+		 downimg2="../../../static/img/icon/home_icon_down1.png"
+		 ></m-token-card>
 		<m-token-card state="history"></m-token-card>
 		<m-token-card state="lost"></m-token-card>
 		<view class="m-token-footer">

@@ -113,7 +113,7 @@ __webpack_require__.r(__webpack_exports__);
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _default =
+Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;
 
 
 
@@ -149,11 +149,19 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 
 
 
+var _event = _interopRequireDefault(__webpack_require__(/*! ../../../common/event.js */ "../../../../../../Users/apple/opt/DONGYAO/common/event.js"));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}var _default =
 {
   data: function data() {
     return {};
 
-
+  },
+  methods: {
+    // 		back(){
+    // 			Event.noticeFun(Event.UPDATA_USER, {userdata:"一只老萌"})
+    // 			uni.navigateBack({
+    // 				delta:1
+    // 			})
+    // 		}
   } };exports.default = _default;
 
 /***/ }),

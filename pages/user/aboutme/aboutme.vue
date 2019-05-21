@@ -19,7 +19,7 @@
 			</view>
 		</view>
 		<view class="m-footer">
-			<view class="m-item">
+			<view  class="m-item">
 				联系人：王先生
 			</view>
 			<view class="m-item">
@@ -34,13 +34,21 @@
 </template>
 
 <script>
-	export default {
-		data() {
-			return {
-				
-			};
-		}
+import Event from '../../../common/event.js'; 
+export default {
+	data() {
+		return {};
+		
+	},
+	methods:{
+// 		back(){
+// 			Event.noticeFun(Event.UPDATA_USER, {userdata:"一只老萌"})
+// 			uni.navigateBack({
+// 				delta:1
+// 			})
+// 		}
 	}
+}
 </script>
 
 <style lang="scss">

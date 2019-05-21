@@ -2,30 +2,31 @@
 	<!-- 门店商品图文 -->
 	<view class="m-store-item">
 		<view class="m-img" @tap="proDetail">
-			<image style="width: 100%;height: 100%;border-radius: 100%;" :src="rowData.pictureUrl" mode="aspectFill"></image>
+			<image style="width: 100%;height: 100%;border-radius: 100%;" :src="pictureUrl" mode="aspectFill"></image>
 			<view v-if="isAssemble==1" class="m-pin">
 				可拼团
 			</view>
 		</view>
 		<view class="m-text"  @tap="proDetail">
 			<view class="m-title">
-				{{rowData.synopsis}}
+				{{synopsis}}
 			</view>
 			<view class="m-descripe">
-				{{rowData.labelName}}
+				{{labelName}}
 			</view>
 			<view class="m-price">
-				{{rowData.presentPrice}}
+				{{presentPrice}}
 			</view>
 			<view class="m-old-price">
 				非会员价
 				<view class="m-num">
-					{{rowData.originalPrice}}
+					{{originalPrice}}
 				</view>
 			</view>
 		</view>
 		<view class="m-distance">
-			<image @tap="touchOnGoods" style="width:40upx;height: 40upx;" src="../../static/img/icon/shop_icon_buy.png" mode="aspectFit"></image>
+			<image v-if="!isAdd" @tap="touchOnGoods" style="width:40upx;height: 40upx;" src="../../static/img/icon/shop_icon_buy.png" mode="aspectFit"></image>
+			<image v-else @tap="touchOnGoods" style="width:40upx;height: 40upx;" src="../../static/img/icon/shop_icon_buy_chose.png" mode="aspectFit"></image>
 		</view>
 	</view>
 </template>
@@ -37,23 +38,50 @@
 			rowData:{
 				type:Object,
 				rowData:{}
+			},
+			pictureUrl:{
+				type:[String,Number],
+				default:""
+			},
+			isAssemble:{
+				type:[String,Number],
+				default:""
+			},
+			synopsis:{
+				type:[String,Number],
+				default:""
+			},
+			labelNames:{
+				type:[String,Number],
+				default:""
+			},
+			presentPrice:{
+				type:[String,Number],
+				default:""
+			},
+			originalPrice:{
+				type:[String,Number],
+				default:""
+			},
+			isadd:{
+				type:[String,Number],
+				default:""
 			}
 		},
 		methods:{
 			proDetail(e){
 				this.$emit("proDetail",this.rowData)
 			},
-		 touchOnGoods(e){
-			 console.log(this.rowData.synopsis);
-			 this.$emit("touchOnGoods",{
-				 data:this.rowData,
-				 elem : e,
-			 })
-		 }
+			touchOnGoods(e){
+				 this.$emit("touchOnGoods",{
+					 data:this.rowData,
+					 elem : e,
+				 })
+			}
 		},
 		data() {
 			return {
-				
+				isAdd:false
 			};
 		}
 	}

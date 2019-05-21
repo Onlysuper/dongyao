@@ -1,7 +1,7 @@
 <template>
 	<view class="m-user-page">
 		<view class="m-header">
-			<view v-if="isLogin" class="m-user">
+			<view @tap="linkTo('/pages/login/login','login')" v-if="isLogin" class="m-user">
 				<view class="m-img">
 					<image style="width:100%;height:100%" :src="userData.avatarUrl" mode="aspectFit"></image>
 				</view>
@@ -12,7 +12,7 @@
 					<image style="width:57upx;height:33upx" src="../../static/img/icon/me_icon_VIP_lose.png" mode="aspectFit"></image>
 				</view>
 			</view>
-			<view  @tap="linkTo('/pages/login/login')" v-else class="m-user">
+			<view  @tap="linkTo('/pages/login/login','login')" v-else class="m-user">
 				<view class="m-img">
 					<image style="width:100%;height:100%" src="../../static/img/icon/home_icon_gps.png" mode="aspectFit"></image>
 				</view>
@@ -84,6 +84,7 @@
 <script>
 	import mVipTop from '@/components/m-vip-top'
 	import mCell from '@/components/m-cell'
+	import Event from '../../common/event.js';  
 	export default {
 		components:{
 			mVipTop,
@@ -98,16 +99,23 @@
 		methods:{
 			
 			linkToTab(url){
-				
 				uni.switchTab({
 					url:url
 				})
 			},
 			// 跳转
-			linkTo(url){
-				uni.navigateTo({
-					url:url
-				})
+			linkTo(url,name){
+				if(name=='login'){
+					let backurl = encodeURI("/pages/tabBar/user");
+					uni.redirectTo({
+						url:url+'?back='+backurl 
+					})
+				}else{
+					uni.navigateTo({
+						url:url
+					})
+				}
+				
 			},
 			// 查看详情
 			vipCardDetail(){
@@ -131,8 +139,18 @@
 			}
 		},
 		onLoad(){
+			// console.log('1111');
 			this.checkLogin();
+			// Event.addNoticeFun(Event.UPDATA_USER, "TEST", this)
+		},
+		onShow(){
+			// console.log('1111');
+			this.checkLogin();
+			// Event.addNoticeFun(Event.UPDATA_USER, "TEST", this)
 		}
+// 		onUnload(){
+// 			Event.removeNoticeFun(Event.UPDATA_USER)
+// 		}
 	}
 </script>
 <style lang="scss">

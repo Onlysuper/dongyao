@@ -3,11 +3,11 @@
 		<view class="m-img-box">
 			东尧蔬菜
 		</view>
-		<view class="">
+		<view class="describe">
 			您暂未授权'东尧蔬菜'小程序获取你的信息，讲无法正常使用小程序的功能。
 			如果需要正常使用，请点击"授权"按钮，打开头像，昵称等信息的权限
 		</view>
-		<view class="">
+		<view class="m-but">
 			<!-- #ifdef MP-WEIXIN -->  
 			<button type="primary" open-type="getUserInfo" @getuserinfo="getuserinfo" withCredentials="true">授权</button>
 			<!-- <button @tap="goback" style="margin-top: 20upx;">取消</button> -->
@@ -125,6 +125,7 @@
 </script>
 
 <style lang="scss">
+@import "../../common/globel.scss";
 .m-login-page{
 	padding:  30upx;
 	.m-img-box{
@@ -135,6 +136,11 @@
 	.m-but{
 		background: rgb(68, 183, 141);
 		margin-top: 30upx;
+	}
+	.describe{
+		color:$color-5;
+		font-size: $fontsize-4;
+		padding: 20upx;
 	}
 	
 }

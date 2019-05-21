@@ -10,15 +10,15 @@
 				</view>
 				<view class="m-price-box">
 					<view class="m-price">
-					{{price}}
+					￥{{price}}
 					</view>
 					<view class="m-oldprice">
-					{{oldprice}}
+					￥{{oldprice}}
 					</view>
 				</view>
 			</view>
 			<view class="m-num-box">
-				X3
+				X{{num}}
 			</view>
 		</view>
 	</view>
@@ -32,6 +32,10 @@
 				type:String,
 				value:"",
 			},
+			num:{
+				type:[String,Number],
+				value:"",
+			},
 			price:{
 				type:String,
 				value:"",
@@ -40,6 +44,7 @@
 				type:String,
 				value:"",
 			},
+			
 			imgurl:{
 				type:String,
 				value:"",

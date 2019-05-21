@@ -7,6 +7,7 @@ Vue.config.productionTip = false
 Vue.prototype.apiurl = 'https://dy.gantangerbus.com/dy'; 
 var Authorization =uni.getStorageSync('Authorization');
 // console.log(Authorization);
+
 Vue.prototype.mGet = function(url,data){
 	let _this=this;
 	return new Promise(function(resolve, reject){
@@ -41,7 +42,6 @@ Vue.prototype.mPost = function(url,data,host){
 	if(host){
 		baseurl=host+url
 	}
-	
 	return new Promise(function(resolve, reject){
 		uni.request({
 			url:baseurl,

@@ -8,6 +8,9 @@
 		},
 		onHide: function () {
 			console.log('App Hide')
+		},
+		onBackPress:function(){
+			console.log('返回');
 		}
 	}
 	global.isLogin = function(){

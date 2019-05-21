@@ -16,9 +16,11 @@
 </template>
 
 <script>
+	import Event from '../../common/event.js'; 
 	export default {
 		data() {
 			return {
+				backurl:'',//返回的路径
 				SessionKey: '',
 				OpenId: '',
 				nickName: null,
@@ -29,12 +31,13 @@
 		methods:{
 			// 返回
 			goback(){
-				let pageIndex= getCurrentPages()-2;
-				uni.navigateBack({
-					delta:pageIndex
+// 				console.log('返回');
+// 				Event.noticeFun(Event.UPDATA_USER, {userdata:"一只老萌"})
+				let backurl = this.backurl ||"/pages/tabBar/user"
+				uni.reLaunch({
+					url:backurl
 				})
 			},
-		
 			//手机号储存
 			getPhoneNumber: function(e) {   
 				let _this = this;
@@ -62,8 +65,11 @@
 			    }  
 			}
 		},
-		onLoad(){
-			
+		onLoad(option){
+			this.backurl=option.backurl;
+		},
+		getCurrentPages(){
+			console.log('这里');
 		}
 	}
 </script>

@@ -160,6 +160,17 @@
                 }
             }
         },
+		//支付优惠券
+		 {
+		    "path" : "pages/order/tokens",
+		    "style" : {
+		        "navigationBarTitleText" : "东尧蔬菜",
+		        "app-plus" : {
+		            "titleNView" : false, //禁用原生导航栏
+		            "softinputNavBar" : "none"
+		        }
+		    }
+		},
         // 订单详情
         {
             "path" : "pages/order/order",

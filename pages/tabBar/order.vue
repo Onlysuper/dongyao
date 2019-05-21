@@ -5,21 +5,21 @@
 			<m-tab @handleFn="tabChange" :tabActive="tabActive" :rowdata="tabList"></m-tab>
 		</view>
 		<view style="height:60px;"></view>
-		<m-need-login v-if="!isLogin"></m-need-login>
+		<!-- <m-need-login v-if="!isLogin"></m-need-login> -->
 		
-		<view v-if="isLogin" class="m-order-body">
+		<view class="m-order-body">
 			<m-order-list v-for="(item,index) in artList" :key="index"
 				:status="1"
-				:title="item.name"
-				:img="item.img"
-				:proname="item.proname"
-				:extrctime="item.extrctime"
-				:describe="item.describe"
-				:price="item.price"
-				:num="item.num"
+				:title="item.store.name"
+				:img="item.store.imgUrl"
+				:proname="item.productList[0].productName"
+				:extrctime="item.order.aboutPickingTime"
+				:describe="item.store.notice"
+				:price="item.order.totalCount"
+				:num="100"
 			>
 			</m-order-list>
-			<m-order-list v-for="(item,index) in artList" :key="index"
+			<!-- <m-order-list v-for="(item,index) in artList" :key="index"
 				:status="2"
 				:title="item.name"
 
@@ -40,7 +40,7 @@
 				:describe="item.describe"
 				:price="item.price"
 				:num="item.num"
-			>
+			> -->
 			</m-order-list>
 		</view>
 		<template>
@@ -65,8 +65,6 @@
 		},
 		data(){
 			return{
-				
-				isLogin:false,
 				tabActive:"1",
 				tabList:[
 					{
@@ -110,15 +108,14 @@
 		methods:{
 			// 获取订单
 			getOrders(){
-				this.mGet('/user/register',{
+				this.mGet('/server/o/myOrders',{
 					state:4,
 					start:1,
 					length:1000
 				}).then(res=>{
-					console.log(res);
-// 					if(res.code=1){
-// 						this.swiperList=res.data;
-// 					}
+					if(res.code=1){
+						this.swiperList=res.data.orders;
+					}
 				}).catch(err=>{
 					console.log(err);
 				});
@@ -153,19 +150,6 @@
 						this.mloading='noMore';
 					}
 				});
-			},
-			//是否登录了
-			checkLogin(){
-				let _this = this;
-				_this.globelIsLogin().then(res=>{
-					if(res=='success'){
-						//已登录
-						_this.isLogin=true;
-						
-					}
-				}).catch(err=>{
-					_this.isLogin=false
-				});
 			}
 		},
 		// 重置分页及数据
@@ -180,7 +164,7 @@
 			this.getNewsList();
 		},
 		onLoad(){
-			this.checkLogin();
+			this.getOrders();
 		}
 	}
 </script>

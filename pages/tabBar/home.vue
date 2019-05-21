@@ -76,6 +76,7 @@
 	export default {
 		data() {
 			return {
+				isLogin:false,
 				searchValue:"",
 				afterHeaderOpacity: 1,//不透明度
 				headerPosition: 'fixed',
@@ -109,12 +110,22 @@
 			mHomeStore
 		},
 		methods:{
+			//是否登录了
+			checkLogin(){
+				let _this = this;
+				_this.globelIsLogin().then(res=>{
+					if(res=='success'){
+						//已登录
+						_this.isLogin=true;
+						
+					}
+				}).catch(err=>{
+					_this.isLogin=false
+				});
+			},
 			//首页搜索
 			toSearch(){
-				console.log(this.searchValue);
-				uni.navigateTo({
-					url:"/pages/product/productlist?search="+this.searchValue
-				})
+				this.linkTo("/pages/product/productlist?search="+this.searchValue)
 			},
 			// banner图片
 			getBanners(){
@@ -184,45 +195,46 @@
 			},
 			// 门店更多
 			choseStore(){
-				uni.navigateTo({
-					url:"/pages/store/list"
-				})
+				this.linkTo("/pages/store/list")
 			},
 			//点击热卖图片
 			hotProDetail(item){
-				uni.navigateTo({
-					url:"/pages/store/store?storeid="+item.storeId
-				})
+				this.linkTo("/pages/store/store?storeid="+item.storeId)
 			},
 			// 点击拼团图片
 			groupProDetail(){
-				uni.navigateTo({
-					url:"/pages/product/product"
-				})
+				this.linkTo("/pages/product/product")
 			},
 			//点击门店图片
 			storeDetail(){
-				uni.navigateTo({
-					url:"/pages/store/store"
-				})
+				this.linkTo("/pages/store/store")
 			},
 			swiperChange(e) {
 				this.current = e.detail.current;
 			},
 			// 拼团
 			pintuanHandle(){
-				uni.navigateTo({
-					url:"/pages/groupbuy/groupbuy"
-				})
+				this.linkTo("/pages/groupbuy/groupbuy")
 			},
 			//附近门店
 			storeHandle(){
-				uni.navigateTo({
-					url:"/pages/store/list"
-				})
+				this.linkTo("/pages/store/list")
+				
+			},
+			linkTo(url){
+				if(this.isLogin){
+					uni.navigateTo({
+						url:url
+					})
+				}else{
+					uni.navigateTo({
+						url:"/pages/login/login"
+					})
+				}
 			}
 		},
 		onLoad(){
+			this.checkLogin();
 			let _this = this;
 			uni.getLocation({//获取当前的位置坐标
 				type: 'wgs84',

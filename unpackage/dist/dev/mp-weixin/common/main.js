@@ -89,6 +89,7 @@ _vue.default.config.productionTip = false;
 _vue.default.prototype.apiurl = 'https://dy.gantangerbus.com/dy';
 var Authorization = uni.getStorageSync('Authorization');
 // console.log(Authorization);
+
 _vue.default.prototype.mGet = function (url, data) {
   var _this = this;
   return new Promise(function (resolve, reject) {
@@ -123,7 +124,6 @@ _vue.default.prototype.mPost = function (url, data, host) {
   if (host) {
     baseurl = host + url;
   }
-
   return new Promise(function (resolve, reject) {
     uni.request({
       url: baseurl,
@@ -258,6 +258,9 @@ app.$mount();
   },
   onHide: function onHide() {
     console.log('App Hide');
+  },
+  onBackPress: function onBackPress() {
+    console.log('返回');
   } };exports.default = _default;
 
 global.isLogin = function () {

@@ -678,8 +678,6 @@ var page = 1,cate = 0;var _default =
 
   data: function data() {
     return {
-
-      isLogin: false,
       tabActive: "1",
       tabList: [
       {
@@ -722,16 +720,15 @@ var page = 1,cate = 0;var _default =
   },
   methods: {
     // 获取订单
-    getOrders: function getOrders() {
-      this.mGet('/user/register', {
+    getOrders: function getOrders() {var _this = this;
+      this.mGet('/server/o/myOrders', {
         state: 4,
         start: 1,
         length: 1000 }).
       then(function (res) {
-        console.log(res);
-        // 					if(res.code=1){
-        // 						this.swiperList=res.data;
-        // 					}
+        if (res.code = 1) {
+          _this.swiperList = res.data.orders;
+        }
       }).catch(function (err) {
         console.log(err);
       });
@@ -766,19 +763,6 @@ var page = 1,cate = 0;var _default =
           _this2.mloading = 'noMore';
         } });
 
-    },
-    //是否登录了
-    checkLogin: function checkLogin() {
-      var _this = this;
-      _this.globelIsLogin().then(function (res) {
-        if (res == 'success') {
-          //已登录
-          _this.isLogin = true;
-
-        }
-      }).catch(function (err) {
-        _this.isLogin = false;
-      });
     } },
 
   // 重置分页及数据
@@ -793,7 +777,7 @@ var page = 1,cate = 0;var _default =
     this.getNewsList();
   },
   onLoad: function onLoad() {
-    this.checkLogin();
+    this.getOrders();
   } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ "./node_modules/@dcloudio/uni-mp-weixin/dist/index.js")["default"]))
 
@@ -1107,69 +1091,29 @@ var render = function() {
         1
       ),
       _c("view", { staticStyle: { height: "60px" } }),
-      !_vm.isLogin
-        ? _c("m-need-login", { attrs: { mpcomid: "2facfe52-1" } })
-        : _vm._e(),
-      _vm.isLogin
-        ? _c(
-            "view",
-            { staticClass: "m-order-body" },
-            [
-              _vm._l(_vm.artList, function(item, index) {
-                return _c("m-order-list", {
-                  key: index,
-                  attrs: {
-                    status: 1,
-                    title: item.name,
-                    img: item.img,
-                    proname: item.proname,
-                    extrctime: item.extrctime,
-                    describe: item.describe,
-                    price: item.price,
-                    num: item.num,
-                    mpcomid: "2facfe52-2-" + index
-                  }
-                })
-              }),
-              _vm._l(_vm.artList, function(item, index) {
-                return _c("m-order-list", {
-                  key: index,
-                  attrs: {
-                    status: 2,
-                    title: item.name,
-                    img: item.img,
-                    proname: item.proname,
-                    extrctime: item.extrctime,
-                    describe: item.describe,
-                    price: item.price,
-                    num: item.num,
-                    mpcomid: "2facfe52-3-" + index
-                  }
-                })
-              }),
-              _vm._l(_vm.artList, function(item, index) {
-                return _c("m-order-list", {
-                  key: index,
-                  attrs: {
-                    status: 3,
-                    title: item.name,
-                    img: item.img,
-                    proname: item.proname,
-                    extrctime: item.extrctime,
-                    describe: item.describe,
-                    price: item.price,
-                    num: item.num,
-                    mpcomid: "2facfe52-4-" + index
-                  }
-                })
-              })
-            ],
-            2
-          )
-        : _vm._e(),
+      _c(
+        "view",
+        { staticClass: "m-order-body" },
+        _vm._l(_vm.artList, function(item, index) {
+          return _c("m-order-list", {
+            key: index,
+            attrs: {
+              status: 1,
+              title: item.store.name,
+              img: item.store.imgUrl,
+              proname: item.productList[0].productName,
+              extrctime: item.order.aboutPickingTime,
+              describe: item.store.notice,
+              price: item.order.totalCount,
+              num: 100,
+              mpcomid: "2facfe52-1-" + index
+            }
+          })
+        })
+      ),
       [
         _c("uni-load-more", {
-          attrs: { status: _vm.mloading, mpcomid: "2facfe52-5" }
+          attrs: { status: _vm.mloading, mpcomid: "2facfe52-2" }
         })
       ]
     ],
