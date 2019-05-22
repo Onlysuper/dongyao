@@ -56,16 +56,9 @@
 						//存储登录code
 						_this.mPost('/auth/wxLogin',code,"https://dy.gantangerbus.com/da"
 						).then(res=>{
-							if(res.code==1){
-								if(res.data){
-									let data = res.data;
-									uni.setStorageSync('Authorization', data.authToken);
-								}
-							}else{
-								uni.showToast({
-									title:  res.message,
-									icon: "none"
-								});
+							if(res.data){
+								let data = res.data;
+								uni.setStorageSync('Authorization', data.authToken);
 							}
 							uni.hideLoading();
 						}).catch(err=>{

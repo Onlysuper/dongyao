@@ -735,7 +735,7 @@ var _GetDate = _interopRequireDefault(__webpack_require__(/*! ./GetDate.js */ ".
 
 var _mMap = _interopRequireDefault(__webpack_require__(/*! @/components/m-map */ "../../../../../../Users/apple/opt/DONGYAO/components/m-map.vue"));
 var _mOrderPro = _interopRequireDefault(__webpack_require__(/*! @/components/m-order-pro */ "../../../../../../Users/apple/opt/DONGYAO/components/m-order-pro.vue"));
-var _rattenkingDtpicker = _interopRequireDefault(__webpack_require__(/*! @/components/rattenking-dtpicker/rattenking-dtpicker.vue */ "../../../../../../Users/apple/opt/DONGYAO/components/rattenking-dtpicker/rattenking-dtpicker.vue"));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };} /**************************************时间格式化处理************************************/function dateFtt(fmt, date) {//author: meizz   
+var _rattenkingDtpicker = _interopRequireDefault(__webpack_require__(/*! @/components/rattenking-dtpicker/rattenking-dtpicker.vue */ "../../../../../../Users/apple/opt/DONGYAO/components/rattenking-dtpicker/rattenking-dtpicker.vue"));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function _objectSpread(target) {for (var i = 1; i < arguments.length; i++) {var source = arguments[i] != null ? arguments[i] : {};var ownKeys = Object.keys(source);if (typeof Object.getOwnPropertySymbols === 'function') {ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) {return Object.getOwnPropertyDescriptor(source, sym).enumerable;}));}ownKeys.forEach(function (key) {_defineProperty(target, key, source[key]);});}return target;}function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;} /**************************************时间格式化处理************************************/function dateFtt(fmt, date) {//author: meizz   
   var o = { "M+": date.getMonth() + 1, //月份   
     "d+": date.getDate(), //日   
     "h+": date.getHours(), //小时   
@@ -824,10 +824,8 @@ var _rattenkingDtpicker = _interopRequireDefault(__webpack_require__(/*! @/compo
         products: _this.shopCarList,
         couponId: "" }).
       then(function (res) {
-
         if (res.code == '1') {
           var data = res.data;
-          console.log(data);
           _this.totalPrice = data.totalPrice;
           _this.couponPrice = data.couponPrice;
           _this.yhPrice = data.yhPrice;
@@ -863,32 +861,22 @@ var _rattenkingDtpicker = _interopRequireDefault(__webpack_require__(/*! @/compo
           var data = res.data;
           // 调起支付
           var _package = data.prepay_id;
-          console.log('支付');
-          console.log(JSON.stringify({ provider: 'wxpay',
-            timeStamp: data.timeStamp + '',
-            nonceStr: data.nonceStr,
-            signType: data.signType,
-            paySign: data.paySign,
-            package: 'prepay_id=' + _package,
-            orderNumber: data.orderNumber,
-            // prepay_id:data.prepay_id,
-            appId: data.appId }));
-          uni.requestPayment({
+          var paydata = {
             provider: 'wxpay',
             timeStamp: data.timeStamp + '',
             nonceStr: data.nonceStr,
+            package: data.package,
             signType: data.signType,
-            paySign: data.paySign,
-            package: 'prepay_id=' + _package,
-            orderNumber: data.orderNumber,
-            prepay_id: data.prepay_id,
-            appId: data.appId,
+            paySign: data.paySign };
+
+          uni.requestPayment(_objectSpread({},
+          paydata, {
             success: function success(res) {
               console.log('success:' + JSON.stringify(res));
             },
             fail: function fail(err) {
               console.log('fail:' + JSON.stringify(err));
-            } });
+            } }));
 
         }
       });

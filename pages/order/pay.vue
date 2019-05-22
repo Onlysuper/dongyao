@@ -227,10 +227,8 @@
 					products:_this.shopCarList,
 					couponId:"",
 				}).then(res=>{
-				
 					if(res.code=='1'){
 						let data= res.data;
-						console.log(data);
 						_this.totalPrice=data.totalPrice;
 						_this.couponPrice=data.couponPrice;
 						_this.yhPrice=data.yhPrice;
@@ -266,26 +264,16 @@
 						let data = res.data;
 						// 调起支付
 							let _package = data.prepay_id;
-							console.log('支付');
-							console.log(JSON.stringify({provider: 'wxpay',
-								timeStamp: data.timeStamp+'',
-								nonceStr: data.nonceStr,
-								signType: data.signType,
-								paySign: data.paySign,
-								package: 'prepay_id='+_package,
-								orderNumber:data.orderNumber,
-								// prepay_id:data.prepay_id,
-								appId:data.appId}))
-							uni.requestPayment({
+							let paydata = {
 								provider: 'wxpay',
 								timeStamp: data.timeStamp+'',
 								nonceStr: data.nonceStr,
+								package: data.package,
 								signType: data.signType,
 								paySign: data.paySign,
-								package: 'prepay_id='+_package,
-								orderNumber:data.orderNumber,
-								prepay_id:data.prepay_id,
-								appId:data.appId,
+							}
+							uni.requestPayment({
+								...paydata,
 								success: function(res) {
 									console.log('success:' + JSON.stringify(res));
 								},

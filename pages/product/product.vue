@@ -36,7 +36,8 @@
 				</view>
 			</view>
 			<view class="btn">
-				<view class="joinCart" @tap="joinCart">我要拼</view>
+				<view class="joinCart" @tap="pintuan">我要拼</view>
+				<!-- <view class="joinCart" @tap="joinCart">我要拼</view> -->
 				<view class="buy" @tap="buy">立即购买</view>
 			</view>
 		</view>
@@ -98,9 +99,9 @@
 				{{goodsData.synopsis}}
 			</view>
 			<view class="tip-box">
-				<view class="item">
+				<!-- <view class="item">
 					{{goodsData.describes}}
-				</view>
+				</view> -->
 			</view>
 			<view class="price-box">
 				<view class="price">￥{{goodsData.presentPrice}}</view>
@@ -197,9 +198,12 @@
 		<!-- 详情 -->
 		<view class="description">
 			<!-- <view class="title">———— 商品详情 ————</view> -->
-			<view class="content">
+			<view class="content" style="padding: 20upx 0;">
 				<rich-text :nodes="descriptionStr"></rich-text>
 			</view>
+		</view>
+		<view style="height: 100upx;">
+			
 		</view>
 	</view>
 </template>
@@ -235,25 +239,6 @@ export default {
 			pintuanData:{},
 			commentData:{},//评论列表
 			degreeData:"",//好评度
-// 			goodsData:{
-// 				id:1,
-// 				name:"新鲜小白菜500g",
-// 				price:"127.00",
-// 				number:10,
-// 				service:[
-// 					{name:"正品保证",description:"此商品官方保证为正品"},
-// 					{name:"极速退款",description:"此商品享受退货极速退款服务"},
-// 					{name:"7天退换",description:"此商品享受7天无理由退换服务"}
-// 				],
-// 				spec:["XS","S","M","L","XL","XXL"],
-// 				comment:{
-// 					number:102,
-// 					userface:'../../static/img/face.jpg',
-// 					username:'大黑哥',
-// 					content:'很不错，之前买了很多次了，很好看，能放很久，和图片色差不大，值得购买！'
-// 				}
-// 				
-// 			},
 			selectSpec:null,//选中规格
 			//商品描述html
 			descriptionStr:'<div style="text-align:center;"><img width="100%" src="https://s2.ax1x.com/2019/03/28/AdOogx.jpg"/><img width="100%" src="https://s2.ax1x.com/2019/03/28/AdOHKK.jpg"/><img width="100%" src="https://s2.ax1x.com/2019/03/28/AdOTv6.jpg"/></div>'
@@ -278,6 +263,7 @@ export default {
 				if(res.data){
 					let data=res.data;
 					_this.goodsData=data;
+					_this.descriptionStr=data.describes;
 					_this.storeId = data.storeId;
 					// 轮播图
 					if(data.pictures){
@@ -395,6 +381,14 @@ export default {
 			setTimeout(() => {
 				this.shareClass = 'none';
 			}, 150);
+		},
+		//拼团
+		pintuan(){
+			let type=2;
+			let carNum=1;
+			uni.navigateTo({
+				url:"/pages/order/pay?storeid="+this.storeid+"&totalCount="+carNum+"&type="+type
+			})
 		},
 		// 加入购物车
 		joinCart(){

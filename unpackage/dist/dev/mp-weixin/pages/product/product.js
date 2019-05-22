@@ -646,6 +646,10 @@ var _uniIcon = _interopRequireDefault(__webpack_require__(/*! ../uni-icon/uni-ic
 
 
 
+
+
+
+
 var _uniRate = _interopRequireDefault(__webpack_require__(/*! @/components/uni-rate/uni-rate.vue */ "../../../../../../Users/apple/opt/DONGYAO/components/uni-rate/uni-rate.vue"));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function _toConsumableArray(arr) {return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread();}function _nonIterableSpread() {throw new TypeError("Invalid attempt to spread non-iterable instance");}function _iterableToArray(iter) {if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter);}function _arrayWithoutHoles(arr) {if (Array.isArray(arr)) {for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) {arr2[i] = arr[i];}return arr2;}}var _default =
 {
   components: { uniRate: _uniRate.default },
@@ -676,25 +680,6 @@ var _uniRate = _interopRequireDefault(__webpack_require__(/*! @/components/uni-r
       pintuanData: {},
       commentData: {}, //评论列表
       degreeData: "", //好评度
-      // 			goodsData:{
-      // 				id:1,
-      // 				name:"新鲜小白菜500g",
-      // 				price:"127.00",
-      // 				number:10,
-      // 				service:[
-      // 					{name:"正品保证",description:"此商品官方保证为正品"},
-      // 					{name:"极速退款",description:"此商品享受退货极速退款服务"},
-      // 					{name:"7天退换",description:"此商品享受7天无理由退换服务"}
-      // 				],
-      // 				spec:["XS","S","M","L","XL","XXL"],
-      // 				comment:{
-      // 					number:102,
-      // 					userface:'../../static/img/face.jpg',
-      // 					username:'大黑哥',
-      // 					content:'很不错，之前买了很多次了，很好看，能放很久，和图片色差不大，值得购买！'
-      // 				}
-      // 				
-      // 			},
       selectSpec: null, //选中规格
       //商品描述html
       descriptionStr: '<div style="text-align:center;"><img width="100%" src="https://s2.ax1x.com/2019/03/28/AdOogx.jpg"/><img width="100%" src="https://s2.ax1x.com/2019/03/28/AdOHKK.jpg"/><img width="100%" src="https://s2.ax1x.com/2019/03/28/AdOTv6.jpg"/></div>' };
@@ -719,6 +704,7 @@ var _uniRate = _interopRequireDefault(__webpack_require__(/*! @/components/uni-r
         if (res.data) {
           var data = res.data;
           _this.goodsData = data;
+          _this.descriptionStr = data.describes;
           _this.storeId = data.storeId;
           // 轮播图
           if (data.pictures) {
@@ -836,6 +822,14 @@ var _uniRate = _interopRequireDefault(__webpack_require__(/*! @/components/uni-r
       setTimeout(function () {
         _this2.shareClass = 'none';
       }, 150);
+    },
+    //拼团
+    pintuan: function pintuan() {
+      var type = 2;
+      var carNum = 1;
+      uni.navigateTo({
+        url: "/pages/order/pay?storeid=" + this.storeid + "&totalCount=" + carNum + "&type=" + type });
+
     },
     // 加入购物车
     joinCart: function joinCart() {
@@ -1217,7 +1211,7 @@ var render = function() {
           {
             staticClass: "joinCart",
             attrs: { eventid: "655b68cc-5" },
-            on: { tap: _vm.joinCart }
+            on: { tap: _vm.pintuan }
           },
           [_vm._v("我要拼")]
         ),
@@ -1495,11 +1489,7 @@ var render = function() {
       _c("view", { staticClass: "title" }, [
         _vm._v(_vm._s(_vm.goodsData.synopsis))
       ]),
-      _c("view", { staticClass: "tip-box" }, [
-        _c("view", { staticClass: "item" }, [
-          _vm._v(_vm._s(_vm.goodsData.describes))
-        ])
-      ]),
+      _c("view", { staticClass: "tip-box" }),
       _c("view", { staticClass: "price-box" }, [
         _c("view", { staticClass: "price" }, [
           _vm._v("￥" + _vm._s(_vm.goodsData.presentPrice))
@@ -1607,7 +1597,7 @@ var render = function() {
     _c("view", { staticClass: "description" }, [
       _c(
         "view",
-        { staticClass: "content" },
+        { staticClass: "content", staticStyle: { padding: "20rpx 0" } },
         [
           _c("rich-text", {
             attrs: { nodes: _vm.descriptionStr, mpcomid: "655b68cc-2" }
@@ -1615,7 +1605,8 @@ var render = function() {
         ],
         1
       )
-    ])
+    ]),
+    _c("view", { staticStyle: { height: "100rpx" } })
   ])
 }
 var staticRenderFns = [

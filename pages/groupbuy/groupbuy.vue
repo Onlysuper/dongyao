@@ -1,9 +1,8 @@
 <template>
-	<view @click="goStore" class="m-groupbuy-page">
-		<view class="m-page-title">
+	<view  class="m-groupbuy-page">
+		<view @tap="goStore" class="m-page-title">
 			<image style="width:148upx;height:46upx;" src="../../static/img/icon/purchase_icon_title.png" mode="aspectFit"></image>
 		</view>
-		<!-- <template> -->
 		<view  v-for="(item,index) in groupsellList" :key="index" class="m-list">
 			<m-groupbuy-list 
 			:title="item.synopsis" 
@@ -12,80 +11,47 @@
 			:price="item.presentPrice" 
 			:oldpric="item.originalPrice"
 			:isAssemble="item.isAssemble">
-				<image style="width:164upx;height:60upx;" src="../../static/img/icon/purchase_button_buy.png" mode="aspectFit"></image>
+				<image @tap="goStore" style="width:164upx;height:60upx;" src="../../static/img/icon/purchase_button_buy.png" mode="aspectFit"></image>
 			</m-groupbuy-list>
 		</view>
-		
-		<!-- title:{
-		 type:String,
-		 default:""
-		},
-		labelName:{
-		 type:String,
-		 default:""
-		},
-		img:{
-			type:String,
-			default:""
-		},
-		price:{
-		 type:[String,Number],
-		 default:""
-		},
-		oldprice:{
-		 type:[String,Number],
-		 default:""
-		},
-		isAssemble:{
-			type:[String,Number],
-			default:0
-		}
-		 -->
-		<!-- </template> -->
 	</view>
 </template>
 <script>
+	var page = 0,totalpage=0;
 	import mGroupbuyList from '@/components/m-groupbuy-list'
 	export default {
 		data() {
 			return {
-				page:0,//当前页数
+				// page:0,//当前页数
 				// 附近门店
-				groupsellList:[{
-					img:"../../static/img/2.jpg",
-					title:"精品秋葵600g",
-					describe:"特价小白菜",
-					price:"￥2.99",
-					oldprice:"￥100"
-				},
-				{
-					img:"../../static/img/2.jpg",
-					title:"精品秋葵600g",
-					describe:"特价小白菜",
-					price:"￥2.99",
-					oldprice:"￥100"
-				},
-				{
-					img:"../../static/img/2.jpg",
-					title:"精品秋葵600g",
-					describe:"特价小白菜",
-					price:"￥2.99",
-					oldprice:"￥100"
-				}]
+				groupsellList:[]
 			}
+		},
+		components: {
+			mGroupbuyList
 		},
 		methods:{
 				getGroupsellList(){
+					uni.showLoading({});
+					if(totalpage&&page > totalpage){
+						uni.showToast({"title":"已经加载全部", icon:"none"});
+						return ;
+					}
 					this.mPost('/server/p/group/products',{
-						start:this.page,
-						length:1000
+						start:page,
+						length:20
 					}).then(res=>{
 						if(res.code=1){
 							if(res.data){
 								let data = res.data;
 								if(data.list){
-									console.log(data.list);
-									this.groupsellList = data.list;
+									totalpage=data.pages;
+									var newsList = data.list;
+									this.groupsellList = this.groupsellList.concat(newsList);
+									uni.hideLoading();
+									page++;
+// 									console.log(data.list);
+// 									this.groupsellList = data.list;
 								}
 							}
 						}
@@ -100,10 +66,20 @@
 					})
 				}
 		},
-		components: {
-			mGroupbuyList
+		// 加载更多
+		onReachBottom(){
+			this.getGroupsellList();
+		},
+		//下拉刷新
+		onPullDownRefresh : function(){
+			// 重置分页及数据
+			page = 1;
+			this.groupsellList =[];
+			this.getGroupsellList();
 		},
 		onLoad(){
+			page = 1;
+			groupsellList:[];
 			this.getGroupsellList();
 		}
 	}

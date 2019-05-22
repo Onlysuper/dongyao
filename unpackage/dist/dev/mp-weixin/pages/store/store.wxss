@@ -620,16 +620,7 @@
             left: 0;
 }
 .m-store-store .category-list .left .row.on {
-          height: 100rpx;
           background-color: #fff;
-}
-.m-store-store .category-list .left .row.on .text {
-            font-size: 30rpx;
-}
-.m-store-store .category-list .left .row.on .text .block {
-              width: 10rpx;
-              height: 80%;
-              top: 10%;
 }
 .m-store-store .category-list .right {
       width: 76%;
@@ -650,6 +641,14 @@
 }
 .m-store-store .category-list .right .category .list .box {
             width: 100%;
+}
+.no-more-text {
+  font-size: 12px;
+  color: #cccccc;
+  height: 100rpx;
+  line-height: 100rpx;
+  text-align: center;
+  width: 100%;
 }
 .popup {
   position: fixed;

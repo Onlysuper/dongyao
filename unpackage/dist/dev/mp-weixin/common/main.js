@@ -89,7 +89,23 @@ _vue.default.config.productionTip = false;
 _vue.default.prototype.apiurl = 'https://dy.gantangerbus.com/dy';
 var Authorization = uni.getStorageSync('Authorization');
 // console.log(Authorization);
+var service = function service(res) {
+  if (res.code == '-1') {
+    // 请求失败
+    uni.redirectTo({
+      url: '/pages/empty/error' });
 
+
+  } else if (res.code == '-2') {
+    // 重新登录
+    var backurl = encodeURI("/pages/tabBar/user");
+    uni.redirectTo({
+      url: '/pages/login/login?back=' + backurl });
+
+
+  }
+  return res.data;
+};
 _vue.default.prototype.mGet = function (url, data) {
   var _this = this;
   return new Promise(function (resolve, reject) {
@@ -103,7 +119,7 @@ _vue.default.prototype.mGet = function (url, data) {
 
       data: _objectSpread({}, data),
       success: function success(res) {
-        resolve(res.data);
+        resolve(service(res));
       },
       fail: function fail(error) {
         uni.showToast({
@@ -111,9 +127,6 @@ _vue.default.prototype.mGet = function (url, data) {
           icon: "none" });
 
         reject(error);
-      },
-      complete: function complete(res) {
-        // resolve(res)
       } });
 
   });
@@ -135,19 +148,14 @@ _vue.default.prototype.mPost = function (url, data, host) {
 
       data: data,
       success: function success(res) {
-        resolve(res.data);
+        resolve(service(res));
       },
       fail: function fail(error) {
-        // console.log(error);
         uni.showToast({
           title: "操作失败，请检查网络",
           icon: "none" });
 
         reject(error);
-      },
-      complete: function complete(res) {
-        // console.log(res);
-        // resolve(res)
       } });
 
   });
@@ -170,7 +178,7 @@ _vue.default.prototype.mPostForm = function (url, data, host) {
 
       data: data,
       success: function success(res) {
-        resolve(res.data);
+        resolve(service(res));
       },
       fail: function fail(error) {
         uni.showToast({
@@ -178,11 +186,6 @@ _vue.default.prototype.mPostForm = function (url, data, host) {
           icon: "none" });
 
         reject(error);
-      },
-      complete: function complete(res) {
-
-        // console.log(res);
-        // resolve(res)
       } });
 
   });

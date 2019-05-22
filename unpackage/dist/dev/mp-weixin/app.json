@@ -12,6 +12,7 @@
     "pages/user/aboutme/aboutme",
     "pages/user/vip/vip",
     "pages/empty/empty",
+    "pages/empty/error",
     "pages/order/pay",
     "pages/order/tokens",
     "pages/order/order",

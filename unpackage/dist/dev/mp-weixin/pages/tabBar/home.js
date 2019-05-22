@@ -924,8 +924,10 @@ var _mHomeStore = _interopRequireDefault(__webpack_require__(/*! @/components/m-
     getStoreList: function getStoreList(lng, lat) {
       var _this = this;
       _this.mPost('/server/s/vicinity/stores', {
-        "lng": lng || 116.206845,
-        "lat": lat || 39.762155 }).
+        // 					"lng":lng || 116.206845,
+        // 					"lat":lat || 39.762155,
+        "lng": 116.206845,
+        "lat": 39.762155 }).
       then(function (res) {
         if (res.code = 1) {
           if (res.data) {

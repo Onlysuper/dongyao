@@ -31,8 +31,8 @@
 		</view>
 		<view class="category-list">
 			<!-- 左侧分类导航 -->
-			<scroll-view  scroll-y="true" class="left" >
-		        <view class="row" v-for="(item,index) in storeMenu" :key="item.id" :class="[item.id==showCategoryIndex?'on':'']" @tap="showCategory(item.id)">
+			<scroll-view  scroll-y="true" class="left">
+		        <view class="row" v-for="(item,index) in storeMenu" :key="item.id" :class="[item.id==showCategoryIndex?'on':'']" @tap="checkType(item.id)">
 					<view class="text">
 						<view class="block"></view>
 						{{item.name}}
@@ -40,39 +40,11 @@
 				</view>
 		    </scroll-view>
 			<!-- 右侧子导航 -->
-			<scroll-view  scroll-y="true" class="right" >
+			<scroll-view  scroll-y="true" class="right"  :scroll-top="scrollTop" @scrolltoupper="upper" @scrolltolower="lower"
+                @scroll="scroll">
 				<view class="category"> 
 					<view class="list">
 						<view class="box" v-for="(category) in productList" :key="category.id">
-							<!-- aa -->
-							<!-- <view class="m-store-item">
-								<view class="m-img" @tap="proDetail">
-									<image style="width: 100%;height: 100%;border-radius: 100%;" :src="rowData.pictureUrl" mode="aspectFill"></image>
-									<view v-if="isAssemble==1" class="m-pin">
-										可拼团
-									</view>
-								</view>
-								<view class="m-text"  @tap="proDetail">
-									<view class="m-title">
-										{{rowData.synopsis}}
-									</view>
-									<view class="m-descripe">
-										{{rowData.labelName}}
-									</view>
-									<view class="m-price">
-										{{rowData.presentPrice}}
-									</view>
-									<view class="m-old-price">
-										非会员价
-										<view class="m-num">
-											{{rowData.originalPrice}}
-										</view>
-									</view>
-								</view>
-								<view class="m-distance">
-									<image @tap="touchOnGoods" style="width:40upx;height: 40upx;" src="../../static/img/icon/shop_icon_buy.png" mode="aspectFit"></image>
-								</view>
-							</view> -->
 							<m-store-pro
 							 :rowData="category"
 							 :pictureUrl="category.pictureUrl"
@@ -84,8 +56,12 @@
 							 :isadd="category.isadd"
 							 @proDetail="proDetail" @touchOnGoods="touchOnGoods" ></m-store-pro>
 						</view>
+						<view class="no-more-text">
+							~去看看其他分类吧~
+						</view>
 					</view>
 				</view>
+				
 			</scroll-view>
 		</view>
 		<m-footer-car  title='去结算' :price="shopCarListPrice" :num="shopCarListLength" @handleFn="showSpec(false)" @payFn="payFn"></m-footer-car>
@@ -131,6 +107,7 @@
 	</view>
 </template>
 <script>
+	var page = 1,totalpage=0,categoryIndex=1;
 	import mFooterCar from '@/components/m-footer-car'
 	import mStorePro from '@/components/m-store-pro'
 	import uniNumberBox from "@/components/uni-number-box/uni-number-box.vue"
@@ -184,6 +161,7 @@
 		},
 		data() {
 			return {
+				scrollTop: 0,
 				// userid:1,
 				shopCarList:[],
 				shopCarListLength:0,
@@ -296,22 +274,32 @@
 			},
 			
 			//分类切换显示
-			showCategory(index){
+			showCategory(){
+				uni.showLoading({});
+				if(totalpage&&page > totalpage){
+					uni.showToast({"title":"已经加载全部", icon:"none"});
+					return ;
+				}
 				this.mPost("/server/p/search/products",{
-					start:0,
-					length:200,
-					typeId:index,
+					start:page,
+					length:10,
+					typeId:categoryIndex,
 					storeId:this.storeId
 				}).then(res=>{
 					if(res.code=='1'){
 						if(res.data&&res.data.list){
-							this.productList=res.data.list;
+							let data = res.data;
+							totalpage=data.pages;
+							var newsList = data.list;
+							this.productList = this.productList.concat(newsList);
 							// 当前购物车信息
 							this.showShopCar();
+							uni.hideLoading();
+							page++;
 						}
 					}
 				})
-				this.showCategoryIndex = index;
+				this.showCategoryIndex = categoryIndex;
 			},
 			// 获取购物车列表信息
 			showShopCar(){
@@ -325,8 +313,8 @@
 							data = data.map(item=>{
 								let _id = item.id;
 								// 产品列表商品是否出现在购物车中
-								this.productList.find(pro=>pro.id=_id)['isadd']=true;
-								console.log(this.productLis);
+								// this.productList.find(pro=>pro.id=_id)['isadd']=true;
+								// console.log(this.productLis);
 								this.productLis=this.productLis;
 								return {stock:_this.productList.find(pro=>pro.id==_id)['stock'],...item};
 							})
@@ -465,6 +453,27 @@
 			shopCarCountClear(){
 				this.shopCarListLength=0;
 				this.shopCarListPrice=0;
+			},
+			lower: function(e) {
+				this.showCategory();
+			},
+			//初始化产品列表
+			initProducts(){
+				// 默认显示第一个分类的产品
+				page = 1;
+				totalpage=0;
+				categoryIndex=1;
+				this.productList=[];
+				this.showCategory();
+			},
+			//选择分类产品
+			checkType(index){
+				console.log('切换分类')
+				page = 1;
+				totalpage=0;
+				categoryIndex=index;
+				this.productList=[];
+				this.showCategory();
 			}
 		},
 		
@@ -486,12 +495,18 @@
 					this.storeMenu=res.data;
 				}
 			})
-			// 默认显示第一个分类的产品
-			this.showCategory(1);
-			// 当前购物车信息
-			// this.showShopCar();
+			this.initProducts()
+		
 			
-		}
+		},
+		
+		//下拉刷新
+		onPullDownRefresh : function(){
+			// 重置分页及数据
+// 			page = 1;
+// 			this.productList =[];
+// 			this.getGroupsellList();
+		},
 		
 	}
 </script>
@@ -692,16 +707,16 @@
 						}
 					}
 					&.on{
-						height: 100upx;
+						// height: 100upx;
 						background-color: #fff;
 						.text{
-							font-size: 30upx;
+							// font-size: 30upx;
 							// font-weight: 600;
 							// color: #2d2d2d;
 							.block{
-								width: 10upx;
-								height: 80%;
-								top: 10%;
+								// width: 10upx;
+								// height: 80%;
+								// top: 10%;
 								// background-color: #f06c7a;
 							}
 						}
@@ -725,6 +740,14 @@
 				}
 			}
 		}
+	}
+	.no-more-text{
+		font-size: 12px;
+		color:$color-6;
+		height: 100upx;
+		line-height: 100upx;
+		text-align: center;
+		width: 100%;
 	}
 	.popup {
 		position: fixed;

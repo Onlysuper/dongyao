@@ -144,6 +144,16 @@
                 }
             }
         },
+		{
+		    "path" : "pages/empty/error",
+		    "style" : {
+		        "navigationBarTitleText" : "东尧蔬菜",
+		        "app-plus" : {
+		            "titleNView" : false, //禁用原生导航栏
+		            "softinputNavBar" : "none"
+		        }
+		    }
+		},
         //支付
         {
             "path" : "pages/order/pay",

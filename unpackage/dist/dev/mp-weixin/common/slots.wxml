@@ -1,14 +1,14 @@
+<import src="/components/m-groupbuy-list.vue.wxml" />
 <import src="/components/m-title.vue.wxml" />
 <import src="/components/m-home-hotpro.vue.wxml" />
 <import src="/components/m-home-pro.vue.wxml" />
 <import src="/components/m-home-store.vue.wxml" />
-<import src="/components/m-groupbuy-list.vue.wxml" />
 <import src="/components/m-vip-top.vue.wxml" />
 <import src="/components/m-cell.vue.wxml" />
 
-<template name="09c88d5b-default-09c88d5b-1"><image style="width:30rpx;height:20rpx;margin-right:10rpx;" src="../../static/img/icon/home_icon_refresh.png" mode="aspectFit" class="_image 09c88d5b"></image></template>
+<template name="02fe9a1a-default-02fe9a1a-0-+index"><image bindtap="handleProxy" style="width:164rpx;height:60rpx;" src="../../static/img/icon/purchase_button_buy.png" mode="aspectFit" data-eventid="{{'02fe9a1a-1-'+index}}" data-comkey="{{$k}}" class="_image 02fe9a1a"></image></template>
 
-<template name="02fe9a1a-default-02fe9a1a-0-+index"><image style="width:164rpx;height:60rpx;" src="../../static/img/icon/purchase_button_buy.png" mode="aspectFit" class="_image 02fe9a1a"></image></template>
+<template name="09c88d5b-default-09c88d5b-1"><image style="width:30rpx;height:20rpx;margin-right:10rpx;" src="../../static/img/icon/home_icon_refresh.png" mode="aspectFit" class="_image 09c88d5b"></image></template>
 
 <template name="09ce8447-default-09ce8447-0"></template>
 

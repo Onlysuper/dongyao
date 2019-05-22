@@ -7,7 +7,23 @@ Vue.config.productionTip = false
 Vue.prototype.apiurl = 'https://dy.gantangerbus.com/dy'; 
 var Authorization =uni.getStorageSync('Authorization');
 // console.log(Authorization);
-
+var service=(res)=>{
+	if(res.code=='-1'){
+		// 请求失败
+		uni.redirectTo({
+			url:'/pages/empty/error'
+		})
+		
+	}else if(res.code=='-2'){
+		// 重新登录
+		let backurl = encodeURI("/pages/tabBar/user");
+		uni.redirectTo({
+			url:'/pages/login/login?back='+backurl 
+		})
+		
+	}
+	return (res.data)
+}
 Vue.prototype.mGet = function(url,data){
 	let _this=this;
 	return new Promise(function(resolve, reject){
@@ -21,7 +37,7 @@ Vue.prototype.mGet = function(url,data){
 			},
 			data: {...data},
 			success: res => {
-				resolve(res.data)
+				resolve(service(res))
 			},
 			fail:error=>{
 				uni.showToast({
@@ -29,9 +45,6 @@ Vue.prototype.mGet = function(url,data){
 					icon: "none"
 				});
 				reject(error)
-			},
-			complete: res => {
-				// resolve(res)
 			}
 		})
 	});
@@ -53,19 +66,14 @@ Vue.prototype.mPost = function(url,data,host){
 			},
 			data: data,
 			success: res => {
-				resolve(res.data)
+				resolve(service(res))
 			},
 			fail:error=>{
-				// console.log(error);
 				uni.showToast({
 					title:  "操作失败，请检查网络",
 					icon: "none"
 				});
 				reject(error)
-			},
-			complete: res => {
-				// console.log(res);
-				// resolve(res)
 			}
 		})
 	});
@@ -88,7 +96,7 @@ Vue.prototype.mPostForm = function(url,data,host){
 			},
 			data: data,
 			success: res => {
-				resolve(res.data)
+				resolve(service(res))
 			},
 			fail:error=>{
 				uni.showToast({
@@ -96,11 +104,6 @@ Vue.prototype.mPostForm = function(url,data,host){
 					icon: "none"
 				});
 				reject(error)
-			},
-			complete: res => {
-				
-				// console.log(res);
-				// resolve(res)
 			}
 		})
 	});

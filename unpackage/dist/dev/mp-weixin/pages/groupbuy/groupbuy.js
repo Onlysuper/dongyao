@@ -133,74 +133,40 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-var _mGroupbuyList = _interopRequireDefault(__webpack_require__(/*! @/components/m-groupbuy-list */ "../../../../../../Users/apple/opt/DONGYAO/components/m-groupbuy-list.vue"));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}var _default =
+var _mGroupbuyList = _interopRequireDefault(__webpack_require__(/*! @/components/m-groupbuy-list */ "../../../../../../Users/apple/opt/DONGYAO/components/m-groupbuy-list.vue"));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}var page = 0,totalpage = 0;var _default =
 {
   data: function data() {
     return {
-      page: 0, //当前页数
+      // page:0,//当前页数
       // 附近门店
-      groupsellList: [{
-        img: "../../static/img/2.jpg",
-        title: "精品秋葵600g",
-        describe: "特价小白菜",
-        price: "￥2.99",
-        oldprice: "￥100" },
-
-      {
-        img: "../../static/img/2.jpg",
-        title: "精品秋葵600g",
-        describe: "特价小白菜",
-        price: "￥2.99",
-        oldprice: "￥100" },
-
-      {
-        img: "../../static/img/2.jpg",
-        title: "精品秋葵600g",
-        describe: "特价小白菜",
-        price: "￥2.99",
-        oldprice: "￥100" }] };
-
+      groupsellList: [] };
 
   },
+  components: {
+    mGroupbuyList: _mGroupbuyList.default },
+
   methods: {
     getGroupsellList: function getGroupsellList() {var _this = this;
+      uni.showLoading({});
+      if (totalpage && page > totalpage) {
+        uni.showToast({ "title": "已经加载全部", icon: "none" });
+        return;
+      }
       this.mPost('/server/p/group/products', {
-        start: this.page,
-        length: 1000 }).
+        start: page,
+        length: 20 }).
       then(function (res) {
         if (res.code = 1) {
           if (res.data) {
             var data = res.data;
             if (data.list) {
-              console.log(data.list);
-              _this.groupsellList = data.list;
+              totalpage = data.pages;
+              var newsList = data.list;
+              _this.groupsellList = _this.groupsellList.concat(newsList);
+              uni.hideLoading();
+              page++;
+              // 									console.log(data.list);
+              // 									this.groupsellList = data.list;
             }
           }
         }
@@ -215,10 +181,20 @@ var _mGroupbuyList = _interopRequireDefault(__webpack_require__(/*! @/components
 
     } },
 
-  components: {
-    mGroupbuyList: _mGroupbuyList.default },
-
+  // 加载更多
+  onReachBottom: function onReachBottom() {
+    this.getGroupsellList();
+  },
+  //下拉刷新
+  onPullDownRefresh: function onPullDownRefresh() {
+    // 重置分页及数据
+    page = 1;
+    this.groupsellList = [];
+    this.getGroupsellList();
+  },
   onLoad: function onLoad() {
+    page = 1;
+    groupsellList: [];
     this.getGroupsellList();
   } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ "./node_modules/@dcloudio/uni-mp-weixin/dist/index.js")["default"]))
@@ -253,13 +229,25 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "view",
-    {
-      staticClass: "m-groupbuy-page",
-      attrs: { eventid: "02fe9a1a-0" },
-      on: { click: _vm.goStore }
-    },
+    { staticClass: "m-groupbuy-page" },
     [
-      _vm._m(0),
+      _c(
+        "view",
+        {
+          staticClass: "m-page-title",
+          attrs: { eventid: "02fe9a1a-0" },
+          on: { tap: _vm.goStore }
+        },
+        [
+          _c("image", {
+            staticStyle: { width: "148rpx", height: "46rpx" },
+            attrs: {
+              src: "../../static/img/icon/purchase_icon_title.png",
+              mode: "aspectFit"
+            }
+          })
+        ]
+      ),
       _vm._l(_vm.groupsellList, function(item, index) {
         return _c(
           "view",
@@ -283,8 +271,10 @@ var render = function() {
                   staticStyle: { width: "164rpx", height: "60rpx" },
                   attrs: {
                     src: "../../static/img/icon/purchase_button_buy.png",
-                    mode: "aspectFit"
-                  }
+                    mode: "aspectFit",
+                    eventid: "02fe9a1a-1-" + index
+                  },
+                  on: { tap: _vm.goStore }
                 })
               ]
             )
@@ -296,22 +286,7 @@ var render = function() {
     2
   )
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("view", { staticClass: "m-page-title" }, [
-      _c("image", {
-        staticStyle: { width: "148rpx", height: "46rpx" },
-        attrs: {
-          src: "../../static/img/icon/purchase_icon_title.png",
-          mode: "aspectFit"
-        }
-      })
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
