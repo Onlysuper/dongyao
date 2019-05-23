@@ -23,8 +23,11 @@
 				<view class="m-name">
 					{{proname}}
 				</view>
-				<view class="m-describe">
+				<view v-if="status==3" class="m-describe">
 					{{extrctime}}
+				</view>
+				<view v-else class="m-describe">
+					{{aboutPickingTime}}
 				</view>
 				<view class="m-describe">
 					{{describe}}
@@ -38,21 +41,21 @@
 				</view> 
 			</view>
 			<view class="footright">
-				<view v-if="status==1">
+				<view @tap="takeGood" v-if="status==1">
 					<view class="but" style="color:#333333;border:1px solid #333333">
 						取货
 					</view>
 				</view>
-				<view  v-else-if="status==2">
+				<view @tap="payGood" v-else-if="status==2">
 					<view  class="but" style="color:#ef7251;border:1px solid #ef7251">
 						立即付款
 					</view>
 				</view>
 				<view  v-else-if="status==3">
-					<view class="but" style="color:#333333;border:1px solid #333333">
+					<!-- <view @tap="againGood" class="but" style="color:#333333;border:1px solid #333333">
 						再来一单
-					</view>
-					<view class="but" style="color:#ef7251;border:1px solid #ef7251;margin-left: 10upx;">
+					</view> -->
+					<view @tap="commentGood" class="but" style="color:#ef7251;border:1px solid #ef7251;margin-left: 10upx;">
 						评论
 					</view>
 				</view>
@@ -65,6 +68,15 @@
 	export default {
 		name:"m-product-list",
 		props:{
+			rowData:{
+				type:Object,
+				 // 对象或数组默认值必须从一个工厂函数获取
+				default: function () {
+					return { 
+						
+					}
+				}
+			},
 			status:{
 				type:[String,Number],
 				default:""
@@ -81,7 +93,11 @@
 				type:[String,Number],
 				default:""
 			},
-			extrctime:{
+			extrctime:{ // 取货时间
+				type:[String,Number],
+				default:""
+			},
+			aboutPickingTime:{ // 取货时间
 				type:[String,Number],
 				default:""
 			},
@@ -98,18 +114,34 @@
 				default:""
 			}
 		},
+		data() {
+			return {
+				
+			};
+		},
 		methods:{
 		 touchOnGoods(e){
 			 this.$emit("touchOnGoods",{
 				 data:this.rowData,
 				 elem : e,
 			 })
+		 },
+		 // 取货
+		 takeGood(){
+			this.$emit('takeGood',{data:this.rowData})
+		 },
+		  // 付款
+		 payGood(){
+		 	this.$emit('payGood',{data:this.rowData})	 
+		 },
+		 // 再来一单
+// 		 againGood(){
+// 		 	this.$emit('againGood',{data:this.rowData})	 	 
+// 		 },
+		 // 评论
+		 commentGood(){
+		 	this.$emit('commentGood',{data:this.rowData})	 	 
 		 }
-		},
-		data() {
-			return {
-				
-			};
 		}
 	}
 </script>

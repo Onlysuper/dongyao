@@ -10,10 +10,9 @@
 					</view>
 					<view class="m-content">
 						<view class="m-address">
-							北京市朝阳区望京SOHO大厦A座B1层15号
-							(AA大厦附近）
+							{{storeData.address}}
 						</view>
-						<m-map :latitude="latitude" :longitude="longitude"></m-map>
+						<m-map :latitude="storeData.lat" :longitude="storeData.lng" :userlat="latitude" :userlng="longitude" :distance="geoDistance(latitude,longitude,storeData.lat,storeData.lng)"></m-map>
 						<view class="m-footer">
 							<view class="m-item">
 								<view class="m-text">
@@ -66,6 +65,14 @@
 				</view>
 				<view class="m-row">
 					<view class="m-label">
+						商品折扣
+					</view>
+					<view class="m-discount">
+						-¥{{discount}}
+					</view>
+				</view>
+				<view class="m-row">
+					<view class="m-label">
 						商品优惠
 					</view>
 					<view class="m-discount">
@@ -74,9 +81,17 @@
 				</view>
 				<view class="m-row">
 					<view class="m-label">
+						优惠券抵用
+					</view>
+					<view class="m-discount">
+						-¥{{couponPrice}}
+					</view>
+				</view>
+				<view class="m-row">
+					<view class="m-label">
 						优惠券
 					</view>
-					<view @tap="choseTokenFn" v-if="!haveTokenCard" class="m-token" >
+					<view  v-if="!haveTokenCard" class="m-token" >
 						暂无可用>
 					</view>
 					<view @tap="choseTokenFn" v-else class="m-token active" >
@@ -117,6 +132,7 @@
 </template>
 
 <script>
+	import Event from '../../common/event.js'; 
 	/**************************************时间格式化处理************************************/
 	function dateFtt(fmt,date)   
 	{ //author: meizz   
@@ -147,6 +163,9 @@
 		},
 		data() {
 			return {
+				storeid:'',
+				storeData:{},
+				distance:'',
 				today:dateFtt("yyyy-MM-dd hh:mm",new Date()),
 				aboutPickingTime:dateFtt("yyyy-MM-dd hh:mm",new Date()),//预约时间
 				reserveTel:"17600802360",// 预约手机号
@@ -181,21 +200,15 @@
 			paytypeFn(type){
 				this.paytype=type;
 			},
-			// 购物车数据
+			// 支付数据
 			getData(option){
-				console.log(option);
 				let _this= this;
-				this.storeid=option.storeid;
-				// this.userid=option.userid;
-				this.totalCount=option.totalCount,
-				this.type=option.type
-				_this.mPost("/server/sc/find/cart",{
-					// userId:_this.userid
-				}).then(res=>{
+				
+				_this.mPost("/server/sc/find/cart",{}).then(res=>{
 					if(res.code=='1'){
 						if(res.data){
 							_this.shopCarList=res.data;
-							_this.payInit()
+							_this.orderInit()
 						}
 					}
 				})
@@ -216,16 +229,15 @@
 					}
 				})
 			},
-			//支付数据
-			payInit(){
+			//生成订单
+			orderInit(){
 				let _this=this;
 				_this.mPost("/server/pay/calOrderPrice",{
 					storeId:_this.storeid,
 					totalCount:_this.totalCount,
 					type:_this.type,
-					// userId:_this.userid,
 					products:_this.shopCarList,
-					couponId:"",
+					couponId:_this.couponId,
 				}).then(res=>{
 					if(res.code=='1'){
 						let data= res.data;
@@ -261,7 +273,7 @@
 				}
 				_this.mPost("/server/pay/wxpay",sendData).then(res=>{
 					if(res.code==1){
-						let data = res.data;
+							let data = res.data;
 						// 调起支付
 							let _package = data.prepay_id;
 							let paydata = {
@@ -275,29 +287,86 @@
 							uni.requestPayment({
 								...paydata,
 								success: function(res) {
-									console.log('success:' + JSON.stringify(res));
+									uni.showModal({
+										title: '支付成功',
+										content: '可在我的订单中查看订单详情',
+										showCancel:false,
+										confirmText:'查看订单',
+										success: function (res) {
+											if (res.confirm) {
+												uni.setStorageSync('orderTab', 1);
+												uni.switchTab({  
+													url: '/pages/tabBar/order'  
+												});
+											} 
+											else if (res.cancel) {
+												console.log('用户点击取消');
+											}
+										}
+									});
+									 
+									// _this.clearShopcar()
 								},
 								fail: function(err) {
-									console.log('fail:' + JSON.stringify(err));
+									//取消支付
+									uni.setStorageSync('orderTab', 2);
+									uni.switchTab({  
+										url: '/pages/tabBar/order'  
+									}); 
+									 // _this.clearShopcar()
 								}
 							});
 					}
 				})
+			},
+			//门店详情
+			storeDetail(){
+				this.mPost("/server/s/storeById",{
+					id:this.storeid
+				}).then(res=>{
+					this.storeData = res.data;
+					console.log(res)
+				}).catch(error=>{
+					console.log(error)
+				})
+			},
+			
+			storeLocation(){
+				let _this = this;
+				uni.getLocation({//获取当前的位置坐标
+					type: 'gcj02',
+					success: function (res) {
+						_this.latitude=res.latitude;
+						_this.longitude=res.longitude;
+					}
+				});
+			},
+			// 获取到优惠券id回调
+			UPDATA_TOKEN(data){
+				// console.log('获取到优惠券id回调');
+				this.couponId=data.id;
+				this.getData();
 			}
 		},
+		// 
 		onLoad(option){
-			let _this = this;
-			uni.getLocation({//获取当前的位置坐标
-				type: 'wgs84',
-				success: function (res) {
-					_this.latitude=res.latitude;
-					_this.longitude=res.longitude
-				}
-			});
+			this.storeid=option.storeid;
+			this.totalCount=option.totalCount,
+			this.type=option.type
+			this.storeid=option.storeid;
+			// 位置
+			this.storeLocation();
+			//店铺详情
+			this.storeDetail();
 			//购买商品清单
 			this.getData(option);
 			//商家优惠券
+			
 			this.tokenCard();
+			Event.addNoticeFun(Event.UPDATA_TOKEN, "UPDATA_TOKEN", this)
+		},
+		onUnload(){
+				Event.removeNoticeFun(Event.UPDATA_TOKEN)
 		}
 	}
 </script>

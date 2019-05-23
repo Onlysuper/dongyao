@@ -207,8 +207,9 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
 var _mMap = _interopRequireDefault(__webpack_require__(/*! @/components/m-map */ "../../../../../../Users/apple/opt/DONGYAO/components/m-map.vue"));
-var _mOrderPro = _interopRequireDefault(__webpack_require__(/*! @/components/m-order-pro */ "../../../../../../Users/apple/opt/DONGYAO/components/m-order-pro.vue"));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}var _default =
+var _mOrderPro = _interopRequireDefault(__webpack_require__(/*! @/components/m-order-pro */ "../../../../../../Users/apple/opt/DONGYAO/components/m-order-pro.vue"));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function _objectSpread(target) {for (var i = 1; i < arguments.length; i++) {var source = arguments[i] != null ? arguments[i] : {};var ownKeys = Object.keys(source);if (typeof Object.getOwnPropertySymbols === 'function') {ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) {return Object.getOwnPropertyDescriptor(source, sym).enumerable;}));}ownKeys.forEach(function (key) {_defineProperty(target, key, source[key]);});}return target;}function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}var _default =
 {
   components: {
     mMap: _mMap.default,
@@ -216,25 +217,115 @@ var _mOrderPro = _interopRequireDefault(__webpack_require__(/*! @/components/m-o
 
   data: function data() {
     return {
+      order: {}, // 订单详情
+      productList: [], //购买的产品列表
+      store: {}, //商家详情
+      state: '', // 订单状态
+      orderid: "",
       paytype: "", //支付方式
       latitude: 39.909,
       longitude: 116.39742 };
 
   },
   methods: {
-    paytypeFn: function paytypeFn(type) {
-      this.paytype = type;
+
+    getLocation: function getLocation() {
+      uni.getLocation({ //获取当前的位置坐标
+        type: 'wgs84',
+        success: function success(res) {
+          console.log('当前位置的经度：' + res.longitude);
+          console.log('当前位置的纬度：' + res.latitude);
+        } });
+
+    },
+    getOrder: function getOrder() {var _this2 = this;
+      var _this = this;
+      var orderid = _this.orderid || '';
+      this.mPost("/server/o/orderDetail", orderid).then(function (res) {
+        var data = res.data;
+        _this2.order = data.order, // 订单详情
+        _this2.productList = data.productList, //购买的产品列表
+        _this2.store = data.store, //商家详情
+        _this2.state = _this2.order.state; //订单状态
+      }).catch(function (err) {
+        console.log(err);
+      });
+    },
+
+    // 立即支付
+    payFn: function payFn() {
+      var _this = this;
+      var products = _this.productList.map(function (item) {return {
+          productId: item.id,
+          cou: item.buyCount };
+      });
+      var sendData = {
+        storeId: _this.store.storeid, //门店id
+        totalCount: _this.order.discount, //商品总数量
+        type: _this.order.is_assemble, //标识是普通下单还是拼团下单 1：普通 2：拼团
+        couponId: _this.order.couponId, //优惠券id,
+        products: products, //商品数组对象
+        aboutPickingTime: _this.store.aboutPickingTime, //预计取货时间 yyyy-MM-dd hh:mm
+        outTradeNo: _this.order.id,
+        reserveTel: _this.order.reserveTel //预留手机号
+      };
+      _this.mPost("/server/pay/wxpay", sendData).then(function (res) {
+        if (res.code == 1) {
+          var data = res.data;
+          // 调起支付
+          var _package = data.prepay_id;
+          var paydata = {
+            provider: 'wxpay',
+            timeStamp: data.timeStamp + '',
+            nonceStr: data.nonceStr,
+            package: data.package,
+            signType: data.signType,
+            paySign: data.paySign };
+
+          uni.requestPayment(_objectSpread({},
+          paydata, {
+            success: function success(res) {
+              uni.showModal({
+                title: '支付成功',
+                content: '可在我的订单中查看订单详情',
+                // showCancel:false,
+                confirmText: '查看订单',
+                success: function success(res) {
+                  if (res.confirm) {
+                    // uni.reLaunch({url: '/pages/tabBar/order'})
+                    uni.switchTab({
+                      url: '/pages/tabBar/order' });
+
+                  } else if (res.cancel) {
+                    console.log('用户点击取消');
+                  }
+                } });
+
+            },
+            fail: function fail(err) {
+              uni.showModal({
+                title: '支付失败',
+                content: '请您在重新尝试一下支付',
+                // showCancel:false,
+                confirmText: '重新支付',
+                success: function success(res) {
+                  if (res.confirm) {
+                    _this.payFn();
+                  } else if (res.cancel) {
+                    console.log('用户点击取消');
+                  }
+                } });
+
+            } }));
+
+        }
+      });
     } },
 
-  onLoad: function onLoad() {
-
-    uni.getLocation({ //获取当前的位置坐标
-      type: 'wgs84',
-      success: function success(res) {
-        alert('当前位置的经度：' + res.longitude);
-        alert('当前位置的纬度：' + res.latitude);
-      } });
-
+  onLoad: function onLoad(options) {
+    this.orderid = options.orderid;
+    this.getLocation();
+    this.getOrder();
   } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ "./node_modules/@dcloudio/uni-mp-weixin/dist/index.js")["default"]))
 
@@ -268,12 +359,35 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("view", { staticClass: "m-pay-page" }, [
     _c("view", { staticClass: "m-top-back" }),
-    _vm._m(0),
+    _c("view", { staticClass: "m-top-map" }, [
+      _c("view", { staticClass: "m-container" }, [
+        _vm.state == 1
+          ? _c("view", { staticClass: "m-content" }, [
+              _c("view", { staticClass: "m-title" }, [_vm._v("FGH3456789")]),
+              _c("view", { staticClass: "m-describe" }, [
+                _vm._v("请在取货时出示提示码")
+              ])
+            ])
+          : _vm.state == 2
+          ? _c("view", { staticClass: "m-content waitepay" }, [
+              _c("view", { staticClass: "m-title" }, [_vm._v("待支付")]),
+              _c("view", { staticClass: "m-describe" }, [
+                _vm._v("支付成功后显示提货码")
+              ])
+            ])
+          : _vm.state == 3
+          ? _c("view", { staticClass: "m-content" }, [
+              _c("view", { staticClass: "m-title" }, [_vm._v("已完成交易")]),
+              _c("view", { staticClass: "m-describe" }, [
+                _vm._v("感谢您对东尧蔬菜的信任")
+              ])
+            ])
+          : _vm._e()
+      ])
+    ]),
     _c("view", { staticClass: "m-store-box" }, [
       _c("view", { staticClass: "m-name" }, [
-        _c("view", { staticClass: "m-body" }, [
-          _vm._v("东尧蔬菜001号(中关村店)")
-        ]),
+        _c("view", { staticClass: "m-body" }, [_vm._v(_vm._s(_vm.store.name))]),
         _c(
           "view",
           {
@@ -281,7 +395,7 @@ var render = function() {
             attrs: { eventid: "69f9dad0-0" },
             on: {
               tap: function($event) {
-                _vm.callPhone(_vm.storeData.tel)
+                _vm.callPhone(_vm.store.tel)
               }
             }
           },
@@ -301,84 +415,67 @@ var render = function() {
         )
       ]),
       _c("view", { staticClass: "address" }, [
-        _vm._v("北京市朝阳区望京SOHO大厦A座B1层15号(AA大厦附近）")
+        _vm._v(_vm._s(_vm.store.address))
       ]),
-      _c("view", { staticClass: "m-time" }, [
-        _vm._v("提货时间：2019.04.20  16:30")
-      ])
+      _vm.state == 3
+        ? _c("view", { staticClass: "m-time" }, [
+            _vm._v("提货时间：" + _vm._s(_vm.store.actualPickingTime))
+          ])
+        : _c("view", { staticClass: "m-time" }, [
+            _vm._v("提货时间：" + _vm._s(_vm.store.aboutPickingTime))
+          ])
     ]),
     _c(
       "view",
       { staticClass: "m-pro-container" },
       [
-        _c("m-order-pro", {
-          attrs: {
-            title: "板栗南瓜800g/份",
-            price: "￥4.99",
-            oldprice: "￥10.86",
-            imgurl: "../../static/img/icon/home_icon_gps.png",
-            mpcomid: "69f9dad0-0"
-          }
+        _vm._l(_vm.productList, function(item, index) {
+          return _c("m-order-pro", {
+            key: item.id,
+            attrs: {
+              title: item.synopsis,
+              price: item.presentPrice,
+              oldprice: item.originalPrice,
+              imgurl: item.pictureUrl,
+              num: item.discount,
+              mpcomid: "69f9dad0-0-" + index
+            }
+          })
         }),
-        _c("m-order-pro", {
-          attrs: {
-            title: "板栗南瓜800g/份",
-            price: "￥4.99",
-            oldprice: "￥10.86",
-            imgurl: "../../static/img/icon/home_icon_gps.png",
-            mpcomid: "69f9dad0-1"
-          }
-        }),
-        _vm._m(1)
-      ],
-      1
-    ),
-    _vm._m(2),
-    _c("view", { staticClass: "place" }),
-    _c("view", { staticClass: "m-footer-but" }, [_vm._v("立即支付￥40.50")])
-  ])
-}
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("view", { staticClass: "m-top-map" }, [
-      _c("view", { staticClass: "m-container" }, [
-        _c("view", { staticClass: "m-content waitepay" }, [
-          _c("view", { staticClass: "m-title" }, [_vm._v("待支付")]),
-          _c("view", { staticClass: "m-describe" }, [
-            _vm._v("支付成功后显示提货码")
+        _c("view", { staticClass: "m-footer" }, [
+          _vm._v("合计"),
+          _c("view", { staticClass: "count" }, [
+            _vm._v("￥" + _vm._s(_vm.order.totalPrice))
           ])
         ])
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("view", { staticClass: "m-footer" }, [
-      _vm._v("合计"),
-      _c("view", { staticClass: "count" }, [_vm._v("￥40.50")])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("view", { staticClass: "m-order-detail" }, [
+      ],
+      2
+    ),
+    _c("view", { staticClass: "m-order-detail" }, [
       _c("view", { staticClass: "m-title" }, [_vm._v("订单信息")]),
       _c("view", { staticClass: "m-item" }, [
-        _vm._v("订单编号：1286908090877680765")
+        _vm._v("订单编号：" + _vm._s(_vm.order.id))
       ]),
       _c("view", { staticClass: "m-item" }, [_vm._v("支付方式：微信支付")]),
       _c("view", { staticClass: "m-item" }, [
-        _vm._v("下单时间：2018.12.25 23:34:45")
+        _vm._v("下单时间：" + _vm._s(_vm.order.createTime))
       ])
-    ])
-  }
-]
+    ]),
+    _c("view", { staticClass: "place" }),
+    _vm.state == 2
+      ? _c(
+          "view",
+          {
+            staticClass: "m-footer-but",
+            attrs: { eventid: "69f9dad0-1" },
+            on: { click: _vm.payFn }
+          },
+          [_vm._v("立即支付￥" + _vm._s(_vm.order.totalPrice))]
+        )
+      : _vm._e()
+  ])
+}
+var staticRenderFns = []
 render._withStripped = true
 
 

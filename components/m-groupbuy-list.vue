@@ -1,6 +1,6 @@
 <template>
 	<!-- 门店列表 -->
-	<view class="m-groupbuy-list">
+	<view class="m-groupbuy-list" @tap="goStore">
 		<view class="m-img">
 			<image style="width: 100%;height: 100%;border-radius: 100%;background: #f5f5f5;" :src="img" mode="aspectFill"></image>
 			<view v-if="isAssemble==1" class="m-pin">
@@ -22,7 +22,7 @@
 			</view>
 		</view>
 		<view class="m-addition">
-			<slot></slot>
+			<image style="width:164upx;height:60upx;" src="../../static/img/icon/purchase_button_buy.png" mode="aspectFit"></image>
 		</view>
 	</view>
 </template>
@@ -31,6 +31,18 @@
 	export default {
 		name:"m-groupbuy-list",
 		props:{
+			typeid:{ // 属于哪个分类
+				type:String,
+				default:""
+			},
+			storeid:{
+			 type:String,
+			 default:""
+			},
+			productid:{
+			 type:String,
+			 default:""
+			},
 			title:{
 			 type:String,
 			 default:""
@@ -55,30 +67,20 @@
 				type:[String,Number],
 				default:0
 			}
-// 			rowData:{
-// 				type:Object,
-// 				 // 对象或数组默认值必须从一个工厂函数获取
-// 				default: function () {
-// 					return { 
-// 						img:"",
-// 						title:"",
-// 						distance:"",
-// 						describel:"",
-// 						address:"",
-// 					}
-// 				}
-// 			},
-// 			tips:{
-// 				type:Array,
-// 				default:function () {
-// 					return []
-// 				}
-// 			}
 		},
 		data() {
 			return {
 				
 			};
+		},
+		methods:{
+			goStore(){
+				this.$emit("goStore",{
+					storeid:this.storeid,
+					typeid:this.typeid
+					
+				});
+			}
 		}
 	}
 </script>

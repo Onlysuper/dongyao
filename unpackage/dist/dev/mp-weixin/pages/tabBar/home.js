@@ -874,9 +874,7 @@ var _mHomeStore = _interopRequireDefault(__webpack_require__(/*! @/components/m-
     // banner图片
     getBanners: function getBanners() {var _this2 = this;
       this.mGet('/server/b/banners', {}).then(function (res) {
-        if (res.code = 1) {
-          _this2.swiperList = res.data;
-        }
+        _this2.swiperList = res.data;
       }).catch(function (err) {
         console.log(err);
       });
@@ -890,12 +888,10 @@ var _mHomeStore = _interopRequireDefault(__webpack_require__(/*! @/components/m-
       then(function (res) {
         console.log('这里');
         console.log(res);
-        if (res.code = 1) {
-          if (res.data) {
-            var data = res.data;
-            _this3.hotProList = data.list;
-            _this3.hotsellPage = data.nextPage;
-          }
+        if (res.data) {
+          var data = res.data;
+          _this3.hotProList = data.list;
+          _this3.hotsellPage = data.nextPage;
         }
       }).catch(function (err) {
         console.log(err);
@@ -908,12 +904,10 @@ var _mHomeStore = _interopRequireDefault(__webpack_require__(/*! @/components/m-
         start: this.hotsellPage,
         length: 500 }).
       then(function (res) {
-        if (res.code = 1) {
-          if (res.data) {
-            var data = res.data;
-            if (data.list) {
-              _this.groupsellList = data.list;
-            }
+        if (res.data) {
+          var data = res.data;
+          if (data.list) {
+            _this.groupsellList = data.list;
           }
         }
       }).catch(function (err) {
@@ -929,11 +923,9 @@ var _mHomeStore = _interopRequireDefault(__webpack_require__(/*! @/components/m-
         "lng": 116.206845,
         "lat": 39.762155 }).
       then(function (res) {
-        if (res.code = 1) {
-          if (res.data) {
-            var data = res.data;
-            _this.nearStoreList = data;
-          }
+        if (res.data) {
+          var data = res.data;
+          _this.nearStoreList = data;
         }
       }).catch(function (err) {
         console.log(err);
@@ -945,7 +937,7 @@ var _mHomeStore = _interopRequireDefault(__webpack_require__(/*! @/components/m-
     },
     //点击热卖图片
     hotProDetail: function hotProDetail(item) {
-      this.linkTo("/pages/store/store?storeid=" + item.storeId);
+      this.linkTo("/pages/store/store?storeid=" + item.storeId + "&typeid=" + item.storeId);
     },
     // 点击拼团图片
     groupProDetail: function groupProDetail() {
@@ -980,8 +972,8 @@ var _mHomeStore = _interopRequireDefault(__webpack_require__(/*! @/components/m-
     } },
 
   onLoad: function onLoad() {
-    this.checkLogin();
     var _this = this;
+    this.checkLogin();
     uni.getLocation({ //获取当前的位置坐标
       type: 'wgs84',
       success: function success(res) {

@@ -113,7 +113,7 @@ __webpack_require__.r(__webpack_exports__);
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;
+/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;
 
 
 
@@ -126,9 +126,9 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 
 
 
+var _event = _interopRequireDefault(__webpack_require__(/*! ../../common/event.js */ "../../../../../../Users/apple/opt/DONGYAO/common/event.js"));
 
-
-var _mTokenCard = _interopRequireDefault(__webpack_require__(/*! @/components/m-token-card.vue */ "../../../../../../Users/apple/opt/DONGYAO/components/m-token-card.vue"));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}var _default =
+var _mTokenCard = _interopRequireDefault(__webpack_require__(/*! @/components/m-token-card.vue */ "../../../../../../Users/apple/opt/DONGYAO/components/m-token-card.vue"));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}var page = 0,totalpage = 0;var _default =
 {
   name: "m-order-tokens",
   props: {},
@@ -136,22 +136,60 @@ var _mTokenCard = _interopRequireDefault(__webpack_require__(/*! @/components/m-
     mTokenCard: _mTokenCard.default },
 
   data: function data() {
-    return {};
-
+    return {
+      storeid: '',
+      tokens: [] };
 
   },
-  methods: {},
+  methods: {
+    getTokens: function getTokens() {var _this2 = this;
+      var _this = this;
+      uni.showLoading({});
+      if (totalpage && page > totalpage) {
+        uni.showToast({ "title": "已经加载全部", icon: "none" });
+        return;
+      }
+      this.mPost('/server/co/usableCoupons', {
+        storeId: _this.storeid,
+        start: page,
+        length: 20 }).
+      then(function (res) {
+        var data = res.data;
+        if (data.coupons) {
+          totalpage = data.pages;
+          var newsList = data.coupons;
+          _this2.tokens = _this2.tokens.concat(newsList);
+          uni.hideLoading();
+          page++;
+        }
+        // this.tokens=res.data.coupons;
+      });
+    },
+    choseTokenFn: function choseTokenFn(data) {
+      _event.default.noticeFun(_event.default.UPDATA_TOKEN, { id: data });
+      uni.navigateBack({
+        delta: 1 });
 
+    } },
 
+  // 加载更多
+  onReachBottom: function onReachBottom() {
+    this.getTokens();
+  },
+  //下拉刷新
+  onPullDownRefresh: function onPullDownRefresh() {
+    // 重置分页及数据
+    page = 1;
+    this.tokens = [];
+    this.getTokens();
+  },
   onLoad: function onLoad(option) {
-    this.mPost('/server/co/usableCoupons', {
-      storeId: option.storeid,
-      start: 1,
-      length: 1000 }).
-    then(function (res) {
-      console.log(res);
-    });
+    this.storeid = option.storeid;
+    page = 1;
+    tokens: [];
+    this.getTokens();
   } };exports.default = _default;
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ "./node_modules/@dcloudio/uni-mp-weixin/dist/index.js")["default"]))
 
 /***/ }),
 
@@ -185,23 +223,29 @@ var render = function() {
     "view",
     { staticClass: "m-tokencard" },
     [
-      _c("m-token-card", {
-        attrs: {
-          state: "normal",
-          days: "10",
-          price: "92",
-          name: "通用卷",
-          describe: "只在北京可以使用",
-          downimg1: "../../static/img/icon/home_icon_down1.png",
-          downimg2: "../../static/img/icon/home_icon_down1.png",
-          mpcomid: "c47f38e0-0"
-        }
+      _vm._l(_vm.tokens, function(item, index) {
+        return _c("m-token-card", {
+          key: item.id,
+          attrs: {
+            id: item.id,
+            state: "normal",
+            days: item.dueTime,
+            price: item.price,
+            name: item.name,
+            describe: item.rule,
+            downimg1: "../../static/img/icon/home_icon_down1.png",
+            downimg2: "../../static/img/icon/home_icon_down1.png",
+            eventid: "c47f38e0-0-" + index,
+            mpcomid: "c47f38e0-0-" + index
+          },
+          on: { choseTokenFn: _vm.choseTokenFn }
+        })
       }),
       _c("view", { staticClass: "m-token-footer" }, [
         _vm._v("以上为全部可用优惠券")
       ])
     ],
-    1
+    2
   )
 }
 var staticRenderFns = []

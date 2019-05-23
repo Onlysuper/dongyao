@@ -56,9 +56,7 @@
 					start:1,
 					length:1000
 				}).then(res=>{
-					if(res.code=='1'){
-						
-					}
+					
 					console.log(res);
 				}).catch(err=>{
 					console.log(err);

@@ -161,19 +161,11 @@ var _event = _interopRequireDefault(__webpack_require__(/*! ../../common/event.j
         _this.mPost('/auth/wxBindPhone', _objectSpread({},
         e.detail),
         "https://dy.gantangerbus.com/da").then(function (res) {
-          if (res.code = 1) {
-            uni.setStorageSync('phone', res.data.phone);
-            uni.showToast({
-              title: "已授权" });
+          uni.setStorageSync('phone', res.data.phone);
+          uni.showToast({
+            title: "已授权" });
 
-            _this.goback();
-          } else {
-            uni.showToast({
-              title: res.message,
-              icon: "none" });
-
-          }
-
+          _this.goback();
         }).catch(function (err) {
 
         });

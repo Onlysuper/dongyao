@@ -46,19 +46,11 @@
 					_this.mPost('/auth/wxBindPhone',{// 	储存用户信息
 						...e.detail
 					},"https://dy.gantangerbus.com/da").then(res=>{
-						if(res.code=1){
 							uni.setStorageSync('phone', res.data.phone);
 							uni.showToast({
 									title:"已授权",
 							})
 							_this.goback()
-						}else{
-							uni.showToast({
-								title:  res.message,
-								icon: "none"
-							});
-						}
-
 					}).catch(err=>{
 
 					});

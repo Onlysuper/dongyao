@@ -1,5 +1,5 @@
 <template>
-	<view class="m-token-card">
+	<view class="m-token-card" @tap="choseTokenFn">
 		<view :class="['m-body',state]">
 			<view class="m-price">
 				￥
@@ -13,7 +13,7 @@
 				</view>
 				<view class="">
 					<view class="status">
-						还有{{days}}天到期
+						{{days}}到期
 					</view>
 				</view>
 			</view>
@@ -45,6 +45,10 @@
 	export default {
 		name:"m-token-card",
 		props:{
+			id:{
+				type:[String,Number],
+				value:"",
+			},
 			state:{
 				type:String,
 				value:"",
@@ -82,6 +86,9 @@
 		methods:{
 			titleHandle(){
 				this.$emit("titleHandle")
+			},
+			choseTokenFn(){
+				this.$emit("choseTokenFn",this.id)
 			}
 		}
 	}

@@ -32,7 +32,7 @@
 		<view class="category-list">
 			<!-- 左侧分类导航 -->
 			<scroll-view  scroll-y="true" class="left">
-		        <view class="row" v-for="(item,index) in storeMenu" :key="item.id" :class="[item.id==showCategoryIndex?'on':'']" @tap="checkType(item.id)">
+		        <view class="row" v-for="(item,index) in storeMenu" :key="item.id" :class="[item.id==typeid?'on':'']" @tap="checkType(item.id)">
 					<view class="text">
 						<view class="block"></view>
 						{{item.name}}
@@ -40,7 +40,7 @@
 				</view>
 		    </scroll-view>
 			<!-- 右侧子导航 -->
-			<scroll-view  scroll-y="true" class="right"  :scroll-top="scrollTop" @scrolltoupper="upper" @scrolltolower="lower"
+			<scroll-view  scroll-y="true" class="right"  :scroll-top="scrollTop" @scrolltoupper="upper" @scrolltolower="loadMore"
                 @scroll="scroll">
 				<view class="category"> 
 					<view class="list">
@@ -107,7 +107,7 @@
 	</view>
 </template>
 <script>
-	var page = 1,totalpage=0,categoryIndex=1;
+	var page = 1,totalpage=0;
 	import mFooterCar from '@/components/m-footer-car'
 	import mStorePro from '@/components/m-store-pro'
 	import uniNumberBox from "@/components/uni-number-box/uni-number-box.vue"
@@ -161,6 +161,7 @@
 		},
 		data() {
 			return {
+				typeid:1,
 				scrollTop: 0,
 				// userid:1,
 				shopCarList:[],
@@ -181,7 +182,7 @@
 				carPrice:"10",
 				carNum:10,
 				specClass: '',//规格弹窗css类，控制开关动画
-				showCategoryIndex:0,
+				// showCategoryIndex:0,
 				//分类列表
 				storeMenu:[
 					{id:1,title:'家用电器',banner:'../../static/img/category/banner.jpg',list:[
@@ -223,6 +224,7 @@
 				uni.navigateTo({
 					url:"/pages/order/pay?storeid="+this.storeid+"&totalCount="+this.carNum+"&type="+type+"&userid="+this.userid
 				})
+				this.clearShopcar();
 			},
 			halfWidth(num){
 				 return num*2+'px';
@@ -283,7 +285,7 @@
 				this.mPost("/server/p/search/products",{
 					start:page,
 					length:10,
-					typeId:categoryIndex,
+					typeId:this.typeid,
 					storeId:this.storeId
 				}).then(res=>{
 					if(res.code=='1'){
@@ -298,14 +300,14 @@
 							page++;
 						}
 					}
+				}).catch(error=>{
+					uni.hideLoading();
 				})
-				this.showCategoryIndex = categoryIndex;
 			},
 			// 获取购物车列表信息
 			showShopCar(){
 				let _this = this;
 				this.mPost("/server/sc/find/cart",{
-					// userId:this.userid
 				}).then(res=>{
 					if(res.code=='1'){
 						if(res.data){
@@ -313,10 +315,12 @@
 							data = data.map(item=>{
 								let _id = item.id;
 								// 产品列表商品是否出现在购物车中
-								// this.productList.find(pro=>pro.id=_id)['isadd']=true;
-								// console.log(this.productLis);
 								this.productLis=this.productLis;
-								return {stock:_this.productList.find(pro=>pro.id==_id)['stock'],...item};
+								let stock=0;
+								if(_this.productList.findIndex(pro=>pro.id==_id)!=-1&&_this.productList.find(pro=>pro.id==_id)['stock']['stock']){
+									stock=_this.productList.find(pro=>pro.id==_id)['stock']
+								}
+								return {stock:stock,...item};
 							})
 							
 							_this.shopCarList=data;
@@ -388,7 +392,6 @@
 			},
 			// 加入购物车
 			addGoodSum(_data,num=1,type){
-				console.log(_data);
 				let _id = _data.id;
 				let data= this.productList.find(item=>item.id==_id);
 				let _this=this;
@@ -406,7 +409,6 @@
 					buyCount=data.stock;
 				}
 				_this.mPost("/server/sc/add/product",{
-					// userId:this.userid,
 					productId:data.id,
 					buyCount:buyCount
 				}).then(res=>{
@@ -421,9 +423,6 @@
 				})
 			},
 			buyNumChange(data){
-				console.log('start');
-				console.log(data);
-				// console
 				let num = data.num;
 				this.addGoodSum(data,num,'change')
 			},
@@ -450,11 +449,13 @@
 					console.log(err)
 				})
 			},
+			
 			shopCarCountClear(){
 				this.shopCarListLength=0;
 				this.shopCarListPrice=0;
 			},
-			lower: function(e) {
+			// 加载更多
+			loadMore: function(e) {
 				this.showCategory();
 			},
 			//初始化产品列表
@@ -462,42 +463,48 @@
 				// 默认显示第一个分类的产品
 				page = 1;
 				totalpage=0;
-				categoryIndex=1;
+				// this.categoryIndex=this.typeid;
 				this.productList=[];
 				this.showCategory();
 			},
 			//选择分类产品
 			checkType(index){
-				console.log('切换分类')
 				page = 1;
 				totalpage=0;
-				categoryIndex=index;
+				this.typeid=index;
 				this.productList=[];
 				this.showCategory();
+			},
+			initTypes(){
+				//商品分类
+				this.mPost("/server/t/types",{
+				}).then(res=>{
+					if(res.code=='1'){
+						this.storeMenu=res.data;
+					}
+				})
+			},
+			// 商家基本信息
+			initBusiness(){
+				let _this = this;
+				this.mPost("/server/s/storeById",{
+					id:_this.storeid
+				}).then(res=>{
+					if(res.code=='1'){
+						this.storeData=res.data;
+					}
+				})
 			}
 		},
 		
 		onLoad(option) {
 			this.storeid=option.storeid;
-			this.busHandle();
-			// 商家基本信息
-			this.mPost("/server/s/storeById",{
-				id:option.storeid
-			}).then(res=>{
-				if(res.code=='1'){
-					this.storeData=res.data;
-				}
-			})
-			//商品分类
-			this.mPost("/server/t/types",{
-			}).then(res=>{
-				if(res.code=='1'){
-					this.storeMenu=res.data;
-				}
-			})
-			this.initProducts()
-		
-			
+			this.typeid=option.typeid || 1;
+			this.busHandle();//购物车样式
+			this.initBusiness();
+			this.initTypes();
+			this.initProducts();
+			// this.checkType(this.typeid);
 		},
 		
 		//下拉刷新

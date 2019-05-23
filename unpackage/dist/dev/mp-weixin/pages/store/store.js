@@ -761,7 +761,7 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 
 var _mFooterCar = _interopRequireDefault(__webpack_require__(/*! @/components/m-footer-car */ "../../../../../../Users/apple/opt/DONGYAO/components/m-footer-car.vue"));
 var _mStorePro = _interopRequireDefault(__webpack_require__(/*! @/components/m-store-pro */ "../../../../../../Users/apple/opt/DONGYAO/components/m-store-pro.vue"));
-var _uniNumberBox = _interopRequireDefault(__webpack_require__(/*! @/components/uni-number-box/uni-number-box.vue */ "../../../../../../Users/apple/opt/DONGYAO/components/uni-number-box/uni-number-box.vue"));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function _objectSpread(target) {for (var i = 1; i < arguments.length; i++) {var source = arguments[i] != null ? arguments[i] : {};var ownKeys = Object.keys(source);if (typeof Object.getOwnPropertySymbols === 'function') {ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) {return Object.getOwnPropertyDescriptor(source, sym).enumerable;}));}ownKeys.forEach(function (key) {_defineProperty(target, key, source[key]);});}return target;}function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}function _toConsumableArray(arr) {return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread();}function _nonIterableSpread() {throw new TypeError("Invalid attempt to spread non-iterable instance");}function _iterableToArray(iter) {if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter);}function _arrayWithoutHoles(arr) {if (Array.isArray(arr)) {for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) {arr2[i] = arr[i];}return arr2;}}var page = 1,totalpage = 0,categoryIndex = 1;
+var _uniNumberBox = _interopRequireDefault(__webpack_require__(/*! @/components/uni-number-box/uni-number-box.vue */ "../../../../../../Users/apple/opt/DONGYAO/components/uni-number-box/uni-number-box.vue"));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function _objectSpread(target) {for (var i = 1; i < arguments.length; i++) {var source = arguments[i] != null ? arguments[i] : {};var ownKeys = Object.keys(source);if (typeof Object.getOwnPropertySymbols === 'function') {ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) {return Object.getOwnPropertyDescriptor(source, sym).enumerable;}));}ownKeys.forEach(function (key) {_defineProperty(target, key, source[key]);});}return target;}function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}function _toConsumableArray(arr) {return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread();}function _nonIterableSpread() {throw new TypeError("Invalid attempt to spread non-iterable instance");}function _iterableToArray(iter) {if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter);}function _arrayWithoutHoles(arr) {if (Array.isArray(arr)) {for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) {arr2[i] = arr[i];}return arr2;}}var page = 1,totalpage = 0;
 // 抛物线计算
 function bezier(pots, amount) {
   var pot;
@@ -812,6 +812,7 @@ function bezier(pots, amount) {
 
   data: function data() {
     return {
+      typeid: 1,
       scrollTop: 0,
       // userid:1,
       shopCarList: [],
@@ -832,7 +833,7 @@ function bezier(pots, amount) {
       carPrice: "10",
       carNum: 10,
       specClass: '', //规格弹窗css类，控制开关动画
-      showCategoryIndex: 0,
+      // showCategoryIndex:0,
       //分类列表
       storeMenu: [
       { id: 1, title: '家用电器', banner: '../../static/img/category/banner.jpg', list: [
@@ -874,6 +875,7 @@ function bezier(pots, amount) {
       uni.navigateTo({
         url: "/pages/order/pay?storeid=" + this.storeid + "&totalCount=" + this.carNum + "&type=" + type + "&userid=" + this.userid });
 
+      this.clearShopcar();
     },
     halfWidth: function halfWidth(num) {
       return num * 2 + 'px';
@@ -934,7 +936,7 @@ function bezier(pots, amount) {
       this.mPost("/server/p/search/products", {
         start: page,
         length: 10,
-        typeId: categoryIndex,
+        typeId: this.typeid,
         storeId: this.storeId }).
       then(function (res) {
         if (res.code == '1') {
@@ -949,25 +951,27 @@ function bezier(pots, amount) {
             page++;
           }
         }
+      }).catch(function (error) {
+        uni.hideLoading();
       });
-      this.showCategoryIndex = categoryIndex;
     },
     // 获取购物车列表信息
     showShopCar: function showShopCar() {var _this3 = this;
       var _this = this;
-      this.mPost("/server/sc/find/cart", {
-        // userId:this.userid
-      }).then(function (res) {
+      this.mPost("/server/sc/find/cart", {}).
+      then(function (res) {
         if (res.code == '1') {
           if (res.data) {
             var data = _toConsumableArray(res.data);
             data = data.map(function (item) {
               var _id = item.id;
               // 产品列表商品是否出现在购物车中
-              // this.productList.find(pro=>pro.id=_id)['isadd']=true;
-              // console.log(this.productLis);
               _this3.productLis = _this3.productLis;
-              return _objectSpread({ stock: _this.productList.find(function (pro) {return pro.id == _id;})['stock'] }, item);
+              var stock = 0;
+              if (_this.productList.findIndex(function (pro) {return pro.id == _id;}) != -1 && _this.productList.find(function (pro) {return pro.id == _id;})['stock']['stock']) {
+                stock = _this.productList.find(function (pro) {return pro.id == _id;})['stock'];
+              }
+              return _objectSpread({ stock: stock }, item);
             });
 
             _this.shopCarList = data;
@@ -1039,7 +1043,6 @@ function bezier(pots, amount) {
     },
     // 加入购物车
     addGoodSum: function addGoodSum(_data) {var num = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1;var type = arguments.length > 2 ? arguments[2] : undefined;
-      console.log(_data);
       var _id = _data.id;
       var data = this.productList.find(function (item) {return item.id == _id;});
       var _this = this;
@@ -1057,7 +1060,6 @@ function bezier(pots, amount) {
         buyCount = data.stock;
       }
       _this.mPost("/server/sc/add/product", {
-        // userId:this.userid,
         productId: data.id,
         buyCount: buyCount }).
       then(function (res) {
@@ -1072,9 +1074,6 @@ function bezier(pots, amount) {
       });
     },
     buyNumChange: function buyNumChange(data) {
-      console.log('start');
-      console.log(data);
-      // console
       var num = data.num;
       this.addGoodSum(data, num, 'change');
     },
@@ -1101,11 +1100,13 @@ function bezier(pots, amount) {
         console.log(err);
       });
     },
+
     shopCarCountClear: function shopCarCountClear() {
       this.shopCarListLength = 0;
       this.shopCarListPrice = 0;
     },
-    lower: function lower(e) {
+    // 加载更多
+    loadMore: function loadMore(e) {
       this.showCategory();
     },
     //初始化产品列表
@@ -1113,42 +1114,48 @@ function bezier(pots, amount) {
       // 默认显示第一个分类的产品
       page = 1;
       totalpage = 0;
-      categoryIndex = 1;
+      // this.categoryIndex=this.typeid;
       this.productList = [];
       this.showCategory();
     },
     //选择分类产品
     checkType: function checkType(index) {
-      console.log('切换分类');
       page = 1;
       totalpage = 0;
-      categoryIndex = index;
+      this.typeid = index;
       this.productList = [];
       this.showCategory();
+    },
+    initTypes: function initTypes() {var _this5 = this;
+      //商品分类
+      this.mPost("/server/t/types", {}).
+      then(function (res) {
+        if (res.code == '1') {
+          _this5.storeMenu = res.data;
+        }
+      });
+    },
+    // 商家基本信息
+    initBusiness: function initBusiness() {var _this6 = this;
+      var _this = this;
+      this.mPost("/server/s/storeById", {
+        id: _this.storeid }).
+      then(function (res) {
+        if (res.code == '1') {
+          _this6.storeData = res.data;
+        }
+      });
     } },
 
 
-  onLoad: function onLoad(option) {var _this5 = this;
+  onLoad: function onLoad(option) {
     this.storeid = option.storeid;
-    this.busHandle();
-    // 商家基本信息
-    this.mPost("/server/s/storeById", {
-      id: option.storeid }).
-    then(function (res) {
-      if (res.code == '1') {
-        _this5.storeData = res.data;
-      }
-    });
-    //商品分类
-    this.mPost("/server/t/types", {}).
-    then(function (res) {
-      if (res.code == '1') {
-        _this5.storeMenu = res.data;
-      }
-    });
+    this.typeid = option.typeid || 1;
+    this.busHandle(); //购物车样式
+    this.initBusiness();
+    this.initTypes();
     this.initProducts();
-
-
+    // this.checkType(this.typeid);
   },
 
   //下拉刷新
@@ -1494,7 +1501,7 @@ var render = function() {
                 {
                   key: item.id,
                   staticClass: "row",
-                  class: [item.id == _vm.showCategoryIndex ? "on" : ""],
+                  class: [item.id == _vm.typeid ? "on" : ""],
                   attrs: { eventid: "05dd8904-1-" + index },
                   on: {
                     tap: function($event) {
@@ -1522,7 +1529,7 @@ var render = function() {
               },
               on: {
                 scrolltoupper: _vm.upper,
-                scrolltolower: _vm.lower,
+                scrolltolower: _vm.loadMore,
                 scroll: _vm.scroll
               }
             },

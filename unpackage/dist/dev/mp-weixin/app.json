@@ -13,9 +13,11 @@
     "pages/user/vip/vip",
     "pages/empty/empty",
     "pages/empty/error",
+    "pages/empty/405",
     "pages/order/pay",
     "pages/order/tokens",
     "pages/order/order",
+    "pages/order/comment",
     "pages/login/login",
     "pages/login/register"
   ],
@@ -59,6 +61,9 @@
     "scope.userLocation": {
       "desc": "您的位置信息将用户小程序接口的展示效果"
     }
+  },
+  "networkTimeout": {
+    "request": 30000
   },
   "sitemapLocation": "sitemap.json"
 }

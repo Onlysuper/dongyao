@@ -1,8 +1,8 @@
 
 let _notice = new Map()
 export default class Event {
-	static UPDATA_USER = 'updata_user' // 更新用户头像昵称等数据
-	static UP_DATA_ORDER_LIST = 'up_data_order_list' // 订单列表更新
+	static UPDATA_TOKEN_STATIC = 'UPDATA_TOKEN' // 订单列表更新
+	// static UPDATA_TOKEN_STATIC = 'UPDATA_ORDER' // 订单列表更新
 	/**
 	 * 添加注册通知对象方法
 	 */

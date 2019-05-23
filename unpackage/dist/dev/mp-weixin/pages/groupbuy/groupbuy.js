@@ -133,11 +133,13 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
+
+
 var _mGroupbuyList = _interopRequireDefault(__webpack_require__(/*! @/components/m-groupbuy-list */ "../../../../../../Users/apple/opt/DONGYAO/components/m-groupbuy-list.vue"));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}var page = 0,totalpage = 0;var _default =
 {
   data: function data() {
     return {
-      // page:0,//当前页数
       // 附近门店
       groupsellList: [] };
 
@@ -156,28 +158,24 @@ var _mGroupbuyList = _interopRequireDefault(__webpack_require__(/*! @/components
         start: page,
         length: 20 }).
       then(function (res) {
-        if (res.code = 1) {
-          if (res.data) {
-            var data = res.data;
-            if (data.list) {
-              totalpage = data.pages;
-              var newsList = data.list;
-              _this.groupsellList = _this.groupsellList.concat(newsList);
-              uni.hideLoading();
-              page++;
-              // 									console.log(data.list);
-              // 									this.groupsellList = data.list;
-            }
+        if (res.data) {
+          var data = res.data;
+          if (data.list) {
+            totalpage = data.pages;
+            var newsList = data.list;
+            _this.groupsellList = _this.groupsellList.concat(newsList);
+            uni.hideLoading();
+            page++;
           }
         }
       }).catch(function (err) {
-        console.log(err);
+        uni.hideLoading();
       });
     },
     //跳转到商家
-    goStore: function goStore() {
+    goStore: function goStore(data) {
       uni.navigateTo({
-        url: "/pages/store/store" });
+        url: "/pages/store/store?storeid=" + data.storeid + "&typeid=" + data.typeid });
 
     } },
 
@@ -231,53 +229,28 @@ var render = function() {
     "view",
     { staticClass: "m-groupbuy-page" },
     [
-      _c(
-        "view",
-        {
-          staticClass: "m-page-title",
-          attrs: { eventid: "02fe9a1a-0" },
-          on: { tap: _vm.goStore }
-        },
-        [
-          _c("image", {
-            staticStyle: { width: "148rpx", height: "46rpx" },
-            attrs: {
-              src: "../../static/img/icon/purchase_icon_title.png",
-              mode: "aspectFit"
-            }
-          })
-        ]
-      ),
+      _vm._m(0),
       _vm._l(_vm.groupsellList, function(item, index) {
         return _c(
           "view",
           { key: index, staticClass: "m-list" },
           [
-            _c(
-              "m-groupbuy-list",
-              {
-                attrs: {
-                  title: item.synopsis,
-                  labelName: item.labelName,
-                  img: item.pictureUrl,
-                  price: item.presentPrice,
-                  oldpric: item.originalPrice,
-                  isAssemble: item.isAssemble,
-                  mpcomid: "02fe9a1a-0-" + index
-                }
+            _c("m-groupbuy-list", {
+              attrs: {
+                storeid: item.storeId,
+                typeid: item.typeId,
+                productid: item.id,
+                title: item.synopsis,
+                labelName: item.labelName,
+                img: item.pictureUrl,
+                price: item.presentPrice,
+                oldpric: item.originalPrice,
+                isAssemble: item.isAssemble,
+                eventid: "02fe9a1a-0-" + index,
+                mpcomid: "02fe9a1a-0-" + index
               },
-              [
-                _c("image", {
-                  staticStyle: { width: "164rpx", height: "60rpx" },
-                  attrs: {
-                    src: "../../static/img/icon/purchase_button_buy.png",
-                    mode: "aspectFit",
-                    eventid: "02fe9a1a-1-" + index
-                  },
-                  on: { tap: _vm.goStore }
-                })
-              ]
-            )
+              on: { goStore: _vm.goStore }
+            })
           ],
           1
         )
@@ -286,7 +259,22 @@ var render = function() {
     2
   )
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("view", { staticClass: "m-page-title" }, [
+      _c("image", {
+        staticStyle: { width: "148rpx", height: "46rpx" },
+        attrs: {
+          src: "../../static/img/icon/purchase_icon_title.png",
+          mode: "aspectFit"
+        }
+      })
+    ])
+  }
+]
 render._withStripped = true
 
 

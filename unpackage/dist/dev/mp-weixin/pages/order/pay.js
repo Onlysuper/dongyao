@@ -729,6 +729,22 @@ var _GetDate = _interopRequireDefault(__webpack_require__(/*! ./GetDate.js */ ".
 
 
 
+var _event = _interopRequireDefault(__webpack_require__(/*! ../../common/event.js */ "../../../../../../Users/apple/opt/DONGYAO/common/event.js"));
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -744,6 +760,9 @@ var _rattenkingDtpicker = _interopRequireDefault(__webpack_require__(/*! @/compo
     "q+": Math.floor((date.getMonth() + 3) / 3), //季度   
     "S": date.getMilliseconds() //毫秒   
   };if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (date.getFullYear() + "").substr(4 - RegExp.$1.length));for (var k in o) {if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, RegExp.$1.length == 1 ? o[k] : ("00" + o[k]).substr(("" + o[k]).length));}return fmt;}var _default = { components: { mMap: _mMap.default, mOrderPro: _mOrderPro.default, ruiDatePicker: _rattenkingDtpicker.default }, data: function data() {return {
+      storeid: '',
+      storeData: {},
+      distance: '',
       today: dateFtt("yyyy-MM-dd hh:mm", new Date()),
       aboutPickingTime: dateFtt("yyyy-MM-dd hh:mm", new Date()), //预约时间
       reserveTel: "17600802360", // 预约手机号
@@ -778,21 +797,15 @@ var _rattenkingDtpicker = _interopRequireDefault(__webpack_require__(/*! @/compo
     paytypeFn: function paytypeFn(type) {
       this.paytype = type;
     },
-    // 购物车数据
+    // 支付数据
     getData: function getData(option) {
-      console.log(option);
       var _this = this;
-      this.storeid = option.storeid;
-      // this.userid=option.userid;
-      this.totalCount = option.totalCount,
-      this.type = option.type;
-      _this.mPost("/server/sc/find/cart", {
-        // userId:_this.userid
-      }).then(function (res) {
+
+      _this.mPost("/server/sc/find/cart", {}).then(function (res) {
         if (res.code == '1') {
           if (res.data) {
             _this.shopCarList = res.data;
-            _this.payInit();
+            _this.orderInit();
           }
         }
       });
@@ -813,16 +826,15 @@ var _rattenkingDtpicker = _interopRequireDefault(__webpack_require__(/*! @/compo
         }
       });
     },
-    //支付数据
-    payInit: function payInit() {
+    //生成订单
+    orderInit: function orderInit() {
       var _this = this;
       _this.mPost("/server/pay/calOrderPrice", {
         storeId: _this.storeid,
         totalCount: _this.totalCount,
         type: _this.type,
-        // userId:_this.userid,
         products: _this.shopCarList,
-        couponId: "" }).
+        couponId: _this.couponId }).
       then(function (res) {
         if (res.code == '1') {
           var data = res.data;
@@ -872,29 +884,86 @@ var _rattenkingDtpicker = _interopRequireDefault(__webpack_require__(/*! @/compo
           uni.requestPayment(_objectSpread({},
           paydata, {
             success: function success(res) {
-              console.log('success:' + JSON.stringify(res));
+              uni.showModal({
+                title: '支付成功',
+                content: '可在我的订单中查看订单详情',
+                showCancel: false,
+                confirmText: '查看订单',
+                success: function success(res) {
+                  if (res.confirm) {
+                    uni.setStorageSync('orderTab', 1);
+                    uni.switchTab({
+                      url: '/pages/tabBar/order' });
+
+                  } else
+                  if (res.cancel) {
+                    console.log('用户点击取消');
+                  }
+                } });
+
+
+              // _this.clearShopcar()
             },
             fail: function fail(err) {
-              console.log('fail:' + JSON.stringify(err));
+              //取消支付
+              uni.setStorageSync('orderTab', 2);
+              uni.switchTab({
+                url: '/pages/tabBar/order' });
+
+              // _this.clearShopcar()
             } }));
 
         }
       });
+    },
+    //门店详情
+    storeDetail: function storeDetail() {var _this2 = this;
+      this.mPost("/server/s/storeById", {
+        id: this.storeid }).
+      then(function (res) {
+        _this2.storeData = res.data;
+        console.log(res);
+      }).catch(function (error) {
+        console.log(error);
+      });
+    },
+
+    storeLocation: function storeLocation() {
+      var _this = this;
+      uni.getLocation({ //获取当前的位置坐标
+        type: 'gcj02',
+        success: function success(res) {
+          _this.latitude = res.latitude;
+          _this.longitude = res.longitude;
+        } });
+
+    },
+    // 获取到优惠券id回调
+    UPDATA_TOKEN: function UPDATA_TOKEN(data) {
+      // console.log('获取到优惠券id回调');
+      this.couponId = data.id;
+      this.getData();
     } },
 
+  // 
   onLoad: function onLoad(option) {
-    var _this = this;
-    uni.getLocation({ //获取当前的位置坐标
-      type: 'wgs84',
-      success: function success(res) {
-        _this.latitude = res.latitude;
-        _this.longitude = res.longitude;
-      } });
-
+    this.storeid = option.storeid;
+    this.totalCount = option.totalCount,
+    this.type = option.type;
+    this.storeid = option.storeid;
+    // 位置
+    this.storeLocation();
+    //店铺详情
+    this.storeDetail();
     //购买商品清单
     this.getData(option);
     //商家优惠券
+
     this.tokenCard();
+    _event.default.addNoticeFun(_event.default.UPDATA_TOKEN, "UPDATA_TOKEN", this);
+  },
+  onUnload: function onUnload() {
+    _event.default.removeNoticeFun(_event.default.UPDATA_TOKEN);
   } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ "./node_modules/@dcloudio/uni-mp-weixin/dist/index.js")["default"]))
 
@@ -989,14 +1058,20 @@ var render = function() {
           { staticClass: "m-content" },
           [
             _c("view", { staticClass: "m-address" }, [
-              _vm._v(
-                "北京市朝阳区望京SOHO大厦A座B1层15号\n\t\t\t\t\t\t(AA大厦附近）"
-              )
+              _vm._v(_vm._s(_vm.storeData.address))
             ]),
             _c("m-map", {
               attrs: {
-                latitude: _vm.latitude,
-                longitude: _vm.longitude,
+                latitude: _vm.storeData.lat,
+                longitude: _vm.storeData.lng,
+                userlat: _vm.latitude,
+                userlng: _vm.longitude,
+                distance: _vm.geoDistance(
+                  _vm.latitude,
+                  _vm.longitude,
+                  _vm.storeData.lat,
+                  _vm.storeData.lng
+                ),
                 mpcomid: "4d5cf31c-0"
               }
             }),
@@ -1061,23 +1136,27 @@ var render = function() {
         ])
       ]),
       _c("view", { staticClass: "m-row" }, [
+        _c("view", { staticClass: "m-label" }, [_vm._v("商品折扣")]),
+        _c("view", { staticClass: "m-discount" }, [
+          _vm._v("-¥" + _vm._s(_vm.discount))
+        ])
+      ]),
+      _c("view", { staticClass: "m-row" }, [
         _c("view", { staticClass: "m-label" }, [_vm._v("商品优惠")]),
         _c("view", { staticClass: "m-discount" }, [
           _vm._v("-¥" + _vm._s(_vm.yhPrice))
         ])
       ]),
       _c("view", { staticClass: "m-row" }, [
+        _c("view", { staticClass: "m-label" }, [_vm._v("优惠券抵用")]),
+        _c("view", { staticClass: "m-discount" }, [
+          _vm._v("-¥" + _vm._s(_vm.couponPrice))
+        ])
+      ]),
+      _c("view", { staticClass: "m-row" }, [
         _c("view", { staticClass: "m-label" }, [_vm._v("优惠券")]),
         !_vm.haveTokenCard
-          ? _c(
-              "view",
-              {
-                staticClass: "m-token",
-                attrs: { eventid: "4d5cf31c-2" },
-                on: { tap: _vm.choseTokenFn }
-              },
-              [_vm._v("暂无可用>")]
-            )
+          ? _c("view", { staticClass: "m-token" }, [_vm._v("暂无可用>")])
           : _c(
               "view",
               {
@@ -1103,7 +1182,7 @@ var render = function() {
           "view",
           {
             staticClass: "m-radio",
-            attrs: { eventid: "4d5cf31c-3" },
+            attrs: { eventid: "4d5cf31c-2" },
             on: {
               tap: function($event) {
                 _vm.paytypeFn("wx")
@@ -1135,7 +1214,7 @@ var render = function() {
       "view",
       {
         staticClass: "m-footer-but",
-        attrs: { eventid: "4d5cf31c-4" },
+        attrs: { eventid: "4d5cf31c-3" },
         on: { tap: _vm.payFn }
       },
       [_vm._v("立即支付￥" + _vm._s(_vm.payPrice))]

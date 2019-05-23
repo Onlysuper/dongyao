@@ -29,13 +29,6 @@
 			};
 		},
 		methods:{
-// 			// 返回
-// 			goback(){
-// 				let currentIndex= uni.getCurrentPages();
-// 				uni.navigateBack({
-// 					delta:currentIndex-1
-// 				})
-// 			},
 			//注册
 			register(){
 				uni.switchTab({  
@@ -69,7 +62,6 @@
 			},
 			//第一授权获取用户信息===》按钮触发
 			getuserinfo:function(res){
-				console.log(res);
 				let _this = this;
 				if (!res.detail.iv) {
 					uni.showToast({
@@ -78,28 +70,17 @@
 					});
 					return false;
 				}
+				uni.showLoading({});
 				uni.getUserInfo({
 			        provider: 'weixin',
 			        success: function(infoRes) {
-						console.log(infoRes);
 						// 	储存用户信息
 						uni.setStorageSync('userData', JSON.stringify(infoRes.userInfo));
+						uni.showLoading({});
 						_this.mPost('/auth/wxUserInfo',infoRes.userInfo,"https://dy.gantangerbus.com/da").then(res=>{
-							console.log(res);
-							if(res.code=1){
-								// _this.goback();
-								uni.navigateTo({  
-								    url: '/pages/login/register'  
-								}); 
-// 								uni.showToast({
-// 										title:"已授权"
-// 								})
-							}else{
-								uni.showToast({
-									title:  res.message,
-									icon: "none"
-								});
-							}
+							uni.navigateTo({  
+								url: '/pages/login/register'  
+							}); 
 							uni.hideLoading();
 						}).catch(err=>{
 							console.log(err);
@@ -107,7 +88,9 @@
 						});
 						
 			        },
-			        fail(res) {}
+			        fail(res) {
+						uni.hideLoading();
+					}
 			    });
 			}
 		},

@@ -15,21 +15,7 @@
 		data() {
 			return {
 				// 附近门店
-				nearStoreList:[{
-					img:"../../static/img/2.jpg",
-					title:"东尧蔬菜002号（望京店）",
-					address:"北京市海淀区中关村大街15号"
-				},
-				{
-					img:"../../static/img/2.jpg",
-					title:"东尧蔬菜002号（望京店）",
-					address:"北京市海淀区中关村大街15号"
-				},
-				{
-					img:"../../static/img/2.jpg",
-					title:"东尧蔬菜002号（望京店）",
-					address:"北京市海淀区中关村大街15号"
-				}]
+				nearStoreList:[]
 			}
 		},
 		methods:{
@@ -46,23 +32,16 @@
 				scope: 'scope.userLocation',
 				success() {
 					uni.getLocation({//获取当前的位置坐标
-						type: 'wgs84',
+						type: 'gcj02',
 						success: function (res) {
 							_that.mPost('/server/s/vicinity/stores',{
-// 								"lng":res.longitude || 116.206845,
-// 								"lat":res.latitude || 39.762155
-								"lng":116.206845,
-								"lat":39.762155
+								"lng":res.longitude || 116.206845,
+								"lat":res.latitude || 39.762155
 							}).then(res=>{
-								if(res.code=1){
 									if(res.data){
 										let data = res.data;
-										// console.log(data);
 										_that.nearStoreList = data;
-// 										this.hotProList = data.list;
-// 										this.hotsellPage=data.nextPage;
 									}
-								}
 							}).catch(err=>{
 								console.log(err);
 							});
@@ -70,14 +49,6 @@
 					})
 				}
 			})
-// 			uni.getLocation({//获取当前的位置坐标
-// 				type: 'wgs84',
-// 				success: function (res) {
-// 					console.log('当前位置的经度：' + res.longitude);
-// 					console.log('当前位置的纬度：' + res.latitude);
-// 				}
-// 			});  
-			// /server/s/vicinity/stores
 		},
 		components: {
 			mStoreList

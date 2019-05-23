@@ -171,9 +171,7 @@ var _mTokenCard = _interopRequireDefault(__webpack_require__(/*! @/components/m-
         start: 1,
         length: 1000 }).
       then(function (res) {
-        if (res.code == '1') {
 
-        }
         console.log(res);
       }).catch(function (err) {
         console.log(err);

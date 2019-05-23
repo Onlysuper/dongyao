@@ -8,22 +8,14 @@
 		<m-need-login v-if="!isLogin"></m-need-login>
 		
 		<view v-else class="m-order-body">
-			<m-order-list v-for="(item,index) in orderList" 
-			@takeGood="takeGood"
-			@payGood="payGood"
-			@againGood="againGood"
-			@commentGood="commentGood"
-			 :rowData="item"
-			 :key="index"
-			 :status="item.order.state"
-			 :price="item.order.totalPrice"
-			 :num="item.order.totalCount"
-			 :extrctime="item.order.actualPickingTime"
-			 :aboutPickingTime="item.order.aboutPickingTime"
-			 :title="item.store.name"
-			 :img="item.productList[0].pictureUrl"
-			 :proname="item.productList[0].synopsis"
-			 ></m-order-list>
+			<view class="" v-for="(item,index) in orderList" :key="index">
+				{{item.store}}
+				<view>{{item.store.name}}</view>
+				<view>{{item.store.imgUrl}}</view>
+				<view>{{item.order.state}}</view> 
+				<!-- <view>{{item.order.state}}</view> -->
+			</view>
+			</m-order-list>
 		</view>
 		<template>
 			<uni-load-more :status="mloading"></uni-load-more>
@@ -31,12 +23,11 @@
 	</view>
 </template>
 <script>
-	import Event from '../../common/event.js'; 
 	import mTab from "@/components/m-tab.vue";
 	import mOrderList from "@/components/m-order-list.vue";
 	import mNeedLogin from "@/components/m-need-login.vue";
 	import uniLoadMore from "@/components/uni-load-more/uni-load-more.vue";
-	var page = 1,totalpage=1;
+	var page = 0,totalpage=0;
 	export default {
 		name:"m-footer-car",
 		props:{},
@@ -53,19 +44,19 @@
 				tabList:[
 					{
 						label:"待取货",
-						id:1,
+						id:"1",
 					},
 					{
 						label:"待支付",
-						id:2,
+						id:"2",
 					},
 					{
 						label:"待评价",
-						id:3,
+						id:"3",
 					},
 					{
 						label:"全部",
-						id:4,
+						id:"4",
 					},
 				],
 				orderList:[],
@@ -73,29 +64,6 @@
 			}
 		},
 		methods:{
-			 // 取货
-			takeGood(data){
-					console.log('取货')	 
-			},
-			 // 付款
-			payGood(res){
-				let orderid = res.data.order.id;
-				uni.navigateTo({
-					url:"/pages/order/order?orderid="+orderid
-				})
-			},
-			// 再来一单
-// 			againGood(data){
-// 				console.log('再来一单')	 	 
-// 			},
-			// 评论
-			commentGood(res){
-				// console.log('评论')	
-				 let orderid = res.data.order.id;
-				uni.navigateTo({
-					url:"/pages/order/comment?orderid="+orderid
-				})
-			},
 			//是否登录了
 			checkLogin(){
 				let _this = this;
@@ -103,6 +71,7 @@
 					if(res=='success'){
 						//已登录
 						_this.isLogin=true;
+						
 					}
 				}).catch(err=>{
 					_this.isLogin=false
@@ -124,9 +93,10 @@
 					if(res.data){
 						let data = res.data;
 						if(data.orders){
-							totalpage=data.pages|| 1;
+							totalpage=data.pages;
 							var newsList = data.orders;
 							this.orderList = this.orderList.concat(newsList);
+							console.log(this.orderList);
 							uni.hideLoading();
 							page++;
 						}
@@ -138,39 +108,27 @@
 			// tab栏点击
 			tabChange(item){
 				this.tabActive= item.id;
-				page = 1;
-				this.orderList = [];
-				this.getOrders();
 			}
 		},
 		// 重置分页及数据
 		onPullDownRefresh(){
 			page = 1;
-			this.orderList = [];
-			this.getOrders();
+			this.artList = [];
+			this.getNewsList();
 		},
 		// 加载更多
 		onReachBottom(){
 			this.mloading='loading';
-			this.getOrders();
+			this.getNewsList();
 		},
-		onLoad(option){
-			this.tabActive=uni.getStorageSync('orderTab')||1;
+		onLoad(){
 			this.checkLogin();
+			
 			//获取订单
 			page = 1;
 			orderList:[];
 			this.getOrders();
-			uni.setStorageSync('orderTab', 1);
 		}
-// 		onShow(){
-// 			this.tabActive=uni.getStorageSync('orderTab')||1;
-// 			uni.setStorageSync('orderTab', 1);
-// 			//获取订单
-// 			page = 1;
-// 			orderList:[];
-// 			this.getOrders();
-// 		}
 	}
 </script>
 <style lang="scss">

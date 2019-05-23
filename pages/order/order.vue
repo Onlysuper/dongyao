@@ -5,17 +5,17 @@
 			<!--  商品支付下单 -->
 			<view class="m-top-map">
 				<view class="m-container">
-					<!-- 交易完成 -->
-					<!-- <view class="m-content">
+					<!-- 待取货 -->
+					<view v-if="state==1" class="m-content">
 						<view class="m-title">
-							已完成交易
+							FGH3456789
 						</view>
 						<view class="m-describe">
-							感谢您对东尧蔬菜的信任
+							请在取货时出示提示码
 						</view>
-					</view> -->
+					</view>
 					<!-- 待支付 -->
-					<view class="m-content waitepay">
+					<view v-else-if="state==2" class="m-content waitepay">
 						<view class="m-title">
 							待支付
 						</view>
@@ -23,50 +23,51 @@
 							支付成功后显示提货码
 						</view>
 					</view>
-					<!-- 待取货 -->
-					<!-- <view class="m-content">
+					<!-- 交易完成 -->
+					<view v-else-if="state==3" class="m-content">
 						<view class="m-title">
-							FGH3456789
+							已完成交易
 						</view>
 						<view class="m-describe">
-							请在取货时出示提示码
+							感谢您对东尧蔬菜的信任
 						</view>
-					</view> -->
+					</view>
 				</view>
 			</view>
 			<view class="m-store-box">
 				<view class="m-name">
 					<view class="m-body">
-						东尧蔬菜001号(中关村店)
+						{{store.name}}
 					</view>
-					<view class="m-phone" @tap='callPhone(storeData.tel)'>
+					<view class="m-phone" @tap='callPhone(store.tel)'>
 						<image style="width: 40upx;height:40upx;margin-left: 20upx;" src="../../static/img/icon/shop_icon_phone.png" mode="aspectFit"></image>
 					</view>
 				</view>
 				<view class="address">
-					北京市朝阳区望京SOHO大厦A座B1层15号(AA大厦附近）
+					{{store.address}}
 				</view>
-				<view class="m-time">
-					提货时间：2019.04.20  16:30
+				<view v-if="state==3" class="m-time">
+					<!-- 已经提货 -->
+					提货时间：{{store.actualPickingTime}}
+				</view>
+				<view v-else class="m-time">
+					<!-- 预计提货 -->
+					提货时间：{{store.aboutPickingTime}}
 				</view>
 			</view>
 			<!-- 商品列表 -->
 			<view class="m-pro-container">
-				<m-order-pro 
-				title="板栗南瓜800g/份"
-				price="￥4.99"
-				oldprice="￥10.86"
-				imgurl="../../static/img/icon/home_icon_gps.png"
+				<m-order-pro
+				v-for="(item) in productList" :key="item.id"
+				:title="item.synopsis"
+				:price="item.presentPrice"
+				:oldprice="item.originalPrice"
+				:imgurl="item.pictureUrl"
+				:num="item.discount"
 				 ></m-order-pro>
-				 <m-order-pro 
-				 title="板栗南瓜800g/份"
-				 price="￥4.99"
-				 oldprice="￥10.86"
-				 imgurl="../../static/img/icon/home_icon_gps.png"
-				  ></m-order-pro>
-				  <view class="m-footer">
-				  	合计<view class="count">￥40.50</view>
-				  </view>
+				 <view class="m-footer">
+					合计<view class="count">￥{{order.totalPrice}}</view>
+				 </view>
 			</view>
 			<!-- 订单明细 -->
 			<view class="m-order-detail">
@@ -74,19 +75,19 @@
 					订单信息
 				</view>
 				<view class="m-item">
-					订单编号：1286908090877680765
+					订单编号：{{order.id}}
 				</view>
 				<view class="m-item">
 					支付方式：微信支付
 				</view>
 				<view class="m-item">
-					下单时间：2018.12.25 23:34:45
+					下单时间：{{order.createTime}}
 				</view>
 			</view>
 		<view class="place"></view>
 		<!-- 分割 -->
-		<view class="m-footer-but">
-			立即支付￥40.50
+		<view v-if="state==2" @click="payFn" class="m-footer-but">
+			立即支付￥{{order.totalPrice}}
 		</view>
 	</view>
 </template>
@@ -101,25 +102,115 @@
 		},
 		data() {
 			return {
+				order:{},// 订单详情
+				productList:[],//购买的产品列表
+				store:{},//商家详情
+				state:'', // 订单状态
+				orderid:"",
 				paytype:"",//支付方式
 				latitude: 39.909,
 				longitude: 116.39742,
 			};
 		},
 		methods:{
-			paytypeFn(type){
-				this.paytype=type;
-			}	
-		},
-		onLoad(){
 			
-			uni.getLocation({//获取当前的位置坐标
-				type: 'wgs84',
-				success: function (res) {
-					alert('当前位置的经度：' + res.longitude);
-					alert('当前位置的纬度：' + res.latitude);
+			getLocation(){
+				uni.getLocation({//获取当前的位置坐标
+					type: 'wgs84',
+					success: function (res) {
+						console.log('当前位置的经度：' + res.longitude);
+						console.log('当前位置的纬度：' + res.latitude);
+					}
+				});  
+			},
+			getOrder(){
+				let _this = this;
+				let orderid=_this.orderid||''
+				this.mPost("/server/o/orderDetail",orderid).then(res=>{
+					let data = res.data;
+					this.order=data.order,// 订单详情
+					this.productList=data.productList,//购买的产品列表
+					this.store=data.store,//商家详情
+					this.state=this.order.state //订单状态
+				}).catch(err=>{
+					console.log(err)
+				})
+			},
+			
+			// 立即支付
+			payFn(){
+				let _this=this;
+				let products=_this.productList.map(item=>{return {
+					productId:item.id,
+					cou:item.buyCount,
+				}})
+				let sendData ={
+					storeId:_this.store.storeid,//门店id
+					totalCount:_this.order.discount,//商品总数量
+					type:_this.order.is_assemble,//标识是普通下单还是拼团下单 1：普通 2：拼团
+					couponId:_this.order.couponId,//优惠券id,
+					products:products,//商品数组对象
+					aboutPickingTime:_this.store.aboutPickingTime,//预计取货时间 yyyy-MM-dd hh:mm
+					outTradeNo:_this.order.id,
+					reserveTel:_this.order.reserveTel,//预留手机号
 				}
-			});  
+				_this.mPost("/server/pay/wxpay",sendData).then(res=>{
+					if(res.code==1){
+							let data = res.data;
+						// 调起支付
+							let _package = data.prepay_id;
+							let paydata = {
+								provider: 'wxpay',
+								timeStamp: data.timeStamp+'',
+								nonceStr: data.nonceStr,
+								package: data.package,
+								signType: data.signType,
+								paySign: data.paySign,
+							}
+							uni.requestPayment({
+								...paydata,
+								success: function(res) {
+									uni.showModal({
+										title: '支付成功',
+										content: '可在我的订单中查看订单详情',
+										// showCancel:false,
+										confirmText:'查看订单',
+										success: function (res) {
+											if (res.confirm) {
+												// uni.reLaunch({url: '/pages/tabBar/order'})
+												uni.switchTab({  
+													url: '/pages/tabBar/order'  
+												});  
+											} else if (res.cancel) {
+												console.log('用户点击取消');
+											}
+										}
+									});
+								},
+								fail: function(err) {
+									uni.showModal({
+										title: '支付失败',
+										content: '请您在重新尝试一下支付',
+										// showCancel:false,
+										confirmText:'重新支付',
+										success: function (res) {
+											if (res.confirm) {
+												_this.payFn();
+											} else if (res.cancel) {
+												console.log('用户点击取消');
+											}
+										}
+									});
+								}
+							});
+					}
+				})
+			},
+		},
+		onLoad(options){
+			this.orderid = options.orderid;
+			this.getLocation();
+			this.getOrder();
 		}
 	}
 </script>

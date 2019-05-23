@@ -144,13 +144,6 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
-    // 			// 返回
-    // 			goback(){
-    // 				let currentIndex= uni.getCurrentPages();
-    // 				uni.navigateBack({
-    // 					delta:currentIndex-1
-    // 				})
-    // 			},
     //注册
     register: function register() {
       uni.switchTab({
@@ -184,7 +177,6 @@ __webpack_require__.r(__webpack_exports__);
     },
     //第一授权获取用户信息===》按钮触发
     getuserinfo: function getuserinfo(res) {
-      console.log(res);
       var _this = this;
       if (!res.detail.iv) {
         uni.showToast({
@@ -193,28 +185,17 @@ __webpack_require__.r(__webpack_exports__);
 
         return false;
       }
+      uni.showLoading({});
       uni.getUserInfo({
         provider: 'weixin',
         success: function success(infoRes) {
-          console.log(infoRes);
           // 	储存用户信息
           uni.setStorageSync('userData', JSON.stringify(infoRes.userInfo));
+          uni.showLoading({});
           _this.mPost('/auth/wxUserInfo', infoRes.userInfo, "https://dy.gantangerbus.com/da").then(function (res) {
-            console.log(res);
-            if (res.code = 1) {
-              // _this.goback();
-              uni.navigateTo({
-                url: '/pages/login/register' });
+            uni.navigateTo({
+              url: '/pages/login/register' });
 
-              // 								uni.showToast({
-              // 										title:"已授权"
-              // 								})
-            } else {
-              uni.showToast({
-                title: res.message,
-                icon: "none" });
-
-            }
             uni.hideLoading();
           }).catch(function (err) {
             console.log(err);
@@ -222,7 +203,9 @@ __webpack_require__.r(__webpack_exports__);
           });
 
         },
-        fail: function fail(res) {} });
+        fail: function fail(res) {
+          uni.hideLoading();
+        } });
 
     } },
 

@@ -419,7 +419,10 @@ __webpack_require__.r(__webpack_exports__);
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _default =
+Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _default2 =
+
+
+
 
 
 
@@ -486,6 +489,15 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 {
   name: "m-product-list",
   props: {
+    rowData: {
+      type: Object,
+      // 对象或数组默认值必须从一个工厂函数获取
+      default: function _default() {
+        return {};
+
+
+      } },
+
     status: {
       type: [String, Number],
       default: "" },
@@ -502,7 +514,11 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
       type: [String, Number],
       default: "" },
 
-    extrctime: {
+    extrctime: { // 取货时间
+      type: [String, Number],
+      default: "" },
+
+    aboutPickingTime: { // 取货时间
       type: [String, Number],
       default: "" },
 
@@ -519,19 +535,34 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
       default: "" } },
 
 
+  data: function data() {
+    return {};
+
+
+  },
   methods: {
     touchOnGoods: function touchOnGoods(e) {
       this.$emit("touchOnGoods", {
         data: this.rowData,
         elem: e });
 
-    } },
-
-  data: function data() {
-    return {};
-
-
-  } };exports.default = _default;
+    },
+    // 取货
+    takeGood: function takeGood() {
+      this.$emit('takeGood', { data: this.rowData });
+    },
+    // 付款
+    payGood: function payGood() {
+      this.$emit('payGood', { data: this.rowData });
+    },
+    // 再来一单
+    // 		 againGood(){
+    // 		 	this.$emit('againGood',{data:this.rowData})	 	 
+    // 		 },
+    // 评论
+    commentGood: function commentGood() {
+      this.$emit('commentGood', { data: this.rowData });
+    } } };exports.default = _default2;
 
 /***/ }),
 
@@ -644,29 +675,12 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+var _event = _interopRequireDefault(__webpack_require__(/*! ../../common/event.js */ "../../../../../../Users/apple/opt/DONGYAO/common/event.js"));
 var _mTab = _interopRequireDefault(__webpack_require__(/*! @/components/m-tab.vue */ "../../../../../../Users/apple/opt/DONGYAO/components/m-tab.vue"));
 var _mOrderList = _interopRequireDefault(__webpack_require__(/*! @/components/m-order-list.vue */ "../../../../../../Users/apple/opt/DONGYAO/components/m-order-list.vue"));
 var _mNeedLogin = _interopRequireDefault(__webpack_require__(/*! @/components/m-need-login.vue */ "../../../../../../Users/apple/opt/DONGYAO/components/m-need-login.vue"));
 var _uniLoadMore = _interopRequireDefault(__webpack_require__(/*! @/components/uni-load-more/uni-load-more.vue */ "../../../../../../Users/apple/opt/DONGYAO/components/uni-load-more/uni-load-more.vue"));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}
-var page = 1,cate = 0;var _default =
+var page = 1,totalpage = 1;var _default =
 {
   name: "m-footer-car",
   props: {},
@@ -678,107 +692,130 @@ var page = 1,cate = 0;var _default =
 
   data: function data() {
     return {
-      tabActive: "1",
+      isLogin: false,
+      tabActive: 1,
       tabList: [
       {
         label: "待取货",
-        id: "1" },
+        id: 1 },
 
       {
         label: "待支付",
-        id: "2" },
+        id: 2 },
 
       {
         label: "待评价",
-        id: "3" },
+        id: 3 },
 
       {
         label: "全部",
-        id: "4" }],
+        id: 4 }],
 
 
-      artList: [
-      {
-        store: "东尧生鲜001号店（中关村店）",
-        name: "东尧生鲜001号店（中关村店）",
-        extrctime: "18:00",
-        createtime: "2018.12.25 23:34:45",
-        price: "450",
-        num: "4" },
-
-      {
-        store: "东尧生鲜001号店（中关村店）",
-        name: "东尧生鲜001号店（中关村店）",
-        extrctime: "18:00",
-        createtime: "2018.12.25 23:34:45",
-        price: "450",
-        num: "4" }],
-
-
+      orderList: [],
       mloading: 'more' };
 
   },
   methods: {
-    // 获取订单
-    getOrders: function getOrders() {var _this = this;
-      this.mGet('/server/o/myOrders', {
-        state: 4,
-        start: 1,
-        length: 1000 }).
-      then(function (res) {
-        if (res.code = 1) {
-          _this.swiperList = res.data.orders;
+    // 取货
+    takeGood: function takeGood(data) {
+      console.log('取货');
+    },
+    // 付款
+    payGood: function payGood(res) {
+      var orderid = res.data.order.id;
+      uni.navigateTo({
+        url: "/pages/order/order?orderid=" + orderid });
+
+    },
+    // 再来一单
+    // 			againGood(data){
+    // 				console.log('再来一单')	 	 
+    // 			},
+    // 评论
+    commentGood: function commentGood(res) {
+      // console.log('评论')	
+      var orderid = res.data.order.id;
+      uni.navigateTo({
+        url: "/pages/order/comment?orderid=" + orderid });
+
+    },
+    //是否登录了
+    checkLogin: function checkLogin() {
+      var _this = this;
+      _this.globelIsLogin().then(function (res) {
+        if (res == 'success') {
+          //已登录
+          _this.isLogin = true;
         }
       }).catch(function (err) {
-        console.log(err);
+        _this.isLogin = false;
+      });
+    },
+    // 获取订单
+    getOrders: function getOrders() {var _this2 = this;
+      var _this = this;
+      uni.showLoading({});
+      if (totalpage && page > totalpage) {
+        uni.showToast({ "title": "已经加载全部", icon: "none" });
+        return;
+      }
+      this.mPost('/server/o/myOrders', {
+        state: _this.tabActive,
+        start: page,
+        length: 20 }).
+      then(function (res) {
+        if (res.data) {
+          var data = res.data;
+          if (data.orders) {
+            totalpage = data.pages || 1;
+            var newsList = data.orders;
+            _this2.orderList = _this2.orderList.concat(newsList);
+            uni.hideLoading();
+            page++;
+          }
+        }
+      }).catch(function (err) {
+        uni.hideLoading();
       });
     },
     // tab栏点击
     tabChange: function tabChange(item) {
       this.tabActive = item.id;
-    },
-    // 数据和分页是模拟的，实际也是这样写
-    getNewsList: function getNewsList() {var _this2 = this;
-      uni.showLoading({});
-      // 假设已经到底，实际根据api接口返回值判断
-      if (page >= 3) {
-        uni.showToast({ "title": "已经加载全部", icon: "none" });
-        return;
-      }
-      uni.request({
-        url: 'https://www.easy-mock.com/mock/5bb833775df5622d84ac87ca/example/imgnewlist?page=' + page + '#!method=get&cate=' + cate,
-        method: 'GET',
-        data: {},
-        success: function success(res) {
-          console.log(res);
-          var newsList = res.data.data;
-          _this2.artList = _this2.artList.concat(newsList);
-          uni.hideLoading();
-          page++;
-          _this2.mloading = 'noMore';
-        },
-        complete: function complete(res) {
-          uni.hideLoading();
-          uni.stopPullDownRefresh();
-          _this2.mloading = 'noMore';
-        } });
-
+      page = 1;
+      this.orderList = [];
+      this.getOrders();
     } },
 
   // 重置分页及数据
   onPullDownRefresh: function onPullDownRefresh() {
     page = 1;
-    this.artList = [];
-    this.getNewsList();
+    this.orderList = [];
+    this.getOrders();
   },
   // 加载更多
   onReachBottom: function onReachBottom() {
     this.mloading = 'loading';
-    this.getNewsList();
-  },
-  onLoad: function onLoad() {
     this.getOrders();
-  } };exports.default = _default;
+  },
+  onLoad: function onLoad(option) {
+    this.tabActive = uni.getStorageSync('orderTab') || 1;
+    this.checkLogin();
+    //获取订单
+    page = 1;
+    orderList: [];
+    this.getOrders();
+    uni.setStorageSync('orderTab', 1);
+  }
+  // 		onShow(){
+  // 			this.tabActive=uni.getStorageSync('orderTab')||1;
+  // 			uni.setStorageSync('orderTab', 1);
+  // 			//获取订单
+  // 			page = 1;
+  // 			orderList:[];
+  // 			this.getOrders();
+  // 		}
+};exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ "./node_modules/@dcloudio/uni-mp-weixin/dist/index.js")["default"]))
 
 /***/ }),
@@ -907,9 +944,13 @@ var render = function() {
       ]),
       _c("view", { staticClass: "m-text-box" }, [
         _c("view", { staticClass: "m-name" }, [_vm._v(_vm._s(_vm.proname))]),
-        _c("view", { staticClass: "m-describe" }, [
-          _vm._v(_vm._s(_vm.extrctime))
-        ]),
+        _vm.status == 3
+          ? _c("view", { staticClass: "m-describe" }, [
+              _vm._v(_vm._s(_vm.extrctime))
+            ])
+          : _c("view", { staticClass: "m-describe" }, [
+              _vm._v(_vm._s(_vm.aboutPickingTime))
+            ]),
         _c("view", { staticClass: "m-describe" }, [
           _vm._v(_vm._s(_vm.describe))
         ])
@@ -925,37 +966,43 @@ var render = function() {
       ]),
       _c("view", { staticClass: "footright" }, [
         _vm.status == 1
-          ? _c("view", [
-              _c(
-                "view",
-                {
-                  staticClass: "but",
-                  staticStyle: { color: "#333333", border: "1px solid #333333" }
-                },
-                [_vm._v("取货")]
-              )
-            ])
+          ? _c(
+              "view",
+              { attrs: { eventid: "1a6ae60c-2" }, on: { tap: _vm.takeGood } },
+              [
+                _c(
+                  "view",
+                  {
+                    staticClass: "but",
+                    staticStyle: {
+                      color: "#333333",
+                      border: "1px solid #333333"
+                    }
+                  },
+                  [_vm._v("取货")]
+                )
+              ]
+            )
           : _vm.status == 2
-          ? _c("view", [
-              _c(
-                "view",
-                {
-                  staticClass: "but",
-                  staticStyle: { color: "#ef7251", border: "1px solid #ef7251" }
-                },
-                [_vm._v("立即付款")]
-              )
-            ])
+          ? _c(
+              "view",
+              { attrs: { eventid: "1a6ae60c-0" }, on: { tap: _vm.payGood } },
+              [
+                _c(
+                  "view",
+                  {
+                    staticClass: "but",
+                    staticStyle: {
+                      color: "#ef7251",
+                      border: "1px solid #ef7251"
+                    }
+                  },
+                  [_vm._v("立即付款")]
+                )
+              ]
+            )
           : _vm.status == 3
           ? _c("view", [
-              _c(
-                "view",
-                {
-                  staticClass: "but",
-                  staticStyle: { color: "#333333", border: "1px solid #333333" }
-                },
-                [_vm._v("再来一单")]
-              ),
               _c(
                 "view",
                 {
@@ -964,7 +1011,9 @@ var render = function() {
                     color: "#ef7251",
                     border: "1px solid #ef7251",
                     "margin-left": "10rpx"
-                  }
+                  },
+                  attrs: { eventid: "1a6ae60c-1" },
+                  on: { tap: _vm.commentGood }
                 },
                 [_vm._v("评论")]
               )
@@ -1091,29 +1140,39 @@ var render = function() {
         1
       ),
       _c("view", { staticStyle: { height: "60px" } }),
-      _c(
-        "view",
-        { staticClass: "m-order-body" },
-        _vm._l(_vm.artList, function(item, index) {
-          return _c("m-order-list", {
-            key: index,
-            attrs: {
-              status: 1,
-              title: item.store.name,
-              img: item.store.imgUrl,
-              proname: item.productList[0].productName,
-              extrctime: item.order.aboutPickingTime,
-              describe: item.store.notice,
-              price: item.order.totalCount,
-              num: 100,
-              mpcomid: "2facfe52-1-" + index
-            }
-          })
-        })
-      ),
+      !_vm.isLogin
+        ? _c("m-need-login", { attrs: { mpcomid: "2facfe52-2" } })
+        : _c(
+            "view",
+            { staticClass: "m-order-body" },
+            _vm._l(_vm.orderList, function(item, index) {
+              return _c("m-order-list", {
+                key: index,
+                attrs: {
+                  rowData: item,
+                  status: item.order.state,
+                  price: item.order.totalPrice,
+                  num: item.order.totalCount,
+                  extrctime: item.order.actualPickingTime,
+                  aboutPickingTime: item.order.aboutPickingTime,
+                  title: item.store.name,
+                  img: item.productList[0].pictureUrl,
+                  proname: item.productList[0].synopsis,
+                  eventid: "2facfe52-1-" + index,
+                  mpcomid: "2facfe52-1-" + index
+                },
+                on: {
+                  takeGood: _vm.takeGood,
+                  payGood: _vm.payGood,
+                  againGood: _vm.againGood,
+                  commentGood: _vm.commentGood
+                }
+              })
+            })
+          ),
       [
         _c("uni-load-more", {
-          attrs: { status: _vm.mloading, mpcomid: "2facfe52-2" }
+          attrs: { status: _vm.mloading, mpcomid: "2facfe52-3" }
         })
       ]
     ],

@@ -130,9 +130,7 @@
 			// banner图片
 			getBanners(){
 				this.mGet('/server/b/banners',{}).then(res=>{
-					if(res.code=1){
 						this.swiperList=res.data;
-					}
 				}).catch(err=>{
 					console.log(err);
 				});
@@ -146,13 +144,11 @@
 				}).then(res=>{
 					console.log('这里');
 					console.log(res);
-					if(res.code=1){
 						if(res.data){
 							let data = res.data;
 							this.hotProList = data.list;
 							this.hotsellPage=data.nextPage;
 						}
-					}
 				}).catch(err=>{
 					console.log(err);
 				});
@@ -164,14 +160,12 @@
 					start:this.hotsellPage,
 					length:500
 				}).then(res=>{
-					if(res.code=1){
 						if(res.data){
 							let data = res.data;
 							if(data.list){
 								_this.groupsellList = data.list;
 							}
 						}
-					}
 				}).catch(err=>{
 					console.log(err);
 				});
@@ -185,12 +179,10 @@
 					"lng": 116.206845,
 					"lat": 39.762155
 				}).then(res=>{
-					if(res.code=1){
 						if(res.data){
 							let data = res.data;
 								_this.nearStoreList = data;
 						}
-					}
 				}).catch(err=>{
 					console.log(err);
 				});
@@ -201,7 +193,7 @@
 			},
 			//点击热卖图片
 			hotProDetail(item){
-				this.linkTo("/pages/store/store?storeid="+item.storeId)
+				this.linkTo("/pages/store/store?storeid="+item.storeId+"&typeid="+item.storeId)
 			},
 			// 点击拼团图片
 			groupProDetail(){
@@ -236,8 +228,8 @@
 			}
 		},
 		onLoad(){
-			this.checkLogin();
 			let _this = this;
+			this.checkLogin();
 			uni.getLocation({//获取当前的位置坐标
 				type: 'wgs84',
 				success: function (res) {

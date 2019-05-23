@@ -181,7 +181,7 @@
 								{{item.commentTime}}
 							</view>
 						</view>
-						<uni-rate size="5" :value="item.starLevel"></uni-rate>
+						<uni-rate size="18" :value="item.starLevel"></uni-rate>
 					</view>
 					<view class="content">
 						<view class="">
@@ -198,7 +198,7 @@
 		<!-- 详情 -->
 		<view class="description">
 			<!-- <view class="title">———— 商品详情 ————</view> -->
-			<view class="content" style="padding: 20upx 0;">
+			<view class="content" style="padding: 20upx 0;text-align:center;">
 				<rich-text :nodes="descriptionStr"></rich-text>
 			</view>
 		</view>
@@ -241,7 +241,7 @@ export default {
 			degreeData:"",//好评度
 			selectSpec:null,//选中规格
 			//商品描述html
-			descriptionStr:'<div style="text-align:center;"><img width="100%" src="https://s2.ax1x.com/2019/03/28/AdOogx.jpg"/><img width="100%" src="https://s2.ax1x.com/2019/03/28/AdOHKK.jpg"/><img width="100%" src="https://s2.ax1x.com/2019/03/28/AdOTv6.jpg"/></div>'
+			descriptionStr:'<div style="text-align:center;"></div>'
 		};
 	},
 	onReady(){
