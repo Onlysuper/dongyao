@@ -228,7 +228,6 @@ var _mOrderPro = _interopRequireDefault(__webpack_require__(/*! @/components/m-o
 
   },
   methods: {
-
     getLocation: function getLocation() {
       uni.getLocation({ //获取当前的位置坐标
         type: 'wgs84',
@@ -251,7 +250,6 @@ var _mOrderPro = _interopRequireDefault(__webpack_require__(/*! @/components/m-o
         console.log(err);
       });
     },
-
     // 立即支付
     payFn: function payFn() {
       var _this = this;

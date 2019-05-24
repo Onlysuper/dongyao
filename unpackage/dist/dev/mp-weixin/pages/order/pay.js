@@ -800,15 +800,10 @@ var _rattenkingDtpicker = _interopRequireDefault(__webpack_require__(/*! @/compo
     // 支付数据
     getData: function getData(option) {
       var _this = this;
-
-      _this.mPost("/server/sc/find/cart", {}).then(function (res) {
-        if (res.code == '1') {
-          if (res.data) {
-            _this.shopCarList = res.data;
-            _this.orderInit();
-          }
-        }
-      });
+      var proUrlData = decodeURI(option.proUrlData);
+      _this.shopCarList = JSON.parse(proUrlData)['proUrlData'];
+      _this.orderInit();
+      console.log(_this.shopCarList);
     },
     // 优惠券
     tokenCard: function tokenCard() {
@@ -829,13 +824,15 @@ var _rattenkingDtpicker = _interopRequireDefault(__webpack_require__(/*! @/compo
     //生成订单
     orderInit: function orderInit() {
       var _this = this;
-      _this.mPost("/server/pay/calOrderPrice", {
+      var sendData = {
         storeId: _this.storeid,
         totalCount: _this.totalCount,
         type: _this.type,
         products: _this.shopCarList,
-        couponId: _this.couponId }).
-      then(function (res) {
+        couponId: _this.couponId };
+
+      console.log(sendData);
+      _this.mPost("/server/pay/calOrderPrice", sendData).then(function (res) {
         if (res.code == '1') {
           var data = res.data;
           _this.totalPrice = data.totalPrice;
@@ -916,6 +913,21 @@ var _rattenkingDtpicker = _interopRequireDefault(__webpack_require__(/*! @/compo
         }
       });
     },
+    // 清空购物车
+    clearShopcar: function clearShopcar() {
+      var _this = this;
+      _this.mPost("/server/sc/delete/all", {
+        // userId:this.userid
+      }).then(function (res) {
+        if (res.code == '1') {
+          console.log('这里');
+          _this.shopCarList = [];
+          // 购物车总商品数，与总价格计算
+          _this.shopCarCountClear();
+          _this.hideSpec();
+        }
+      });
+    },
     //门店详情
     storeDetail: function storeDetail() {var _this2 = this;
       this.mPost("/server/s/storeById", {
@@ -950,7 +962,6 @@ var _rattenkingDtpicker = _interopRequireDefault(__webpack_require__(/*! @/compo
     this.storeid = option.storeid;
     this.totalCount = option.totalCount,
     this.type = option.type;
-    this.storeid = option.storeid;
     // 位置
     this.storeLocation();
     //店铺详情

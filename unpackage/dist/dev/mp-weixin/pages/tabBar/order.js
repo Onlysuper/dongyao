@@ -717,12 +717,24 @@ var page = 1,totalpage = 1;var _default =
 
   },
   methods: {
-    // 取货
-    takeGood: function takeGood(data) {
-      console.log('取货');
-    },
+
     // 付款
     payGood: function payGood(res) {
+      var orderid = res.data.order.id;
+      uni.navigateTo({
+        url: "/pages/order/order?orderid=" + orderid });
+
+    },
+    // 评论
+    commentGood: function commentGood(res) {
+      // console.log('评论')	
+      var orderid = res.data.order.id;
+      uni.navigateTo({
+        url: "/pages/order/comment?orderid=" + orderid });
+
+    },
+    // 取货
+    takeGood: function takeGood(res) {
       var orderid = res.data.order.id;
       uni.navigateTo({
         url: "/pages/order/order?orderid=" + orderid });
@@ -732,14 +744,7 @@ var page = 1,totalpage = 1;var _default =
     // 			againGood(data){
     // 				console.log('再来一单')	 	 
     // 			},
-    // 评论
-    commentGood: function commentGood(res) {
-      // console.log('评论')	
-      var orderid = res.data.order.id;
-      uni.navigateTo({
-        url: "/pages/order/comment?orderid=" + orderid });
 
-    },
     //是否登录了
     checkLogin: function checkLogin() {
       var _this = this;

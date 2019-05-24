@@ -73,12 +73,24 @@
 			}
 		},
 		methods:{
-			 // 取货
-			takeGood(data){
-					console.log('取货')	 
-			},
+			
 			 // 付款
 			payGood(res){
+				let orderid = res.data.order.id;
+				uni.navigateTo({
+					url:"/pages/order/order?orderid="+orderid
+				})
+			},
+			// 评论
+			commentGood(res){
+				// console.log('评论')	
+				 let orderid = res.data.order.id;
+				uni.navigateTo({
+					url:"/pages/order/comment?orderid="+orderid
+				})
+			},
+			 // 取货
+			takeGood(res){
 				let orderid = res.data.order.id;
 				uni.navigateTo({
 					url:"/pages/order/order?orderid="+orderid
@@ -88,14 +100,7 @@
 // 			againGood(data){
 // 				console.log('再来一单')	 	 
 // 			},
-			// 评论
-			commentGood(res){
-				// console.log('评论')	
-				 let orderid = res.data.order.id;
-				uni.navigateTo({
-					url:"/pages/order/comment?orderid="+orderid
-				})
-			},
+			
 			//是否登录了
 			checkLogin(){
 				let _this = this;

@@ -113,7 +113,110 @@ __webpack_require__.r(__webpack_exports__);
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;
+/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -171,10 +274,31 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 var _uniRate = _interopRequireDefault(__webpack_require__(/*! @/components/uni-rate/uni-rate.vue */ "../../../../../../Users/apple/opt/DONGYAO/components/uni-rate/uni-rate.vue"));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}var _default =
 {
   components: { uniRate: _uniRate.default },
+  data: function data() {
+    return {
+      imgs: [] };
+
+  },
   methods: {
+    chooseImg: function chooseImg() {var _this = this;
+      uni.chooseImage({
+        count: 3,
+        success: function success(res) {
+          console.log(res);
+          var newImgs = res.tempFiles;
+          _this.imgs = _this.imgs.concat(newImgs);
+          console.log(_this.imgs);
+
+        },
+        fail: function fail(err) {
+          console.log(err);
+        } });
+
+    },
     changeStar: function changeStar(e) {
       console.log(e);
     } } };exports.default = _default;
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ "./node_modules/@dcloudio/uni-mp-weixin/dist/index.js")["default"]))
 
 /***/ }),
 
@@ -205,26 +329,102 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("view", { staticClass: "m-comment-page" }, [
-    _c("view", { staticClass: "m-top" }, [
-      _vm._m(0),
-      _c(
-        "view",
-        {},
-        [
-          _c("uni-rate", {
-            attrs: {
-              size: "18",
-              value: "5",
-              eventid: "d1bc61ae-0",
-              mpcomid: "d1bc61ae-0"
-            },
-            on: { change: _vm.changeStar }
-          })
-        ],
-        1
-      )
+    _c("view", { staticClass: "m-pro" }, [
+      _c("view", { staticClass: "m-top" }, [
+        _vm._m(0),
+        _c(
+          "view",
+          {},
+          [
+            _c("uni-rate", {
+              attrs: {
+                size: "18",
+                value: "5",
+                eventid: "d1bc61ae-0",
+                mpcomid: "d1bc61ae-0"
+              },
+              on: { change: _vm.changeStar }
+            })
+          ],
+          1
+        )
+      ]),
+      _c("view", { staticClass: "m-body" }, [
+        _vm._m(1),
+        _c(
+          "view",
+          { staticClass: "m-img" },
+          [
+            _vm._l(_vm.imgs, function(item, index) {
+              return _c("view", { key: index, staticClass: "m-img-item" }, [
+                _c("image", {
+                  staticStyle: { width: "120rpx", height: "120rpx" },
+                  attrs: { src: item.path, mode: "" }
+                })
+              ])
+            }),
+            _c(
+              "view",
+              {
+                staticClass: "m-img-item",
+                attrs: { eventid: "d1bc61ae-1" },
+                on: { click: _vm.chooseImg }
+              },
+              [_c("view", { staticClass: "m-img-but" }, [_vm._v("添加图片")])]
+            )
+          ],
+          2
+        )
+      ])
     ]),
-    _c("view", { staticClass: "m-body" })
+    _c("view", { staticClass: "m-pro" }, [
+      _c("view", { staticClass: "m-top" }, [
+        _vm._m(2),
+        _c(
+          "view",
+          {},
+          [
+            _c("uni-rate", {
+              attrs: {
+                size: "18",
+                value: "5",
+                eventid: "d1bc61ae-2",
+                mpcomid: "d1bc61ae-1"
+              },
+              on: { change: _vm.changeStar }
+            })
+          ],
+          1
+        )
+      ]),
+      _c("view", { staticClass: "m-body" }, [
+        _vm._m(3),
+        _c(
+          "view",
+          { staticClass: "m-img" },
+          [
+            _vm._l(_vm.imgs, function(item, index) {
+              return _c("view", { key: index, staticClass: "m-img-item" }, [
+                _c("image", {
+                  staticStyle: { width: "120rpx", height: "120rpx" },
+                  attrs: { src: item.path, mode: "" }
+                })
+              ])
+            }),
+            _c(
+              "view",
+              {
+                staticClass: "m-img-item",
+                attrs: { eventid: "d1bc61ae-3" },
+                on: { click: _vm.chooseImg }
+              },
+              [_c("view", { staticClass: "m-img-but" }, [_vm._v("添加图片")])]
+            )
+          ],
+          2
+        )
+      ])
+    ])
   ])
 }
 var staticRenderFns = [
@@ -232,7 +432,7 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("view", {}, [
+    return _c("view", { staticClass: "m-title" }, [
       _c("view", { staticClass: "img-box" }, [
         _c("image", {
           staticStyle: { width: "80rpx", height: "80rpx" },
@@ -243,6 +443,53 @@ var staticRenderFns = [
         })
       ]),
       _vm._v("商品评价")
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("view", { staticClass: "m-text" }, [
+      _c("view", { staticClass: "m-title" }, [_vm._v("分享一下吧")]),
+      _c("textarea", {
+        staticClass: "m-textarea",
+        attrs: {
+          "placeholder-style": "color:$color-2",
+          placeholder: "产品你还满意吗？有什么想对我们说的吗？让更多人知道吧"
+        }
+      })
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("view", { staticClass: "m-title" }, [
+      _c("view", { staticClass: "img-box" }, [
+        _c("image", {
+          staticStyle: { width: "80rpx", height: "80rpx" },
+          attrs: {
+            src: "../../static/img/icon/goods_icon_Avatar.png",
+            mode: "aspectFit"
+          }
+        })
+      ]),
+      _vm._v("商品评价")
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("view", { staticClass: "m-text" }, [
+      _c("view", { staticClass: "m-title" }, [_vm._v("分享一下吧")]),
+      _c("textarea", {
+        staticClass: "m-textarea",
+        attrs: {
+          "placeholder-style": "color:$color-2",
+          placeholder: "产品你还满意吗？有什么想对我们说的吗？让更多人知道吧"
+        }
+      })
     ])
   }
 ]

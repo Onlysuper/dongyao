@@ -382,66 +382,60 @@ export default {
 				this.shareClass = 'none';
 			}, 150);
 		},
-		//拼团
-		pintuan(){
-			let type=2;
-			let carNum=1;
-			uni.navigateTo({
-				url:"/pages/order/pay?storeid="+this.storeid+"&totalCount="+carNum+"&type="+type
-			})
-		},
-		// 加入购物车
-		joinCart(){
-			if(this.selectSpec==null){
-				return this.showSpec(()=>{
-					uni.showToast({title: "已加入购物车"});
-				});
-			}
-			uni.showToast({title: "已加入购物车"});
-		},
 		//立即购买
 		buy(){
-			if(this.selectSpec==null){
-				return this.showSpec(()=>{
-					this.toConfirmation();
-				});
-			}
-			this.toConfirmation();
+			this.joinCart(2)
 		},
-		//跳转确认订单页面
-		toConfirmation(){
-			let tmpList=[];
-			let goods = {id:this.goodsData.id,img:'../../static/img/goods/p1.jpg',name:this.goodsData.name,spec:'规格:'+this.goodsData.spec[this.selectSpec],price:this.goodsData.price,number:this.goodsData.number};
-			tmpList.push(goods);
-			uni.setStorage({
-				key:'buylist',
-				data:tmpList,
-				success: () => {
-					uni.navigateTo({
-						url:'../order/confirmation'
-					})
-				}
+		//拼团
+		pintuan(){
+			this.joinCart(2)
+		},
+		joinCart(type){
+			let _this = this;
+			var newobj={...this.goodsData};  
+			newobj['describes']="";
+			newobj['buyCount']='1';
+			let proArr = [newobj];
+			let proUrlData = encodeURI(JSON.stringify({proUrlData:proArr}));
+			let totalCount = 1;
+			uni.navigateTo({
+				url:"/pages/order/pay?storeid="+_this.storeId+"&totalCount="+totalCount+"&type="+type+'&proUrlData='+proUrlData
 			})
 		},
+		//跳转确认订单页面
+// 		toConfirmation(){
+// 			let tmpList=[];
+// 			let goods = {id:this.goodsData.id,img:'../../static/img/goods/p1.jpg',name:this.goodsData.name,spec:'规格:'+this.goodsData.spec[this.selectSpec],price:this.goodsData.price,number:this.goodsData.number};
+// 			tmpList.push(goods);
+// 			uni.setStorage({
+// 				key:'buylist',
+// 				data:tmpList,
+// 				success: () => {
+// 					uni.navigateTo({
+// 						url:'../order/confirmation'
+// 					})
+// 				}
+// 			})
+// 		},
 		//跳转评论列表
-		showComments(goodsid){
-			
-		},
+// 		showComments(goodsid){
+// 			
+// 		},
 		//选择规格
-		setSelectSpec(index){
-			this.selectSpec = index;
-		},
+// 		setSelectSpec(index){
+// 			this.selectSpec = index;
+// 		},
 		//减少数量
-		sub(){
-			if(this.goodsData.number<=1){
-				return;
-			}
-			this.goodsData.number--;
-		},
-		//增加数量
-		add(){
-			this.goodsData.number++;
-		},
+// 		sub(){
+// 			if(this.goodsData.number<=1){
+// 				return;
+// 			}
+// 			this.goodsData.number--;
+// 		},
+// 		//增加数量
+// 		add(){
+// 			this.goodsData.number++;
+// 		},
 		//跳转锚点
 		toAnchor(index){
 			this.selectAnchor = index;

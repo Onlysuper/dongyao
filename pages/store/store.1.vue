@@ -223,8 +223,10 @@
 				let type=1;
 				let totalCount=0;
 				let proArr =this.shopCarList.map((val,index,arrs)=>{  
-				  var obj={...val};  
-				  obj['describes']="";
+				  var obj={};  
+				  obj.productId=val.id;  
+				  obj.cou=val.buyCount;  
+				  totalCount+=val.buyCount;
 				  return obj  
 				});  
 				let proUrlData = encodeURI(JSON.stringify({proUrlData:proArr}));

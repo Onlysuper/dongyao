@@ -203,10 +203,15 @@
 			// 支付数据
 			getData(option){
 				let _this= this;
-				let proUrlData=decodeURI(option.proUrlData);
-				_this.shopCarList=JSON.parse(proUrlData)['proUrlData'];
-				_this.orderInit()
-				console.log(_this.shopCarList);
+				
+				_this.mPost("/server/sc/find/cart",{}).then(res=>{
+					if(res.code=='1'){
+						if(res.data){
+							_this.shopCarList=res.data;
+							_this.orderInit()
+						}
+					}
+				})
 			},
 			// 优惠券
 			tokenCard(){
@@ -227,15 +232,13 @@
 			//生成订单
 			orderInit(){
 				let _this=this;
-				let sendData = {
+				_this.mPost("/server/pay/calOrderPrice",{
 					storeId:_this.storeid,
 					totalCount:_this.totalCount,
 					type:_this.type,
 					products:_this.shopCarList,
 					couponId:_this.couponId,
-				}
-				console.log(sendData);
-				_this.mPost("/server/pay/calOrderPrice",sendData).then(res=>{
+				}).then(res=>{
 					if(res.code=='1'){
 						let data= res.data;
 						_this.totalPrice=data.totalPrice;
@@ -365,6 +368,7 @@
 			this.storeid=option.storeid;
 			this.totalCount=option.totalCount,
 			this.type=option.type
+			this.storeid=option.storeid;
 			// 位置
 			this.storeLocation();
 			//店铺详情
