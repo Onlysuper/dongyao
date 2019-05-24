@@ -834,14 +834,7 @@ var _mHomeStore = _interopRequireDefault(__webpack_require__(/*! @/components/m-
       // 拼团列表
       groupsellList: [],
       // 附近门店
-      nearStoreList: [{
-        // 					img:"../../static/img/2.jpg",
-        // 					title:"老萌1号店",
-        // 					distance:"13km",
-        // 					describel:"优惠优惠优惠",
-        // 					address:"北京市海淀区中关村大街15号",
-        // 					tips:['优惠']
-      }],
+      nearStoreList: [{}],
       current: 0,
       mode: 'long' };
 
@@ -881,7 +874,6 @@ var _mHomeStore = _interopRequireDefault(__webpack_require__(/*! @/components/m-
     },
     //热卖列表
     getHotsellList: function getHotsellList() {var _this3 = this;
-      console.log('热卖');
       this.mPost('/server/p/hot/products', {
         start: this.hotsellPage,
         length: 3 }).
@@ -927,8 +919,10 @@ var _mHomeStore = _interopRequireDefault(__webpack_require__(/*! @/components/m-
           var data = res.data;
           _this.nearStoreList = data;
         }
+
       }).catch(function (err) {
         console.log(err);
+        // uni.stopPullDownRefresh();
       });
     },
     // 门店更多
@@ -978,13 +972,15 @@ var _mHomeStore = _interopRequireDefault(__webpack_require__(/*! @/components/m-
       type: 'wgs84',
       success: function success(res) {
         _this.getStoreList(res.longitude, res.latitude);
-        console.log('当前位置的经度：' + res.longitude);
-        console.log('当前位置的纬度：' + res.latitude);
       } });
 
     this.getBanners();
     this.getHotsellList();
     this.getGroupsellList();
+  },
+  onPullDownRefresh: function onPullDownRefresh() {
+    var _this = this;
+    uni.stopPullDownRefresh();
   } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ "./node_modules/@dcloudio/uni-mp-weixin/dist/index.js")["default"]))
 

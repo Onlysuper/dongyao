@@ -163,8 +163,11 @@ _vue.default.prototype.mGet = function (url, data) {
           icon: "none" });
 
         reject(error);
-      } });
-
+      }
+      // 			complete() {
+      // 				uni.stopPullDownRefresh();
+      // 			}
+    });
   });
 };
 _vue.default.prototype.mPost = function (url, data, host) {
@@ -197,8 +200,11 @@ _vue.default.prototype.mPost = function (url, data, host) {
           icon: "none" });
 
         reject(error);
-      } });
-
+      }
+      // 			complete() {
+      // 				uni.stopPullDownRefresh();
+      // 			}
+    });
   });
 };
 _vue.default.prototype.mPostForm = function (url, data, host) {
@@ -232,8 +238,11 @@ _vue.default.prototype.mPostForm = function (url, data, host) {
           icon: "none" });
 
         reject(error);
-      } });
-
+      }
+      // 			complete() {
+      // 				uni.stopPullDownRefresh();
+      // 			}
+    });
   });
 };
 

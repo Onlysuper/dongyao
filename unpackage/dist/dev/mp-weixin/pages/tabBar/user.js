@@ -501,7 +501,12 @@ var _event = _interopRequireDefault(__webpack_require__(/*! ../../common/event.j
 
   },
   methods: {
+    linkToOrderTab: function linkToOrderTab(index) {
+      uni.setStorageSync('orderTab', index);
+      uni.switchTab({
+        url: '/pages/tabBar/order' });
 
+    },
     linkToTab: function linkToTab(url) {
       uni.switchTab({
         url: url });
@@ -806,14 +811,54 @@ var render = function() {
               attrs: { eventid: "09ce8447-3" },
               on: {
                 tap: function($event) {
-                  _vm.linkToTab("/pages/tabBar/order")
+                  _vm.linkToOrderTab(4)
                 }
               }
             },
             [_vm._v("查看全部 >")]
           )
         ]),
-        _vm._m(2)
+        _c("view", { staticClass: "m-slection" }, [
+          _c(
+            "view",
+            {
+              staticClass: "m-item",
+              attrs: { eventid: "09ce8447-4" },
+              on: {
+                tap: function($event) {
+                  _vm.linkToOrderTab(1)
+                }
+              }
+            },
+            [_vm._m(2), _c("view", {}, [_vm._v("待取货")])]
+          ),
+          _c(
+            "view",
+            {
+              staticClass: "m-item",
+              attrs: { eventid: "09ce8447-5" },
+              on: {
+                tap: function($event) {
+                  _vm.linkToOrderTab(2)
+                }
+              }
+            },
+            [_vm._m(3), _c("view", {}, [_vm._v("待支付")])]
+          ),
+          _c(
+            "view",
+            {
+              staticClass: "m-item",
+              attrs: { eventid: "09ce8447-6" },
+              on: {
+                tap: function($event) {
+                  _vm.linkToOrderTab(3)
+                }
+              }
+            },
+            [_vm._m(4), _c("view", {}, [_vm._v("待评价")])]
+          )
+        ])
       ]),
       _c(
         "view",
@@ -825,7 +870,7 @@ var render = function() {
               attrs: {
                 label: "我的优惠券",
                 link: true,
-                eventid: "09ce8447-4",
+                eventid: "09ce8447-7",
                 mpcomid: "09ce8447-1"
               },
               on: {
@@ -850,7 +895,7 @@ var render = function() {
               attrs: {
                 label: "关于我们",
                 link: true,
-                eventid: "09ce8447-5",
+                eventid: "09ce8447-8",
                 mpcomid: "09ce8447-2"
               },
               on: {
@@ -904,43 +949,42 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("view", { staticClass: "m-slection" }, [
-      _c("view", { staticClass: "m-item" }, [
-        _c("view", { staticClass: "img-box" }, [
-          _c("image", {
-            staticStyle: { width: "59rpx", height: "59rpx" },
-            attrs: {
-              src: "../../static/img/icon/me_icon_buy.png",
-              mode: "aspectFit"
-            }
-          })
-        ]),
-        _c("view", {}, [_vm._v("待取货")])
-      ]),
-      _c("view", { staticClass: "m-item" }, [
-        _c("view", { staticClass: "img-box" }, [
-          _c("image", {
-            staticStyle: { width: "59rpx", height: "59rpx" },
-            attrs: {
-              src: "../../static/img/icon/me_icon_maney.png",
-              mode: "aspectFit"
-            }
-          })
-        ]),
-        _c("view", {}, [_vm._v("待支付")])
-      ]),
-      _c("view", { staticClass: "m-item" }, [
-        _c("view", { staticClass: "img-box" }, [
-          _c("image", {
-            staticStyle: { width: "59rpx", height: "59rpx" },
-            attrs: {
-              src: "../../static/img/icon/me_icon_pingjia.png",
-              mode: "aspectFit"
-            }
-          })
-        ]),
-        _c("view", {}, [_vm._v("待平价")])
-      ])
+    return _c("view", { staticClass: "img-box" }, [
+      _c("image", {
+        staticStyle: { width: "59rpx", height: "59rpx" },
+        attrs: {
+          src: "../../static/img/icon/me_icon_buy.png",
+          mode: "aspectFit"
+        }
+      })
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("view", { staticClass: "img-box" }, [
+      _c("image", {
+        staticStyle: { width: "59rpx", height: "59rpx" },
+        attrs: {
+          src: "../../static/img/icon/me_icon_maney.png",
+          mode: "aspectFit"
+        }
+      })
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("view", { staticClass: "img-box" }, [
+      _c("image", {
+        staticStyle: { width: "59rpx", height: "59rpx" },
+        attrs: {
+          src: "../../static/img/icon/me_icon_pingjia.png",
+          mode: "aspectFit"
+        }
+      })
     ])
   }
 ]

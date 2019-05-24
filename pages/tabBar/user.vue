@@ -39,12 +39,12 @@
 					<view class="">
 						我的订单
 					</view>
-					<view class="right" @tap="linkToTab('/pages/tabBar/order')">
+					<view class="right" @tap="linkToOrderTab(4)">
 						查看全部 >
 					</view>
 				</view>
 				<view class="m-slection">
-					<view class="m-item">
+					<view @tap="linkToOrderTab(1)" class="m-item">
 						<view class="img-box">
 							<image style="width:59upx;height:59upx" src="../../static/img/icon/me_icon_buy.png" mode="aspectFit"></image>
 						</view>
@@ -52,7 +52,7 @@
 							待取货
 						</view>
 					</view>
-					<view class="m-item">
+					<view @tap="linkToOrderTab(2)" class="m-item">
 						<view class="img-box">
 							<image style="width:59upx;height:59upx" src="../../static/img/icon/me_icon_maney.png" mode="aspectFit"></image>
 						</view>
@@ -60,12 +60,12 @@
 							待支付
 						</view>
 					</view>
-					<view class="m-item">
+					<view @tap="linkToOrderTab(3)" class="m-item">
 						<view class="img-box">
 							<image style="width:59upx;height:59upx" src="../../static/img/icon/me_icon_pingjia.png" mode="aspectFit"></image>
 						</view>
 						<view class="">
-							待平价
+							待评价
 						</view>
 					</view>
 				</view>
@@ -97,7 +97,12 @@
 			}
 		},
 		methods:{
-			
+			linkToOrderTab(index){
+				uni.setStorageSync('orderTab', index);
+				uni.switchTab({
+					url:'/pages/tabBar/order'
+				})
+			},
 			linkToTab(url){
 				uni.switchTab({
 					url:url

@@ -361,7 +361,9 @@ var render = function() {
       _c("view", { staticClass: "m-container" }, [
         _vm.state == 1
           ? _c("view", { staticClass: "m-content" }, [
-              _c("view", { staticClass: "m-title" }, [_vm._v("FGH3456789")]),
+              _c("view", { staticClass: "m-title" }, [
+                _vm._v(_vm._s(_vm.order.carryCode))
+              ]),
               _c("view", { staticClass: "m-describe" }, [
                 _vm._v("请在取货时出示提示码")
               ])
@@ -435,7 +437,7 @@ var render = function() {
               price: item.presentPrice,
               oldprice: item.originalPrice,
               imgurl: item.pictureUrl,
-              num: item.discount,
+              num: item.buyCount,
               mpcomid: "69f9dad0-0-" + index
             }
           })

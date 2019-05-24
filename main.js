@@ -82,6 +82,9 @@ Vue.prototype.mGet = function(url,data){
 				});
 				reject(error)
 			}
+// 			complete() {
+// 				uni.stopPullDownRefresh();
+// 			}
 		})
 	});
 }
@@ -116,6 +119,9 @@ Vue.prototype.mPost = function(url,data,host){
 				});
 				reject(error)
 			}
+// 			complete() {
+// 				uni.stopPullDownRefresh();
+// 			}
 		})
 	});
 }
@@ -151,6 +157,9 @@ Vue.prototype.mPostForm = function(url,data,host){
 				});
 				reject(error)
 			}
+// 			complete() {
+// 				uni.stopPullDownRefresh();
+// 			}
 		})
 	});
 }

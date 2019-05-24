@@ -29,7 +29,7 @@
   border-radius: 10rpx;
   -webkit-box-shadow: 0 0 10rpx rgba(0, 0, 0, 0.1);
           box-shadow: 0 0 10rpx rgba(0, 0, 0, 0.1);
-  padding: 30rpx;
+  padding: 50rpx 30rpx;
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -43,6 +43,18 @@
     margin-left: 20rpx;
     color: #4f3a18;
     font-size: 32rpx;
+}
+.m-vip-page.actived {
+    background: #fdebc5;
+    position: relative;
+    overflow: hidden;
+}
+.m-vip-page.actived .icon {
+      content: "";
+      display: block;
+      position: absolute;
+      right: 0;
+      bottom: 0;
 }
 
 @charset "UTF-8";
@@ -81,7 +93,6 @@
 .m-myvip-page .m-user-box {
   background: #4e4e4e;
   margin: 0 30rpx;
-  padding-bottom: 58rpx;
   border-radius: 10rpx;
   -webkit-box-shadow: 0rpx 2rpx 20rpx rgba(0, 0, 0, 0.3);
           box-shadow: 0rpx 2rpx 20rpx rgba(0, 0, 0, 0.3);
@@ -158,6 +169,7 @@
 }
 .m-myvip-page .m-user-box .m-footer {
     padding: 0 30rpx;
+    padding-bottom: 58rpx;
 }
 .m-myvip-page .m-user-box .m-footer .m-title {
       color: #dbbb8d;
@@ -196,6 +208,7 @@
 }
 .m-myvip-page .m-main .m-card-describe {
     margin-top: 30rpx;
+    padding-bottom: 100rpx;
 }
 .m-myvip-page .m-main .m-card-describe .m-title {
       margin-top: 58rpx;
@@ -215,6 +228,8 @@
               justify-content: space-around;
       height: 88rpx;
       line-height: 88rpx;
+      color: #4c4c4c;
+      font-size: 24rpx;
 }
 .m-myvip-page .m-main .m-card-describe .m-title .line {
         height: 1px;

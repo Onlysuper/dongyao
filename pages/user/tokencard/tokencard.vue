@@ -51,7 +51,7 @@
 			},
 			// 获取订单
 			getTokencards(type){
-				this.mGet('/server/co/myCoupons',{
+				this.mPost('/server/co/myCoupons',{
 					type:type,
 					start:1,
 					length:1000

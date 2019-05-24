@@ -8,7 +8,7 @@
 					<!-- 待取货 -->
 					<view v-if="state==1" class="m-content">
 						<view class="m-title">
-							FGH3456789
+							{{order.carryCode}}
 						</view>
 						<view class="m-describe">
 							请在取货时出示提示码
@@ -63,7 +63,7 @@
 				:price="item.presentPrice"
 				:oldprice="item.originalPrice"
 				:imgurl="item.pictureUrl"
-				:num="item.discount"
+				:num="item.buyCount"
 				 ></m-order-pro>
 				 <view class="m-footer">
 					合计<view class="count">￥{{order.totalPrice}}</view>

@@ -810,17 +810,14 @@ var page = 1,totalpage = 1;var _default =
     page = 1;
     orderList: [];
     this.getOrders();
-    uni.setStorageSync('orderTab', 1);
-  }
-  // 		onShow(){
-  // 			this.tabActive=uni.getStorageSync('orderTab')||1;
-  // 			uni.setStorageSync('orderTab', 1);
-  // 			//获取订单
-  // 			page = 1;
-  // 			orderList:[];
-  // 			this.getOrders();
-  // 		}
-};exports.default = _default;
+  },
+  onShow: function onShow() {
+    this.tabActive = uni.getStorageSync('orderTab') || 1;
+    //获取订单
+    page = 1;
+    orderList: [];
+    this.getOrders();
+  } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ "./node_modules/@dcloudio/uni-mp-weixin/dist/index.js")["default"]))
 
 /***/ }),

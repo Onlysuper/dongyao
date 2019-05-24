@@ -13,7 +13,7 @@
 							</view>
 						</view>
 					</view>
-					<view class="m-date">
+					<view v-if="isVip" class="m-date">
 						<view class="m-text">
 							续费>
 						</view>
@@ -22,7 +22,7 @@
 						</view>
 					</view>
 				</view>
-				<view class="m-footer">
+				<view v-if="isVip" class="m-footer">
 					<view class="m-title">
 						{{myMember.memberType}}{{myMember.discount}}卡
 					</view>
@@ -35,24 +35,17 @@
 		</view>
 		<view class="m-main">
 			<m-title title="VIP折扣卡" label="会员权益 >" @titleHandle="vipDetails"></m-title>
-			<m-vip-card style="margin-bottom: 30upx;" v-for="(item,index) in members" :key="index" :state="item.type"  :synopsis="item.synopsis" :price="item.price" ></m-vip-card>
-			<view class="m-button" @buyVipFn="buyVipFn">立即续费/购买</view>
+			<view v-for="(item,index) in members" :key="index" style="padding-bottom: 30upx">
+				<m-vip-card @chooseVip="chooseVip" :describes="item.describes" :chooseVipId="chooseVipId" :id="item.id" :state="item.type"  :synopsis="item.synopsis" :price="item.price" ></m-vip-card>
+			</view>
+			<view class="m-button" @tap="buyVipFn">立即续费/购买</view>
 			<view class="m-card-describe">
 				<view class="m-title">
 					<view class="line"></view>月卡介绍<view class="line"></view>
 				</view>
 				<view class="m-content">
 					<view class="m-list">
-						1.受消费积分。积分比例为15：1；可抵值100元人民币或等
-						值礼品.  享受专属会员产品的短信通知、节假日问候。
-					</view>
-					<view class="m-list">
-						1.受消费积分。积分比例为15：1；可抵值100元人民币或等
-						值礼品.  享受专属会员产品的短信通知、节假日问候。
-					</view>
-					<view class="m-list">
-						1.受消费积分。积分比例为15：1；可抵值100元人民币或等
-						值礼品.  享受专属会员产品的短信通知、节假日问候。
+						{{vipDescribes}}
 					</view>
 				</view>
 			</view>
@@ -69,15 +62,23 @@
 		},
 		data() {
 			return {
-				myMember:{},
+				chooseVipId:0,
+				isVip:false,//是否为会员
+				myMember:{
+					nickName:'',
+					dueTime:'',
+					memberType:'',
+					discount:'',
+					memberSynopsis:''
+				},
 				members:[],
-				userData:{}
+				userData:{},
+				vipDescribes:"" //会员卡权益
 			};
 		},
 		methods:{
 			getUser(){
 				this.userData = JSON.parse(uni.getStorageSync('userData'));
-				console.log(this.userData);
 			},
 			// 会员列表
 			getVips(){
@@ -87,6 +88,12 @@
 						_this.members=res.data.members
 					}
 				})
+			},
+			// 选择会员卡
+			chooseVip(res){
+				console.log('选择会员卡'+res);
+				this.chooseVipId=res.id,
+				this.vipDescribes=res.describes;
 			},
 			changeType(memberType){
 				switch(memberType){
@@ -106,28 +113,80 @@
 				this.mPost("/server/m/myMember",{}).then(res=>{
 					if(res.code==1){
 						let data = res.data.myMember;
-						if(data['memberType']){
-							data['memberType']= _this.changeType(data['memberType']);
+						if(data){
+							// 会员
+							_this.isVip = true
+							if(data&&data['memberType']){
+								data['memberType']= _this.changeType(data['memberType']);
+							}
+							if(data&&data['discount']){
+								data['discount']=_this.accMul(data['discount'],10)+'折'
+							}
+							_this.myMember=data;
+							
+						}else{
+							// 非会员
+							_this.isVip = false
 						}
-						if(data['discount']){
-							data['discount']=_this.accMul(data['discount'],10)+'折'
-						}
-						_this.myMember=data;
 					}
 				})
 			},
 			//购买vip
 			buyVipFn(){
 				let _this = this;
-				this.mPost("",{}).then(res=>{
+				this.mPost("/server/m/buyMember",_this.chooseVipId).then(res=>{
 					console.log(res);
+					let data =res.data;
+					if(data){
+						let paydata = {
+							provider: 'wxpay',
+							timeStamp: data.timeStamp+'',
+							nonceStr: data.nonceStr,
+							package: data.package,
+							signType: data.signType,
+							paySign: data.paySign
+						}
+						uni.requestPayment({
+							...paydata,
+							success: function(res) {
+								uni.showModal({
+									title: '支付成功',
+									content: '恭喜哦，你已成功成为会员用户',
+									showCancel:false,
+									confirmText:'完成',
+									success: function (res) {
+										if (res.confirm) {
+											_this.initData()
+// 											uni.setStorageSync('orderTab', 1);
+// 											uni.switchTab({  
+// 												url: '/pages/tabBar/order'  
+// 											});
+										} 
+										else if (res.cancel) {
+											_this.initData()
+											// console.log('用户点击取消');
+										}
+									}
+								});
+							},
+							fail: function(err) {
+								console.log(err);
+							}
+						})
+					}
+					
+				}).catch(err=>{
+					console.log(err)
 				})
+			},
+			initData(){
+				this.getUser();
+				this.getVips();
+				this.myVips();
 			}
 		},
 		onLoad(options){
-			this.getUser();
-			this.getVips();
-			this.myVips();
+			this.initData()
 		}
 	}
 </script>
@@ -145,7 +204,7 @@
 	.m-user-box{
 		background: #4e4e4e;
 		margin: 0 30upx;
-		padding-bottom: 58upx;
+		// padding-bottom: 58upx;
 		border-radius: 10upx;
 		box-shadow:0upx 2upx 20upx rgba(0,0,0,0.3);
 		.m-container{
@@ -193,6 +252,7 @@
 		
 		.m-footer{
 			padding:0 30upx;
+			padding-bottom: 58upx;
 			.m-title{
 				color:#dbbb8d;
 				font-weight: bold;
@@ -222,6 +282,7 @@
 		}
 		.m-card-describe{
 			margin-top: 30upx;
+			padding-bottom: 100upx;
 			.m-title{
 				margin-top: 58upx;
 				color:$color-5;
@@ -233,6 +294,8 @@
 				justify-content: space-around;
 				height: 88upx;
 				line-height: 88upx;
+				color:$color-5;
+				font-size: $fontsize-5;
 				.line{
 					height: 1px;
 					background:$color-border3;

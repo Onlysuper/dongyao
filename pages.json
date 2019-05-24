@@ -8,7 +8,7 @@
                 "navigationBarTitleText" : "东尧蔬菜",
                 "navigationBarTextStyle" : "black",
                 "enablePullDownRefresh" : true,
-                "onReachBottomDistance" : 50,
+                "onReachBottomDistance" : 100,
                 "app-plus" : {
                     "titleNView" : false, //禁用原生导航栏
                     "softinputNavBar" : "none"
@@ -71,7 +71,7 @@
             "style" : {
                 "navigationBarTitleText" : "东尧蔬菜",
                 "navigationBarTextStyle" : "black",
-                "enablePullDownRefresh" : true,
+                "enablePullDownRefresh" : false,
                 "onReachBottomDistance" : 50,
                 "app-plus" : {
                     "titleNView" : false, //禁用原生导航栏

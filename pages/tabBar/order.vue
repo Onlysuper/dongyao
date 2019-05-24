@@ -160,22 +160,20 @@
 			this.getOrders();
 		},
 		onLoad(option){
-			this.tabActive=uni.getStorageSync('orderTab')||1;
+			this.tabActive=uni.getStorageSync('orderTab')|| 1;
 			this.checkLogin();
 			//获取订单
 			page = 1;
 			orderList:[];
 			this.getOrders();
-			uni.setStorageSync('orderTab', 1);
+		},
+		onShow(){
+			this.tabActive=uni.getStorageSync('orderTab')||1;
+			//获取订单
+			page = 1;
+			orderList:[];
+			this.getOrders();
 		}
-// 		onShow(){
-// 			this.tabActive=uni.getStorageSync('orderTab')||1;
-// 			uni.setStorageSync('orderTab', 1);
-// 			//获取订单
-// 			page = 1;
-// 			orderList:[];
-// 			this.getOrders();
-// 		}
 	}
 </script>
 <style lang="scss">

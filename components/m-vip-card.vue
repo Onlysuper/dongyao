@@ -1,5 +1,5 @@
 <template>
-	<view class="m-vip-page">
+	<view class="m-vip-page" @tap="chooseVip" :class="{actived:(chooseVipId==id)}">
 		<view class="m-img-box">
 			<image v-if="state=='0'" style="height:100upx;width:100upx;" src="../../../static/img/icon/member_icon_月卡.png" mode=""></image>
 			<image v-if="state=='1'" style="height:100upx;width:100upx;" src="../../../static/img/icon/member_icon_季卡.png" mode=""></image>
@@ -13,6 +13,9 @@
 			<view class="m-price">
 				￥{{price}}
 			</view>
+			<!-- <view > -->
+			<image v-if="(chooseVipId==id)" class="icon"  style="height:58upx;width:58upx;" src="../../../static/img/icon/member_icon_ok.png" mode=""></image>
+			<!-- </view> -->
 		</view>
 	</view>
 </template>
@@ -21,6 +24,18 @@
 	export default {
 		name:"m-vip-page",
 		props:{
+			id:{
+				type:String,
+				value:"",
+			},
+			chooseVipId:{
+				type:String,
+				value:"",
+			},
+			describes:{
+				type:String,
+				value:"",
+			},
 			state:{
 				type:String,
 				value:"",
@@ -40,8 +55,8 @@
 			};
 		},
 		methods:{
-			titleHandle(){
-				// this.$emit("titleHandle")
+			chooseVip(){
+				this.$emit('chooseVip',{id:this.id,describes:this.describes})
 			}
 		}
 	}
@@ -53,7 +68,7 @@
 	background:#fff;
 	border-radius: 10upx;
 	box-shadow: 0 0 10upx rgba(0,0,0,0.1);
-	padding:30upx;
+	padding:50upx 30upx;
 	display: flex;
 	// justify-content: center;
 	align-items: center;
@@ -68,6 +83,19 @@
 			
 		}
 	}
-	
+	&.actived{
+		background:#fdebc5;
+		position: relative;
+		overflow: hidden;
+		.icon{
+			content: "";
+			display: block;
+			position: absolute;
+			right: 0;bottom: 0;
+			// background:url();
+			// width: 50upx;
+			// height: 90upx;
+		}
+	}
 }
 </style>

@@ -90,14 +90,7 @@
 				// 拼团列表
 				groupsellList:[],
 				// 附近门店
-				nearStoreList:[{
-// 					img:"../../static/img/2.jpg",
-// 					title:"老萌1号店",
-// 					distance:"13km",
-// 					describel:"优惠优惠优惠",
-// 					address:"北京市海淀区中关村大街15号",
-// 					tips:['优惠']
-				}],
+				nearStoreList:[{}],
 				current: 0,
 				mode: 'long',
 			};
@@ -137,7 +130,6 @@
 			},
 			//热卖列表
 			getHotsellList(){
-				console.log('热卖');
 				this.mPost('/server/p/hot/products',{
 					start:this.hotsellPage,
 					length:3
@@ -179,12 +171,14 @@
 					"lng": 116.206845,
 					"lat": 39.762155
 				}).then(res=>{
-						if(res.data){
-							let data = res.data;
-								_this.nearStoreList = data;
-						}
+					if(res.data){
+						let data = res.data;
+							_this.nearStoreList = data;
+					}
+					
 				}).catch(err=>{
 					console.log(err);
+					// uni.stopPullDownRefresh();
 				});
 			},
 			// 门店更多
@@ -234,13 +228,15 @@
 				type: 'wgs84',
 				success: function (res) {
 					_this.getStoreList(res.longitude,res.latitude);
-					console.log('当前位置的经度：' + res.longitude);
-					console.log('当前位置的纬度：' + res.latitude);
 				}
 			}); 
 			this.getBanners();
 			this.getHotsellList();
 			this.getGroupsellList();
+		},
+		onPullDownRefresh(){
+			let _this = this;
+			uni.stopPullDownRefresh();
 		}
 	}
 </script>

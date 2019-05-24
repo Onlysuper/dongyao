@@ -223,9 +223,24 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 
 
 
+
+
+
 {
   name: "m-vip-page",
   props: {
+    id: {
+      type: String,
+      value: "" },
+
+    chooseVipId: {
+      type: String,
+      value: "" },
+
+    describes: {
+      type: String,
+      value: "" },
+
     state: {
       type: String,
       value: "" },
@@ -245,8 +260,8 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
     };
   },
   methods: {
-    titleHandle: function titleHandle() {
-      // this.$emit("titleHandle")
+    chooseVip: function chooseVip() {
+      this.$emit('chooseVip', { id: this.id, describes: this.describes });
     } } };exports.default = _default;
 
 /***/ }),
@@ -314,15 +329,8 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 
 
 
-
-
-
-
-
-
-
 var _mTitle = _interopRequireDefault(__webpack_require__(/*! @/components/m-title */ "../../../../../../Users/apple/opt/DONGYAO/components/m-title.vue"));
-var _mVipCard = _interopRequireDefault(__webpack_require__(/*! @/components/m-vip-card */ "../../../../../../Users/apple/opt/DONGYAO/components/m-vip-card.vue"));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}var _default =
+var _mVipCard = _interopRequireDefault(__webpack_require__(/*! @/components/m-vip-card */ "../../../../../../Users/apple/opt/DONGYAO/components/m-vip-card.vue"));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function _objectSpread(target) {for (var i = 1; i < arguments.length; i++) {var source = arguments[i] != null ? arguments[i] : {};var ownKeys = Object.keys(source);if (typeof Object.getOwnPropertySymbols === 'function') {ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) {return Object.getOwnPropertyDescriptor(source, sym).enumerable;}));}ownKeys.forEach(function (key) {_defineProperty(target, key, source[key]);});}return target;}function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}var _default =
 {
   components: {
     mTitle: _mTitle.default,
@@ -330,15 +338,23 @@ var _mVipCard = _interopRequireDefault(__webpack_require__(/*! @/components/m-vi
 
   data: function data() {
     return {
-      myMember: {},
-      members: [],
-      userData: {} };
+      chooseVipId: 0,
+      isVip: false, //是否为会员
+      myMember: {
+        nickName: '',
+        dueTime: '',
+        memberType: '',
+        discount: '',
+        memberSynopsis: '' },
 
+      members: [],
+      userData: {},
+      vipDescribes: "" //会员卡权益
+    };
   },
   methods: {
     getUser: function getUser() {
       this.userData = JSON.parse(uni.getStorageSync('userData'));
-      console.log(this.userData);
     },
     // 会员列表
     getVips: function getVips() {
@@ -348,6 +364,12 @@ var _mVipCard = _interopRequireDefault(__webpack_require__(/*! @/components/m-vi
           _this.members = res.data.members;
         }
       });
+    },
+    // 选择会员卡
+    chooseVip: function chooseVip(res) {
+      console.log('选择会员卡' + res);
+      this.chooseVipId = res.id,
+      this.vipDescribes = res.describes;
     },
     changeType: function changeType(memberType) {
       switch (memberType) {
@@ -367,28 +389,80 @@ var _mVipCard = _interopRequireDefault(__webpack_require__(/*! @/components/m-vi
       this.mPost("/server/m/myMember", {}).then(function (res) {
         if (res.code == 1) {
           var data = res.data.myMember;
-          if (data['memberType']) {
-            data['memberType'] = _this.changeType(data['memberType']);
+          if (data) {
+            // 会员
+            _this.isVip = true;
+            if (data && data['memberType']) {
+              data['memberType'] = _this.changeType(data['memberType']);
+            }
+            if (data && data['discount']) {
+              data['discount'] = _this.accMul(data['discount'], 10) + '折';
+            }
+            _this.myMember = data;
+
+          } else {
+            // 非会员
+            _this.isVip = false;
           }
-          if (data['discount']) {
-            data['discount'] = _this.accMul(data['discount'], 10) + '折';
-          }
-          _this.myMember = data;
         }
       });
     },
     //购买vip
     buyVipFn: function buyVipFn() {
       var _this = this;
-      this.mPost("", {}).then(function (res) {
+      this.mPost("/server/m/buyMember", _this.chooseVipId).then(function (res) {
         console.log(res);
+        var data = res.data;
+        if (data) {
+          var paydata = {
+            provider: 'wxpay',
+            timeStamp: data.timeStamp + '',
+            nonceStr: data.nonceStr,
+            package: data.package,
+            signType: data.signType,
+            paySign: data.paySign };
+
+          uni.requestPayment(_objectSpread({},
+          paydata, {
+            success: function success(res) {
+              uni.showModal({
+                title: '支付成功',
+                content: '恭喜哦，你已成功成为会员用户',
+                showCancel: false,
+                confirmText: '完成',
+                success: function success(res) {
+                  if (res.confirm) {
+                    _this.initData();
+                    // 											uni.setStorageSync('orderTab', 1);
+                    // 											uni.switchTab({  
+                    // 												url: '/pages/tabBar/order'  
+                    // 											});
+                  } else
+                  if (res.cancel) {
+                    _this.initData();
+                    // console.log('用户点击取消');
+                  }
+                } });
+
+            },
+            fail: function fail(err) {
+              console.log(err);
+            } }));
+
+        }
+
+      }).catch(function (err) {
+        console.log(err);
       });
+    },
+    initData: function initData() {
+      this.getUser();
+      this.getVips();
+      this.myVips();
     } },
 
   onLoad: function onLoad(options) {
-    this.getUser();
-    this.getVips();
-    this.myVips();
+    this.initData();
   } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ "./node_modules/@dcloudio/uni-mp-weixin/dist/index.js")["default"]))
 
@@ -431,50 +505,71 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("view", { staticClass: "m-vip-page" }, [
-    _c("view", { staticClass: "m-img-box" }, [
-      _vm.state == "0"
-        ? _c("image", {
-            staticStyle: { height: "100rpx", width: "100rpx" },
-            attrs: {
-              src: "../../../static/img/icon/member_icon_月卡.png",
-              mode: ""
-            }
-          })
-        : _vm._e(),
-      _vm.state == "1"
-        ? _c("image", {
-            staticStyle: { height: "100rpx", width: "100rpx" },
-            attrs: {
-              src: "../../../static/img/icon/member_icon_季卡.png",
-              mode: ""
-            }
-          })
-        : _vm._e(),
-      _vm.state == "2"
-        ? _c("image", {
-            staticStyle: { height: "100rpx", width: "100rpx" },
-            attrs: {
-              src: "../../../static/img/icon/member_icon_半年卡.png",
-              mode: ""
-            }
-          })
-        : _vm._e(),
-      _vm.state == "3"
-        ? _c("image", {
-            staticStyle: { height: "100rpx", width: "100rpx" },
-            attrs: {
-              src: "../../../static/img/icon/member_icon_年卡.png",
-              mode: ""
-            }
-          })
-        : _vm._e()
-    ]),
-    _c("view", { staticClass: "m-text-box" }, [
-      _c("view", { staticClass: "m-text" }, [_vm._v(_vm._s(_vm.synopsis))]),
-      _c("view", { staticClass: "m-price" }, [_vm._v("￥" + _vm._s(_vm.price))])
-    ])
-  ])
+  return _c(
+    "view",
+    {
+      staticClass: "m-vip-page",
+      class: { actived: _vm.chooseVipId == _vm.id },
+      attrs: { eventid: "1c71e0cf-0" },
+      on: { tap: _vm.chooseVip }
+    },
+    [
+      _c("view", { staticClass: "m-img-box" }, [
+        _vm.state == "0"
+          ? _c("image", {
+              staticStyle: { height: "100rpx", width: "100rpx" },
+              attrs: {
+                src: "../../../static/img/icon/member_icon_月卡.png",
+                mode: ""
+              }
+            })
+          : _vm._e(),
+        _vm.state == "1"
+          ? _c("image", {
+              staticStyle: { height: "100rpx", width: "100rpx" },
+              attrs: {
+                src: "../../../static/img/icon/member_icon_季卡.png",
+                mode: ""
+              }
+            })
+          : _vm._e(),
+        _vm.state == "2"
+          ? _c("image", {
+              staticStyle: { height: "100rpx", width: "100rpx" },
+              attrs: {
+                src: "../../../static/img/icon/member_icon_半年卡.png",
+                mode: ""
+              }
+            })
+          : _vm._e(),
+        _vm.state == "3"
+          ? _c("image", {
+              staticStyle: { height: "100rpx", width: "100rpx" },
+              attrs: {
+                src: "../../../static/img/icon/member_icon_年卡.png",
+                mode: ""
+              }
+            })
+          : _vm._e()
+      ]),
+      _c("view", { staticClass: "m-text-box" }, [
+        _c("view", { staticClass: "m-text" }, [_vm._v(_vm._s(_vm.synopsis))]),
+        _c("view", { staticClass: "m-price" }, [
+          _vm._v("￥" + _vm._s(_vm.price))
+        ]),
+        _vm.chooseVipId == _vm.id
+          ? _c("image", {
+              staticClass: "icon",
+              staticStyle: { height: "58rpx", width: "58rpx" },
+              attrs: {
+                src: "../../../static/img/icon/member_icon_ok.png",
+                mode: ""
+              }
+            })
+          : _vm._e()
+      ])
+    ]
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -515,36 +610,40 @@ var render = function() {
               ])
             ])
           ]),
-          _c("view", { staticClass: "m-date" }, [
-            _c("view", { staticClass: "m-text" }, [_vm._v("续费>")]),
-            _c("view", { staticClass: "m-time" }, [
-              _vm._v(_vm._s(_vm.myMember.dueTime) + "到期")
-            ])
-          ])
+          _vm.isVip
+            ? _c("view", { staticClass: "m-date" }, [
+                _c("view", { staticClass: "m-text" }, [_vm._v("续费>")]),
+                _c("view", { staticClass: "m-time" }, [
+                  _vm._v(_vm._s(_vm.myMember.dueTime) + "到期")
+                ])
+              ])
+            : _vm._e()
         ]),
-        _c("view", { staticClass: "m-footer" }, [
-          _c("view", { staticClass: "m-title" }, [
-            _vm._v(
-              _vm._s(_vm.myMember.memberType) +
-                _vm._s(_vm.myMember.discount) +
-                "卡"
-            )
-          ]),
-          _c("view", { staticClass: "m-describe" }, [
-            _c("image", {
-              staticStyle: {
-                width: "59rpx",
-                height: "59rpx",
-                "margin-right": "10rpx"
-              },
-              attrs: {
-                src: "../../../static/img/icon/me_icon_VIP.png",
-                mode: "aspectFit"
-              }
-            }),
-            _vm._v(_vm._s(_vm.myMember.memberSynopsis))
-          ])
-        ])
+        _vm.isVip
+          ? _c("view", { staticClass: "m-footer" }, [
+              _c("view", { staticClass: "m-title" }, [
+                _vm._v(
+                  _vm._s(_vm.myMember.memberType) +
+                    _vm._s(_vm.myMember.discount) +
+                    "卡"
+                )
+              ]),
+              _c("view", { staticClass: "m-describe" }, [
+                _c("image", {
+                  staticStyle: {
+                    width: "59rpx",
+                    height: "59rpx",
+                    "margin-right": "10rpx"
+                  },
+                  attrs: {
+                    src: "../../../static/img/icon/me_icon_VIP.png",
+                    mode: "aspectFit"
+                  }
+                }),
+                _vm._v(_vm._s(_vm.myMember.memberSynopsis))
+              ])
+            ])
+          : _vm._e()
       ])
     ]),
     _c(
@@ -561,27 +660,44 @@ var render = function() {
           on: { titleHandle: _vm.vipDetails }
         }),
         _vm._l(_vm.members, function(item, index) {
-          return _c("m-vip-card", {
-            key: index,
-            staticStyle: { "margin-bottom": "30rpx" },
-            attrs: {
-              state: item.type,
-              synopsis: item.synopsis,
-              price: item.price,
-              mpcomid: "45ab7cfc-1-" + index
-            }
-          })
+          return _c(
+            "view",
+            { key: index, staticStyle: { "padding-bottom": "30rpx" } },
+            [
+              _c("m-vip-card", {
+                attrs: {
+                  describes: item.describes,
+                  chooseVipId: _vm.chooseVipId,
+                  id: item.id,
+                  state: item.type,
+                  synopsis: item.synopsis,
+                  price: item.price,
+                  eventid: "45ab7cfc-1-" + index,
+                  mpcomid: "45ab7cfc-1-" + index
+                },
+                on: { chooseVip: _vm.chooseVip }
+              })
+            ],
+            1
+          )
         }),
         _c(
           "view",
           {
             staticClass: "m-button",
-            attrs: { eventid: "45ab7cfc-1" },
-            on: { buyVipFn: _vm.buyVipFn }
+            attrs: { eventid: "45ab7cfc-2" },
+            on: { tap: _vm.buyVipFn }
           },
           [_vm._v("立即续费/购买")]
         ),
-        _vm._m(0)
+        _c("view", { staticClass: "m-card-describe" }, [
+          _vm._m(0),
+          _c("view", { staticClass: "m-content" }, [
+            _c("view", { staticClass: "m-list" }, [
+              _vm._v(_vm._s(_vm.vipDescribes))
+            ])
+          ])
+        ])
       ],
       2
     )
@@ -592,29 +708,10 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("view", { staticClass: "m-card-describe" }, [
-      _c("view", { staticClass: "m-title" }, [
-        _c("view", { staticClass: "line" }),
-        _vm._v("月卡介绍"),
-        _c("view", { staticClass: "line" })
-      ]),
-      _c("view", { staticClass: "m-content" }, [
-        _c("view", { staticClass: "m-list" }, [
-          _vm._v(
-            "1.受消费积分。积分比例为15：1；可抵值100元人民币或等\n\t\t\t\t\t值礼品.  享受专属会员产品的短信通知、节假日问候。"
-          )
-        ]),
-        _c("view", { staticClass: "m-list" }, [
-          _vm._v(
-            "1.受消费积分。积分比例为15：1；可抵值100元人民币或等\n\t\t\t\t\t值礼品.  享受专属会员产品的短信通知、节假日问候。"
-          )
-        ]),
-        _c("view", { staticClass: "m-list" }, [
-          _vm._v(
-            "1.受消费积分。积分比例为15：1；可抵值100元人民币或等\n\t\t\t\t\t值礼品.  享受专属会员产品的短信通知、节假日问候。"
-          )
-        ])
-      ])
+    return _c("view", { staticClass: "m-title" }, [
+      _c("view", { staticClass: "line" }),
+      _vm._v("月卡介绍"),
+      _c("view", { staticClass: "line" })
     ])
   }
 ]

@@ -166,7 +166,7 @@ var _mTokenCard = _interopRequireDefault(__webpack_require__(/*! @/components/m-
     },
     // 获取订单
     getTokencards: function getTokencards(type) {
-      this.mGet('/server/co/myCoupons', {
+      this.mPost('/server/co/myCoupons', {
         type: type,
         start: 1,
         length: 1000 }).
