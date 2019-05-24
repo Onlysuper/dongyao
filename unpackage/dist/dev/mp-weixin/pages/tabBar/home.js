@@ -624,6 +624,11 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
       } } },
 
 
+  methods: {
+    handleFn: function handleFn() {
+      this.$emit('handleFn', this.rowData.id);
+    } },
+
   data: function data() {
     return {};
 
@@ -938,8 +943,8 @@ var _mHomeStore = _interopRequireDefault(__webpack_require__(/*! @/components/m-
       this.linkTo("/pages/product/product");
     },
     //点击门店图片
-    storeDetail: function storeDetail() {
-      this.linkTo("/pages/store/store");
+    storeDetail: function storeDetail(id) {
+      this.linkTo("/pages/store/store?storeid=" + id);
     },
     swiperChange: function swiperChange(e) {
       this.current = e.detail.current;
@@ -1160,41 +1165,49 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("view", { staticClass: "m-store-item" }, [
-    _vm.rowData.imgUrl
-      ? _c("view", { staticClass: "m-img" }, [
-          _c("image", {
-            staticStyle: { width: "100%", height: "100%" },
-            attrs: { src: _vm.rowData.img, mode: "aspectFit" }
-          })
+  return _c(
+    "view",
+    {
+      staticClass: "m-store-item",
+      attrs: { eventid: "36b44e7c-0" },
+      on: { tap: _vm.handleFn }
+    },
+    [
+      _vm.rowData.imgUrl
+        ? _c("view", { staticClass: "m-img" }, [
+            _c("image", {
+              staticStyle: { width: "100%", height: "100%" },
+              attrs: { src: _vm.rowData.img, mode: "aspectFit" }
+            })
+          ])
+        : _vm._e(),
+      _c("view", { staticClass: "m-text" }, [
+        _c("view", { staticClass: "m-title" }, [
+          _vm._v(_vm._s(_vm.rowData.name))
+        ]),
+        _c(
+          "view",
+          { staticClass: "m-discount" },
+          [
+            _vm._l(_vm.tips, function(item, index) {
+              return _c("view", { key: index, staticClass: "m-tip" }, [
+                _vm._v(_vm._s(item))
+              ])
+            }),
+            _vm._t("tip", null, { mpcomid: "36b44e7c-0" }),
+            _vm._v(_vm._s(_vm.rowData.describel))
+          ],
+          2
+        ),
+        _c("view", { staticClass: "m-address" }, [
+          _vm._v(_vm._s(_vm.rowData.address))
         ])
-      : _vm._e(),
-    _c("view", { staticClass: "m-text" }, [
-      _c("view", { staticClass: "m-title" }, [
-        _vm._v(_vm._s(_vm.rowData.name))
       ]),
-      _c(
-        "view",
-        { staticClass: "m-discount" },
-        [
-          _vm._l(_vm.tips, function(item, index) {
-            return _c("view", { key: index, staticClass: "m-tip" }, [
-              _vm._v(_vm._s(item))
-            ])
-          }),
-          _vm._t("tip", null, { mpcomid: "36b44e7c-0" }),
-          _vm._v(_vm._s(_vm.rowData.describel))
-        ],
-        2
-      ),
-      _c("view", { staticClass: "m-address" }, [
-        _vm._v(_vm._s(_vm.rowData.address))
+      _c("view", { staticClass: "m-distance" }, [
+        _vm._v(_vm._s(_vm.rowData.fencingRange) + "km")
       ])
-    ]),
-    _c("view", { staticClass: "m-distance" }, [
-      _vm._v(_vm._s(_vm.rowData.fencingRange) + "km")
-    ])
-  ])
+    ]
+  )
 }
 var staticRenderFns = []
 render._withStripped = true

@@ -194,8 +194,8 @@
 				this.linkTo("/pages/product/product")
 			},
 			//点击门店图片
-			storeDetail(){
-				this.linkTo("/pages/store/store")
+			storeDetail(id){
+				this.linkTo("/pages/store/store?storeid="+id)
 			},
 			swiperChange(e) {
 				this.current = e.detail.current;

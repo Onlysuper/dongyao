@@ -8,7 +8,7 @@
                 "navigationBarTitleText" : "东尧蔬菜",
                 "navigationBarTextStyle" : "black",
                 "enablePullDownRefresh" : true,
-                "onReachBottomDistance" : 100,
+                "onReachBottomDistance" : 50,
                 "app-plus" : {
                     "titleNView" : false, //禁用原生导航栏
                     "softinputNavBar" : "none"
@@ -263,6 +263,7 @@
                 "pagePath" : "pages/tabBar/order",
                 "iconPath" : "static/img/tabBar/order.png",
                 "selectedIconPath" : "static/img/tabBar/order-on.png",
+				"onReachBottomDistance" : 100,
                 "text" : "订单"
             },
             {

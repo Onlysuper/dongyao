@@ -977,8 +977,8 @@ var render = function() {
                   {
                     staticClass: "but",
                     staticStyle: {
-                      color: "#333333",
-                      border: "1px solid #333333"
+                      color: "#a7a7a7",
+                      border: "1px solid #a7a7a7"
                     }
                   },
                   [_vm._v("取货")]

@@ -3,7 +3,7 @@
 		<view class="m-conainer">
 			<image style="width:500upx;height:300upx" src="../../static/img/icon/img_nothave.png" mode="aspectFit"></image>
 			<view class="m-text">
-				呀！当前什么都没有呢~
+				~哎，请求失败~
 			</view>
 		</view>
 	</view>

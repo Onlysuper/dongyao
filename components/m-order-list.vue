@@ -42,7 +42,7 @@
 			</view>
 			<view class="footright">
 				<view @tap="takeGood" v-if="status==1">
-					<view class="but" style="color:#333333;border:1px solid #333333">
+					<view class="but" style="color:#a7a7a7;border:1px solid #a7a7a7">
 						取货
 					</view>
 				</view>
@@ -209,8 +209,8 @@
 				display: inline-block;
 				padding: 10upx 20upx;
 				border-radius: 80upx;
-				border: 1px solid #cfcfcf;
-				color:#333333;
+				border: 1px solid $color-border2;
+				color:$color-5;
 			}
 		}
 	}

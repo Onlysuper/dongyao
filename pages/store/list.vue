@@ -35,8 +35,10 @@
 						type: 'gcj02',
 						success: function (res) {
 							_that.mPost('/server/s/vicinity/stores',{
-								"lng":res.longitude || 116.206845,
-								"lat":res.latitude || 39.762155
+// 								"lng":res.longitude || 116.206845,
+// 								"lat":res.latitude || 39.762155,
+								"lng":116.206845,
+								"lat":39.762155
 							}).then(res=>{
 									if(res.data){
 										let data = res.data;

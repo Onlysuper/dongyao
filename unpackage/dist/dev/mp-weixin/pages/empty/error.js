@@ -176,7 +176,7 @@ var staticRenderFns = [
             mode: "aspectFit"
           }
         }),
-        _c("view", { staticClass: "m-text" }, [_vm._v("呀！当前什么都没有呢~")])
+        _c("view", { staticClass: "m-text" }, [_vm._v("~哎，请求失败~")])
       ])
     ])
   }

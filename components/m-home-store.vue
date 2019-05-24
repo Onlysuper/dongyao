@@ -1,6 +1,6 @@
 <template>
 	<!-- 首页门店图文 -->
-	<view class="m-store-item">
+	<view @tap='handleFn' class="m-store-item">
 		<view class="m-img" v-if="rowData.imgUrl">
 			<image style="width:100%;height: 100%;" :src="rowData.img" mode="aspectFit"></image>
 		</view>
@@ -43,6 +43,11 @@
 				default:function () {
 					return []
 				}
+			}
+		},
+		methods:{
+			handleFn(){
+				this.$emit('handleFn',this.rowData.id)
 			}
 		},
 		data() {

@@ -47,6 +47,7 @@
         "pagePath": "pages/tabBar/order",
         "iconPath": "static/img/tabBar/order.png",
         "selectedIconPath": "static/img/tabBar/order-on.png",
+        "onReachBottomDistance": 100,
         "text": "订单"
       },
       {
