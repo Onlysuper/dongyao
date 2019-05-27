@@ -959,6 +959,7 @@ var _rattenkingDtpicker = _interopRequireDefault(__webpack_require__(/*! @/compo
 
   // 
   onLoad: function onLoad(option) {
+    this.couponId = option.couponId || "",
     this.storeid = option.storeid;
     this.totalCount = option.totalCount,
     this.type = option.type;

@@ -4,9 +4,6 @@
 		<view class="m-header">
 			<view class="">
 				{{title}}
-				<view class="m-time">
-					{{createTime}}
-				</view>
 			</view>
 			<view style="color:#ee6641" v-if="status==1">
 				待取货
@@ -19,20 +16,10 @@
 			</view>
 		</view>
 		<view class="m-body">
-			<view class="m-img-container">
-				<view class="m-img-box" v-for="(item) in productList" :key="item.id">
-					<image style="width:100%;height:100%" :src="item.pictures[0].pictureUrl" mode="aspectFill"></image>
-				</view>
+			<view class="m-img-box">
+				<image style="width:100%;height:100%" :src="img" mode="aspectFill"></image>
 			</view>
-			<view class="m-text-right">
-				<view class="price">
-					￥{{price}}
-				</view>
-				<view class="num">
-					共{{num}}件
-				</view>
-			</view>
-			<!-- <view class="m-text-box">
+			<view class="m-text-box">
 				<view class="m-name">
 					{{proname}}
 				</view>
@@ -49,24 +36,12 @@
 					{{describe}}
 				</view>
 				
-			</view> -->
+			</view>
 		</view>
 		<view class="m-footer">
 			<view class="footleft">
 				<view class="footleft">
-					<!-- 应付款：￥{{price}}    共{{num}}件 -->
-					<view class="m-name">
-						{{proname}}
-					</view>
-					<view v-if="status==3" class="m-describe">
-						提货时间:{{extrctime}}
-					</view>
-					<view v-else class="m-describe">
-						提货时间:{{aboutPickingTime}}
-					</view>
-					<view class="m-describe">
-						{{describe}}
-					</view>
+					应付款：￥{{price}}    共{{num}}件
 				</view> 
 			</view>
 			<view class="footright">
@@ -101,15 +76,10 @@
 				type:Object,
 				 // 对象或数组默认值必须从一个工厂函数获取
 				default: function () {
-					return {}
+					return { 
+						
+					}
 				}
-			},
-			productList:{
-				type:Object
-				 // 对象或数组默认值必须从一个工厂函数获取
-// 				default: function () {
-// 					return []
-// 				}
 			},
 			status:{
 				type:[String,Number],
@@ -119,14 +89,14 @@
 				type:[String,Number],
 				default:""
 			},
-// 			img:{
-// 				type:[String,Number],
-// 				default:""
-// 			},
-// 			proname:{
-// 				type:[String,Number],
-// 				default:""
-// 			},
+			img:{
+				type:[String,Number],
+				default:""
+			},
+			proname:{
+				type:[String,Number],
+				default:""
+			},
 			createTime:{ // 下单时间
 				type:[String,Number],
 				default:""
@@ -180,10 +150,7 @@
 		 commentGood(){
 		 	this.$emit('commentGood',{data:this.rowData})	 	 
 		 }
-		},
-// 		onLoad(){
-// 			console.log(this.productList);
-// 		}
+		}
 	}
 </script>
 
@@ -204,13 +171,6 @@
 		border-bottom:1px solid #ebebeb;
 		.but{
 			color:#4eb87d;
-			white-space:nowrap
-		}
-		.m-time{
-			font-size: $fontsize-6;
-			color:$color-5;
-			display: inline;
-			padding-left: 20upx;
 		}
 	}
 	.m-body{
@@ -236,16 +196,7 @@
 				color:#999999;
 			}
 		}
-		.m-text-right{
-			text-align: right;
-			.price{
-				color:$color-price;
-			}
-			.num{
-				font-size: $fontsize-4;
-				color:$color-5;
-			}
-		}
+		
 	}
 	.m-footer{
 		display: flex;
@@ -256,11 +207,7 @@
 		.footleft{
 			flex:1;
 			font-size: 26upx;
-			.m-describe{
-				white-space:nowrap;
-				font-size: $fontsize-6;
-				color:$color-5;
-			}
+			color:#333333;
 		}
 		.footright{
 			flex:1;
@@ -275,5 +222,53 @@
 			}
 		}
 	}
+// 	display: flex;
+// 	flex-direction: row;
+// 	width: 100%;
+// 	justify-content: space-between;
+// 	align-items: flex-end;
+// 	margin-top: 30upx;
+// 	margin-bottom: 30upx;
+
+// 	.m-img{
+// 		flex: 0 0 170upx;
+// 		height: 170upx;
+// 		background: #eee;
+// 	}
+// 	.m-text{
+// 		flex:1;
+// 		padding: 0 20upx;
+// 		.m-title{
+// 			font-size: 32upx;
+// 			color:#4c4c4c;
+// 		}
+// 		.m-descripe{
+// 			font-size: 24upx;
+// 			color:#999999;
+// 			margin-top: 10upx;
+// 		}
+// 		.m-price{
+// 			font-size: 28upx;
+// 			color:#ff582b;
+// 			font-weight: bold;
+// 			margin-top: 5upx;
+// 		}
+// 		.m-old-price{
+// 			display: flex;
+// 			flex-direction: row;
+// 			font-size: 18upx;
+// 			color:#999999;
+// 			margin-top: 5upx;
+// 			.m-num{
+// 				// font-size:  20upx;
+// 			}
+// 		}
+// 	}
+// 	.m-distance{
+// 		flex: 0 1 30upx;
+// 		color:#b2b2b2;
+// 		font-size: 20upx;
+// 		text-align: right
+// 	}
 }
 </style>

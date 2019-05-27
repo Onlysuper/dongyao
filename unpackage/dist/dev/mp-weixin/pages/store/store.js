@@ -876,6 +876,7 @@ function bezier(pots, amount) {
       var proArr = this.shopCarList.map(function (val, index, arrs) {
         var obj = _objectSpread({}, val);
         obj['describes'] = "";
+        totalCount += obj.buyCount;
         return obj;
       });
       var proUrlData = encodeURI(JSON.stringify({ proUrlData: proArr }));

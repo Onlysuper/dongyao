@@ -12,9 +12,13 @@ var service=(res)=>{
 	if(res.statusCode==200){
 		if(res.data.code=='-1'){
 			// 请求失败
-			uni.redirectTo({
-				url:'/pages/empty/error'
-			})
+			uni.showToast({
+				title:  "请求出错",
+				icon: "none"
+			});
+// 			uni.redirectTo({
+// 				url:'/pages/empty/error'
+// 			})
 		}else if(res.data.code=='-2'){
 			// 重新登录
 			let backurl = encodeURI("/pages/tabBar/user");
@@ -23,9 +27,10 @@ var service=(res)=>{
 			})
 		}
 	}else{
-		uni.redirectTo({
-			url:'/pages/empty/405'
-		})
+		uni.showToast({
+			title:  "请求出错"+res.statusCod,
+			icon: "none"
+		});
 	}
 	
 }

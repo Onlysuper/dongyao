@@ -362,6 +362,7 @@
 		},
 		// 
 		onLoad(option){
+			this.couponId=option.couponId|| "",
 			this.storeid=option.storeid;
 			this.totalCount=option.totalCount,
 			this.type=option.type

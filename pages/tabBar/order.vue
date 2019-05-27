@@ -6,7 +6,7 @@
 		</view>
 		<view style="height:60px;"></view>
 		<m-need-login v-if="!isLogin"></m-need-login>
-		
+		<m-empty v-else-if="orderList.length==0"></m-empty>
 		<view v-else class="m-order-body">
 			<m-order-list v-for="(item,index) in orderList" 
 			@takeGood="takeGood"
@@ -18,16 +18,19 @@
 			 :status="item.order.state"
 			 :price="item.order.totalPrice"
 			 :num="item.order.totalCount"
+			 :createTime="item.order.createTime"
 			 :extrctime="item.order.actualPickingTime"
 			 :aboutPickingTime="item.order.aboutPickingTime"
 			 :title="item.store.name"
-			 :img="item.productList[0].pictureUrl"
-			 :proname="item.productList[0].synopsis"
+			 :productList="item.productList"
 			 ></m-order-list>
+			<!--  :img="item.productList[0].pictureUrl"
+			 :proname="item.productList[0].productName" -->
+			 <uni-load-more :status="mloading"></uni-load-more>
 		</view>
-		<template>
-			<uni-load-more :status="mloading"></uni-load-more>
-		</template>
+		<!-- <template> -->
+			
+		<!-- </template> -->
 	</view>
 </template>
 <script>
@@ -36,6 +39,7 @@
 	import mOrderList from "@/components/m-order-list.vue";
 	import mNeedLogin from "@/components/m-need-login.vue";
 	import uniLoadMore from "@/components/uni-load-more/uni-load-more.vue";
+	import mEmpty from "@/components/m-result/m-empty.vue";
 	var page = 1,totalpage=1;
 	export default {
 		name:"m-footer-car",
@@ -44,7 +48,8 @@
 			mTab,
 			uniLoadMore,
 			mOrderList,
-			mNeedLogin
+			mNeedLogin,
+			mEmpty
 		},
 		data(){
 			return{
@@ -73,12 +78,22 @@
 			}
 		},
 		methods:{
-			
 			 // 付款
 			payGood(res){
-				let orderid = res.data.order.id;
+				let _this = this;
+				console.log(res);
+				let data = res.data;
+				let newOrder={...data.order}; 
+				let newStore ={...data.store};
+				newOrder['describes']="";
+				let storeId= newStore.id; // 店铺id
+				let totalCount = newOrder.totalCount; // 商品件数
+				let type= newOrder.paymentType; // 是团购还是直接购买
+				let couponId = newOrder.couponId; // 优惠券id
+				let proArr = [newOrder];
+				let proUrlData = encodeURI(JSON.stringify({proUrlData:proArr}));
 				uni.navigateTo({
-					url:"/pages/order/order?orderid="+orderid
+					url:"/pages/order/pay?storeid="+storeId+"&totalCount="+totalCount+"&type="+type+'&couponId='+couponId+'&proUrlData='+proUrlData
 				})
 			},
 			// 评论
@@ -118,7 +133,8 @@
 				let _this = this;
 				uni.showLoading({});
 				if(totalpage&&page > totalpage){
-					uni.showToast({"title":"已经加载全部", icon:"none"});
+					// uni.showToast({"title":"已经加载全部", icon:"none"});
+					_this.mloading='noMore';
 					return ;
 				}
 				this.mPost('/server/o/myOrders',{
@@ -134,10 +150,14 @@
 							this.orderList = this.orderList.concat(newsList);
 							uni.hideLoading();
 							page++;
+						}else{
+							
 						}
 					}
+					uni.stopPullDownRefresh();
 				}).catch(err=>{
 					uni.hideLoading();
+					uni.stopPullDownRefresh();
 				});
 			},
 			// tab栏点击
@@ -148,14 +168,10 @@
 				this.getOrders();
 			}
 		},
-		// 重置分页及数据
-		onPullDownRefresh(){
-			page = 1;
-			this.orderList = [];
-			this.getOrders();
-		},
+		
 		// 加载更多
 		onReachBottom(){
+			
 			this.mloading='loading';
 			this.getOrders();
 		},
@@ -167,11 +183,18 @@
 			orderList:[];
 			this.getOrders();
 		},
+		// 重置分页及数据
+		onPullDownRefresh(){
+			console.log('清空数据');
+			page = 1;
+			this.orderList = [];
+			this.getOrders();
+		},
 		onShow(){
 			this.tabActive=uni.getStorageSync('orderTab')||1;
 			//获取订单
 			page = 1;
-			orderList:[];
+			this.orderList = [];
 			this.getOrders();
 		}
 	}
