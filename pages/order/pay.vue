@@ -205,6 +205,8 @@
 				let _this= this;
 				let proUrlData=decodeURI(option.proUrlData);
 				_this.shopCarList=JSON.parse(proUrlData)['proUrlData'];
+				console.log('zzzzzz');
+				// console.log(_this.shopCarList)
 				_this.orderInit()
 				console.log(_this.shopCarList);
 			},
@@ -234,7 +236,6 @@
 					products:_this.shopCarList,
 					couponId:_this.couponId,
 				}
-				console.log(sendData);
 				_this.mPost("/server/pay/calOrderPrice",sendData).then(res=>{
 					if(res.code=='1'){
 						let data= res.data;
@@ -362,6 +363,7 @@
 		},
 		// 
 		onLoad(option){
+			console.log(111111);
 			this.couponId=option.couponId|| "",
 			this.storeid=option.storeid;
 			this.totalCount=option.totalCount,

@@ -509,6 +509,10 @@ export default {
 
 <style lang="scss">
 @import "../../common/globel.scss";
+.description{
+	background:#fff;
+	font-size: $fontsize-4;
+}
 .mvideo{
 	width: 100%;
 	height: 100%;

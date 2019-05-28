@@ -842,17 +842,12 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 
 
 
-
-
-
-
-
 var _event = _interopRequireDefault(__webpack_require__(/*! ../../common/event.js */ "../../../../../../Users/apple/opt/DONGYAO/common/event.js"));
 var _mTab = _interopRequireDefault(__webpack_require__(/*! @/components/m-tab.vue */ "../../../../../../Users/apple/opt/DONGYAO/components/m-tab.vue"));
 var _mOrderList = _interopRequireDefault(__webpack_require__(/*! @/components/m-order-list.vue */ "../../../../../../Users/apple/opt/DONGYAO/components/m-order-list.vue"));
 var _mNeedLogin = _interopRequireDefault(__webpack_require__(/*! @/components/m-need-login.vue */ "../../../../../../Users/apple/opt/DONGYAO/components/m-need-login.vue"));
 var _uniLoadMore = _interopRequireDefault(__webpack_require__(/*! @/components/uni-load-more/uni-load-more.vue */ "../../../../../../Users/apple/opt/DONGYAO/components/uni-load-more/uni-load-more.vue"));
-var _mEmpty = _interopRequireDefault(__webpack_require__(/*! @/components/m-result/m-empty.vue */ "../../../../../../Users/apple/opt/DONGYAO/components/m-result/m-empty.vue"));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function _objectSpread(target) {for (var i = 1; i < arguments.length; i++) {var source = arguments[i] != null ? arguments[i] : {};var ownKeys = Object.keys(source);if (typeof Object.getOwnPropertySymbols === 'function') {ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) {return Object.getOwnPropertyDescriptor(source, sym).enumerable;}));}ownKeys.forEach(function (key) {_defineProperty(target, key, source[key]);});}return target;}function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
+var _mEmpty = _interopRequireDefault(__webpack_require__(/*! @/components/m-result/m-empty.vue */ "../../../../../../Users/apple/opt/DONGYAO/components/m-result/m-empty.vue"));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function _toConsumableArray(arr) {return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread();}function _nonIterableSpread() {throw new TypeError("Invalid attempt to spread non-iterable instance");}function _iterableToArray(iter) {if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter);}function _arrayWithoutHoles(arr) {if (Array.isArray(arr)) {for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) {arr2[i] = arr[i];}return arr2;}}function _objectSpread(target) {for (var i = 1; i < arguments.length; i++) {var source = arguments[i] != null ? arguments[i] : {};var ownKeys = Object.keys(source);if (typeof Object.getOwnPropertySymbols === 'function') {ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) {return Object.getOwnPropertyDescriptor(source, sym).enumerable;}));}ownKeys.forEach(function (key) {_defineProperty(target, key, source[key]);});}return target;}function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 var page = 1,totalpage = 1;var _default =
 {
   name: "m-footer-car",
@@ -892,18 +887,32 @@ var page = 1,totalpage = 1;var _default =
   },
   methods: {
     // 付款
+    // 			payGood(res){
+    // 				let _this = this;
+    // 				console.log(res);
+    // 				let data = res.data;
+    // 				let newOrder={...data.order}; 
+    // 				let newStore ={...data.store};
+    // 				let storeId= newStore.id; // 店铺id
+    // 				let totalCount = newOrder.totalCount; // 商品件数
+    // 				let type= newOrder.paymentType; // 是团购还是直接购买
+    // 				let couponId = newOrder.couponId; // 优惠券id
+    // 				let proArr = [newOrder];
+    // 				let proUrlData = encodeURI(JSON.stringify({proUrlData:proArr}));
+    // 				uni.navigateTo({
+    // 					url:"/pages/order/pay?storeid="+storeId+"&totalCount="+totalCount+"&type="+type+'&couponId='+couponId+'&proUrlData='+proUrlData
+    // 				})
+    // 			},
     payGood: function payGood(res) {
       var _this = this;
-      console.log(res);
       var data = res.data;
       var newOrder = _objectSpread({}, data.order);
       var newStore = _objectSpread({}, data.store);
-      newOrder['describes'] = "";
       var storeId = newStore.id; // 店铺id
       var totalCount = newOrder.totalCount; // 商品件数
       var type = newOrder.paymentType; // 是团购还是直接购买
       var couponId = newOrder.couponId; // 优惠券id
-      var proArr = [newOrder];
+      var proArr = _toConsumableArray(data.productList);
       var proUrlData = encodeURI(JSON.stringify({ proUrlData: proArr }));
       uni.navigateTo({
         url: "/pages/order/pay?storeid=" + storeId + "&totalCount=" + totalCount + "&type=" + type + '&couponId=' + couponId + '&proUrlData=' + proUrlData });
@@ -911,10 +920,13 @@ var page = 1,totalpage = 1;var _default =
     },
     // 评论
     commentGood: function commentGood(res) {
-      // console.log('评论')	
-      var orderid = res.data.order.id;
+      // console.log('评论')
+      var data = res.data;
+      var orderid = data.order.id;
+      var newProduct = _toConsumableArray(data.productList);
+      var ProductUrlData = encodeURI(JSON.stringify({ ProductUrlData: newProduct }));
       uni.navigateTo({
-        url: "/pages/order/comment?orderid=" + orderid });
+        url: "/pages/order/comment?orderid=" + orderid + "&ProductUrlData=" + ProductUrlData });
 
     },
     // 取货
@@ -923,6 +935,19 @@ var page = 1,totalpage = 1;var _default =
       uni.navigateTo({
         url: "/pages/order/order?orderid=" + orderid });
 
+      // 				let _this = this;
+      // 				let data = res.data;
+      // 				let newOrder={...data.order}; 
+      // 				let newStore ={...data.store};
+      // 				let storeId= newStore.id; // 店铺id
+      // 				let totalCount = newOrder.totalCount; // 商品件数
+      // 				let type= newOrder.paymentType; // 是团购还是直接购买
+      // 				let couponId = newOrder.couponId; // 优惠券id
+      // 				let proArr = [...data.productList];
+      // 				let proUrlData = encodeURI(JSON.stringify({proUrlData:proArr}));
+      // 				uni.navigateTo({
+      // 					url:"/pages/order/pay?storeid="+storeId+"&totalCount="+totalCount+"&type="+type+'&couponId='+couponId+'&proUrlData='+proUrlData
+      // 				})
     },
     // 再来一单
     // 			againGood(data){
@@ -948,6 +973,8 @@ var page = 1,totalpage = 1;var _default =
       if (totalpage && page > totalpage) {
         // uni.showToast({"title":"已经加载全部", icon:"none"});
         _this.mloading = 'noMore';
+        uni.hideLoading();
+        uni.stopPullDownRefresh();
         return;
       }
       this.mPost('/server/o/myOrders', {
@@ -961,12 +988,10 @@ var page = 1,totalpage = 1;var _default =
             totalpage = data.pages || 1;
             var newsList = data.orders;
             _this2.orderList = _this2.orderList.concat(newsList);
-            uni.hideLoading();
             page++;
-          } else {
-
           }
         }
+        uni.hideLoading();
         uni.stopPullDownRefresh();
       }).catch(function (err) {
         uni.hideLoading();

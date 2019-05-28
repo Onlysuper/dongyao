@@ -55,6 +55,7 @@ export default {
 @import "../../../common/globel.scss";
 .m-about-page{
 	 background:#fff !important;
+	 min-height: 100%;
 	.m-banner{
 		width: 100%;
 		height:300upx;

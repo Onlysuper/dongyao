@@ -144,6 +144,9 @@
 /* 垂直间距 */
 /* 透明度 */
 /* 文章场景相关 */
+.split-place {
+  height: 100rpx;
+}
 .m-cell {
   display: -webkit-box;
   display: -webkit-flex;
@@ -207,6 +210,9 @@
 /* 垂直间距 */
 /* 透明度 */
 /* 文章场景相关 */
+.split-place {
+  height: 100rpx;
+}
 .m-user-page .m-header {
   width: 100%;
   background: url("http://dongyaoxiaoxiaochegnxu.oss-cn-beijing.aliyuncs.com/banners/me_bg_top.png") no-repeat top left;

@@ -24,8 +24,12 @@
 /* 垂直间距 */
 /* 透明度 */
 /* 文章场景相关 */
+.split-place {
+  height: 100rpx;
+}
 .m-about-page {
   background: #fff !important;
+  min-height: 100%;
 }
 .m-about-page .m-banner {
     width: 100%;

@@ -802,6 +802,8 @@ var _rattenkingDtpicker = _interopRequireDefault(__webpack_require__(/*! @/compo
       var _this = this;
       var proUrlData = decodeURI(option.proUrlData);
       _this.shopCarList = JSON.parse(proUrlData)['proUrlData'];
+      console.log('zzzzzz');
+      // console.log(_this.shopCarList)
       _this.orderInit();
       console.log(_this.shopCarList);
     },
@@ -831,7 +833,6 @@ var _rattenkingDtpicker = _interopRequireDefault(__webpack_require__(/*! @/compo
         products: _this.shopCarList,
         couponId: _this.couponId };
 
-      console.log(sendData);
       _this.mPost("/server/pay/calOrderPrice", sendData).then(function (res) {
         if (res.code == '1') {
           var data = res.data;
@@ -959,6 +960,7 @@ var _rattenkingDtpicker = _interopRequireDefault(__webpack_require__(/*! @/compo
 
   // 
   onLoad: function onLoad(option) {
+    console.log(111111);
     this.couponId = option.couponId || "",
     this.storeid = option.storeid;
     this.totalCount = option.totalCount,

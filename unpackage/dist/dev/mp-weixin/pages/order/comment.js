@@ -271,33 +271,125 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-var _uniRate = _interopRequireDefault(__webpack_require__(/*! @/components/uni-rate/uni-rate.vue */ "../../../../../../Users/apple/opt/DONGYAO/components/uni-rate/uni-rate.vue"));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}var _default =
+
+
+
+
+
+
+var _uniRate = _interopRequireDefault(__webpack_require__(/*! @/components/uni-rate/uni-rate.vue */ "../../../../../../Users/apple/opt/DONGYAO/components/uni-rate/uni-rate.vue"));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function _objectSpread(target) {for (var i = 1; i < arguments.length; i++) {var source = arguments[i] != null ? arguments[i] : {};var ownKeys = Object.keys(source);if (typeof Object.getOwnPropertySymbols === 'function') {ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) {return Object.getOwnPropertyDescriptor(source, sym).enumerable;}));}ownKeys.forEach(function (key) {_defineProperty(target, key, source[key]);});}return target;}function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}var _default =
 {
-  components: { uniRate: _uniRate.default },
+  components: {
+    // mMap,
+    // mOrderPro,
+    uniRate: _uniRate.default },
+
   data: function data() {
     return {
-      imgs: [] };
+      productList: [],
+      // imgsFiles:[], // 图片
+      imgsUrl: [],
+      textAreaVals: [], // 评论内容
+      levels: [], //
+      anonymous: [] };
+
 
   },
   methods: {
-    chooseImg: function chooseImg() {var _this = this;
+    switchChange: function switchChange(e, proindex) {
+      var values = e.detail.value ? 1 : 0;
+      this.anonymous[proindex] = values;
+    },
+    // 内容
+    textAreaChange: function textAreaChange(ev, index) {
+      var value = ev.detail.value;
+      this.textAreaVals[index] = value;
+    },
+    chooseImg: function chooseImg(index) {var _this2 = this;
+      console.log('index:' + index);
+      // return false;
       uni.chooseImage({
         count: 3,
         success: function success(res) {
-          console.log(res);
-          var newImgs = res.tempFiles;
-          _this.imgs = _this.imgs.concat(newImgs);
-          console.log(_this.imgs);
+          if (!_this2.imgsUrl[index]) {
+            _this2.imgsUrl[index] = [];
+          }
+          var images = _this2.imgsUrl[index].concat(res.tempFilePaths);
+          _this2.$set(_this2.imgsUrl, index, _this2.imgsUrl[index].length <= 3 ? images : images.slice(0, 3));
+          // console.log(this.imgsUrl[index]);
+          // this.imgsUrl=this.imgsUrl;
 
+          console.log(_this2.imgsUrl);
         },
         fail: function fail(err) {
           console.log(err);
         } });
 
     },
-    changeStar: function changeStar(e) {
-      console.log(e);
-    } } };exports.default = _default;
+    changeStar: function changeStar(e, index) {
+      this.levels[index] = e.value;
+    },
+    //删除图片
+    removeImage: function removeImage(proindex, index) {
+      this.imgsUrl[proindex].splice(index, 1);
+    },
+    // 预览图片
+    handleImagePreview: function handleImagePreview(proindex, index) {
+      var idx = index;
+      var images = this.imgsUrl[proindex];
+      uni.previewImage({
+        current: images[idx], //当前预览的图片
+        urls: images //所有要预览的图片
+      });
+
+    },
+    commentFn: function commentFn() {var _this3 = this;
+      var _this = this;
+      this.productList.forEach(function (pro, index) {
+        // 将选择的图片组成一个Promise数组，准备进行并行上传
+        var formData = {
+          productId: pro.id,
+          anonymous: _this.anonymous[index] || 0,
+          orderId: _this.orderid,
+          starLevel: _this.levels[index] || 5,
+          commentContent: _this.textAreaVals[index] };
+
+        if (!_this3.imgsUrl[index] || _this3.imgsUrl[index].length == 0) {
+          return false;
+        }
+        var arr = _this3.imgsUrl[index].map(function (path) {
+          var sendData = {
+            url: _this.apiurl + "/server/o/commentOn",
+            header: {
+              "Cache-Control": "no-cache",
+              Authorization: uni.getStorageSync('Authorization') },
+
+            filePath: path,
+            formData: formData,
+            name: 'file' };
+
+          console.log('sendDatasendDatasendData');
+          console.log(sendData);
+          return uni.uploadFile(_objectSpread({}, sendData));
+        });
+
+        Promise.all(arr).then(function (res) {
+          //上传成功
+          console.log(res);
+        }).catch(function (err) {
+          //上传失败
+          console.log(err);
+        });
+      });
+    } },
+
+  onLoad: function onLoad(option) {
+    var ProductUrlData = decodeURI(option.ProductUrlData);
+    var productList = JSON.parse(ProductUrlData)['ProductUrlData']; // 产品列表
+    var orderid = option.orderid; // 订单id
+    this.productList = productList;
+    this.orderid = orderid;
+  } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ "./node_modules/@dcloudio/uni-mp-weixin/dist/index.js")["default"]))
 
 /***/ }),
@@ -328,171 +420,147 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("view", { staticClass: "m-comment-page" }, [
-    _c("view", { staticClass: "m-pro" }, [
-      _c("view", { staticClass: "m-top" }, [
-        _vm._m(0),
-        _c(
-          "view",
-          {},
-          [
-            _c("uni-rate", {
-              attrs: {
-                size: "18",
-                value: "5",
-                eventid: "d1bc61ae-0",
-                mpcomid: "d1bc61ae-0"
-              },
-              on: { change: _vm.changeStar }
-            })
-          ],
-          1
-        )
-      ]),
-      _c("view", { staticClass: "m-body" }, [
-        _vm._m(1),
-        _c(
-          "view",
-          { staticClass: "m-img" },
-          [
-            _vm._l(_vm.imgs, function(item, index) {
-              return _c("view", { key: index, staticClass: "m-img-item" }, [
+  return _c(
+    "view",
+    { staticClass: "m-comment-page" },
+    [
+      _vm._l(_vm.productList, function(pro, proIndex) {
+        return _c("view", { key: proIndex, staticClass: "m-pro" }, [
+          _c("view", { staticClass: "m-top" }, [
+            _c("view", { staticClass: "m-title" }, [
+              _c("view", { staticClass: "img-box" }, [
                 _c("image", {
-                  staticStyle: { width: "120rpx", height: "120rpx" },
-                  attrs: { src: item.path, mode: "" }
+                  staticStyle: { width: "80rpx", height: "80rpx" },
+                  attrs: {
+                    src: pro["pictures"][0]["pictureUrl"],
+                    mode: "aspectFit"
+                  }
                 })
-              ])
-            }),
+              ]),
+              _vm._v("商品评价")
+            ]),
             _c(
               "view",
-              {
-                staticClass: "m-img-item",
-                attrs: { eventid: "d1bc61ae-1" },
-                on: { click: _vm.chooseImg }
-              },
-              [_c("view", { staticClass: "m-img-but" }, [_vm._v("添加图片")])]
-            )
-          ],
-          2
-        )
-      ])
-    ]),
-    _c("view", { staticClass: "m-pro" }, [
-      _c("view", { staticClass: "m-top" }, [
-        _vm._m(2),
-        _c(
-          "view",
-          {},
-          [
-            _c("uni-rate", {
-              attrs: {
-                size: "18",
-                value: "5",
-                eventid: "d1bc61ae-2",
-                mpcomid: "d1bc61ae-1"
-              },
-              on: { change: _vm.changeStar }
-            })
-          ],
-          1
-        )
-      ]),
-      _c("view", { staticClass: "m-body" }, [
-        _vm._m(3),
-        _c(
-          "view",
-          { staticClass: "m-img" },
-          [
-            _vm._l(_vm.imgs, function(item, index) {
-              return _c("view", { key: index, staticClass: "m-img-item" }, [
-                _c("image", {
-                  staticStyle: { width: "120rpx", height: "120rpx" },
-                  attrs: { src: item.path, mode: "" }
+              {},
+              [
+                _c("uni-rate", {
+                  attrs: {
+                    size: "18",
+                    value: "5",
+                    eventid: "d1bc61ae-0-" + proIndex,
+                    mpcomid: "d1bc61ae-0-" + proIndex
+                  },
+                  on: {
+                    change: function($event) {
+                      _vm.changeStar($event, proIndex)
+                    }
+                  }
                 })
-              ])
-            }),
+              ],
+              1
+            )
+          ]),
+          _c("view", { staticClass: "m-body" }, [
+            _c("view", { staticClass: "m-text" }, [
+              _c("view", { staticClass: "m-title" }, [_vm._v("分享一下吧")]),
+              _c("textarea", {
+                staticClass: "m-textarea",
+                attrs: {
+                  "placeholder-style": "color:$color-2",
+                  placeholder:
+                    "产品你还满意吗？有什么想对我们说的吗？让更多人知道吧",
+                  eventid: "d1bc61ae-1-" + proIndex
+                },
+                on: {
+                  input: function($event) {
+                    _vm.textAreaChange($event, proIndex)
+                  }
+                }
+              })
+            ]),
             _c(
               "view",
-              {
-                staticClass: "m-img-item",
-                attrs: { eventid: "d1bc61ae-3" },
-                on: { click: _vm.chooseImg }
-              },
-              [_c("view", { staticClass: "m-img-but" }, [_vm._v("添加图片")])]
+              { staticClass: "m-img" },
+              [
+                _vm._l(_vm.imgsUrl[proIndex], function(item, index) {
+                  return _c("view", { key: index, staticClass: "m-img-item" }, [
+                    _c("image", {
+                      staticStyle: { width: "120rpx", height: "120rpx" },
+                      attrs: {
+                        src: item,
+                        mode: "",
+                        eventid: "d1bc61ae-2-" + proIndex + "-" + index
+                      },
+                      on: {
+                        tap: function($event) {
+                          _vm.handleImagePreview(proIndex, index)
+                        }
+                      }
+                    }),
+                    _c(
+                      "view",
+                      {
+                        staticClass: "delete",
+                        attrs: {
+                          eventid: "d1bc61ae-3-" + proIndex + "-" + index
+                        },
+                        on: {
+                          tap: function($event) {
+                            _vm.removeImage(proIndex, index)
+                          }
+                        }
+                      },
+                      [_c("icon", { attrs: { type: "clear", size: "26" } })],
+                      1
+                    )
+                  ])
+                }),
+                _c(
+                  "view",
+                  {
+                    staticClass: "m-img-item",
+                    attrs: { eventid: "d1bc61ae-4-" + proIndex },
+                    on: {
+                      click: function($event) {
+                        _vm.chooseImg(proIndex)
+                      }
+                    }
+                  },
+                  [_c("view", { staticClass: "m-img-but" })]
+                )
+              ],
+              2
             )
-          ],
-          2
-        )
-      ])
-    ])
-  ])
+          ]),
+          _c("view", { staticClass: "m-footer" }, [
+            _vm._v("是否匿名"),
+            _c("switch", {
+              staticStyle: { "margin-left": "20rpx" },
+              attrs: { type: "checkbox", eventid: "d1bc61ae-5-" + proIndex },
+              on: {
+                change: function($event) {
+                  _vm.switchChange($event, proIndex)
+                }
+              }
+            })
+          ])
+        ])
+      }),
+      _c(
+        "view",
+        {
+          staticClass: "m-footer-but",
+          attrs: { eventid: "d1bc61ae-6" },
+          on: { tap: _vm.commentFn }
+        },
+        [_vm._v("提交评论")]
+      ),
+      _c("view", { staticClass: "split-place" })
+    ],
+    2
+  )
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("view", { staticClass: "m-title" }, [
-      _c("view", { staticClass: "img-box" }, [
-        _c("image", {
-          staticStyle: { width: "80rpx", height: "80rpx" },
-          attrs: {
-            src: "../../static/img/icon/goods_icon_Avatar.png",
-            mode: "aspectFit"
-          }
-        })
-      ]),
-      _vm._v("商品评价")
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("view", { staticClass: "m-text" }, [
-      _c("view", { staticClass: "m-title" }, [_vm._v("分享一下吧")]),
-      _c("textarea", {
-        staticClass: "m-textarea",
-        attrs: {
-          "placeholder-style": "color:$color-2",
-          placeholder: "产品你还满意吗？有什么想对我们说的吗？让更多人知道吧"
-        }
-      })
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("view", { staticClass: "m-title" }, [
-      _c("view", { staticClass: "img-box" }, [
-        _c("image", {
-          staticStyle: { width: "80rpx", height: "80rpx" },
-          attrs: {
-            src: "../../static/img/icon/goods_icon_Avatar.png",
-            mode: "aspectFit"
-          }
-        })
-      ]),
-      _vm._v("商品评价")
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("view", { staticClass: "m-text" }, [
-      _c("view", { staticClass: "m-title" }, [_vm._v("分享一下吧")]),
-      _c("textarea", {
-        staticClass: "m-textarea",
-        attrs: {
-          "placeholder-style": "color:$color-2",
-          placeholder: "产品你还满意吗？有什么想对我们说的吗？让更多人知道吧"
-        }
-      })
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 

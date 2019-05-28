@@ -24,6 +24,9 @@
 /* 垂直间距 */
 /* 透明度 */
 /* 文章场景相关 */
+.split-place {
+  height: 100rpx;
+}
 .m-tokencard .m-token-footer {
   color: #999;
   font-size: 22rpx;

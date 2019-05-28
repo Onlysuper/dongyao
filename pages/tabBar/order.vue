@@ -24,13 +24,8 @@
 			 :title="item.store.name"
 			 :productList="item.productList"
 			 ></m-order-list>
-			<!--  :img="item.productList[0].pictureUrl"
-			 :proname="item.productList[0].productName" -->
 			 <uni-load-more :status="mloading"></uni-load-more>
 		</view>
-		<!-- <template> -->
-			
-		<!-- </template> -->
 	</view>
 </template>
 <script>
@@ -79,18 +74,32 @@
 		},
 		methods:{
 			 // 付款
+// 			payGood(res){
+// 				let _this = this;
+// 				console.log(res);
+// 				let data = res.data;
+// 				let newOrder={...data.order}; 
+// 				let newStore ={...data.store};
+// 				let storeId= newStore.id; // 店铺id
+// 				let totalCount = newOrder.totalCount; // 商品件数
+// 				let type= newOrder.paymentType; // 是团购还是直接购买
+// 				let couponId = newOrder.couponId; // 优惠券id
+// 				let proArr = [newOrder];
+// 				let proUrlData = encodeURI(JSON.stringify({proUrlData:proArr}));
+// 				uni.navigateTo({
+// 					url:"/pages/order/pay?storeid="+storeId+"&totalCount="+totalCount+"&type="+type+'&couponId='+couponId+'&proUrlData='+proUrlData
+// 				})
+// 			},
 			payGood(res){
 				let _this = this;
-				console.log(res);
 				let data = res.data;
 				let newOrder={...data.order}; 
 				let newStore ={...data.store};
-				newOrder['describes']="";
 				let storeId= newStore.id; // 店铺id
 				let totalCount = newOrder.totalCount; // 商品件数
 				let type= newOrder.paymentType; // 是团购还是直接购买
 				let couponId = newOrder.couponId; // 优惠券id
-				let proArr = [newOrder];
+				let proArr = [...data.productList];
 				let proUrlData = encodeURI(JSON.stringify({proUrlData:proArr}));
 				uni.navigateTo({
 					url:"/pages/order/pay?storeid="+storeId+"&totalCount="+totalCount+"&type="+type+'&couponId='+couponId+'&proUrlData='+proUrlData
@@ -98,10 +107,13 @@
 			},
 			// 评论
 			commentGood(res){
-				// console.log('评论')	
-				 let orderid = res.data.order.id;
+				// console.log('评论')
+				let data = res.data;
+				let orderid = data.order.id;
+				let newProduct = [...data.productList];
+				let ProductUrlData = encodeURI(JSON.stringify({ProductUrlData:newProduct}));
 				uni.navigateTo({
-					url:"/pages/order/comment?orderid="+orderid
+					url:"/pages/order/comment?orderid="+orderid+"&ProductUrlData="+ProductUrlData
 				})
 			},
 			 // 取货
@@ -110,6 +122,19 @@
 				uni.navigateTo({
 					url:"/pages/order/order?orderid="+orderid
 				})
+// 				let _this = this;
+// 				let data = res.data;
+// 				let newOrder={...data.order}; 
+// 				let newStore ={...data.store};
+// 				let storeId= newStore.id; // 店铺id
+// 				let totalCount = newOrder.totalCount; // 商品件数
+// 				let type= newOrder.paymentType; // 是团购还是直接购买
+// 				let couponId = newOrder.couponId; // 优惠券id
+// 				let proArr = [...data.productList];
+// 				let proUrlData = encodeURI(JSON.stringify({proUrlData:proArr}));
+// 				uni.navigateTo({
+// 					url:"/pages/order/pay?storeid="+storeId+"&totalCount="+totalCount+"&type="+type+'&couponId='+couponId+'&proUrlData='+proUrlData
+// 				})
 			},
 			// 再来一单
 // 			againGood(data){
@@ -135,6 +160,8 @@
 				if(totalpage&&page > totalpage){
 					// uni.showToast({"title":"已经加载全部", icon:"none"});
 					_this.mloading='noMore';
+					uni.hideLoading();
+					uni.stopPullDownRefresh();
 					return ;
 				}
 				this.mPost('/server/o/myOrders',{
@@ -148,12 +175,10 @@
 							totalpage=data.pages|| 1;
 							var newsList = data.orders;
 							this.orderList = this.orderList.concat(newsList);
-							uni.hideLoading();
 							page++;
-						}else{
-							
 						}
 					}
+					uni.hideLoading();
 					uni.stopPullDownRefresh();
 				}).catch(err=>{
 					uni.hideLoading();

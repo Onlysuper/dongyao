@@ -132,6 +132,7 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 
 
 
+
 var _mTab = _interopRequireDefault(__webpack_require__(/*! @/components/m-tab.vue */ "../../../../../../Users/apple/opt/DONGYAO/components/m-tab.vue"));
 var _mTokenCard = _interopRequireDefault(__webpack_require__(/*! @/components/m-token-card.vue */ "../../../../../../Users/apple/opt/DONGYAO/components/m-token-card.vue"));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}var _default =
 {
@@ -149,9 +150,10 @@ var _mTokenCard = _interopRequireDefault(__webpack_require__(/*! @/components/m-
 
       {
         label: "已失效",
-        id: "2" }] };
+        id: "2" }],
 
 
+      coupons: [] };
 
   },
   components: {
@@ -166,13 +168,13 @@ var _mTokenCard = _interopRequireDefault(__webpack_require__(/*! @/components/m-
     },
     // 获取订单
     getTokencards: function getTokencards(type) {
+      var _this = this;
       this.mPost('/server/co/myCoupons', {
         type: type,
         start: 1,
         length: 1000 }).
       then(function (res) {
-
-        console.log(res);
+        _this.coupons = res.data.coupons;
       }).catch(function (err) {
         console.log(err);
       });
@@ -230,27 +232,28 @@ var render = function() {
         ],
         1
       ),
-      _c("m-token-card", {
-        attrs: {
-          state: "normal",
-          days: "10",
-          price: "92",
-          name: "通用卷",
-          describe: "只在北京可以使用",
-          downimg1: "../../../static/img/icon/home_icon_down1.png",
-          downimg2: "../../../static/img/icon/home_icon_down1.png",
-          mpcomid: "79057a58-1"
-        }
+      _c("view", { staticClass: "split-place" }),
+      _vm._l(_vm.coupons, function(item, index) {
+        return _c("m-token-card", {
+          key: item.id,
+          attrs: {
+            id: item.id,
+            state: "normal",
+            days: item.dueTime,
+            price: item.price,
+            name: item.name,
+            describe: item.rule,
+            downimg1: "../../../static/img/icon/home_icon_down1.png",
+            downimg2: "../../../static/img/icon/home_icon_down1.png",
+            mpcomid: "79057a58-1-" + index
+          }
+        })
       }),
-      _c("m-token-card", {
-        attrs: { state: "history", mpcomid: "79057a58-2" }
-      }),
-      _c("m-token-card", { attrs: { state: "lost", mpcomid: "79057a58-3" } }),
       _c("view", { staticClass: "m-token-footer" }, [
         _vm._v("以上为全部可用优惠券")
       ])
     ],
-    1
+    2
   )
 }
 var staticRenderFns = []
