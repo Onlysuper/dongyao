@@ -1310,29 +1310,49 @@ var render = function() {
           : _vm._e()
       ]
     ),
-    _c(
-      "view",
-      {
-        staticClass: "m-text",
-        attrs: { eventid: "6c868792-1" },
-        on: { tap: _vm.proDetail }
-      },
-      [
-        _c("view", { staticClass: "m-title" }, [_vm._v(_vm._s(_vm.synopsis))]),
-        _c("view", { staticClass: "m-descripe" }, [
-          _vm._v(_vm._s(_vm.labelName))
-        ]),
-        _c("view", { staticClass: "m-price" }, [
-          _vm._v(_vm._s(_vm.presentPrice))
-        ]),
-        _c("view", { staticClass: "m-old-price" }, [
+    _c("view", { staticClass: "m-text" }, [
+      _c(
+        "view",
+        {
+          staticClass: "m-title",
+          attrs: { eventid: "6c868792-1" },
+          on: { tap: _vm.proDetail }
+        },
+        [_vm._v(_vm._s(_vm.synopsis))]
+      ),
+      _c(
+        "view",
+        {
+          staticClass: "m-descripe",
+          attrs: { eventid: "6c868792-2" },
+          on: { tap: _vm.proDetail }
+        },
+        [_vm._v(_vm._s(_vm.labelName))]
+      ),
+      _c(
+        "view",
+        {
+          staticClass: "m-price",
+          attrs: { eventid: "6c868792-3" },
+          on: { tap: _vm.proDetail }
+        },
+        [_vm._v(_vm._s(_vm.presentPrice))]
+      ),
+      _c(
+        "view",
+        {
+          staticClass: "m-old-price",
+          attrs: { eventid: "6c868792-4" },
+          on: { tap: _vm.proDetail }
+        },
+        [
           _vm._v("非会员价"),
           _c("view", { staticClass: "m-num" }, [
             _vm._v(_vm._s(_vm.originalPrice))
           ])
-        ])
-      ]
-    ),
+        ]
+      )
+    ]),
     _c("view", { staticClass: "m-distance" }, [
       !_vm.isAdd
         ? _c("image", {
@@ -1340,7 +1360,7 @@ var render = function() {
             attrs: {
               src: "../../static/img/icon/shop_icon_buy.png",
               mode: "aspectFit",
-              eventid: "6c868792-3"
+              eventid: "6c868792-6"
             },
             on: { tap: _vm.touchOnGoods }
           })
@@ -1349,7 +1369,7 @@ var render = function() {
             attrs: {
               src: "../../static/img/icon/shop_icon_buy_chose.png",
               mode: "aspectFit",
-              eventid: "6c868792-2"
+              eventid: "6c868792-5"
             },
             on: { tap: _vm.touchOnGoods }
           })

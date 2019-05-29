@@ -7,17 +7,17 @@
 				可拼团
 			</view>
 		</view>
-		<view class="m-text"  @tap="proDetail">
-			<view class="m-title">
+		<view class="m-text">
+			<view @tap="proDetail" class="m-title">
 				{{synopsis}}
 			</view>
-			<view class="m-descripe">
+			<view @tap="proDetail" class="m-descripe">
 				{{labelName}}
 			</view>
-			<view class="m-price">
+			<view @tap="proDetail" class="m-price">
 				{{presentPrice}}
 			</view>
-			<view class="m-old-price">
+			<view @tap="proDetail" class="m-old-price">
 				非会员价
 				<view class="m-num">
 					{{originalPrice}}

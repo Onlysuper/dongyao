@@ -253,17 +253,35 @@
 						  formData:formData,
 						  name: 'file',
 						}
-						console.log('sendDatasendDatasendData')
-						console.log(sendData);
 						return uni.uploadFile({...sendData})
 					})
-					
 					Promise.all(arr).then(res => {
 						  //上传成功
-						  console.log(res);
+						  uni.showModal({
+						  	title: '上传成功',
+						  	content: '可在我的订单中查看详情',
+						  	showCancel:false,
+						  	confirmText:'查看',
+						  	success: function (res) {
+						  		if (res.confirm) {
+						  			uni.setStorageSync('orderTab', 4);
+						  			uni.switchTab({  
+						  				url: '/pages/tabBar/order'  
+						  			});
+						  		} 
+						  		else if (res.cancel) {
+						  			uni.switchTab({  
+						  				url: '/pages/tabBar/home'  
+						  			});
+						  		}
+						  	}
+						});
 					}).catch(err=>{
 						   //上传失败
-						  console.log(err);
+						uni.showToast({
+							title: "上传失败",
+							icon: "none"
+						});
 					})
 				})
 			}

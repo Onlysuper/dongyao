@@ -205,10 +205,7 @@
 				let _this= this;
 				let proUrlData=decodeURI(option.proUrlData);
 				_this.shopCarList=JSON.parse(proUrlData)['proUrlData'];
-				console.log('zzzzzz');
-				// console.log(_this.shopCarList)
 				_this.orderInit()
-				console.log(_this.shopCarList);
 			},
 			// 优惠券
 			tokenCard(){
@@ -218,7 +215,6 @@
 					start:1,
 					length:1000,
 				}).then(res=>{
-					console.log(res);
 					if(res.code==1){
 						if(res.data.coupons&&res.data.coupons.length>0){
 							_this.haveTokenCard=true
@@ -287,7 +283,7 @@
 								success: function(res) {
 									uni.showModal({
 										title: '支付成功',
-										content: '可在我的订单中查看订单详情',
+										content: '可在我的订单中查看详情',
 										showCancel:false,
 										confirmText:'查看订单',
 										success: function (res) {

@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "东尧蔬菜",
+  "navigationBarTextStyle": "black",
+  "enablePullDownRefresh": false,
+  "onReachBottomDistance": 50
+}
