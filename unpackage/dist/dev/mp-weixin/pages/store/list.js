@@ -309,10 +309,8 @@ var _mStoreList = _interopRequireDefault(__webpack_require__(/*! @/components/m-
           type: 'gcj02',
           success: function success(res) {
             _that.mPost('/server/s/vicinity/stores', {
-              // 								"lng":res.longitude || 116.206845,
-              // 								"lat":res.latitude || 39.762155,
-              "lng": 116.206845,
-              "lat": 39.762155 }).
+              "lng": res.longitude || 116.206845,
+              "lat": res.latitude || 39.762155 }).
             then(function (res) {
               if (res.data) {
                 var data = res.data;

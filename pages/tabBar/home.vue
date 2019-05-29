@@ -134,13 +134,11 @@
 					start:this.hotsellPage,
 					length:3
 				}).then(res=>{
-					console.log('这里');
-					console.log(res);
-						if(res.data){
-							let data = res.data;
-							this.hotProList = data.list;
-							this.hotsellPage=data.nextPage;
-						}
+					if(res.data){
+						let data = res.data;
+						this.hotProList = data.list;
+						this.hotsellPage=data.nextPage;
+					}
 				}).catch(err=>{
 					console.log(err);
 				});
@@ -166,10 +164,8 @@
 			getStoreList(lng,lat){
 				let _this=this;
 				_this.mPost('/server/s/vicinity/stores',{
-// 					"lng":lng || 116.206845,
-// 					"lat":lat || 39.762155,
-					"lng": 116.206845,
-					"lat": 39.762155
+					"lng":lng || 116.206845,
+					"lat":lat || 39.762155,
 				}).then(res=>{
 					if(res.data){
 						let data = res.data;

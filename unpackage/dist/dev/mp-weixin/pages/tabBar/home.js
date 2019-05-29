@@ -883,8 +883,6 @@ var _mHomeStore = _interopRequireDefault(__webpack_require__(/*! @/components/m-
         start: this.hotsellPage,
         length: 3 }).
       then(function (res) {
-        console.log('这里');
-        console.log(res);
         if (res.data) {
           var data = res.data;
           _this3.hotProList = data.list;
@@ -915,10 +913,8 @@ var _mHomeStore = _interopRequireDefault(__webpack_require__(/*! @/components/m-
     getStoreList: function getStoreList(lng, lat) {
       var _this = this;
       _this.mPost('/server/s/vicinity/stores', {
-        // 					"lng":lng || 116.206845,
-        // 					"lat":lat || 39.762155,
-        "lng": 116.206845,
-        "lat": 39.762155 }).
+        "lng": lng || 116.206845,
+        "lat": lat || 39.762155 }).
       then(function (res) {
         if (res.data) {
           var data = res.data;
