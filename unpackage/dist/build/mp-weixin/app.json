@@ -12,9 +12,14 @@
     "pages/user/aboutme/aboutme",
     "pages/user/vip/vip",
     "pages/empty/empty",
+    "pages/empty/error",
+    "pages/empty/405",
     "pages/order/pay",
+    "pages/order/tokens",
     "pages/order/order",
-    "pages/login/login"
+    "pages/order/comment",
+    "pages/login/login",
+    "pages/login/register"
   ],
   "subPackages": [],
   "window": {
@@ -42,6 +47,7 @@
         "pagePath": "pages/tabBar/order",
         "iconPath": "static/img/tabBar/order.png",
         "selectedIconPath": "static/img/tabBar/order-on.png",
+        "onReachBottomDistance": 100,
         "text": "订单"
       },
       {
@@ -52,9 +58,13 @@
       }
     ]
   },
-  "devServer": {
-    "port": 8081,
-    "disableHostCheck": true,
-    "proxy": "http://39.105.89.138:6090"
-  }
+  "permission": {
+    "scope.userLocation": {
+      "desc": "您的位置信息将用户小程序接口的展示效果"
+    }
+  },
+  "networkTimeout": {
+    "request": 30000
+  },
+  "sitemapLocation": "sitemap.json"
 }

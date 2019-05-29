@@ -84,11 +84,7 @@ var _vue = _interopRequireDefault(__webpack_require__(/*! vue */ "./node_modules
 var _App = _interopRequireDefault(__webpack_require__(/*! ./App */ "../../../../../../Users/apple/opt/DONGYAO/App.vue"));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function _objectSpread(target) {for (var i = 1; i < arguments.length; i++) {var source = arguments[i] != null ? arguments[i] : {};var ownKeys = Object.keys(source);if (typeof Object.getOwnPropertySymbols === 'function') {ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) {return Object.getOwnPropertyDescriptor(source, sym).enumerable;}));}ownKeys.forEach(function (key) {_defineProperty(target, key, source[key]);});}return target;}function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
 _vue.default.config.productionTip = false;
-// my config start
-// Vue.prototype.apiurl = 'http://39.105.89.138:6090'; 
 _vue.default.prototype.apiurl = 'https://dy.gantangerbus.com/dy';
-var Authorization = uni.getStorageSync('Authorization');
-// console.log(Authorization);
 var service = function service(res) {
   console.log(res);
   if (res.statusCode == 200) {
@@ -98,9 +94,6 @@ var service = function service(res) {
         title: "请求出错",
         icon: "none" });
 
-      // 			uni.redirectTo({
-      // 				url:'/pages/empty/error'
-      // 			})
     } else if (res.data.code == '-2') {
       // 重新登录
       var backurl = encodeURI("/pages/tabBar/user");
@@ -114,7 +107,6 @@ var service = function service(res) {
       icon: "none" });
 
   }
-
 };
 //经纬度转换成三角函数中度分表形式。
 _vue.default.prototype.rad = function (d) {
@@ -137,7 +129,6 @@ _vue.default.prototype.geoDistance = function (lat1, lng1, lat2, lng2) {
   s = Math.round(s * 10000) / 10000; //输出为公里
   return s.toFixed(1) + 'km';
 },
-console.log(Authorization);
 _vue.default.prototype.mGet = function (url, data) {
   var _this = this;
   return new Promise(function (resolve, reject) {
@@ -147,7 +138,7 @@ _vue.default.prototype.mGet = function (url, data) {
       header: {
         "Cache-Control": "no-cache",
         "Content-Type": "application/json;charset=UTF-8",
-        "Authorization": Authorization },
+        "Authorization": uni.getStorageSync('Authorization') },
 
       data: _objectSpread({}, data),
       success: function success(res) {
@@ -188,7 +179,7 @@ _vue.default.prototype.mPost = function (url, data, host) {
       header: {
         "Cache-Control": "no-cache",
         "Content-Type": "application/json;charset=UTF-8",
-        "Authorization": Authorization },
+        "Authorization": uni.getStorageSync('Authorization') },
 
       data: data,
       success: function success(res) {
@@ -226,7 +217,7 @@ _vue.default.prototype.mPostForm = function (url, data, host) {
       header: {
         "Cache-Control": "no-cache",
         "Content-Type": "application/x-www-form-urlencoded",
-        "Authorization": Authorization },
+        "Authorization": uni.getStorageSync('Authorization') },
 
       data: data,
       success: function success(res) {
@@ -284,13 +275,10 @@ _vue.default.prototype.globelIsLogin = function () {
         }
       },
       fail: function fail() {
-        console.log('失败这里这里');
         reject('fail');
       } });
 
   });
-
-
 
 };
 // my config end

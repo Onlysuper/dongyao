@@ -2,11 +2,7 @@ import Vue from 'vue'
 import App from './App'
 
 Vue.config.productionTip = false
-// my config start
-// Vue.prototype.apiurl = 'http://39.105.89.138:6090'; 
 Vue.prototype.apiurl = 'https://dy.gantangerbus.com/dy'; 
-var Authorization =uni.getStorageSync('Authorization');
-// console.log(Authorization);
 var service=(res)=>{
 	console.log(res);
 	if(res.statusCode==200){
@@ -16,9 +12,6 @@ var service=(res)=>{
 				title:  "请求出错",
 				icon: "none"
 			});
-// 			uni.redirectTo({
-// 				url:'/pages/empty/error'
-// 			})
 		}else if(res.data.code=='-2'){
 			// 重新登录
 			let backurl = encodeURI("/pages/tabBar/user");
@@ -32,7 +25,6 @@ var service=(res)=>{
 			icon: "none"
 		});
 	}
-	
 }
 //经纬度转换成三角函数中度分表形式。
 Vue.prototype.rad= function(d) {
@@ -55,7 +47,6 @@ Vue.prototype.geoDistance= function(lat1, lng1, lat2, lng2) {
   s = Math.round(s * 10000) / 10000; //输出为公里
   return (s.toFixed(1))+'km';
 },
-console.log(Authorization);
 Vue.prototype.mGet = function(url,data){
 	let _this=this;
 	return new Promise(function(resolve, reject){
@@ -65,7 +56,7 @@ Vue.prototype.mGet = function(url,data){
 			header:{
 				"Cache-Control": "no-cache",
 				"Content-Type": "application/json;charset=UTF-8",
-				"Authorization":Authorization
+				"Authorization":uni.getStorageSync('Authorization')
 			},
 			data: {...data},
 			success: res => {
@@ -106,7 +97,7 @@ Vue.prototype.mPost = function(url,data,host){
 			header:{
 				"Cache-Control": "no-cache",
 				"Content-Type": "application/json;charset=UTF-8",
-				"Authorization":Authorization
+				"Authorization":uni.getStorageSync('Authorization')
 			},
 			data: data,
 			success: res => {
@@ -144,7 +135,7 @@ Vue.prototype.mPostForm = function(url,data,host){
 			header:{
 				"Cache-Control": "no-cache",
 				"Content-Type": "application/x-www-form-urlencoded",
-				"Authorization":Authorization
+				"Authorization":uni.getStorageSync('Authorization')
 			},
 			data: data,
 			success: res => {
@@ -202,14 +193,11 @@ Vue.prototype.globelIsLogin=function(){
 				}
 			},
 			fail() {
-				console.log('失败这里这里')
 				reject('fail')
 			}
 		})
 	})
-	
 	// #endif
-	
 }
 // my config end
 App.mpType = 'app'

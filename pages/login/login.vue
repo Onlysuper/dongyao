@@ -35,14 +35,13 @@
 				    url: '/pages/login/register'  
 				});  
 			},
-			// 
-			 saveCode() {
+			async saveCode() {
 			    let _this = this;
-// 			    uni.showLoading({
-// 			        title: '登录中...'
-// 			    });
+			    uni.showLoading({
+			        title: '登录中...'
+			    });
 			   // 1.wx获取登录用户code
-			    uni.login({
+			    await uni.login({
 			        provider: 'weixin',
 			        success: function(loginRes) {
 			            let code = loginRes.code;
@@ -61,7 +60,11 @@
 			    });
 			},
 			//第一授权获取用户信息===》按钮触发
+			
 			getuserinfo:function(res){
+				if(!uni.getStorageSync('Authorization')){
+					this.saveCode();
+				}
 				let _this = this;
 				if (!res.detail.iv) {
 					uni.showToast({
@@ -83,7 +86,6 @@
 							}); 
 							uni.hideLoading();
 						}).catch(err=>{
-							console.log(err);
 							uni.hideLoading();
 						});
 						

@@ -24,11 +24,12 @@
 /* 垂直间距 */
 /* 透明度 */
 /* 文章场景相关 */
-.m-groupbuy-list .m-page-title {
+.m-groupbuy-page .m-page-title {
+  margin-top: 30rpx;
   margin-bottom: 30rpx;
   padding-left: 40rpx;
 }
-.m-groupbuy-list .m-list {
+.m-groupbuy-page .m-list {
   border-bottom: 1px solid #ebebeb;
 }
 
