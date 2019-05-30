@@ -231,7 +231,7 @@ export default {
 			storeId:"",
 			goodsData:{},
 			isAssemble:false,// 是否拼团
-			pintunNum:0,
+			// pintunNum:0,
 			pintuanData:{},
 			commentData:{},//评论列表
 			degreeData:"",//好评度
@@ -313,12 +313,9 @@ export default {
 				length:100,
 				productId:id
 			}).then(res=>{
-				console.log(res);
-				if(res.code=='1'){
-					if(res.data){
-						_this.pintunNum = res.endRow;
-						_this.pintuanData=res.data.list;
-					}
+				if(res.data){
+					_this.pintunNum = res.data.endRow;
+					_this.pintuanData=res.data.list;
 				}
 			})
 		},

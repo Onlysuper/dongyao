@@ -937,7 +937,8 @@ function bezier(pots, amount) {
     showCategory: function showCategory() {var _this2 = this;
       uni.showLoading({});
       if (totalpage && page > totalpage) {
-        uni.showToast({ "title": "已经加载全部", icon: "none" });
+        // uni.hideLoading({"title":"已经加载全部", icon:"none"});
+        uni.hideLoading();
         return;
       }
       this.mPost("/server/p/search/products", {
@@ -995,7 +996,6 @@ function bezier(pots, amount) {
         // userId:this.userid
       }).then(function (res) {
         // if(res.code=='1'){
-        console.log('这里');
         _this.shopCarList = [];
         // 购物车总商品数，与总价格计算
         _this.shopCarCountClear();
