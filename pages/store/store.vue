@@ -89,7 +89,7 @@
 							{{item.synopsis}}
 						</view>
 						<view class="m-price">
-							￥{{item.originalPrice}}
+							￥{{item.presentPrice}}
 						</view>
 						<view class="m-controne">
 							<uni-number-box @change="buyNumChange" :value="item.buyCount" :min="0" :max="item.stock" :id="item.id"></uni-number-box>

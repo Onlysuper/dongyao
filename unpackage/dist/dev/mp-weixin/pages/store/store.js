@@ -1680,7 +1680,7 @@ var render = function() {
                           _vm._v(_vm._s(item.synopsis))
                         ]),
                         _c("view", { staticClass: "m-price" }, [
-                          _vm._v("￥" + _vm._s(item.originalPrice))
+                          _vm._v("￥" + _vm._s(item.presentPrice))
                         ]),
                         _c(
                           "view",

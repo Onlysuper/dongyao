@@ -317,18 +317,13 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-
-
-
-
-
-
-
-var _uniRate = _interopRequireDefault(__webpack_require__(/*! @/components/uni-rate/uni-rate.vue */ "../../../../../../Users/apple/opt/DONGYAO/components/uni-rate/uni-rate.vue"));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function _objectSpread(target) {for (var i = 1; i < arguments.length; i++) {var source = arguments[i] != null ? arguments[i] : {};var ownKeys = Object.keys(source);if (typeof Object.getOwnPropertySymbols === 'function') {ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) {return Object.getOwnPropertyDescriptor(source, sym).enumerable;}));}ownKeys.forEach(function (key) {_defineProperty(target, key, source[key]);});}return target;}function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}function _toConsumableArray(arr) {return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread();}function _nonIterableSpread() {throw new TypeError("Invalid attempt to spread non-iterable instance");}function _iterableToArray(iter) {if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter);}function _arrayWithoutHoles(arr) {if (Array.isArray(arr)) {for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) {arr2[i] = arr[i];}return arr2;}}var _default =
+var _uniRate = _interopRequireDefault(__webpack_require__(/*! @/components/uni-rate/uni-rate.vue */ "../../../../../../Users/apple/opt/DONGYAO/components/uni-rate/uni-rate.vue"));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function _objectSpread(target) {for (var i = 1; i < arguments.length; i++) {var source = arguments[i] != null ? arguments[i] : {};var ownKeys = Object.keys(source);if (typeof Object.getOwnPropertySymbols === 'function') {ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) {return Object.getOwnPropertyDescriptor(source, sym).enumerable;}));}ownKeys.forEach(function (key) {_defineProperty(target, key, source[key]);});}return target;}function _toConsumableArray(arr) {return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread();}function _nonIterableSpread() {throw new TypeError("Invalid attempt to spread non-iterable instance");}function _iterableToArray(iter) {if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter);}function _arrayWithoutHoles(arr) {if (Array.isArray(arr)) {for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) {arr2[i] = arr[i];}return arr2;}}function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}var _default =
 {
   components: { uniRate: _uniRate.default },
-  data: function data() {
-    return {
+  data: function data() {var _ref;
+    return _ref = {
+      timeSpan: '', //距团购结束
+      pintunNum: '', // 拼团人数
       //控制渐变标题栏的参数
       beforeHeaderzIndex: 11, //层级
       afterHeaderzIndex: 10, //层级
@@ -350,13 +345,14 @@ var _uniRate = _interopRequireDefault(__webpack_require__(/*! @/components/uni-r
       // 商品信息
       storeId: "",
       goodsData: {},
-      isAssemble: false, // 是否拼团
-      pintuanData: {},
-      commentData: {}, //评论列表
-      degreeData: "", //好评度
-      selectSpec: null, //选中规格
-      //商品描述html
-      descriptionStr: '<div style="text-align:center;"></div>' };
+      isAssemble: false }, _defineProperty(_ref, "pintunNum",
+    0), _defineProperty(_ref, "pintuanData",
+    {}), _defineProperty(_ref, "commentData",
+    {}), _defineProperty(_ref, "degreeData",
+    ""), _defineProperty(_ref, "selectSpec",
+    null), _defineProperty(_ref, "descriptionStr",
+
+    '<div style="text-align:center;"></div>'), _ref;
 
   },
   onReady: function onReady() {
@@ -380,6 +376,7 @@ var _uniRate = _interopRequireDefault(__webpack_require__(/*! @/components/uni-r
           _this.goodsData = data;
           _this.descriptionStr = data.describes;
           _this.storeId = data.storeId;
+          _this.timeSpan = data.timeSpan;
           // 轮播图
           if (data.pictures) {
             _this.swiperList = _toConsumableArray(data.pictures);
@@ -410,10 +407,6 @@ var _uniRate = _interopRequireDefault(__webpack_require__(/*! @/components/uni-r
     this.beforeHeaderzIndex = e.scrollTop > 0 ? 10 : 11;
     this.afterHeaderzIndex = e.scrollTop > 0 ? 11 : 10;
   },
-  //上拉加载，需要自己在page.json文件中配置"onReachBottomDistance"
-  onReachBottom: function onReachBottom() {
-    uni.showToast({ title: '触发上拉加载' });
-  },
   methods: {
     goHome: function goHome() {
       uni.switchTab({
@@ -438,6 +431,7 @@ var _uniRate = _interopRequireDefault(__webpack_require__(/*! @/components/uni-r
         console.log(res);
         if (res.code == '1') {
           if (res.data) {
+            _this.pintunNum = res.endRow;
             _this.pintuanData = res.data.list;
           }
         }
@@ -1041,7 +1035,17 @@ var render = function() {
     ]),
     _vm.isAssemble
       ? _c("view", { staticClass: "info-box pintuan" }, [
-          _vm._m(2),
+          _c("view", { staticClass: "m-header" }, [
+            _c("view", { staticClass: "time-box" }, [
+              _c("view", {}, [_vm._v("距团购结束")]),
+              _c("view", { staticClass: "time" }, [
+                _vm._v(_vm._s(_vm.timeSpan))
+              ])
+            ]),
+            _c("view", { staticClass: "text-box" }, [
+              _vm._v("已有" + _vm._s(_vm.pintunNum) + "人下单 可直接参与")
+            ])
+          ]),
           _c(
             "view",
             { staticClass: "user-list-box" },
@@ -1176,24 +1180,6 @@ var staticRenderFns = [
           mode: "aspectFit"
         }
       })
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("view", { staticClass: "m-header" }, [
-      _c("view", { staticClass: "time-box" }, [
-        _c("view", {}, [_vm._v("距团购结束")]),
-        _c("view", { staticClass: "time" }, [_vm._v("03")]),
-        _vm._v(":"),
-        _c("view", { staticClass: "time" }, [_vm._v("56")]),
-        _vm._v(":"),
-        _c("view", { staticClass: "time" }, [_vm._v("35")])
-      ]),
-      _c("view", { staticClass: "text-box" }, [
-        _vm._v("已有3人下单 可直接参与")
-      ])
     ])
   }
 ]

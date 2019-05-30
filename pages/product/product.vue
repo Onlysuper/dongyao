@@ -119,19 +119,12 @@
 						距团购结束
 					</view>
 					<view class="time">
-						03
+						{{timeSpan}}
 					</view>
-					:
-					<view class="time">
-						56
-					</view>
-					:
-					<view class="time">
-						35
-					</view>
+
 				</view>
 				<view class="text-box">
-					已有3人下单 可直接参与
+					已有{{pintunNum}}人下单 可直接参与
 				</view>
 			</view>
 			<view class="user-list-box">
@@ -214,6 +207,8 @@ export default {
 	components: {uniRate},
 	data() {
 		return {
+			timeSpan:'',//距团购结束
+			pintunNum:'',// 拼团人数
 			//控制渐变标题栏的参数
 			beforeHeaderzIndex: 11,//层级
 			afterHeaderzIndex: 10,//层级
@@ -236,6 +231,7 @@ export default {
 			storeId:"",
 			goodsData:{},
 			isAssemble:false,// 是否拼团
+			pintunNum:0,
 			pintuanData:{},
 			commentData:{},//评论列表
 			degreeData:"",//好评度
@@ -265,6 +261,7 @@ export default {
 					_this.goodsData=data;
 					_this.descriptionStr=data.describes;
 					_this.storeId = data.storeId;
+					_this.timeSpan = data.timeSpan;
 					// 轮播图
 					if(data.pictures){
 						_this.swiperList=[...data.pictures];
@@ -295,10 +292,6 @@ export default {
 		this.beforeHeaderzIndex = e.scrollTop > 0 ? 10 : 11;
 		this.afterHeaderzIndex = e.scrollTop > 0 ? 11 : 10;
 	},
-	//上拉加载，需要自己在page.json文件中配置"onReachBottomDistance"
-	onReachBottom() {
-		uni.showToast({ title: '触发上拉加载' });
-	},
 	methods: {
 		goHome(){
 			uni.switchTab({  
@@ -323,6 +316,7 @@ export default {
 				console.log(res);
 				if(res.code=='1'){
 					if(res.data){
+						_this.pintunNum = res.endRow;
 						_this.pintuanData=res.data.list;
 					}
 				}
