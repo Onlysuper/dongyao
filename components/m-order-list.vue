@@ -21,7 +21,7 @@
 		<view class="m-body">
 			<view class="m-img-container">
 				<view class="m-img-box" v-for="(item) in productList" :key="item.id">
-					<image style="width:100%;height:100%" :src="item.pictures[0].pictureUrl" mode="aspectFill"></image>
+					<image style="width:100%;height:100%" :src="item.pictures[0].pictureUrl" mode="aspectFit"></image>
 				</view>
 			</view>
 			<view class="m-text-right">
@@ -220,9 +220,8 @@
 		align-items: center;
 		margin-top: 40upx;
 		.m-img-box{
-			flex: 0 0 130upx;
+			width: 130upx;
 			height: 130upx;
-			background: #eee;
 		}
 		.m-text-box{
 			flex:1;

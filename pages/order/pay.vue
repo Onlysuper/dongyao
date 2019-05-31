@@ -19,7 +19,6 @@
 									自取时间
 								</view>
 								<view class="m-light">
-									<!-- 16：30 -->
 									<ruiDatePicker
 										fields="minute"
 										:start="today"
@@ -171,7 +170,6 @@
 				aboutPickingTime:dateFtt("yyyy-MM-dd hh:mm",new Date()),//预约时间
 				reserveTel:"17600802360",// 预约手机号
 				paytype:"wx",//支付方式
-				// userid:"",
 				type:"",//是否是拼团订单
 				latitude: 39.909,
 				longitude: 116.39742,
@@ -207,12 +205,8 @@
 				if(option){
 					let proUrlData=decodeURI(option.proUrlData);
 					_this.shopCarList=JSON.parse(proUrlData)['proUrlData'];
-					// console.log(_this.shopCarList);
-					_this.orderInit()
-				}else{
-					_this.orderInit()
 				}
-				
+				_this.orderInit()
 			},
 			// 优惠券
 			tokenCard(){
@@ -236,7 +230,6 @@
 					productId:item.id,
 					cou:item.buyCount,
 				}})
-				console.log(products);
 				let sendData = {
 					storeId:_this.storeid,
 					totalCount:_this.totalCount,
@@ -278,52 +271,57 @@
 					sendData['outTradeNo']=this.outTradeNo; //订单id，第一次下单不需要，待支付订单支付时需要传入
 				}
 				_this.mPost("/server/pay/wxpay",sendData).then(res=>{
-					if(res.code==1){
-							let data = res.data;
-						// 调起支付
-							let _package = data.prepay_id;
-							let paydata = {
-								provider: 'wxpay',
-								timeStamp: data.timeStamp+'',
-								nonceStr: data.nonceStr,
-								package: data.package,
-								signType: data.signType,
-								paySign: data.paySign,
-							}
-							uni.requestPayment({
-								...paydata,
-								success: function(res) {
-									uni.showModal({
-										title: '支付成功',
-										content: '可在我的订单中查看详情',
-										showCancel:false,
-										confirmText:'查看订单',
-										success: function (res) {
-											if (res.confirm) {
-												uni.setStorageSync('orderTab', 1);
-												uni.switchTab({  
-													url: '/pages/tabBar/order'  
-												});
-											} 
-											else if (res.cancel) {
-												console.log('用户点击取消');
-											}
-										}
-									});
-									 
-									// _this.clearShopcar()
-								},
-								fail: function(err) {
-									//取消支付
-									uni.setStorageSync('orderTab', 2);
-									uni.switchTab({  
-										url: '/pages/tabBar/order'  
-									}); 
-									 // _this.clearShopcar()
-								}
-							});
+					let data = res.data;
+					if(!data.paySign){
+						this.paySuccess();
+						return
 					}
+					// 调起支付
+					let _package = data.prepay_id;
+					let paydata = {
+						provider: 'wxpay',
+						timeStamp: data.timeStamp+'',
+						nonceStr: data.nonceStr,
+						package: data.package,
+						signType: data.signType,
+						paySign: data.paySign,
+					}
+					uni.requestPayment({
+						...paydata,
+						success: function(res) {
+							_this.paySuccess()
+						},
+						fail: function(err) {
+							//取消支付
+							uni.setStorageSync('orderTab', 2);
+							uni.switchTab({  
+								url: '/pages/tabBar/order'  
+							}); 
+							 // _this.clearShopcar()
+						}
+					});
+					
 				})
+			},
+			//支付成功
+			paySuccess(){
+				uni.showModal({
+					title: '支付成功',
+					content: '可在我的订单中查看详情',
+					showCancel:false,
+					confirmText:'查看订单',
+					success: function (res) {
+						if (res.confirm) {
+							uni.setStorageSync('orderTab', 1);
+							uni.switchTab({  
+								url: '/pages/tabBar/order'  
+							});
+						} 
+						else if (res.cancel) {
+							console.log('用户点击取消');
+						}
+					}
+				});	
 			},
 			// 清空购物车
 			clearShopcar(){

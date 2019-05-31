@@ -1176,7 +1176,7 @@ var render = function() {
           return _c("view", { key: item.id, staticClass: "m-img-box" }, [
             _c("image", {
               staticStyle: { width: "100%", height: "100%" },
-              attrs: { src: item.pictures[0].pictureUrl, mode: "aspectFill" }
+              attrs: { src: item.pictures[0].pictureUrl, mode: "aspectFit" }
             })
           ])
         })

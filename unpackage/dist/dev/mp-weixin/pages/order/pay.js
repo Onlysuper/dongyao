@@ -729,7 +729,6 @@ var _GetDate = _interopRequireDefault(__webpack_require__(/*! ./GetDate.js */ ".
 
 
 
-
 var _event = _interopRequireDefault(__webpack_require__(/*! ../../common/event.js */ "../../../../../../Users/apple/opt/DONGYAO/common/event.js"));
 
 
@@ -768,7 +767,6 @@ var _rattenkingDtpicker = _interopRequireDefault(__webpack_require__(/*! @/compo
       aboutPickingTime: dateFtt("yyyy-MM-dd hh:mm", new Date()), //预约时间
       reserveTel: "17600802360", // 预约手机号
       paytype: "wx", //支付方式
-      // userid:"",
       type: "", //是否是拼团订单
       latitude: 39.909,
       longitude: 116.39742,
@@ -804,12 +802,8 @@ var _rattenkingDtpicker = _interopRequireDefault(__webpack_require__(/*! @/compo
       if (option) {
         var proUrlData = decodeURI(option.proUrlData);
         _this.shopCarList = JSON.parse(proUrlData)['proUrlData'];
-        // console.log(_this.shopCarList);
-        _this.orderInit();
-      } else {
-        _this.orderInit();
       }
-
+      _this.orderInit();
     },
     // 优惠券
     tokenCard: function tokenCard() {
@@ -833,7 +827,6 @@ var _rattenkingDtpicker = _interopRequireDefault(__webpack_require__(/*! @/compo
           productId: item.id,
           cou: item.buyCount };
       });
-      console.log(products);
       var sendData = {
         storeId: _this.storeid,
         totalCount: _this.totalCount,
@@ -853,7 +846,7 @@ var _rattenkingDtpicker = _interopRequireDefault(__webpack_require__(/*! @/compo
       });
     },
     // 立即支付
-    payFn: function payFn() {
+    payFn: function payFn() {var _this2 = this;
       var _this = this;
       var products = _this.shopCarList.map(function (item) {return {
           productId: item.id,
@@ -875,52 +868,57 @@ var _rattenkingDtpicker = _interopRequireDefault(__webpack_require__(/*! @/compo
         sendData['outTradeNo'] = this.outTradeNo; //订单id，第一次下单不需要，待支付订单支付时需要传入
       }
       _this.mPost("/server/pay/wxpay", sendData).then(function (res) {
-        if (res.code == 1) {
-          var data = res.data;
-          // 调起支付
-          var _package = data.prepay_id;
-          var paydata = {
-            provider: 'wxpay',
-            timeStamp: data.timeStamp + '',
-            nonceStr: data.nonceStr,
-            package: data.package,
-            signType: data.signType,
-            paySign: data.paySign };
-
-          uni.requestPayment(_objectSpread({},
-          paydata, {
-            success: function success(res) {
-              uni.showModal({
-                title: '支付成功',
-                content: '可在我的订单中查看详情',
-                showCancel: false,
-                confirmText: '查看订单',
-                success: function success(res) {
-                  if (res.confirm) {
-                    uni.setStorageSync('orderTab', 1);
-                    uni.switchTab({
-                      url: '/pages/tabBar/order' });
-
-                  } else
-                  if (res.cancel) {
-                    console.log('用户点击取消');
-                  }
-                } });
-
-
-              // _this.clearShopcar()
-            },
-            fail: function fail(err) {
-              //取消支付
-              uni.setStorageSync('orderTab', 2);
-              uni.switchTab({
-                url: '/pages/tabBar/order' });
-
-              // _this.clearShopcar()
-            } }));
-
+        var data = res.data;
+        if (!data.paySign) {
+          _this2.paySuccess();
+          return;
         }
+        // 调起支付
+        var _package = data.prepay_id;
+        var paydata = {
+          provider: 'wxpay',
+          timeStamp: data.timeStamp + '',
+          nonceStr: data.nonceStr,
+          package: data.package,
+          signType: data.signType,
+          paySign: data.paySign };
+
+        uni.requestPayment(_objectSpread({},
+        paydata, {
+          success: function success(res) {
+            _this.paySuccess();
+          },
+          fail: function fail(err) {
+            //取消支付
+            uni.setStorageSync('orderTab', 2);
+            uni.switchTab({
+              url: '/pages/tabBar/order' });
+
+            // _this.clearShopcar()
+          } }));
+
+
       });
+    },
+    //支付成功
+    paySuccess: function paySuccess() {
+      uni.showModal({
+        title: '支付成功',
+        content: '可在我的订单中查看详情',
+        showCancel: false,
+        confirmText: '查看订单',
+        success: function success(res) {
+          if (res.confirm) {
+            uni.setStorageSync('orderTab', 1);
+            uni.switchTab({
+              url: '/pages/tabBar/order' });
+
+          } else
+          if (res.cancel) {
+            console.log('用户点击取消');
+          }
+        } });
+
     },
     // 清空购物车
     clearShopcar: function clearShopcar() {
@@ -938,11 +936,11 @@ var _rattenkingDtpicker = _interopRequireDefault(__webpack_require__(/*! @/compo
       });
     },
     //门店详情
-    storeDetail: function storeDetail() {var _this2 = this;
+    storeDetail: function storeDetail() {var _this3 = this;
       this.mPost("/server/s/storeById", {
         id: this.storeid }).
       then(function (res) {
-        _this2.storeData = res.data;
+        _this3.storeData = res.data;
         console.log(res);
       }).catch(function (error) {
         console.log(error);

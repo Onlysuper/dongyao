@@ -83,12 +83,8 @@
     margin-top: 40rpx;
 }
 .m-order-pro-list .m-body .m-img-box {
-      -webkit-box-flex: 0;
-      -webkit-flex: 0 0 130rpx;
-          -ms-flex: 0 0 130rpx;
-              flex: 0 0 130rpx;
+      width: 130rpx;
       height: 130rpx;
-      background: #eee;
 }
 .m-order-pro-list .m-body .m-text-box {
       -webkit-box-flex: 1;
