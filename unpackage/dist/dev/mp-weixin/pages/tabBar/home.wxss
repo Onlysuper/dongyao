@@ -354,6 +354,7 @@ uni-swiper{
         -ms-flex: 1;
             flex: 1;
     padding: 0 20rpx;
+    font-size: 26rpx;
 }
 .m-store-item .m-text .m-title {
       font-size: 32rpx;

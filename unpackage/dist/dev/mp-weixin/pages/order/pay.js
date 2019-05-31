@@ -729,6 +729,7 @@ var _GetDate = _interopRequireDefault(__webpack_require__(/*! ./GetDate.js */ ".
 
 
 
+
 var _event = _interopRequireDefault(__webpack_require__(/*! ../../common/event.js */ "../../../../../../Users/apple/opt/DONGYAO/common/event.js"));
 
 
@@ -800,9 +801,15 @@ var _rattenkingDtpicker = _interopRequireDefault(__webpack_require__(/*! @/compo
     // 支付数据
     getData: function getData(option) {
       var _this = this;
-      var proUrlData = decodeURI(option.proUrlData);
-      _this.shopCarList = JSON.parse(proUrlData)['proUrlData'];
-      _this.orderInit();
+      if (option) {
+        var proUrlData = decodeURI(option.proUrlData);
+        _this.shopCarList = JSON.parse(proUrlData)['proUrlData'];
+        // console.log(_this.shopCarList);
+        _this.orderInit();
+      } else {
+        _this.orderInit();
+      }
+
     },
     // 优惠券
     tokenCard: function tokenCard() {
@@ -822,11 +829,16 @@ var _rattenkingDtpicker = _interopRequireDefault(__webpack_require__(/*! @/compo
     //生成订单
     orderInit: function orderInit() {
       var _this = this;
+      var products = _this.shopCarList.map(function (item) {return {
+          productId: item.id,
+          cou: item.buyCount };
+      });
+      console.log(products);
       var sendData = {
         storeId: _this.storeid,
         totalCount: _this.totalCount,
         type: _this.type,
-        products: _this.shopCarList,
+        products: products,
         couponId: _this.couponId };
 
       _this.mPost("/server/pay/calOrderPrice", sendData).then(function (res) {

@@ -45,6 +45,7 @@
 			</view>
 			<!-- 商品列表 -->
 			<view class="m-pro-container">
+				
 				<m-order-pro v-for="(item) in shopCarList" :key="item.id"
 				:title="item.synopsis"
 				:price="item.presentPrice"
@@ -190,7 +191,7 @@
 				// 优惠券end
 			};
 		},
-		methods:{
+		methods:{ 
 			// 选择优惠券
 			choseTokenFn(){
 				uni.navigateTo({
@@ -203,9 +204,15 @@
 			// 支付数据
 			getData(option){
 				let _this= this;
-				let proUrlData=decodeURI(option.proUrlData);
-				_this.shopCarList=JSON.parse(proUrlData)['proUrlData'];
-				_this.orderInit()
+				if(option){
+					let proUrlData=decodeURI(option.proUrlData);
+					_this.shopCarList=JSON.parse(proUrlData)['proUrlData'];
+					// console.log(_this.shopCarList);
+					_this.orderInit()
+				}else{
+					_this.orderInit()
+				}
+				
 			},
 			// 优惠券
 			tokenCard(){
@@ -225,11 +232,16 @@
 			//生成订单
 			orderInit(){
 				let _this=this;
+				let products=_this.shopCarList.map(item=>{return {
+					productId:item.id,
+					cou:item.buyCount,
+				}})
+				console.log(products);
 				let sendData = {
 					storeId:_this.storeid,
 					totalCount:_this.totalCount,
 					type:_this.type,
-					products:_this.shopCarList,
+					products:products, 
 					couponId:_this.couponId,
 				}
 				_this.mPost("/server/pay/calOrderPrice",sendData).then(res=>{

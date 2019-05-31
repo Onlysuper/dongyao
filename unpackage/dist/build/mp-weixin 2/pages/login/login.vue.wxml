@@ -1,2 +1,0 @@
-<template name="8ff3bae4"><view class="_view 8ff3bae4 m-login-page"><view class="_view 8ff3bae4 m-img-box">东尧蔬菜</view><view class="_view 8ff3bae4 describe">您暂未授权'东尧蔬菜'小程序获取你的信息，讲无法正常使用小程序的功能。
-		如果需要正常使用，请点击"授权"按钮，打开头像，昵称等信息的权限</view><view class="_view 8ff3bae4 m-but"><button type="primary" open-type="getUserInfo" bindgetuserinfo="handleProxy" withCredentials="true" data-eventid="{{'8ff3bae4-0'}}" data-comkey="{{$k}}" class="_button 8ff3bae4">授权</button></view></view></template>

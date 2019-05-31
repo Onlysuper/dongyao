@@ -935,8 +935,10 @@ var _mHomeStore = _interopRequireDefault(__webpack_require__(/*! @/components/m-
       this.linkTo("/pages/store/store?storeid=" + item.storeId + "&typeid=" + item.storeId);
     },
     // 点击拼团图片
-    groupProDetail: function groupProDetail() {
-      this.linkTo("/pages/product/product");
+    groupProDetail: function groupProDetail(item) {
+      // console.log(item);
+      // return fales;
+      this.linkTo("/pages/product/product?id=" + item.id);
     },
     //点击门店图片
     storeDetail: function storeDetail(id) {
@@ -1173,7 +1175,7 @@ var render = function() {
         ? _c("view", { staticClass: "m-img" }, [
             _c("image", {
               staticStyle: { width: "100%", height: "100%" },
-              attrs: { src: _vm.rowData.img, mode: "aspectFit" }
+              attrs: { src: _vm.rowData.imgUrl, mode: "aspectFit" }
             })
           ])
         : _vm._e(),
@@ -1579,7 +1581,11 @@ var render = function() {
                             eventid: "09c88d5b-8-" + index,
                             mpcomid: "09c88d5b-5-" + index
                           },
-                          on: { handleFn: _vm.groupProDetail }
+                          on: {
+                            handleFn: function($event) {
+                              _vm.groupProDetail(item)
+                            }
+                          }
                         })
                       ]
                     })

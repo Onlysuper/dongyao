@@ -166,6 +166,7 @@ var _mTokenCard = _interopRequireDefault(__webpack_require__(/*! @/components/m-
       });
     },
     choseTokenFn: function choseTokenFn(data) {
+      console.log('优惠间id：' + data);
       _event.default.noticeFun(_event.default.UPDATA_TOKEN, { id: data });
       uni.navigateBack({
         delta: 1 });

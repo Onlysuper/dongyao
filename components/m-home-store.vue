@@ -2,7 +2,7 @@
 	<!-- 首页门店图文 -->
 	<view @tap='handleFn' class="m-store-item">
 		<view class="m-img" v-if="rowData.imgUrl">
-			<image style="width:100%;height: 100%;" :src="rowData.img" mode="aspectFit"></image>
+			<image style="width:100%;height: 100%;" :src="rowData.imgUrl" mode="aspectFit"></image>
 		</view>
 		<view class="m-text">
 			<view class="m-title">
@@ -76,6 +76,7 @@
 	.m-text{
 		flex:1;
 		padding: 0 20upx;
+		font-size: 26upx;
 		.m-title{
 			font-size: 32upx;
 			color:#333333;

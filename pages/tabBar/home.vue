@@ -48,7 +48,7 @@
 				<scroll-view class="scroll-view" scroll-x="true"  scroll-left="120">
 					<view class="m-togethoer">
 						<template v-for="(item,index) in groupsellList">
-							<m-home-pro  @handleFn="groupProDetail" :key="index" :rowData="item"></m-home-pro>
+							<m-home-pro  @handleFn="groupProDetail(item)" :key="index" :rowData="item"></m-home-pro>
 						</template>
 					</view>
 				</scroll-view>
@@ -186,8 +186,10 @@
 				this.linkTo("/pages/store/store?storeid="+item.storeId+"&typeid="+item.storeId)
 			},
 			// 点击拼团图片
-			groupProDetail(){
-				this.linkTo("/pages/product/product")
+			groupProDetail(item){
+				// console.log(item);
+				// return fales;
+				this.linkTo("/pages/product/product?id="+item.id)
 			},
 			//点击门店图片
 			storeDetail(id){
