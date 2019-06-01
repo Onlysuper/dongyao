@@ -9,7 +9,7 @@
 		</view>
 		<view class="m-but">
 			<!-- #ifdef MP-WEIXIN -->  
-			<button type="primary" open-type="getUserInfo" @getuserinfo="getuserinfo" withCredentials="true">授权</button>
+			<button :disabled="!needAllow" type="primary" open-type="getUserInfo" @getuserinfo="getuserinfo" withCredentials="true">授权</button>
 			<!-- <button @tap="goback" style="margin-top: 20upx;">取消</button> -->
 			<!-- #endif -->  
 			
@@ -25,7 +25,8 @@
 				OpenId: '',
 				nickName: null,
 				avatarUrl: null,
-				isCanUse: uni.getStorageSync('isCanUse')||true//默认为true
+				isCanUse: uni.getStorageSync('isCanUse')||true,//默认为true
+				needAllow:true //是否需要授权
 			};
 		},
 		methods:{
@@ -50,6 +51,18 @@
 						).then(res=>{
 							if(res.data){
 								let data = res.data;
+								if(data.isRegister){
+									_this.needAllow=false;
+									uni.showToast({
+										title: "授权成功",
+										icon: "none"
+									});
+									setTimeout(()=>{
+										uni.switchTab({  
+											url: '/pages/tabBar/home'  
+										});
+									},1300)
+								}
 								uni.setStorageSync('Authorization', data.authToken);
 							}
 							uni.hideLoading();

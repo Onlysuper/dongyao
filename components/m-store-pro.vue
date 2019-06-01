@@ -18,7 +18,9 @@
 				{{presentPrice}}
 			</view>
 			<view @tap="proDetail" class="m-old-price">
-				非会员价
+				<view class="">
+					非会员价
+				</view>
 				<view class="m-num">
 					{{originalPrice}}
 				</view>
@@ -141,6 +143,7 @@
 			font-size: 18upx;
 			color:#999999;
 			margin-top: 5upx;
+			align-items: center;
 			.m-num{
 				// font-size:  20upx;
 			}

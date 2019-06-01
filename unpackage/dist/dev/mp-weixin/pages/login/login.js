@@ -152,7 +152,8 @@ module.exports = __webpack_require__(/*! regenerator-runtime */ "./node_modules/
       OpenId: '',
       nickName: null,
       avatarUrl: null,
-      isCanUse: uni.getStorageSync('isCanUse') || true //默认为true
+      isCanUse: uni.getStorageSync('isCanUse') || true, //默认为true
+      needAllow: true //是否需要授权
     };
   },
   methods: {
@@ -177,6 +178,18 @@ module.exports = __webpack_require__(/*! regenerator-runtime */ "./node_modules/
                     then(function (res) {
                       if (res.data) {
                         var data = res.data;
+                        if (data.isRegister) {
+                          _this.needAllow = false;
+                          uni.showToast({
+                            title: "授权成功",
+                            icon: "none" });
+
+                          setTimeout(function () {
+                            uni.switchTab({
+                              url: '/pages/tabBar/home' });
+
+                          }, 1300);
+                        }
                         uni.setStorageSync('Authorization', data.authToken);
                       }
                       uni.hideLoading();
@@ -1051,6 +1064,7 @@ var render = function() {
           "button",
           {
             attrs: {
+              disabled: !_vm.needAllow,
               type: "primary",
               "open-type": "getUserInfo",
               withCredentials: "true",

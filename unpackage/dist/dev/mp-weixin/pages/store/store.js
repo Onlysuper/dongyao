@@ -474,6 +474,8 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 
 
 
+
+
 {
   name: "m-store-pro",
   props: {
@@ -1346,7 +1348,7 @@ var render = function() {
           on: { tap: _vm.proDetail }
         },
         [
-          _vm._v("非会员价"),
+          _c("view", {}, [_vm._v("非会员价")]),
           _c("view", { staticClass: "m-num" }, [
             _vm._v(_vm._s(_vm.originalPrice))
           ])

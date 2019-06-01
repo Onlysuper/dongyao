@@ -324,6 +324,16 @@ var _mOrderPro = _interopRequireDefault(__webpack_require__(/*! @/components/m-o
     this.orderid = options.orderid;
     this.getLocation();
     this.getOrder();
+  },
+  onShow: function onShow() {
+    uni.setStorageSync('orderTab', 4);
+  },
+  onUnload: function onUnload() {
+    var index = 4;
+    if (this.state == 1 || this.state == 2 || this.state == 3) {
+      index = this.state;
+    }
+    uni.setStorageSync('orderTab', index);
   } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ "./node_modules/@dcloudio/uni-mp-weixin/dist/index.js")["default"]))
 

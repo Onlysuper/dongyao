@@ -881,7 +881,7 @@ var _mHomeStore = _interopRequireDefault(__webpack_require__(/*! @/components/m-
     getHotsellList: function getHotsellList() {var _this3 = this;
       this.mPost('/server/p/hot/products', {
         start: this.hotsellPage,
-        length: 3 }).
+        length: 6 }).
       then(function (res) {
         if (res.data) {
           var data = res.data;

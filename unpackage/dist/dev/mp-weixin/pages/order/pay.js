@@ -765,7 +765,7 @@ var _rattenkingDtpicker = _interopRequireDefault(__webpack_require__(/*! @/compo
       distance: '',
       today: dateFtt("yyyy-MM-dd hh:mm", new Date()),
       aboutPickingTime: dateFtt("yyyy-MM-dd hh:mm", new Date()), //预约时间
-      reserveTel: "17600802360", // 预约手机号
+      reserveTel: uni.getStorageSync('phone'), // 预约手机号
       paytype: "wx", //支付方式
       type: "", //是否是拼团订单
       latitude: 39.909,
@@ -824,7 +824,7 @@ var _rattenkingDtpicker = _interopRequireDefault(__webpack_require__(/*! @/compo
     orderInit: function orderInit() {
       var _this = this;
       var products = _this.shopCarList.map(function (item) {return {
-          productId: item.id,
+          productId: item.productId,
           cou: item.buyCount };
       });
       var sendData = {
@@ -849,7 +849,7 @@ var _rattenkingDtpicker = _interopRequireDefault(__webpack_require__(/*! @/compo
     payFn: function payFn() {var _this2 = this;
       var _this = this;
       var products = _this.shopCarList.map(function (item) {return {
-          productId: item.id,
+          productId: item.productId,
           cou: item.buyCount };
       });
       var sendData = {
@@ -966,7 +966,6 @@ var _rattenkingDtpicker = _interopRequireDefault(__webpack_require__(/*! @/compo
 
   // 
   onLoad: function onLoad(option) {
-    console.log(111111);
     this.couponId = option.couponId || "",
     this.storeid = option.storeid;
     this.totalCount = option.totalCount,

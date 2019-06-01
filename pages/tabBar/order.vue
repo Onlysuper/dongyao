@@ -1,6 +1,5 @@
 <template>
 	<view class="m-order-page">
-		
 		<view class="fixedit">
 			<m-tab @handleFn="tabChange" :tabActive="tabActive" :rowdata="tabList"></m-tab>
 		</view>
@@ -9,6 +8,7 @@
 		<m-empty v-else-if="orderList.length==0"></m-empty>
 		<view v-else class="m-order-body">
 			<m-order-list v-for="(item,index) in orderList" 
+			@detailGood="detailGood"
 			@takeGood="takeGood"
 			@payGood="payGood"
 			@againGood="againGood"
@@ -73,23 +73,15 @@
 			}
 		},
 		methods:{
-			 // 付款
-// 			payGood(res){
-// 				let _this = this;
-// 				console.log(res);
-// 				let data = res.data;
-// 				let newOrder={...data.order}; 
-// 				let newStore ={...data.store};
-// 				let storeId= newStore.id; // 店铺id
-// 				let totalCount = newOrder.totalCount; // 商品件数
-// 				let type= newOrder.paymentType; // 是团购还是直接购买
-// 				let couponId = newOrder.couponId; // 优惠券id
-// 				let proArr = [newOrder];
-// 				let proUrlData = encodeURI(JSON.stringify({proUrlData:proArr}));
-// 				uni.navigateTo({
-// 					url:"/pages/order/pay?storeid="+storeId+"&totalCount="+totalCount+"&type="+type+'&couponId='+couponId+'&proUrlData='+proUrlData
-// 				})
-// 			},
+			// 商品详情
+			detailGood(res){
+				let orderid = res.data.order.id;
+				let type=1;
+				uni.navigateTo({
+					url:`/pages/order/order?orderid=${orderid}&type=${type}`
+				})
+			},
+			// 付款
 			payGood(res){
 				let _this = this;
 				let data = res.data;
@@ -122,25 +114,7 @@
 				uni.navigateTo({
 					url:"/pages/order/order?orderid="+orderid
 				})
-// 				let _this = this;
-// 				let data = res.data;
-// 				let newOrder={...data.order}; 
-// 				let newStore ={...data.store};
-// 				let storeId= newStore.id; // 店铺id
-// 				let totalCount = newOrder.totalCount; // 商品件数
-// 				let type= newOrder.paymentType; // 是团购还是直接购买
-// 				let couponId = newOrder.couponId; // 优惠券id
-// 				let proArr = [...data.productList];
-// 				let proUrlData = encodeURI(JSON.stringify({proUrlData:proArr}));
-// 				uni.navigateTo({
-// 					url:"/pages/order/pay?storeid="+storeId+"&totalCount="+totalCount+"&type="+type+'&couponId='+couponId+'&proUrlData='+proUrlData
-// 				})
 			},
-			// 再来一单
-// 			againGood(data){
-// 				console.log('再来一单')	 	 
-// 			},
-			
 			//是否登录了
 			checkLogin(){
 				let _this = this;
@@ -193,10 +167,8 @@
 				this.getOrders();
 			}
 		},
-		
 		// 加载更多
 		onReachBottom(){
-			
 			this.mloading='loading';
 			this.getOrders();
 		},
@@ -210,7 +182,6 @@
 		},
 		// 重置分页及数据
 		onPullDownRefresh(){
-			console.log('清空数据');
 			page = 1;
 			this.orderList = [];
 			this.getOrders();

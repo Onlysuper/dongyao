@@ -168,7 +168,7 @@
 				distance:'',
 				today:dateFtt("yyyy-MM-dd hh:mm",new Date()),
 				aboutPickingTime:dateFtt("yyyy-MM-dd hh:mm",new Date()),//预约时间
-				reserveTel:"17600802360",// 预约手机号
+				reserveTel:uni.getStorageSync('phone'),// 预约手机号
 				paytype:"wx",//支付方式
 				type:"",//是否是拼团订单
 				latitude: 39.909,
@@ -227,7 +227,7 @@
 			orderInit(){
 				let _this=this;
 				let products=_this.shopCarList.map(item=>{return {
-					productId:item.id,
+					productId:item.productId,
 					cou:item.buyCount,
 				}})
 				let sendData = {
@@ -252,7 +252,7 @@
 			payFn(){
 				let _this=this;
 				let products=_this.shopCarList.map(item=>{return {
-					productId:item.id,
+					productId:item.productId,
 					cou:item.buyCount,
 				}})
 				let sendData ={
@@ -369,7 +369,6 @@
 		},
 		// 
 		onLoad(option){
-			console.log(111111);
 			this.couponId=option.couponId|| "",
 			this.storeid=option.storeid;
 			this.totalCount=option.totalCount,

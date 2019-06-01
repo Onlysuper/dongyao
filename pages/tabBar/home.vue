@@ -132,7 +132,7 @@
 			getHotsellList(){
 				this.mPost('/server/p/hot/products',{
 					start:this.hotsellPage,
-					length:3
+					length:6
 				}).then(res=>{
 					if(res.data){
 						let data = res.data;

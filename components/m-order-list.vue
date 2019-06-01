@@ -17,14 +17,26 @@
 			<view style="color:#b2aaaa" v-else-if="status==3">
 				待评论
 			</view>
+			<view style="color:#b2aaaa" v-else-if="status==4">
+				已退款
+			</view>
+			<view style="color:#b2aaaa" v-else-if="status==5">
+				已取消
+			</view>
+			<view style="color:#b2aaaa" v-else-if="status==6">
+				已失效
+			</view>
 		</view>
 		<view class="m-body">
 			<view class="m-img-container">
-				<view class="m-img-box" v-for="(item) in productList" :key="item.id">
+				<!-- <view class="m-img-box" v-for="(item) in productList" :key="item.id">
 					<image style="width:100%;height:100%" :src="item.pictures[0].pictureUrl" mode="aspectFit"></image>
+				</view> -->
+				<view  @tap="detailGood" class="m-img-box">
+					<image style="width:100%;height:100%" :src="productList[0].pictures[0].pictureUrl" mode="aspectFull"></image>
 				</view>
 			</view>
-			<view class="m-text-right">
+			<view @tap="detailGood" class="m-text-right">
 				<view class="price">
 					￥{{price}}
 				</view>
@@ -32,29 +44,11 @@
 					共{{num}}件
 				</view>
 			</view>
-			<!-- <view class="m-text-box">
-				<view class="m-name">
-					{{proname}}
-				</view>
-				<view v-if="status==3" class="m-describe">
-					提货时间:{{extrctime}}
-				</view>
-				<view v-else class="m-describe">
-					预计提货时间:{{aboutPickingTime}}
-				</view>
-				<view class="m-describe">
-					下单时间:{{createTime}}
-				</view>
-				<view class="m-describe">
-					{{describe}}
-				</view>
-				
-			</view> -->
+			
 		</view>
 		<view class="m-footer">
 			<view class="footleft">
 				<view class="footleft">
-					<!-- 应付款：￥{{price}}    共{{num}}件 -->
 					<view class="m-name">
 						{{proname}}
 					</view>
@@ -81,9 +75,6 @@
 					</view>
 				</view>
 				<view  v-else-if="status==3">
-					<!-- <view @tap="againGood" class="but" style="color:#333333;border:1px solid #333333">
-						再来一单
-					</view> -->
 					<view @tap="commentGood" class="but" style="color:#ef7251;border:1px solid #ef7251;margin-left: 10upx;">
 						评论
 					</view>
@@ -164,6 +155,10 @@
 				 elem : e,
 			 })
 		 },
+		 // 订单详情
+		 detailGood(){
+			 this.$emit('detailGood',{data:this.rowData})
+		 },
 		 // 取货
 		 takeGood(){
 			this.$emit('takeGood',{data:this.rowData})
@@ -222,6 +217,8 @@
 		.m-img-box{
 			width: 130upx;
 			height: 130upx;
+			border-radius: 100%;
+			overflow: hidden;
 		}
 		.m-text-box{
 			flex:1;

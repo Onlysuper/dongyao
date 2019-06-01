@@ -85,6 +85,8 @@
 .m-order-pro-list .m-body .m-img-box {
       width: 130rpx;
       height: 130rpx;
+      border-radius: 100%;
+      overflow: hidden;
 }
 .m-order-pro-list .m-body .m-text-box {
       -webkit-box-flex: 1;

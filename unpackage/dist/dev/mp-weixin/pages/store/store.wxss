@@ -184,6 +184,10 @@
       font-size: 18rpx;
       color: #999999;
       margin-top: 5rpx;
+      -webkit-box-align: center;
+      -webkit-align-items: center;
+          -ms-flex-align: center;
+              align-items: center;
 }
 .m-store-item .m-distance {
     -webkit-box-flex: 0;

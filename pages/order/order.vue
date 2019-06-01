@@ -209,7 +209,17 @@
 			this.orderid = options.orderid;
 			this.getLocation();
 			this.getOrder();
-		}
+		},
+		onShow() {
+		  uni.setStorageSync('orderTab', 4);
+		},
+		onUnload() {
+			let index = 4;
+			if(this.state==1||this.state==2||this.state==3){
+				index = this.state;
+			}
+			uni.setStorageSync('orderTab', index);
+		},
 	}
 </script>
 

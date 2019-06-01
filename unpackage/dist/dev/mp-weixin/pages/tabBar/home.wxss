@@ -230,7 +230,6 @@ uni-swiper{
   -webkit-flex-direction: column;
       -ms-flex-direction: column;
           flex-direction: column;
-  min-width: 220rpx;
   margin-left: 10rpx;
   margin-right: 10rpx;
   margin-bottom: 30rpx;
@@ -240,10 +239,10 @@ uni-swiper{
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
   border-radius: 10rpx;
-  -webkit-box-flex: 1;
-  -webkit-flex: 1;
-      -ms-flex: 1;
-          flex: 1;
+  -webkit-box-flex: 0;
+  -webkit-flex: 0 0 222rpx;
+      -ms-flex: 0 0 222rpx;
+          flex: 0 0 222rpx;
   margin-top: 2px;
 }
 .m-pro-item .m-img {
