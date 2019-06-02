@@ -46,18 +46,42 @@
 <style lang="scss">
 @import "../common/globel.scss";
 .m-pro-item{
-	display: flex;
 	flex-direction: column;
-	min-width: 222upx;
-	margin-left: 10upx;
-	margin-right: 10upx;
+	margin-left: 8upx;
+	margin-right: 8upx;
 	margin-bottom: 30upx;
-	box-shadow: 0px 1px 3px rgba(0,0,0,0.2);
+	// box-shadow: 0px 1px 3px rgba(0,0,0,0.2);
 	padding: 20upx;
 	box-sizing: border-box;
 	border-radius: 10upx;
-	flex:1;
+	flex:0 0 220upx;
 	margin-top: 2px;
+	box-sizing: border-box;
+	position: relative;
+	::before{
+		content: "";
+		display: block;
+		position: absolute;
+		left:0px;
+		right: 2px;
+		top: 1px;
+		bottom: 1px;
+		box-sizing: border-box;
+		box-shadow: 0px 0px 3px rgba(235,235,235,0.4);
+		z-index: -1;
+	}
+	
+	&:last-of-type{
+		// background:red;
+		margin-right: 3px;
+		flex:0 0 218upx;
+	}
+	&:last-of-type::after{
+		// right: 3px !important;
+	}
+	&:active{
+		background:$color-hover
+	}
 	.m-img{
 		box-sizing: border-box;
 		flex:0 0 170upx;

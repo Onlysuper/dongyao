@@ -24,7 +24,7 @@
 			 :title="item.store.name"
 			 :productList="item.productList"
 			 ></m-order-list>
-			 <uni-load-more :status="mloading"></uni-load-more>
+			 <uni-load-more :status="mloading"></uni-load-more> 
 		</view>
 	</view>
 </template>

@@ -418,10 +418,15 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 
 
   data: function data() {
-    return {};
-
+    return {
+      animation: false };
 
   },
+  watch: {
+    num: function num() {
+      this.animation = true;
+    } },
+
   methods: {
     handleFn: function handleFn() {
       this.$emit("handleFn");
@@ -1241,12 +1246,12 @@ var render = function() {
     _c(
       "view",
       {
-        staticClass: "m-icon",
+        class: ["m-icon", { animation: _vm.animation }],
         attrs: { eventid: "44b39ef1-0" },
         on: { tap: _vm.handleFn }
       },
       [
-        _c("view", { staticClass: "m-num" }, [_vm._v(_vm._s(_vm.num))]),
+        _c("view", { class: ["m-num"] }, [_vm._v(_vm._s(_vm.num))]),
         _c("image", {
           staticStyle: { width: "120rpx", height: "120rpx" },
           attrs: {
@@ -1552,6 +1557,7 @@ var render = function() {
             {
               staticClass: "right",
               attrs: {
+                "scroll-with-animation": true,
                 "scroll-y": "true",
                 "scroll-top": _vm.scrollTop,
                 eventid: "05dd8904-3"

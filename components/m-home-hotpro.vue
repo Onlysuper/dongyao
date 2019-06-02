@@ -1,6 +1,6 @@
 <template>
 	<!-- 首页产品图文 -->
-	<view class="m-pro-item">
+	<view class="m-hotpro-item">
 		<view class="m-img" @tap="handleFn">
 			<image style="width: 100%;height: 100%;" :src="rowData.pictureUrl" mode="aspectFit"></image>
 		</view>
@@ -45,20 +45,35 @@
 
 <style lang="scss">
 @import "../common/globel.scss";
-.m-pro-item{
-	display: flex;
+.m-hotpro-item{
 	flex-direction: column;
-	// min-width: 220upx;
-	margin-left: 10upx;
-	margin-right: 10upx;
+	margin-left: 7upx;
+	margin-right: 8upx;
 	margin-bottom: 30upx;
-	box-shadow: 0px 1px 3px rgba(0,0,0,0.2);
+	// box-shadow: 0px 1px 3px rgba(0,0,0,0.2);
 	padding: 20upx;
 	box-sizing: border-box;
 	border-radius: 10upx;
-	// flex:1;
-		flex:0 0 222upx;
+	flex:0 0 220upx;
 	margin-top: 2px;
+	box-sizing: border-box;
+	position: relative;
+	&:active{
+		background:$color-hover
+	}
+	::before{
+		content: "";
+		display: block;
+		position: absolute;
+		left:1px;
+		right: 1px;
+		top: 1px;
+		bottom: 1px;
+		box-sizing: border-box;
+		box-shadow: 0px 1px 3px rgba(235,235,235,0.4);
+		z-index: -1;
+		// box-shadow: 0px 1px 3px rgba(247,247,247,1);
+	}
 	.m-img{
 		box-sizing: border-box;
 		flex:0 0 170upx;

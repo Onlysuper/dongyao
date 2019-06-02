@@ -17,26 +17,32 @@
 			:isAssemble="item.isAssemble">
 			</m-groupbuy-list>
 		</view>
+		 <uni-load-more :status="mloading"></uni-load-more>
 	</view>
 </template>
 <script>
 	var page = 0,totalpage=0;
 	import mGroupbuyList from '@/components/m-groupbuy-list'
+	import uniLoadMore from "@/components/uni-load-more/uni-load-more.vue";
 	export default {
 		data() {
 			return {
 				// 附近门店
-				groupsellList:[]
+				groupsellList:[],
+				mloading:'more'
 			}
 		},
 		components: {
-			mGroupbuyList
+			mGroupbuyList,
+			uniLoadMore
 		},
 		methods:{
 			getGroupsellList(){
 				uni.showLoading({});
 				if(totalpage&&page > totalpage){
-					uni.showToast({"title":"已经加载全部", icon:"none"});
+					this.mloading='noMore';
+					uni.hideLoading();
+					uni.stopPullDownRefresh();
 					return ;
 				}
 				this.mPost('/server/p/group/products',{

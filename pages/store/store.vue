@@ -40,7 +40,7 @@
 				</view>
 		    </scroll-view>
 			<!-- 右侧子导航 -->
-			<scroll-view  scroll-y="true" class="right"  :scroll-top="scrollTop" @scrolltoupper="upper" @scrolltolower="loadMore"
+			<scroll-view :scroll-with-animation='true'  scroll-y="true" class="right"  :scroll-top="scrollTop" @scrolltoupper="upper" @scrolltolower="loadMore"
                 @scroll="scroll">
 				<view class="category"> 
 					<view class="list">

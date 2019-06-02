@@ -1,7 +1,7 @@
 <template>
 	<view class="m-footer-car">
-		<view @tap="handleFn" class="m-icon">
-			<view class="m-num">
+		<view @tap="handleFn" :class="['m-icon',{animation:animation}]">
+			<view :class="['m-num']">
 				{{num}}
 			</view>
 			<image style="width: 120upx;height:120upx;" src="../../static/img/icon/shop_button_buy.png" mode="aspectFit"></image>
@@ -34,8 +34,13 @@
 		},
 		data() {
 			return {
-				
+				animation:false
 			};
+		},
+		watch:{
+			num(){
+				this.animation=true
+			}
 		},
 		methods:{
 			handleFn(){
@@ -62,6 +67,11 @@
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
+		transition: all 2s;
+// 		transform: scale(1,1);
+// 		.animation{
+// 			 animation: myfirst 5s;
+// 		}
 		.m-but{
 			background: #4eb87d;
 			color:#fff;

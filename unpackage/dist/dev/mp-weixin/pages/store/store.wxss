@@ -44,6 +44,9 @@
   -webkit-align-items: center;
       -ms-flex-align: center;
           align-items: center;
+  -webkit-transition: all 2s;
+  -o-transition: all 2s;
+  transition: all 2s;
 }
 .m-footer-car .m-but {
     background: #4eb87d;

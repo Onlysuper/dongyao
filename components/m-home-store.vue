@@ -59,6 +59,7 @@
 </script>
 
 <style lang="scss">
+@import "../common/globel.scss";
 .m-store-item{
 	display: flex;
 	flex-direction: row;
@@ -68,6 +69,9 @@
 	margin-bottom: 20upx;
 	margin-left: 10upx;
 	margin-right: 10upx;
+	&:active{
+		background:$color-hover
+	}
 	.m-img{
 		flex: 0 0 120upx;
 		height: 120upx;

@@ -136,22 +136,28 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-var _mGroupbuyList = _interopRequireDefault(__webpack_require__(/*! @/components/m-groupbuy-list */ "../../../../../../Users/apple/opt/DONGYAO/components/m-groupbuy-list.vue"));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}var page = 0,totalpage = 0;var _default =
+
+var _mGroupbuyList = _interopRequireDefault(__webpack_require__(/*! @/components/m-groupbuy-list */ "../../../../../../Users/apple/opt/DONGYAO/components/m-groupbuy-list.vue"));
+var _uniLoadMore = _interopRequireDefault(__webpack_require__(/*! @/components/uni-load-more/uni-load-more.vue */ "../../../../../../Users/apple/opt/DONGYAO/components/uni-load-more/uni-load-more.vue"));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}var page = 0,totalpage = 0;var _default =
 {
   data: function data() {
     return {
       // 附近门店
-      groupsellList: [] };
+      groupsellList: [],
+      mloading: 'more' };
 
   },
   components: {
-    mGroupbuyList: _mGroupbuyList.default },
+    mGroupbuyList: _mGroupbuyList.default,
+    uniLoadMore: _uniLoadMore.default },
 
   methods: {
     getGroupsellList: function getGroupsellList() {var _this = this;
       uni.showLoading({});
       if (totalpage && page > totalpage) {
-        uni.showToast({ "title": "已经加载全部", icon: "none" });
+        this.mloading = 'noMore';
+        uni.hideLoading();
+        uni.stopPullDownRefresh();
         return;
       }
       this.mPost('/server/p/group/products', {
@@ -254,6 +260,9 @@ var render = function() {
           ],
           1
         )
+      }),
+      _c("uni-load-more", {
+        attrs: { status: _vm.mloading, mpcomid: "02fe9a1a-1" }
       })
     ],
     2

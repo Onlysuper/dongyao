@@ -817,14 +817,25 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 
 
 
+
+
+
+
+
+
+
+
+
 var _uniSwiperDot = _interopRequireDefault(__webpack_require__(/*! @/components/uni-swiper-dot/uni-swiper-dot */ "../../../../../../Users/apple/opt/DONGYAO/components/uni-swiper-dot/uni-swiper-dot.vue"));
 var _mTitle = _interopRequireDefault(__webpack_require__(/*! @/components/m-title */ "../../../../../../Users/apple/opt/DONGYAO/components/m-title.vue"));
 var _mHomePro = _interopRequireDefault(__webpack_require__(/*! @/components/m-home-pro */ "../../../../../../Users/apple/opt/DONGYAO/components/m-home-pro.vue"));
 var _mHomeHotpro = _interopRequireDefault(__webpack_require__(/*! @/components/m-home-hotpro */ "../../../../../../Users/apple/opt/DONGYAO/components/m-home-hotpro.vue"));
-var _mHomeStore = _interopRequireDefault(__webpack_require__(/*! @/components/m-home-store */ "../../../../../../Users/apple/opt/DONGYAO/components/m-home-store.vue"));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}var _default =
+var _mHomeStore = _interopRequireDefault(__webpack_require__(/*! @/components/m-home-store */ "../../../../../../Users/apple/opt/DONGYAO/components/m-home-store.vue"));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}var _default =
 {
-  data: function data() {
-    return {
+  data: function data() {var _ref;
+    return _ref = {
+      current: 0,
+      mode: 'long',
       isLogin: false,
       searchValue: "",
       afterHeaderOpacity: 1, //不透明度
@@ -839,9 +850,9 @@ var _mHomeStore = _interopRequireDefault(__webpack_require__(/*! @/components/m-
       // 拼团列表
       groupsellList: [],
       // 附近门店
-      nearStoreList: [{}],
-      current: 0,
-      mode: 'long' };
+      nearStoreList: [{}] }, _defineProperty(_ref, "current",
+    0), _defineProperty(_ref, "mode",
+    'long'), _ref;
 
   },
   components: {
@@ -852,6 +863,9 @@ var _mHomeStore = _interopRequireDefault(__webpack_require__(/*! @/components/m-
     mHomeStore: _mHomeStore.default },
 
   methods: {
+    change: function change(e) {
+      this.current = e.detail.current;
+    },
     //是否登录了
     checkLogin: function checkLogin() {
       var _this = this;
@@ -1059,7 +1073,7 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("view", { staticClass: "m-pro-item" }, [
+  return _c("view", { staticClass: "m-hotpro-item" }, [
     _c(
       "view",
       {
@@ -1455,34 +1469,48 @@ var render = function() {
       { staticClass: "swiper-box" },
       [
         _c(
-          "swiper",
+          "uni-swiper-dot",
           {
             attrs: {
-              circular: "true",
-              autoplay: "true",
-              eventid: "09c88d5b-4"
-            },
-            on: { change: _vm.swiperChange }
+              info: _vm.swiperList,
+              current: _vm.current,
+              field: "content",
+              mode: _vm.mode,
+              mpcomid: "09c88d5b-1"
+            }
           },
-          _vm._l(_vm.swiperList, function(swiper, index) {
-            return _c(
-              "swiper-item",
+          [
+            _c(
+              "swiper",
               {
-                key: swiper.id,
-                attrs: { "wx:key": "swiper.id", mpcomid: "09c88d5b-0-" + index }
+                staticClass: "swiper-box",
+                attrs: { eventid: "09c88d5b-4" },
+                on: { change: _vm.change }
               },
-              [
-                _c("image", {
-                  attrs: { src: swiper.imgUrl, eventid: "09c88d5b-3-" + index },
-                  on: {
-                    tap: function($event) {
-                      _vm.swiperChange(swiper)
-                    }
-                  }
-                })
-              ]
+              _vm._l(_vm.swiperList, function(item, index) {
+                return _c(
+                  "swiper-item",
+                  { key: index, attrs: { mpcomid: "09c88d5b-0-" + index } },
+                  [
+                    _c("view", { staticClass: "swiper-item" }, [
+                      _c("image", {
+                        attrs: {
+                          src: item.imgUrl,
+                          eventid: "09c88d5b-3-" + index
+                        },
+                        on: {
+                          tap: function($event) {
+                            _vm.swiperChange(item)
+                          }
+                        }
+                      })
+                    ])
+                  ]
+                )
+              })
             )
-          })
+          ],
+          1
         )
       ],
       1
@@ -1499,7 +1527,7 @@ var render = function() {
               labelColor: "#666666",
               label: "换一换",
               eventid: "09c88d5b-5",
-              mpcomid: "09c88d5b-1"
+              mpcomid: "09c88d5b-2"
             },
             on: { titleHandle: _vm.getHotsellList }
           },
@@ -1528,7 +1556,7 @@ var render = function() {
                   attrs: {
                     rowData: item,
                     eventid: "09c88d5b-6-" + index,
-                    mpcomid: "09c88d5b-2-" + index
+                    mpcomid: "09c88d5b-3-" + index
                   },
                   on: {
                     handleFn: function($event) {
@@ -1553,19 +1581,19 @@ var render = function() {
             title: "今日必拼",
             label: "查看更多 >",
             eventid: "09c88d5b-7",
-            mpcomid: "09c88d5b-4"
+            mpcomid: "09c88d5b-5"
           },
           on: { titleHandle: _vm.pintuanHandle }
         }),
         _c(
           "view",
-          { staticClass: "m-content" },
+          { staticClass: "m-content m-pin" },
           [
             _c(
               "scroll-view",
               {
                 staticClass: "scroll-view",
-                attrs: { "scroll-x": "true", "scroll-left": "120" }
+                attrs: { "scroll-x": "true", "scroll-left": "0" }
               },
               [
                 _c(
@@ -1579,7 +1607,7 @@ var render = function() {
                           attrs: {
                             rowData: item,
                             eventid: "09c88d5b-8-" + index,
-                            mpcomid: "09c88d5b-5-" + index
+                            mpcomid: "09c88d5b-6-" + index
                           },
                           on: {
                             handleFn: function($event) {
@@ -1609,7 +1637,7 @@ var render = function() {
             title: "附近门店",
             label: "查看全部 >",
             eventid: "09c88d5b-9",
-            mpcomid: "09c88d5b-7"
+            mpcomid: "09c88d5b-8"
           },
           on: { titleHandle: _vm.storeHandle }
         }),
@@ -1625,7 +1653,7 @@ var render = function() {
                     tips: item.tips,
                     rowData: item,
                     eventid: "09c88d5b-10-" + index,
-                    mpcomid: "09c88d5b-8-" + index
+                    mpcomid: "09c88d5b-9-" + index
                   },
                   on: { handleFn: _vm.storeDetail }
                 })

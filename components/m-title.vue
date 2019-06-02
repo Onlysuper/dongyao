@@ -64,6 +64,10 @@
 		cursor: pointer;
 		justify-content: center;
 		align-items: center;
+		padding: 5upx;
+		&:active{
+			background:$color-hover
+		}
 	}
 }
 </style>

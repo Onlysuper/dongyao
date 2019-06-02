@@ -25,11 +25,20 @@
 		<view class="place"></view>
 		<!-- 轮播图 -->
 		<view class="swiper-box">
-			<swiper circular="true" autoplay="true" @change="swiperChange">
+			<!-- <swiper circular="true" autoplay="true" @change="swiperChange">
 				<swiper-item v-for="swiper in swiperList" :key="swiper.id" wx:key="swiper.id">
 					<image :src="swiper.imgUrl" @tap="swiperChange(swiper)"></image>
 				</swiper-item>
-			</swiper>
+			</swiper> -->
+			<uni-swiper-dot :info="swiperList" :current="current" field="content" :mode="mode">
+				<swiper class="swiper-box" @change="change">
+					<swiper-item v-for="(item ,index) in swiperList" :key="index">
+						<view class="swiper-item">
+							<image :src="item.imgUrl" @tap="swiperChange(item)"></image>
+						</view>
+					</swiper-item>
+				</swiper>
+			</uni-swiper-dot>
 		</view>
 		<!-- 超值热卖 -->
 		<view class="m-container">
@@ -44,11 +53,11 @@
 		</view>
 		<view class="m-container">
 			<m-title title="今日必拼" label="查看更多 >" @titleHandle="pintuanHandle"></m-title>
-			<view class="m-content">
-				<scroll-view class="scroll-view" scroll-x="true"  scroll-left="120">
+			<view class="m-content m-pin" >
+				<scroll-view class="scroll-view" scroll-x="true"  scroll-left="0">
 					<view class="m-togethoer">
 						<template v-for="(item,index) in groupsellList">
-							<m-home-pro  @handleFn="groupProDetail(item)" :key="index" :rowData="item"></m-home-pro>
+							<m-home-pro @handleFn="groupProDetail(item)" :key="index" :rowData="item"></m-home-pro>
 						</template>
 					</view>
 				</scroll-view>
@@ -76,6 +85,8 @@
 	export default {
 		data() {
 			return {
+				 current: 0,
+            mode: 'long',
 				isLogin:false,
 				searchValue:"",
 				afterHeaderOpacity: 1,//不透明度
@@ -103,6 +114,9 @@
 			mHomeStore
 		},
 		methods:{
+			change(e) {
+				this.current = e.detail.current;
+			},
 			//是否登录了
 			checkLogin(){
 				let _this = this;
@@ -596,14 +610,22 @@
 .m-content{
 	// padding: 10upx;
 	width: 96%;
+// 	margin:0 auto;
 	margin-left: 2%;
 	padding-top: 0;
 	box-sizing: border-box;
+	padding: 20upx;
 	// 热
 	&.m-hotsell{
 		display: flex;
 		flex-wrap: wrap;
 		flex-direction: row;
+		margin-left: 0;
+		width: 100%;
+	}
+	&.m-pin{
+		margin-left: 0;
+		width: 100%;
 	}
 	&.m-store{
 		display: block;
