@@ -266,19 +266,20 @@ _vue.default.prototype.globelIsLogin = function () {
 
   var phone = uni.getStorageSync('phone');
   return new Promise(function (resolve, reject) {
-    wx.checkSession({
-      success: function success() {
-        if (phone) {
-          resolve('success');
-        } else {
-          reject('fail');
-        }
-      },
-      fail: function fail() {
-        reject('fail');
-      } });
+    if (phone) {
+      wx.checkSession({
+        success: function success() {
+          resolve(true);
+        },
+        fail: function fail() {
+          resolve(false);
+        } });
 
+    } else {
+      resolve(false);
+    }
   });
+
 
 };
 // my config end

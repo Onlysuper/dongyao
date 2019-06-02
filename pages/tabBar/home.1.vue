@@ -34,7 +34,7 @@
 				<swiper class="swiper-box" @change="change">
 					<swiper-item v-for="(item ,index) in swiperList" :key="index">
 						<view class="swiper-item">
-							<image :src="item.imgUrl" @tap="swiperChange(index)"></image>
+							<image :src="item.imgUrl" @tap="swiperChange(item)"></image>
 						</view>
 					</swiper-item>
 				</swiper>
@@ -87,7 +87,7 @@
 			return {
 				 current: 0,
             mode: 'long',
-				
+				isLogin:false,
 				searchValue:"",
 				afterHeaderOpacity: 1,//不透明度
 				headerPosition: 'fixed',
@@ -117,7 +117,19 @@
 			change(e) {
 				this.current = e.detail.current;
 			},
-			
+			//是否登录了
+			checkLogin(){
+				let _this = this;
+				_this.globelIsLogin().then(res=>{
+					if(res=='success'){
+						//已登录
+						_this.isLogin=true;
+						
+					}
+				}).catch(err=>{
+					_this.isLogin=false
+				});
+			},
 			//首页搜索
 			toSearch(){
 				this.linkTo("/pages/product/productlist?search="+this.searchValue)
@@ -125,7 +137,7 @@
 			// banner图片
 			getBanners(){
 				this.mGet('/server/b/banners',{}).then(res=>{
-						this.swiperList=res.data;
+					this.swiperList=res.data;
 				}).catch(err=>{
 					console.log(err);
 				});
@@ -184,47 +196,48 @@
 				this.linkTo("/pages/store/list")
 			},
 			//点击热卖图片
-			hotProDetail(item){
+			 hotProDetail(item){
 				this.linkTo("/pages/store/store?storeid="+item.storeId+"&typeid="+item.storeId)
 			},
 			// 点击拼团图片
-			groupProDetail(item){
-				// console.log(item);
-				// return fales;
+			 groupProDetail(item){
 				this.linkTo("/pages/product/product?id="+item.id)
 			},
 			//点击门店图片
-			storeDetail(id){
+			 storeDetail(id){
 				this.linkTo("/pages/store/store?storeid="+id)
 			},
 			swiperChange(e) {
-				this.current = e;
 				this.current = e.detail.current;
 			},
 			// 拼团
-			pintuanHandle(){
+			 pintuanHandle(){
 				this.linkTo("/pages/groupbuy/groupbuy")
 			},
 			//附近门店
-			storeHandle(){
+			 storeHandle(){
 				this.linkTo("/pages/store/list")
 				
 			},
 			async linkTo(url){
 				let islogin = await this.globelIsLogin();
-				if(islogin){ // 是否登录了
+// 				if(islogin !='success'){
+// 					return false;
+// 				}
+				if(this.isLogin){
 					uni.navigateTo({
 						url:url
 					})
 				}else{
 					uni.navigateTo({
 						url:"/pages/login/login"
-					})	
+					})
 				}
 			}
 		},
 		onLoad(){
 			let _this = this;
+			this.checkLogin();
 			uni.getLocation({//获取当前的位置坐标
 				type: 'wgs84',
 				success: function (res) {

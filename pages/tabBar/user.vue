@@ -129,18 +129,12 @@
 				})
 			},
 			//是否登录了
-			checkLogin(){
-				let _this = this;
-				_this.globelIsLogin().then(res=>{
-					if(res=='success'){
-						//已登录
-						_this.isLogin=true;
-						_this.userData = JSON.parse(uni.getStorageSync('userData'));
-					}
-				}).catch(err=>{
-					//未登录
-					_this.isLogin=false
-				});
+			async checkLogin(){
+				let islogin = await this.globelIsLogin();
+				this.isLogin = islogin;
+				if(islogin){
+					this.userData = JSON.parse(uni.getStorageSync('userData'));
+				}
 			}
 		},
 		onLoad(){

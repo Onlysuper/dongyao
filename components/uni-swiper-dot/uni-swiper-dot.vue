@@ -58,21 +58,21 @@
 		data() {
 			return {
 				dots: {
-					width: 8,
-					height: 8,
+					width: 5,
+					height: 5,
 					bottom: 10,
 					color: '#fff',
-					backgroundColor: 'rgba(0, 0, 0, .3)',
+					backgroundColor: 'rgba(255, 255, 255, .3)',
 					border: '1px rgba(0, 0, 0, .3) solid',
-					selectedBackgroundColor: '#333',
-					selectedBorder: '1px rgba(0, 0, 0, .9) solid'
+					selectedBackgroundColor: 'rgba(255, 255, 255,0.5)',
+					selectedBorder: '1px rgba(78, 184, 125, .9) solid'
 				}
 			};
 		},
 		created() {
 			if (this.mode === 'indexes') {
-				this.dots.width = 20
-				this.dots.height = 20
+				this.dots.width = 15
+				this.dots.height = 15
 			}
 			this.dots = Object.assign(this.dots, this.dotsStyles)
 		},
@@ -82,11 +82,11 @@
 			},
 			mode(newVal) {
 				if (newVal === 'indexes') {
-					this.dots.width = 20
-					this.dots.height = 20
+					this.dots.width = 15
+					this.dots.height = 15
 				} else {
-					this.dots.width = 8
-					this.dots.height = 8
+					this.dots.width = 5
+					this.dots.height = 5
 				}
 			}
 

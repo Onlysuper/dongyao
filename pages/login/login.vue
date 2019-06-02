@@ -53,6 +53,9 @@
 								let data = res.data;
 								if(data.isRegister){
 									_this.needAllow=false;
+									// 	储存用户信息
+									uni.setStorageSync('userData', JSON.stringify(data.userInfo));
+									uni.setStorageSync('phone',  data.userInfo.mobile);
 									uni.showToast({
 										title: "授权成功",
 										icon: "none"
@@ -80,6 +83,7 @@
 				}
 				let _this = this;
 				if (!res.detail.iv) {
+					
 					uni.showToast({
 						title: "您取消了授权,登录失败",
 						icon: "none"

@@ -705,21 +705,21 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
   data: function data() {
     return {
       dots: {
-        width: 8,
-        height: 8,
+        width: 5,
+        height: 5,
         bottom: 10,
         color: '#fff',
-        backgroundColor: 'rgba(0, 0, 0, .3)',
+        backgroundColor: 'rgba(255, 255, 255, .3)',
         border: '1px rgba(0, 0, 0, .3) solid',
-        selectedBackgroundColor: '#333',
-        selectedBorder: '1px rgba(0, 0, 0, .9) solid' } };
+        selectedBackgroundColor: 'rgba(255, 255, 255,0.5)',
+        selectedBorder: '1px rgba(78, 184, 125, .9) solid' } };
 
 
   },
   created: function created() {
     if (this.mode === 'indexes') {
-      this.dots.width = 20;
-      this.dots.height = 20;
+      this.dots.width = 15;
+      this.dots.height = 15;
     }
     this.dots = Object.assign(this.dots, this.dotsStyles);
   },
@@ -729,11 +729,11 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
     },
     mode: function mode(newVal) {
       if (newVal === 'indexes') {
-        this.dots.width = 20;
-        this.dots.height = 20;
+        this.dots.width = 15;
+        this.dots.height = 15;
       } else {
-        this.dots.width = 8;
-        this.dots.height = 8;
+        this.dots.width = 5;
+        this.dots.height = 5;
       }
     } } };exports.default = _default2;
 
@@ -747,7 +747,7 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;
+/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _regenerator = _interopRequireDefault(__webpack_require__(/*! ./node_modules/@babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js"));
 
 
 
@@ -830,13 +830,13 @@ var _uniSwiperDot = _interopRequireDefault(__webpack_require__(/*! @/components/
 var _mTitle = _interopRequireDefault(__webpack_require__(/*! @/components/m-title */ "../../../../../../Users/apple/opt/DONGYAO/components/m-title.vue"));
 var _mHomePro = _interopRequireDefault(__webpack_require__(/*! @/components/m-home-pro */ "../../../../../../Users/apple/opt/DONGYAO/components/m-home-pro.vue"));
 var _mHomeHotpro = _interopRequireDefault(__webpack_require__(/*! @/components/m-home-hotpro */ "../../../../../../Users/apple/opt/DONGYAO/components/m-home-hotpro.vue"));
-var _mHomeStore = _interopRequireDefault(__webpack_require__(/*! @/components/m-home-store */ "../../../../../../Users/apple/opt/DONGYAO/components/m-home-store.vue"));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}var _default =
+var _mHomeStore = _interopRequireDefault(__webpack_require__(/*! @/components/m-home-store */ "../../../../../../Users/apple/opt/DONGYAO/components/m-home-store.vue"));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {try {var info = gen[key](arg);var value = info.value;} catch (error) {reject(error);return;}if (info.done) {resolve(value);} else {Promise.resolve(value).then(_next, _throw);}}function _asyncToGenerator(fn) {return function () {var self = this,args = arguments;return new Promise(function (resolve, reject) {var gen = fn.apply(self, args);function _next(value) {asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value);}function _throw(err) {asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err);}_next(undefined);});};}function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}var _default =
 {
   data: function data() {var _ref;
     return _ref = {
       current: 0,
       mode: 'long',
-      isLogin: false,
+
       searchValue: "",
       afterHeaderOpacity: 1, //不透明度
       headerPosition: 'fixed',
@@ -866,19 +866,7 @@ var _mHomeStore = _interopRequireDefault(__webpack_require__(/*! @/components/m-
     change: function change(e) {
       this.current = e.detail.current;
     },
-    //是否登录了
-    checkLogin: function checkLogin() {
-      var _this = this;
-      _this.globelIsLogin().then(function (res) {
-        if (res == 'success') {
-          //已登录
-          _this.isLogin = true;
 
-        }
-      }).catch(function (err) {
-        _this.isLogin = false;
-      });
-    },
     //首页搜索
     toSearch: function toSearch() {
       this.linkTo("/pages/product/productlist?search=" + this.searchValue);
@@ -959,6 +947,7 @@ var _mHomeStore = _interopRequireDefault(__webpack_require__(/*! @/components/m-
       this.linkTo("/pages/store/store?storeid=" + id);
     },
     swiperChange: function swiperChange(e) {
+      this.current = e;
       this.current = e.detail.current;
     },
     // 拼团
@@ -970,21 +959,21 @@ var _mHomeStore = _interopRequireDefault(__webpack_require__(/*! @/components/m-
       this.linkTo("/pages/store/list");
 
     },
-    linkTo: function linkTo(url) {
-      if (this.isLogin) {
-        uni.navigateTo({
-          url: url });
+    linkTo: function () {var _linkTo = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee(url) {var islogin;return _regenerator.default.wrap(function _callee$(_context) {while (1) {switch (_context.prev = _context.next) {case 0:_context.next = 2;return (
+                  this.globelIsLogin());case 2:islogin = _context.sent;
+                if (islogin) {// 是否登录了
+                  uni.navigateTo({
+                    url: url });
 
-      } else {
-        uni.navigateTo({
-          url: "/pages/login/login" });
+                } else {
+                  uni.navigateTo({
+                    url: "/pages/login/login" });
 
-      }
-    } },
+                }case 4:case "end":return _context.stop();}}}, _callee, this);}));function linkTo(_x) {return _linkTo.apply(this, arguments);}return linkTo;}() },
+
 
   onLoad: function onLoad() {
     var _this = this;
-    this.checkLogin();
     uni.getLocation({ //获取当前的位置坐标
       type: 'wgs84',
       success: function success(res) {
@@ -1500,7 +1489,7 @@ var render = function() {
                         },
                         on: {
                           tap: function($event) {
-                            _vm.swiperChange(item)
+                            _vm.swiperChange(index)
                           }
                         }
                       })

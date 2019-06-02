@@ -115,17 +115,17 @@
 					url:"/pages/order/order?orderid="+orderid
 				})
 			},
+		
 			//是否登录了
-			checkLogin(){
-				let _this = this;
-				_this.globelIsLogin().then(res=>{
-					if(res=='success'){
-						//已登录
-						_this.isLogin=true;
-					}
-				}).catch(err=>{
-					_this.isLogin=false
-				});
+			async checkLogin(){
+				let islogin = await this.globelIsLogin();
+				this.isLogin = islogin;
+				if(islogin){
+					//获取订单
+					page = 1;
+					this.orderList = [];
+					this.getOrders();
+				}
 			},
 			// 获取订单
 			getOrders(){
@@ -175,10 +175,7 @@
 		onLoad(option){
 			this.tabActive=uni.getStorageSync('orderTab')|| 1;
 			this.checkLogin();
-			//获取订单
-			page = 1;
-			orderList:[];
-			this.getOrders();
+		
 		},
 		// 重置分页及数据
 		onPullDownRefresh(){
@@ -188,10 +185,8 @@
 		},
 		onShow(){
 			this.tabActive=uni.getStorageSync('orderTab')||1;
-			//获取订单
-			page = 1;
-			this.orderList = [];
-			this.getOrders();
+			this.checkLogin();
+			
 		}
 	}
 </script>

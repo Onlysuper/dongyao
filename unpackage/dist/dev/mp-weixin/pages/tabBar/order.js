@@ -648,7 +648,7 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;
+/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _regenerator = _interopRequireDefault(__webpack_require__(/*! ./node_modules/@babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js"));
 
 
 
@@ -684,7 +684,7 @@ var _mTab = _interopRequireDefault(__webpack_require__(/*! @/components/m-tab.vu
 var _mOrderList = _interopRequireDefault(__webpack_require__(/*! @/components/m-order-list.vue */ "../../../../../../Users/apple/opt/DONGYAO/components/m-order-list.vue"));
 var _mNeedLogin = _interopRequireDefault(__webpack_require__(/*! @/components/m-need-login.vue */ "../../../../../../Users/apple/opt/DONGYAO/components/m-need-login.vue"));
 var _uniLoadMore = _interopRequireDefault(__webpack_require__(/*! @/components/uni-load-more/uni-load-more.vue */ "../../../../../../Users/apple/opt/DONGYAO/components/uni-load-more/uni-load-more.vue"));
-var _mEmpty = _interopRequireDefault(__webpack_require__(/*! @/components/m-result/m-empty.vue */ "../../../../../../Users/apple/opt/DONGYAO/components/m-result/m-empty.vue"));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function _toConsumableArray(arr) {return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread();}function _nonIterableSpread() {throw new TypeError("Invalid attempt to spread non-iterable instance");}function _iterableToArray(iter) {if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter);}function _arrayWithoutHoles(arr) {if (Array.isArray(arr)) {for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) {arr2[i] = arr[i];}return arr2;}}function _objectSpread(target) {for (var i = 1; i < arguments.length; i++) {var source = arguments[i] != null ? arguments[i] : {};var ownKeys = Object.keys(source);if (typeof Object.getOwnPropertySymbols === 'function') {ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) {return Object.getOwnPropertyDescriptor(source, sym).enumerable;}));}ownKeys.forEach(function (key) {_defineProperty(target, key, source[key]);});}return target;}function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
+var _mEmpty = _interopRequireDefault(__webpack_require__(/*! @/components/m-result/m-empty.vue */ "../../../../../../Users/apple/opt/DONGYAO/components/m-result/m-empty.vue"));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {try {var info = gen[key](arg);var value = info.value;} catch (error) {reject(error);return;}if (info.done) {resolve(value);} else {Promise.resolve(value).then(_next, _throw);}}function _asyncToGenerator(fn) {return function () {var self = this,args = arguments;return new Promise(function (resolve, reject) {var gen = fn.apply(self, args);function _next(value) {asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value);}function _throw(err) {asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err);}_next(undefined);});};}function _toConsumableArray(arr) {return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread();}function _nonIterableSpread() {throw new TypeError("Invalid attempt to spread non-iterable instance");}function _iterableToArray(iter) {if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter);}function _arrayWithoutHoles(arr) {if (Array.isArray(arr)) {for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) {arr2[i] = arr[i];}return arr2;}}function _objectSpread(target) {for (var i = 1; i < arguments.length; i++) {var source = arguments[i] != null ? arguments[i] : {};var ownKeys = Object.keys(source);if (typeof Object.getOwnPropertySymbols === 'function') {ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) {return Object.getOwnPropertyDescriptor(source, sym).enumerable;}));}ownKeys.forEach(function (key) {_defineProperty(target, key, source[key]);});}return target;}function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 var page = 1,totalpage = 1;var _default =
 {
   name: "m-footer-car",
@@ -765,18 +765,18 @@ var page = 1,totalpage = 1;var _default =
         url: "/pages/order/order?orderid=" + orderid });
 
     },
+
     //是否登录了
-    checkLogin: function checkLogin() {
-      var _this = this;
-      _this.globelIsLogin().then(function (res) {
-        if (res == 'success') {
-          //已登录
-          _this.isLogin = true;
-        }
-      }).catch(function (err) {
-        _this.isLogin = false;
-      });
-    },
+    checkLogin: function () {var _checkLogin = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {var islogin;return _regenerator.default.wrap(function _callee$(_context) {while (1) {switch (_context.prev = _context.next) {case 0:_context.next = 2;return (
+                  this.globelIsLogin());case 2:islogin = _context.sent;
+                this.isLogin = islogin;
+                if (islogin) {
+                  //获取订单
+                  page = 1;
+                  this.orderList = [];
+                  this.getOrders();
+                }case 5:case "end":return _context.stop();}}}, _callee, this);}));function checkLogin() {return _checkLogin.apply(this, arguments);}return checkLogin;}(),
+
     // 获取订单
     getOrders: function getOrders() {var _this2 = this;
       var _this = this;
@@ -825,10 +825,7 @@ var page = 1,totalpage = 1;var _default =
   onLoad: function onLoad(option) {
     this.tabActive = uni.getStorageSync('orderTab') || 1;
     this.checkLogin();
-    //获取订单
-    page = 1;
-    orderList: [];
-    this.getOrders();
+
   },
   // 重置分页及数据
   onPullDownRefresh: function onPullDownRefresh() {
@@ -838,10 +835,8 @@ var page = 1,totalpage = 1;var _default =
   },
   onShow: function onShow() {
     this.tabActive = uni.getStorageSync('orderTab') || 1;
-    //获取订单
-    page = 1;
-    this.orderList = [];
-    this.getOrders();
+    this.checkLogin();
+
   } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ "./node_modules/@dcloudio/uni-mp-weixin/dist/index.js")["default"]))
 

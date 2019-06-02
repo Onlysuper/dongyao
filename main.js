@@ -183,20 +183,21 @@ Vue.prototype.accMul = function(arg1, arg2) {
 Vue.prototype.globelIsLogin=function(){
 	// #ifdef MP-WEIXIN
 	let phone = uni.getStorageSync('phone');
-	return new Promise(function(resolve, reject){
-		wx.checkSession({
-			success() {
-				if(phone){
-					resolve('success')
-				}else{
-					reject('fail')
+	return new Promise(function (resolve, reject){ 
+		if(phone){
+			wx.checkSession({
+				success() {
+					resolve(true)
+				},
+				fail() {
+					resolve(false)
 				}
-			},
-			fail() {
-				reject('fail')
-			}
-		})
+			})
+		}else{
+			resolve(false)
+		}
 	})
+
 	// #endif
 }
 // my config end
