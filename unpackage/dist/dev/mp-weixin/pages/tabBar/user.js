@@ -727,38 +727,26 @@ var render = function() {
   return _c("view", { staticClass: "m-user-page" }, [
     _c("view", { staticClass: "m-header" }, [
       _vm.isLogin
-        ? _c(
-            "view",
-            {
-              staticClass: "m-user",
-              attrs: { eventid: "09ce8447-1" },
-              on: {
-                tap: function($event) {
-                  _vm.linkTo("/pages/login/login", "login")
-                }
-              }
-            },
-            [
-              _c("view", { staticClass: "m-img" }, [
-                _c("image", {
-                  staticStyle: { width: "100%", height: "100%" },
-                  attrs: { src: _vm.userData.avatarUrl, mode: "aspectFit" }
-                })
+        ? _c("view", { staticClass: "m-user" }, [
+            _c("view", { staticClass: "m-img" }, [
+              _c("image", {
+                staticStyle: { width: "100%", height: "100%" },
+                attrs: { src: _vm.userData.avatarUrl, mode: "aspectFit" }
+              })
+            ]),
+            _c("view", { staticClass: "m-text" }, [
+              _c("view", { staticClass: "m-username" }, [
+                _vm._v(_vm._s(_vm.userData.nickName))
               ]),
-              _c("view", { staticClass: "m-text" }, [
-                _c("view", { staticClass: "m-username" }, [
-                  _vm._v(_vm._s(_vm.userData.nickName))
-                ]),
-                _c("image", {
-                  staticStyle: { width: "57rpx", height: "33rpx" },
-                  attrs: {
-                    src: "../../static/img/icon/me_icon_VIP_lose.png",
-                    mode: "aspectFit"
-                  }
-                })
-              ])
-            ]
-          )
+              _c("image", {
+                staticStyle: { width: "57rpx", height: "33rpx" },
+                attrs: {
+                  src: "../../static/img/icon/me_icon_VIP_lose.png",
+                  mode: "aspectFit"
+                }
+              })
+            ])
+          ])
         : _c(
             "view",
             {
@@ -776,7 +764,7 @@ var render = function() {
         "view",
         {
           staticClass: "m-card",
-          attrs: { eventid: "09ce8447-2" },
+          attrs: { eventid: "09ce8447-1" },
           on: {
             tap: function($event) {
               _vm.linkTo("/pages/user/vip/vip")
@@ -802,7 +790,7 @@ var render = function() {
             "view",
             {
               staticClass: "right",
-              attrs: { eventid: "09ce8447-3" },
+              attrs: { eventid: "09ce8447-2" },
               on: {
                 tap: function($event) {
                   _vm.linkToOrderTab(4)
@@ -817,7 +805,7 @@ var render = function() {
             "view",
             {
               staticClass: "m-item",
-              attrs: { eventid: "09ce8447-4" },
+              attrs: { eventid: "09ce8447-3" },
               on: {
                 tap: function($event) {
                   _vm.linkToOrderTab(1)
@@ -830,7 +818,7 @@ var render = function() {
             "view",
             {
               staticClass: "m-item",
-              attrs: { eventid: "09ce8447-5" },
+              attrs: { eventid: "09ce8447-4" },
               on: {
                 tap: function($event) {
                   _vm.linkToOrderTab(2)
@@ -843,7 +831,7 @@ var render = function() {
             "view",
             {
               staticClass: "m-item",
-              attrs: { eventid: "09ce8447-6" },
+              attrs: { eventid: "09ce8447-5" },
               on: {
                 tap: function($event) {
                   _vm.linkToOrderTab(3)
@@ -864,7 +852,7 @@ var render = function() {
               attrs: {
                 label: "我的优惠券",
                 link: true,
-                eventid: "09ce8447-7",
+                eventid: "09ce8447-6",
                 mpcomid: "09ce8447-1"
               },
               on: {
@@ -889,7 +877,7 @@ var render = function() {
               attrs: {
                 label: "关于我们",
                 link: true,
-                eventid: "09ce8447-8",
+                eventid: "09ce8447-7",
                 mpcomid: "09ce8447-2"
               },
               on: {
