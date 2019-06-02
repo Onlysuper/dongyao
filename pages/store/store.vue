@@ -342,14 +342,26 @@
 			clearShopcar(){
 				let _this = this;
 				_this.mPost("/server/sc/delete/all",{
-					// userId:this.userid
+					
 				}).then(res=>{
-					// if(res.code=='1'){
-							_this.shopCarList=[];
-							// 购物车总商品数，与总价格计算
-							_this.shopCarCountClear();
-							_this.hideSpec();
-					// }
+					uni.showModal({
+						title: '提示',
+						content: '确定要清空购物车吗？',
+						// showCancel:false,
+						confirmText:'确定',
+						success: function (res) {
+							if (res.confirm) {
+								_this.shopCarList=[];
+								// 购物车总商品数，与总价格计算
+								_this.shopCarCountClear();
+								_this.hideSpec();
+							} 
+							else if (res.cancel) {
+								console.log('用户点击取消');
+							}
+						}
+					});	
+					
 				})
 			},
 			//关闭规格弹窗

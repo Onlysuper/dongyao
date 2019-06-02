@@ -423,8 +423,11 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 
   },
   watch: {
-    num: function num() {
+    num: function num() {var _this = this;
       this.animation = true;
+      setTimeout(function () {
+        _this.animation = false;
+      }, 1000);
     } },
 
   methods: {
@@ -999,15 +1002,27 @@ function bezier(pots, amount) {
     // 清空购物车
     clearShopcar: function clearShopcar() {
       var _this = this;
-      _this.mPost("/server/sc/delete/all", {
-        // userId:this.userid
-      }).then(function (res) {
-        // if(res.code=='1'){
-        _this.shopCarList = [];
-        // 购物车总商品数，与总价格计算
-        _this.shopCarCountClear();
-        _this.hideSpec();
-        // }
+      _this.mPost("/server/sc/delete/all", {}).
+
+      then(function (res) {
+        uni.showModal({
+          title: '提示',
+          content: '确定要清空购物车吗？',
+          // showCancel:false,
+          confirmText: '确定',
+          success: function success(res) {
+            if (res.confirm) {
+              _this.shopCarList = [];
+              // 购物车总商品数，与总价格计算
+              _this.shopCarCountClear();
+              _this.hideSpec();
+            } else
+            if (res.cancel) {
+              console.log('用户点击取消');
+            }
+          } });
+
+
       });
     },
     //关闭规格弹窗

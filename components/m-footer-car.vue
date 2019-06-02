@@ -39,7 +39,10 @@
 		},
 		watch:{
 			num(){
-				this.animation=true
+				this.animation=true;
+				setTimeout(()=>{
+					this.animation=false
+				},1000)
 			}
 		},
 		methods:{
@@ -55,6 +58,16 @@
 
 
 <style lang="scss">
+	@keyframes myfirst
+	{
+	0%   {transform: scale(0.9,0.9)}
+	50%  {transform: scale(1.2,1.2)}
+	// 50%  {background: blue;}
+	100% {transform: scale(1,1)}
+	}
+	.animation{
+		 animation: myfirst 1s;
+	}
 // 底部
 	.m-footer-car {
 		position: fixed;
@@ -69,9 +82,7 @@
 		align-items: center;
 		transition: all 2s;
 // 		transform: scale(1,1);
-// 		.animation{
-// 			 animation: myfirst 5s;
-// 		}
+		
 		.m-but{
 			background: #4eb87d;
 			color:#fff;
