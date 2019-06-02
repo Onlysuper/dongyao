@@ -47,14 +47,14 @@
 @import "../common/globel.scss";
 .m-pro-item{
 	flex-direction: column;
-	margin-left: 8upx;
-	margin-right: 8upx;
+	margin-left: 10upx;
+	// margin-right: 8upx;
 	margin-bottom: 30upx;
 	// box-shadow: 0px 1px 3px rgba(0,0,0,0.2);
 	padding: 20upx;
 	box-sizing: border-box;
 	border-radius: 10upx;
-	flex:0 0 220upx;
+	flex:0 0 225upx;
 	margin-top: 2px;
 	box-sizing: border-box;
 	position: relative;
