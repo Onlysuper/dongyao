@@ -58,6 +58,7 @@
 									// saveData.avatarUrl=data.headAddress||"";
 									uni.setStorageSync('userData', JSON.stringify(saveData.userInfo));
 									uni.setStorageSync('phone',  saveData.userInfo.mobile);
+									uni.setStorageSync('Authorization', saveData.authToken);
 									uni.showToast({
 										title: "授权成功",
 										icon: "none"
@@ -68,7 +69,6 @@
 										});
 									},1300)
 								}
-								uni.setStorageSync('Authorization', saveData.authToken);
 							}
 							uni.hideLoading();
 						}).catch(err=>{

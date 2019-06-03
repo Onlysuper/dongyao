@@ -5,6 +5,9 @@
 <import src="/components/m-home-store.vue.wxml" />
 <import src="/components/m-vip-top.vue.wxml" />
 <import src="/components/m-cell.vue.wxml" />
+<import src="/components/m-tab.vue.wxml" />
+<import src="/components/m-result/m-empty.vue.wxml" />
+<import src="/components/m-token-card.vue.wxml" />
 
 <template name="09c88d5b-default-09c88d5b-1"><swiper class="_swiper 09c88d5b swiper-box" bindchange="handleProxy" data-eventid="{{'09c88d5b-4'}}" data-comkey="{{$k}}"><swiper-item wx:key="index" key="{{index}}" wx:for="{{swiperList}}" wx:for-index="index" wx:for-item="item" class="_swiper-item 09c88d5b"><view class="_view 09c88d5b swiper-item"><image src="{{item.imgUrl}}" bindtap="handleProxy" data-eventid="{{'09c88d5b-3-'+index}}" data-comkey="{{$k}}" class="_image 09c88d5b"></image></view></swiper-item></swiper></template>
 

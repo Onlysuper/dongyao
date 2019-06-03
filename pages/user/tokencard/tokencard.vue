@@ -4,16 +4,21 @@
 			<m-tab @handleFn="tabChange" :tabActive="tabActive" :rowdata="tabList"></m-tab>
 		</view>
 		<view class="split-place"></view>
-		 <m-token-card  v-for="(item) in coupons" :key="item.id" :id="item.id"
-		  state="normal" :days="item.dueTime" :price="item.price" :name="item.name" :describe="item.rule"
-		  downimg1="../../../static/img/icon/home_icon_down1.png"
-		  downimg2="../../../static/img/icon/home_icon_down1.png"
-		  ></m-token-card>
-		 <uni-load-more :status="mloading"></uni-load-more> 
+		<m-empty v-if="coupons.length==0"></m-empty>
+		<view v-else class="">
+			 <m-token-card  v-for="(item) in coupons" :key="item.id" :id="item.id"
+			 state="normal" :days="item.dueTime" :price="item.price" :name="item.name" :describe="item.rule"
+			 downimg1="../../../static/img/icon/home_icon_down1.png"
+			 downimg2="../../../static/img/icon/home_icon_down1.png"
+			 ></m-token-card>
+			 <uni-load-more :status="mloading"></uni-load-more> 
+		</view>
+		
 	</view>
 </template>
 
 <script>
+	import mEmpty from "@/components/m-result/m-empty.vue";
 	import uniLoadMore from "@/components/uni-load-more/uni-load-more.vue";
 	import mTab from "@/components/m-tab.vue";
 	import mTokenCard from "@/components/m-token-card.vue";
@@ -41,13 +46,17 @@
 			};
 		},
 		components:{
+			mEmpty,
 			mTab,
 			mTokenCard
 		},
 		methods:{
 			// tab栏点击
 			tabChange(item){
+				console.log('我的优惠券')
 				this.tabActive= item.id;
+				page = 1;
+				this.coupons = [];
 				this.getTokencards(item.id);
 			},
 			// 获取订单
@@ -68,7 +77,7 @@
 					let data = res.data;
 					if(data.coupons){
 						totalpage=data.pages|| 1;
-						var newsList = data.orders;
+						var newsList = data.coupons;
 						_this.coupons = _this.coupons.concat(newsList);
 						page++;	
 					}
@@ -83,13 +92,13 @@
 		// 加载更多
 		onReachBottom(){
 			this.mloading='loading';
-			this.getTokencards();
+			this.getTokencards(0);
 		},
 		// 重置分页及数据
 		onPullDownRefresh(){
 			page = 1;
 			this.coupons = [];
-			this.getTokencards();
+			this.getTokencards(0);
 		},
 		onLoad(){
 			page = 1;

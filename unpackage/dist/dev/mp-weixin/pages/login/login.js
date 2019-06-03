@@ -167,12 +167,13 @@ __webpack_require__.r(__webpack_exports__);
                       if (res.data) {
                         var data = res.data;
                         if (data.isRegister) {
-                          var _saveData = data;
+                          var saveData = data;
                           _this.needAllow = false;
                           // 	储存用户信息
                           // saveData.avatarUrl=data.headAddress||"";
-                          uni.setStorageSync('userData', JSON.stringify(_saveData.userInfo));
-                          uni.setStorageSync('phone', _saveData.userInfo.mobile);
+                          uni.setStorageSync('userData', JSON.stringify(saveData.userInfo));
+                          uni.setStorageSync('phone', saveData.userInfo.mobile);
+                          uni.setStorageSync('Authorization', saveData.authToken);
                           uni.showToast({
                             title: "授权成功",
                             icon: "none" });
@@ -183,7 +184,6 @@ __webpack_require__.r(__webpack_exports__);
 
                           }, 1300);
                         }
-                        uni.setStorageSync('Authorization', saveData.authToken);
                       }
                       uni.hideLoading();
                     }).catch(function (err) {

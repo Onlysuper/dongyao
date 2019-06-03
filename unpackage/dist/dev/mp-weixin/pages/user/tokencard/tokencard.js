@@ -129,6 +129,11 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
+
+
+
+var _mEmpty = _interopRequireDefault(__webpack_require__(/*! @/components/m-result/m-empty.vue */ "../../../../../../Users/apple/opt/DONGYAO/components/m-result/m-empty.vue"));
 var _uniLoadMore = _interopRequireDefault(__webpack_require__(/*! @/components/uni-load-more/uni-load-more.vue */ "../../../../../../Users/apple/opt/DONGYAO/components/uni-load-more/uni-load-more.vue"));
 var _mTab = _interopRequireDefault(__webpack_require__(/*! @/components/m-tab.vue */ "../../../../../../Users/apple/opt/DONGYAO/components/m-tab.vue"));
 var _mTokenCard = _interopRequireDefault(__webpack_require__(/*! @/components/m-token-card.vue */ "../../../../../../Users/apple/opt/DONGYAO/components/m-token-card.vue"));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}
@@ -156,13 +161,17 @@ var page = 1,totalpage = 1;var _default =
 
   },
   components: {
+    mEmpty: _mEmpty.default,
     mTab: _mTab.default,
     mTokenCard: _mTokenCard.default },
 
   methods: {
     // tab栏点击
     tabChange: function tabChange(item) {
+      console.log('我的优惠券');
       this.tabActive = item.id;
+      page = 1;
+      this.coupons = [];
       this.getTokencards(item.id);
     },
     // 获取订单
@@ -183,7 +192,7 @@ var page = 1,totalpage = 1;var _default =
         var data = res.data;
         if (data.coupons) {
           totalpage = data.pages || 1;
-          var newsList = data.orders;
+          var newsList = data.coupons;
           _this.coupons = _this.coupons.concat(newsList);
           page++;
         }
@@ -198,13 +207,13 @@ var page = 1,totalpage = 1;var _default =
   // 加载更多
   onReachBottom: function onReachBottom() {
     this.mloading = 'loading';
-    this.getTokencards();
+    this.getTokencards(0);
   },
   // 重置分页及数据
   onPullDownRefresh: function onPullDownRefresh() {
     page = 1;
     this.coupons = [];
-    this.getTokencards();
+    this.getTokencards(0);
   },
   onLoad: function onLoad() {
     page = 1;
@@ -262,27 +271,36 @@ var render = function() {
         1
       ),
       _c("view", { staticClass: "split-place" }),
-      _vm._l(_vm.coupons, function(item, index) {
-        return _c("m-token-card", {
-          key: item.id,
-          attrs: {
-            id: item.id,
-            state: "normal",
-            days: item.dueTime,
-            price: item.price,
-            name: item.name,
-            describe: item.rule,
-            downimg1: "../../../static/img/icon/home_icon_down1.png",
-            downimg2: "../../../static/img/icon/home_icon_down1.png",
-            mpcomid: "79057a58-1-" + index
-          }
-        })
-      }),
-      _c("uni-load-more", {
-        attrs: { status: _vm.mloading, mpcomid: "79057a58-2" }
-      })
+      _vm.coupons.length == 0
+        ? _c("m-empty", { attrs: { mpcomid: "79057a58-3" } })
+        : _c(
+            "view",
+            {},
+            [
+              _vm._l(_vm.coupons, function(item, index) {
+                return _c("m-token-card", {
+                  key: item.id,
+                  attrs: {
+                    id: item.id,
+                    state: "normal",
+                    days: item.dueTime,
+                    price: item.price,
+                    name: item.name,
+                    describe: item.rule,
+                    downimg1: "../../../static/img/icon/home_icon_down1.png",
+                    downimg2: "../../../static/img/icon/home_icon_down1.png",
+                    mpcomid: "79057a58-1-" + index
+                  }
+                })
+              }),
+              _c("uni-load-more", {
+                attrs: { status: _vm.mloading, mpcomid: "79057a58-2" }
+              })
+            ],
+            2
+          )
     ],
-    2
+    1
   )
 }
 var staticRenderFns = []

@@ -548,19 +548,11 @@ var _event = _interopRequireDefault(__webpack_require__(/*! ../../common/event.j
 
 
   onLoad: function onLoad() {
-    // console.log('1111');
     this.checkLogin();
-    // Event.addNoticeFun(Event.UPDATA_USER, "TEST", this)
   },
   onShow: function onShow() {
-    // console.log('1111');
     this.checkLogin();
-    // Event.addNoticeFun(Event.UPDATA_USER, "TEST", this)
-  }
-  // 		onUnload(){
-  // 			Event.removeNoticeFun(Event.UPDATA_USER)
-  // 		}
-};exports.default = _default;
+  } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ "./node_modules/@dcloudio/uni-mp-weixin/dist/index.js")["default"]))
 
 /***/ }),

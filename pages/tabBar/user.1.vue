@@ -109,18 +109,24 @@
 				})
 			},
 			// 跳转
-			linkTo(url,name){
-				if(name=='login'){
-					let backurl = encodeURI("/pages/tabBar/user");
-					uni.redirectTo({
-						url:url+'?back='+backurl 
-					})
+			async linkTo(url,name){ 
+				let islogin = await this.globelIsLogin();
+				if(islogin){ // 是否登录了
+					if(name=='login'){
+						let backurl = encodeURI("/pages/tabBar/user");
+						uni.redirectTo({
+							url:url+'?back='+backurl 
+						})
+					}else{
+						uni.navigateTo({
+							url:url
+						})
+					}
 				}else{
 					uni.navigateTo({
-						url:url
+						url:"/pages/login/login"
 					})
 				}
-				
 			},
 			// 查看详情
 			vipCardDetail(){
@@ -128,27 +134,19 @@
 					url:url
 				})
 			},
-			//是否登录了
-			async checkLogin(){
-				let islogin = await this.globelIsLogin();
-				this.isLogin = islogin;
-				if(islogin){
-					this.userData = JSON.parse(uni.getStorageSync('userData'));
-					if(!this.userData.avatarUrl){
-						this.$set(this.userData,'avatarUrl',this.userData.headAddress||'')
-					}
-					if(!this.userData.nickName){
-						this.$set(this.userData,'nickName',this.userData.nickname||'')
-					}
-				}
-			}
+		
 		},
 		onLoad(){
-			this.checkLogin();
+			
+			// Event.addNoticeFun(Event.UPDATA_USER, "TEST", this)
 		},
 		onShow(){
-			this.checkLogin();
+		
+			// Event.addNoticeFun(Event.UPDATA_USER, "TEST", this)
 		}
+// 		onUnload(){
+// 			Event.removeNoticeFun(Event.UPDATA_USER)
+// 		}
 	}
 </script>
 <style lang="scss">
