@@ -334,27 +334,7 @@ var _mEmpty = _interopRequireDefault(__webpack_require__(/*! @/components/m-resu
       mloading: 'more',
       search: "",
       // 附近门店
-      nearStoreList: [{
-        img: "../../static/img/2.jpg",
-        title: "精品秋葵600g",
-        describe: "特价小白菜",
-        price: "￥2.99",
-        oldprice: "￥100" },
-
-      {
-        img: "../../static/img/2.jpg",
-        title: "精品秋葵600g",
-        describe: "特价小白菜",
-        price: "￥2.99",
-        oldprice: "￥100" },
-
-      {
-        img: "../../static/img/2.jpg",
-        title: "精品秋葵600g",
-        describe: "特价小白菜",
-        price: "￥2.99",
-        oldprice: "￥100" }] };
-
+      nearStoreList: [] };
 
   },
 
@@ -480,9 +460,11 @@ var render = function() {
         _c("view", { staticClass: "m-describe" }, [
           _vm._v(_vm._s(_vm.labelName))
         ]),
-        _c("view", { staticClass: "m-price" }, [_vm._v(_vm._s(_vm.price))]),
+        _c("view", { staticClass: "m-price" }, [
+          _vm._v("￥" + _vm._s(_vm.price))
+        ]),
         _c("view", { staticClass: "m-oldprice" }, [
-          _vm._v("非会员价" + _vm._s(_vm.oldprice))
+          _vm._v("原价￥" + _vm._s(_vm.oldprice))
         ])
       ])
     ]
@@ -541,7 +523,7 @@ var render = function() {
                       labelName: item.labelName,
                       img: item.pictureUrl,
                       price: item.presentPrice,
-                      oldpric: item.originalPrice,
+                      oldprice: item.originalPrice,
                       isAssemble: item.isAssemble,
                       mpcomid: "043cc190-0-" + index
                     }

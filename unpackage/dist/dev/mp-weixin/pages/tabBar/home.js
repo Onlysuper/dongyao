@@ -491,6 +491,8 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 
 
 
+
+
 {
   name: "m-home-pro",
   props: {
@@ -526,6 +528,8 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _default2 =
+
+
 
 
 
@@ -748,6 +752,24 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _regenerator = _interopRequireDefault(__webpack_require__(/*! ./node_modules/@babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js"));
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1064,30 +1086,32 @@ var render = function() {
     _c(
       "view",
       {
-        staticClass: "m-img",
+        staticClass: "m-content",
         attrs: { eventid: "c5e88902-0" },
         on: { tap: _vm.handleFn }
       },
       [
-        _c("image", {
-          staticStyle: { width: "100%", height: "100%" },
-          attrs: { src: _vm.rowData.pictureUrl, mode: "aspectFit" }
-        })
-      ]
-    ),
-    _c("view", { staticClass: "m-pro" }, [
-      _c("view", { staticClass: "m-title" }, [
-        _vm._v(_vm._s(_vm.rowData.synopsis))
-      ]),
-      _c("view", { staticClass: "m-price" }, [
-        _c("view", { staticClass: "new" }, [
-          _vm._v(_vm._s(_vm.rowData.presentPrice))
+        _c("view", { staticClass: "m-img" }, [
+          _c("image", {
+            staticStyle: { width: "100%", height: "100%" },
+            attrs: { src: _vm.rowData.pictureUrl, mode: "aspectFit" }
+          })
         ]),
-        _c("view", { staticClass: "old" }, [
-          _vm._v(_vm._s(_vm.rowData.originalPrice))
+        _c("view", { staticClass: "m-pro" }, [
+          _c("view", { staticClass: "m-title" }, [
+            _vm._v(_vm._s(_vm.rowData.synopsis))
+          ]),
+          _c("view", { staticClass: "m-price" }, [
+            _c("view", { staticClass: "new" }, [
+              _vm._v(_vm._s(_vm.rowData.presentPrice))
+            ]),
+            _c("view", { staticClass: "old" }, [
+              _vm._v(_vm._s(_vm.rowData.originalPrice))
+            ])
+          ])
         ])
-      ])
-    ])
+      ]
+    )
   ])
 }
 var staticRenderFns = []
@@ -1116,30 +1140,32 @@ var render = function() {
     _c(
       "view",
       {
-        staticClass: "m-img",
+        staticClass: "m-content",
         attrs: { eventid: "ad35d264-0" },
         on: { tap: _vm.handleFn }
       },
       [
-        _c("image", {
-          staticStyle: { width: "100%", height: "100%" },
-          attrs: { src: _vm.rowData.pictureUrl, mode: "aspectFit" }
-        })
-      ]
-    ),
-    _c("view", { staticClass: "m-pro" }, [
-      _c("view", { staticClass: "m-title" }, [
-        _vm._v(_vm._s(_vm.rowData.synopsis))
-      ]),
-      _c("view", { staticClass: "m-price" }, [
-        _c("view", { staticClass: "new" }, [
-          _vm._v(_vm._s(_vm.rowData.presentPrice))
+        _c("view", { staticClass: "m-img" }, [
+          _c("image", {
+            staticStyle: { width: "100%", height: "100%" },
+            attrs: { src: _vm.rowData.pictureUrl, mode: "aspectFit" }
+          })
         ]),
-        _c("view", { staticClass: "old" }, [
-          _vm._v(_vm._s(_vm.rowData.originalPrice))
+        _c("view", { staticClass: "m-pro" }, [
+          _c("view", { staticClass: "m-title" }, [
+            _vm._v(_vm._s(_vm.rowData.synopsis))
+          ]),
+          _c("view", { staticClass: "m-price" }, [
+            _c("view", { staticClass: "new" }, [
+              _vm._v(_vm._s(_vm.rowData.presentPrice))
+            ]),
+            _c("view", { staticClass: "old" }, [
+              _vm._v(_vm._s(_vm.rowData.originalPrice))
+            ])
+          ])
         ])
-      ])
-    ])
+      ]
+    )
   ])
 }
 var staticRenderFns = []
@@ -1379,7 +1405,7 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("view", [
+  return _c("view", { staticStyle: { background: "#fff" } }, [
     _c("view", {
       staticClass: "status",
       style: {
@@ -1461,8 +1487,9 @@ var render = function() {
             attrs: {
               info: _vm.swiperList,
               current: _vm.current,
-              field: "content",
               mode: _vm.mode,
+              "dots-styles": _vm.dotsStyles,
+              field: "content",
               mpcomid: "09c88d5b-1"
             }
           },
@@ -1471,7 +1498,7 @@ var render = function() {
               "swiper",
               {
                 staticClass: "swiper-box",
-                attrs: { eventid: "09c88d5b-4" },
+                attrs: { eventid: "09c88d5b-3" },
                 on: { change: _vm.change }
               },
               _vm._l(_vm.swiperList, function(item, index) {
@@ -1479,19 +1506,15 @@ var render = function() {
                   "swiper-item",
                   { key: index, attrs: { mpcomid: "09c88d5b-0-" + index } },
                   [
-                    _c("view", { staticClass: "swiper-item" }, [
-                      _c("image", {
-                        attrs: {
-                          src: item.imgUrl,
-                          eventid: "09c88d5b-3-" + index
-                        },
-                        on: {
-                          tap: function($event) {
-                            _vm.swiperChange(index)
-                          }
-                        }
-                      })
-                    ])
+                    _c(
+                      "view",
+                      { staticClass: "swiper-item", class: item.colorClass },
+                      [
+                        _c("image", {
+                          attrs: { src: item.imgUrl, mode: "aspectFill" }
+                        })
+                      ]
+                    )
                   ]
                 )
               })
@@ -1513,7 +1536,7 @@ var render = function() {
               title: "超值热卖",
               labelColor: "#666666",
               label: "换一换",
-              eventid: "09c88d5b-5",
+              eventid: "09c88d5b-4",
               mpcomid: "09c88d5b-2"
             },
             on: { titleHandle: _vm.getHotsellList }
@@ -1542,7 +1565,7 @@ var render = function() {
                   key: index,
                   attrs: {
                     rowData: item,
-                    eventid: "09c88d5b-6-" + index,
+                    eventid: "09c88d5b-5-" + index,
                     mpcomid: "09c88d5b-3-" + index
                   },
                   on: {
@@ -1567,7 +1590,7 @@ var render = function() {
           attrs: {
             title: "今日必拼",
             label: "查看更多 >",
-            eventid: "09c88d5b-7",
+            eventid: "09c88d5b-6",
             mpcomid: "09c88d5b-5"
           },
           on: { titleHandle: _vm.pintuanHandle }
@@ -1593,7 +1616,7 @@ var render = function() {
                           key: index,
                           attrs: {
                             rowData: item,
-                            eventid: "09c88d5b-8-" + index,
+                            eventid: "09c88d5b-7-" + index,
                             mpcomid: "09c88d5b-6-" + index
                           },
                           on: {
@@ -1623,7 +1646,7 @@ var render = function() {
           attrs: {
             title: "附近门店",
             label: "查看全部 >",
-            eventid: "09c88d5b-9",
+            eventid: "09c88d5b-8",
             mpcomid: "09c88d5b-8"
           },
           on: { titleHandle: _vm.storeHandle }
@@ -1639,7 +1662,7 @@ var render = function() {
                   attrs: {
                     tips: item.tips,
                     rowData: item,
-                    eventid: "09c88d5b-10-" + index,
+                    eventid: "09c88d5b-9-" + index,
                     mpcomid: "09c88d5b-9-" + index
                   },
                   on: { handleFn: _vm.storeDetail }

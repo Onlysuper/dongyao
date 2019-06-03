@@ -9,9 +9,11 @@
 					<view class="m-username">
 						{{userData.nickName}}
 					</view>
-					<image style="width:57upx;height:33upx" src="../../static/img/icon/me_icon_VIP_lose.png" mode="aspectFit"></image>
+					<image v-if="isVip" style="width:57upx;height:33upx" src="/static/img/icon/me_icon_VIP.png" mode="aspectFit"></image>
+					<image v-else style="width:57upx;height:33upx" src="/static/img/icon/me_icon_VIP_lose.png" mode="aspectFit"></image>
 				</view>
 			</view>
+			
 			<view  @tap="linkTo('/pages/login/login','login')" v-else class="m-user">
 				<view class="m-img">
 					<image style="width:100%;height:100%" src="../../static/img/icon/home_icon_gps.png" mode="aspectFit"></image>
@@ -24,10 +26,17 @@
 					</view>
 				</view>
 			</view>
-			<view class="m-card" @tap="linkTo('/pages/user/vip')">
+			<view v-if="isVip" class="m-card" @tap="linkTo('/pages/user/vip')">
+				<m-vip-top>
+					<view slot="name">VIP{{myMember.discount}}</view>
+					<view slot="label"></view>
+					<view slot="describe">{{myMember.memberSynopsis}}</view>
+				</m-vip-top>
+			</view>
+			<view v-else class="m-card" @tap="linkTo('/pages/user/vip')">
 				<m-vip-top>
 					<view slot="name">VIP会员</view>
-					<view slot="label">（半年卡6折）</view>
+					<view slot="label"></view>
 					<view slot="describe">享受专属折扣  福利优惠  定制服务</view>
 					<view slot="right">
 						立即开通>
@@ -36,7 +45,7 @@
 			</view>
 			<view class="m-order-chose">
 				<view class="m-title">
-					<view class="">
+					<view class="m-text">
 						我的订单
 					</view>
 					<view class="right" @tap="linkToOrderTab(4)">
@@ -72,10 +81,10 @@
 			</view>
 			<view class="m-cell-list">
 				<m-cell @handleFn="linkTo('/pages/user/tokencard')" label="我的优惠券" :link='true'>
-					<image  style="width:30upx;height:30upx;" src="../../static/img/icon/me_icon_preferential.png" mode="aspectFit"></image>
+					<image  style="width:36upx;height:36upx;" src="/static/img/icon/me_icon_preferential.png" mode="aspectFull"></image>
 				</m-cell>
 				<m-cell @handleFn="linkTo('/pages/user/aboutme')" label="关于我们" :link='true'>
-					<image  style="width:30upx;height:30upx;" src="../../static/img/icon/me_icon_about.png" mode="aspectFit"></image>
+					<image style="width:36upx;height:36upx;" src="/static/img/icon/me_icon_about.png" mode="aspectFull"></image>
 				</m-cell>
 			</view>
 		</view>
@@ -93,10 +102,29 @@
 		data(){
 			return {
 				isLogin:false,
+				isVip:false, // 是否是会员
+				myMember:{}, // 会员信息
 				userData:{},
 			}
 		},
 		methods:{
+			//我的会员
+			myVips(){
+				let _this = this;
+				this.mPost("/server/m/myMember",{}).then(res=>{
+					if(res.code==1){
+						let data = res.data.myMember;
+						if(data){
+							// 会员
+							_this.myMember=data;
+							_this.isVip = true;
+						}else{
+							// 非会员
+							_this.isVip = false
+						}
+					}
+				})
+			},
 			linkToOrderTab(index){
 				uni.setStorageSync('orderTab', index);
 				uni.switchTab({
@@ -128,18 +156,22 @@
 					url:url
 				})
 			},
+			initData(){
+				this.userData = JSON.parse(uni.getStorageSync('userData'));
+				if(!this.userData.avatarUrl){
+					this.$set(this.userData,'avatarUrl',this.userData.headAddress||'')
+				}
+				if(!this.userData.nickName){
+					this.$set(this.userData,'nickName',this.userData.nickname||'')
+				}
+				this.myVips();	
+			},
 			//是否登录了
 			async checkLogin(){
 				let islogin = await this.globelIsLogin();
 				this.isLogin = islogin;
 				if(islogin){
-					this.userData = JSON.parse(uni.getStorageSync('userData'));
-					if(!this.userData.avatarUrl){
-						this.$set(this.userData,'avatarUrl',this.userData.headAddress||'')
-					}
-					if(!this.userData.nickName){
-						this.$set(this.userData,'nickName',this.userData.nickname||'')
-					}
+					this.initData();
 				}
 			}
 		},
@@ -203,6 +235,9 @@
 				font-size: 32upx;
 				justify-content: space-between;
 				color: #333;
+				.m-text{
+					font-weight: bold;
+				}
 				.right{
 					color:$color-1;
 					font-size: 24upx;
@@ -220,6 +255,9 @@
 					font-size: 26upx;
 					color: #808080;
 					position: relative;
+					&:active{
+						background:$color-hover;
+					}
 					&:after{
 						content: "";
 						display: block;

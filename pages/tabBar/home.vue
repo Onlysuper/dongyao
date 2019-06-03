@@ -1,5 +1,5 @@
 <template>
-	<view>
+	<view style="background: #fff;">
 		<!-- 状态栏 -->
 		<view class="status" :style="{ position: headerPosition,top:statusTop,opacity: afterHeaderOpacity}"></view>
 		<!-- 顶部导航栏 -->
@@ -25,12 +25,30 @@
 		<view class="place"></view>
 		<!-- 轮播图 -->
 		<view class="swiper-box">
-			<!-- <swiper circular="true" autoplay="true" @change="swiperChange">
-				<swiper-item v-for="swiper in swiperList" :key="swiper.id" wx:key="swiper.id">
-					<image :src="swiper.imgUrl" @tap="swiperChange(swiper)"></image>
+			 <uni-swiper-dot
+			  :info="swiperList"
+			  :current="current"
+			  :mode="mode"
+			  :dots-styles="dotsStyles"
+			  field="content"
+			>
+			  <swiper
+				class="swiper-box"
+				@change="change">
+				<swiper-item
+				  v-for="(item ,index) in swiperList"
+				  :key="index">
+				  <view
+					:class="item.colorClass"
+					class="swiper-item">
+					<image
+					  :src="item.imgUrl"
+					  mode="aspectFill"/>
+				  </view>
 				</swiper-item>
-			</swiper> -->
-			<uni-swiper-dot :info="swiperList" :current="current" field="content" :mode="mode">
+			  </swiper>
+			</uni-swiper-dot>
+			<!-- <uni-swiper-dot :info="swiperList" :current="current" field="content" :mode="mode">
 				<swiper class="swiper-box" @change="change">
 					<swiper-item v-for="(item ,index) in swiperList" :key="index">
 						<view class="swiper-item">
@@ -38,7 +56,7 @@
 						</view>
 					</swiper-item>
 				</swiper>
-			</uni-swiper-dot>
+			</uni-swiper-dot> -->
 		</view>
 		<!-- 超值热卖 -->
 		<view class="m-container">

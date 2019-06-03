@@ -137,6 +137,7 @@ uni-swiper{
   margin-top: 2px;
   box-sizing: border-box;
   position: relative;
+  border-radius: 30rpx;
 }
 .m-pro-item ::before {
     content: "";
@@ -148,9 +149,10 @@ uni-swiper{
     bottom: 1px;
     -webkit-box-sizing: border-box;
             box-sizing: border-box;
-    -webkit-box-shadow: 0px 0px 3px rgba(235, 235, 235, 0.4);
-            box-shadow: 0px 0px 3px rgba(235, 235, 235, 0.4);
+    -webkit-box-shadow: 0px 1px 3px rgba(241, 241, 241, 0.6);
+            box-shadow: 0px 1px 3px rgba(241, 241, 241, 0.6);
     z-index: -1;
+    border-radius: 12rpx;
 }
 .m-pro-item:last-of-type {
     margin-right: 3px;
@@ -272,9 +274,10 @@ uni-swiper{
     bottom: 1px;
     -webkit-box-sizing: border-box;
             box-sizing: border-box;
-    -webkit-box-shadow: 0px 1px 3px rgba(235, 235, 235, 0.4);
-            box-shadow: 0px 1px 3px rgba(235, 235, 235, 0.4);
+    -webkit-box-shadow: 0px 1px 3px rgba(241, 241, 241, 0.6);
+            box-shadow: 0px 1px 3px rgba(241, 241, 241, 0.6);
     z-index: -1;
+    border-radius: 12rpx;
 }
 .m-hotpro-item .m-img {
     -webkit-box-sizing: border-box;

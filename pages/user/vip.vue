@@ -5,7 +5,7 @@
 				<view class="m-container">
 					<view class="m-user">
 						<view class="m-img">
-							<image style="width:100%;height:100%" :src="userData.avatarUrl" mode="aspectFit"></image>
+							<image style="width:100%;height:100%" :src="userData.avatarUrl" mode="aspectFull"></image>
 						</view>
 						<view class="m-text">
 							<view class="m-username">
@@ -24,7 +24,7 @@
 				</view>
 				<view v-if="isVip" class="m-footer">
 					<view class="m-title">
-						{{myMember.memberType}}{{myMember.discount}}卡
+						{{myMember.memberType}}{{myMember.discount}}
 					</view>
 					<view class="m-describe">
 						<image style="width:59upx;height:59upx;margin-right: 10upx;" src="/static/img/icon/me_icon_VIP.png" mode="aspectFit"></image>
@@ -34,7 +34,7 @@
 			</view>
 		</view>
 		<view class="m-main">
-			<m-title title="VIP折扣卡" label="会员权益 >" @titleHandle="vipDetails"></m-title>
+			<m-title title="VIP折扣卡" @titleHandle=""></m-title>
 			<view v-for="(item,index) in members" :key="index" style="padding-bottom: 30upx">
 				<m-vip-card @chooseVip="chooseVip" :describes="item.describes" :chooseVipId="chooseVipId" :id="item.id" :state="item.type"  :synopsis="item.synopsis" :price="item.price" ></m-vip-card>
 			</view>
@@ -90,7 +90,14 @@
 				let _this = this;
 				this.mPost("/server/m/members",{}).then(res=>{
 					if(res.code==1){
-						_this.members=res.data.members
+						_this.members=res.data.members;
+						if(!_this.isVip){
+							//非会员
+							this.chooseVipId=_this.members[0].id;
+							this.vipName=_this.members[0].synopsis;
+							this.vipDescribes=_this.members[0].describes;
+						}
+
 					}
 				})
 			},
@@ -98,7 +105,7 @@
 			chooseVip(res){
 				// console.log(res);
 				this.chooseVipId=res.id,
-				this.vieName=res.synopsis;
+				this.vipName=res.synopsis;
 				this.vipDescribes=res.describes;
 			},
 			changeType(memberType){
@@ -126,14 +133,17 @@
 								data['memberType']= _this.changeType(data['memberType']);
 							}
 							if(data&&data['discount']){
-								data['discount']=_this.accMul(data['discount'],10)+'折'
+								data['discount']=data['discount'];
 							}
 							_this.myMember=data;
-							
+							_this.chooseVipId=data['memberId'];
+							_this.vipName=data['discount'];
+							_this.vipDescribes=data['memberSynopsis'];
 						}else{
 							// 非会员
 							_this.isVip = false
 						}
+						this.getVips();
 					}
 				})
 			},
@@ -141,7 +151,6 @@
 			buyVipFn(){
 				let _this = this;
 				this.mPost("/server/m/buyMember",_this.chooseVipId).then(res=>{
-					console.log(res);
 					let data =res.data;
 					if(data){
 						let paydata = {
@@ -163,10 +172,9 @@
 									success: function (res) {
 										if (res.confirm) {
 											_this.initData()
-// 											uni.setStorageSync('orderTab', 1);
-// 											uni.switchTab({  
-// 												url: '/pages/tabBar/order'  
-// 											});
+											uni.switchTab({  
+												url: '/pages/tabBar/user'  
+											});
 										} 
 										else if (res.cancel) {
 											_this.initData()
@@ -187,7 +195,7 @@
 			},
 			initData(){
 				this.getUser();
-				this.getVips();
+				
 				this.myVips();
 			}
 		},
@@ -237,7 +245,7 @@
 					color:#fff;
 					margin-left: 10upx;
 					display: flex;
-					align-items: center;
+					align-items: right;
 					.m-username{
 						margin-right: 10upx;
 					}
@@ -245,6 +253,7 @@
 			}
 			.m-date{
 				padding-right: 30upx;
+				text-align: right;
 				.m-text{
 					font-size: $fontsize-6;
 					color:#dcbc8d;

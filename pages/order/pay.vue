@@ -204,6 +204,7 @@
 				let _this= this;
 				if(option){
 					let proUrlData=decodeURI(option.proUrlData);
+					console.log(_this.shopCarList);
 					_this.shopCarList=JSON.parse(proUrlData)['proUrlData'];
 				}
 				_this.orderInit()
@@ -227,15 +228,15 @@
 			orderInit(){
 				let _this=this;
 				let products=_this.shopCarList.map(item=>{return {
-					productId:item.productId,
+					productId:item.productId||item.id,
 					cou:item.buyCount,
 				}})
 				let sendData = {
 					storeId:_this.storeid,
 					totalCount:_this.totalCount,
 					type:_this.type,
-					products:products, 
 					couponId:_this.couponId,
+					products:products, 
 				}
 				_this.mPost("/server/pay/calOrderPrice",sendData).then(res=>{
 					if(res.code=='1'){
@@ -252,7 +253,7 @@
 			payFn(){
 				let _this=this;
 				let products=_this.shopCarList.map(item=>{return {
-					productId:item.productId,
+					productId:item.productId||item.id,
 					cou:item.buyCount,
 				}})
 				let sendData ={

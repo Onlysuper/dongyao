@@ -53,16 +53,16 @@
 
 <style lang="scss">
 .m-vip-top{
-	width: 695upx;
-	height: 166upx;
+	width: 88%;
+	height: 130upx;
 	margin:0 auto;
 	border-radius: 15upx;
 	position: relative;
 	&::before{
 		display: block;
 		content: "";
-		width: 695upx;
-		height: 166upx;
+		width: 100%;
+		height: 100%;
 		background: #4e4e4e;
 		margin:0 auto;
 		border-radius: 15upx;
@@ -74,7 +74,7 @@
 	&::after{
 		display: block;
 		content: "";
-		height: 166upx;
+		height: 90%;
 		background: #977a58;
 		margin:0 auto;
 		border-radius: 15upx;
@@ -89,7 +89,7 @@
 		position: relative;
 		z-index: 5;
 		padding:10upx;
-		padding-left: 30upx;
+		padding-left: 40upx;
 		display: flex;
 		flex-direction: row;
 		justify-content: space-between;
@@ -117,6 +117,7 @@
 			text-align: right;
 			font-size: 22upx;
 			color:#dcbc8d;
+			padding-right: 20upx;
 		}
 	}
 	

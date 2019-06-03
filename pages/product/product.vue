@@ -187,6 +187,31 @@
 			</view>
 			
 		</view>
+		<view class="info-box pro-detail">
+			<view class="m-header">
+				<view class="m-label">
+					商品介绍
+				</view>
+			</view>
+			<view class="m-body" >
+				<view class="m-row">
+					<view class="m-cell">
+						产地:{{details.placeOrigin}}
+					</view>
+					<view class="m-cell">
+						储存:{{details.placeOrigin}}
+					</view>
+				</view>
+				<view class="m-row">
+					<view class="m-cell">
+						规格:{{details.specs}}
+					</view>
+					<view class="m-cell">
+						保质期:{{details.qualityGuaranteePeriod}}
+					</view>
+				</view>
+			</view>
+		</view>
 		<!-- 详情 -->
 		<view class="description">
 			<!-- <view class="title">———— 商品详情 ————</view> -->
@@ -206,6 +231,7 @@ export default {
 	components: {uniRate},
 	data() {
 		return {
+			details:{}, // 详情
 			timeSpan:'',//距团购结束
 			pintunNum:'',// 拼团人数
 			//控制渐变标题栏的参数
@@ -261,6 +287,7 @@ export default {
 					_this.descriptionStr=data.describes;
 					_this.storeId = data.storeId;
 					_this.timeSpan = data.timeSpan;
+					_this.details=data.details;
 					// 轮播图
 					if(data.pictures){
 						_this.swiperList=[...data.pictures];
@@ -800,6 +827,22 @@ page {
 		}
 	}
 }
+.pro-detail{
+	.m-header{
+		color:$color-2;
+		font-size:32upx;
+		padding: 30upx 0;
+	}
+	.m-row{
+		display: flex;
+		flex-direction: row;
+		.m-cell{
+			flex: 1;
+			font-size: $fontsize-9;
+			color:$color-5;
+		}
+	}
+}
 //拼团start
 .pintuan{
 	// padding: 0;
@@ -994,6 +1037,7 @@ page {
 		.joinCart {
 			background-color: #4eb87d;
 			text-align: center;
+			border-right: 1px solid #7fc19c;
 		}
 		.buy {
 			background-color: #4eb87d;

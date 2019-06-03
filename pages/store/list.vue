@@ -40,7 +40,7 @@
 					uni.getLocation({//获取当前的位置坐标
 						type: 'gcj02',
 						success: function (res) {
-							_that.mPost('/server/s/vicinity/stores',{
+							_that.mPost('/server/s/select/stores',{
 								"lng":res.longitude || 116.206845,
 								"lat":res.latitude || 39.762155,
 							}).then(res=>{

@@ -15,10 +15,10 @@
 				{{labelName}}
 			</view>
 			<view class="m-price">
-				{{price}}
+				￥{{price}}
 			</view>
 			<view class="m-oldprice">
-				非会员价{{oldprice}}
+				原价￥{{oldprice}}
 			</view>
 		</view>
 		<view class="m-addition">
@@ -101,7 +101,7 @@
 	.m-img{
 		flex: 0 0 150upx;
 		height: 150upx;
-		overflow: hidden;
+		overflow: hidden; 
 		position: relative;
 		.m-pin{
 			background:#eb5555;
@@ -124,13 +124,13 @@
 			color:#333333;
 		}
 		.m-describe{
-			font-size:$fontsize-5;
+			font-size:$fontsize-6;
 			margin-top: 5upx;
 			color:#808080;
 		}
 		.m-price{
 			color:#ff582b;
-			font-size: $fontsize-4;
+			font-size: $fontsize-9;
 			margin-top:10upx;
 			font-weight: bold;
 		}

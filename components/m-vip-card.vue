@@ -14,7 +14,7 @@
 				￥{{price}}
 			</view>
 			<!-- <view > -->
-			<image v-if="(chooseVipId==id)" class="icon"  style="height:58upx;width:58upx;" src="../../../static/img/icon/member_icon_ok.png" mode=""></image>
+			<image v-if="(chooseVipId==id)" class="icon"  style="height:58upx;width:58upx;" src="/static/img/icon/member_icon_ok.png" mode=""></image>
 			<!-- </view> -->
 		</view>
 	</view>
@@ -76,12 +76,6 @@
 		margin-left: 20upx;
 		color:#4f3a18;
 		font-size: $fontsize-2;
-		.m-text{
-			// font-size: $fontsize-2;
-		}
-		.m-price{
-			
-		}
 	}
 	&.actived{
 		background:#fdebc5;

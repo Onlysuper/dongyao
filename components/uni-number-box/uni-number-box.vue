@@ -1,6 +1,7 @@
 <template>
 	<view class="uni-numbox">
-		<view class="uni-numbox__minus" :class="{'uni-numbox--disabled': disableSubtract||disabled}" @click="_calcValue('subtract')">-</view>
+		<view v-if="inputValue==1" class="uni-numbox__minus" :class="{'uni-numbox--disabled': false}" @click="deleteFn('delete')">-</view>
+		<view v-else class="uni-numbox__minus" :class="{'uni-numbox--disabled': disableSubtract||disabled}" @click="_calcValue('subtract')">-</view>
 		<input class="uni-numbox__value" type="number" :disabled="disabled" :value="inputValue" @blur="_onBlur">
 		<view class="uni-numbox__plus" :class="{'uni-numbox--disabled': disableAdd||disabled}" @click="_calcValue('add')">+</view>
 	</view>
@@ -50,6 +51,7 @@
 		},
 		watch: {
 			value(val) {
+				console.log('改变',val);
 				this.inputValue = val;
 			},
 // 			inputValue(val) {
@@ -57,6 +59,11 @@
 // 			}
 		},
 		methods: {
+			//
+			deleteFn(type){
+				console.log('zzz');
+				this.$emit('delete', {num:this.inputValue,id:this.id,type:type});
+			},
 			_calcValue(type) {
 				if (this.disabled) {
 					return
@@ -73,7 +80,8 @@
 					return
 				}
 				this.inputValue = value / scale;
-				this.$emit('change', {num:this.inputValue,id:this.id});
+				this.$emit('change', {num:this.inputValue,id:this.id,type:type});
+				
 			},
 			_getDecimalScale() {
 				let scale = 1

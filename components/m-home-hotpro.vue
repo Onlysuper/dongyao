@@ -1,16 +1,18 @@
 <template>
 	<!-- 首页产品图文 -->
 	<view class="m-hotpro-item">
-		<view class="m-img" @tap="handleFn">
-			<image style="width: 100%;height: 100%;" :src="rowData.pictureUrl" mode="aspectFit"></image>
-		</view>
-		<view class="m-pro">
-			<view class="m-title">
-				{{rowData.synopsis}}
+		<view @tap="handleFn" class="m-content">
+			<view class="m-img" >
+				<image style="width: 100%;height: 100%;" :src="rowData.pictureUrl" mode="aspectFit"></image>
 			</view>
-			<view class="m-price">
-				<view class="new">{{rowData.presentPrice}}</view>
-				<view class="old">{{rowData.originalPrice}}</view>
+			<view class="m-pro">
+				<view class="m-title">
+					{{rowData.synopsis}}
+				</view>
+				<view class="m-price">
+					<view class="new">{{rowData.presentPrice}}</view>
+					<view class="old">{{rowData.originalPrice}}</view>
+				</view>
 			</view>
 		</view>
 	</view>
@@ -51,15 +53,23 @@
 	margin-right: 0upx;
 	margin-bottom: 30upx;
 	// box-shadow: 0px 1px 3px rgba(0,0,0,0.2);
-	padding: 20upx; 
+	
 	box-sizing: border-box;
-	border-radius: 10upx;
+	border-radius: 12upx;
 	flex:0 0 225upx;
 	margin-top: 2px;
 	box-sizing: border-box;
 	position: relative;
+	background:#fff;
 	&:active{
 		background:$color-hover
+	}
+	.m-content{
+		position: relative;
+		z-index: 10;
+		width: 100%;
+		padding: 20upx; 
+		// height: 225upx;
 	}
 	::before{
 		content: "";
@@ -70,8 +80,8 @@
 		top: 1px;
 		bottom: 1px;
 		box-sizing: border-box;
-		box-shadow: 0px 1px 3px rgba(241,241,241,0.6);
-		z-index: -1;
+		box-shadow: 0px 0px 3px rgba(241,241,241,0.6);
+		z-index: 1;
 		border-radius: 12upx;
 		// box-shadow: 0px 1px 3px rgba(247,247,247,1);
 	}
@@ -89,7 +99,7 @@
 		overflow: hidden;
 	  text-overflow: ellipsis;
 	  display: -webkit-box;
-	  -webkit-line-clamp: 2;
+	  -webkit-line-clamp: 1;
 	  -webkit-box-orient: vertical;
 	}
 	.m-price{

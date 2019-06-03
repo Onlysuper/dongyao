@@ -7,10 +7,10 @@
 			 :key="index"></view>
 		</view>
 		<view v-if="mode === 'long'" class="uni-swiper__dots-box" :style="{'bottom':dots.bottom + 'px'}">
-			<view class="uni-swiper__dots-item " v-for="(item,index) in info" :class="[index === current&&'uni-swiper__dots-long']"
+			<view class="uni-swiper__dots-item " v-for="(item,index) in info" :key="index" :class="[index === current&&'uni-swiper__dots-long']"
 			 :style="{
 				 'width':(index === current? dots.width*3:dots.width ) + 'px','height':dots.height +'px' ,'background-color':index !== current?dots.backgroundColor:dots.selectedBackgroundColor,'border':index !==current ? dots.border:dots.selectedBorder}"
-			 :key="index"></view>
+			 ></view>
 		</view>
 		<view v-if="mode === 'nav'" class="uni-swiper__dots-box uni-swiper__dots-nav" :style="{'background-color':dotsStyles.backgroundColor}">
 			<view class="uni-swiper__dots-nav-item" :style="{'color':dotsStyles.color}">{{(current+1)+"/"+info.length}}

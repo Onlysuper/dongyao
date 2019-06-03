@@ -486,6 +486,15 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 
 
 
+
+
+
+
+
+
+
+
+
 var _mVipTop = _interopRequireDefault(__webpack_require__(/*! @/components/m-vip-top */ "../../../../../../Users/apple/opt/DONGYAO/components/m-vip-top.vue"));
 var _mCell = _interopRequireDefault(__webpack_require__(/*! @/components/m-cell */ "../../../../../../Users/apple/opt/DONGYAO/components/m-cell.vue"));
 var _event = _interopRequireDefault(__webpack_require__(/*! ../../common/event.js */ "../../../../../../Users/apple/opt/DONGYAO/common/event.js"));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {try {var info = gen[key](arg);var value = info.value;} catch (error) {reject(error);return;}if (info.done) {resolve(value);} else {Promise.resolve(value).then(_next, _throw);}}function _asyncToGenerator(fn) {return function () {var self = this,args = arguments;return new Promise(function (resolve, reject) {var gen = fn.apply(self, args);function _next(value) {asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value);}function _throw(err) {asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err);}_next(undefined);});};}var _default =
@@ -497,10 +506,29 @@ var _event = _interopRequireDefault(__webpack_require__(/*! ../../common/event.j
   data: function data() {
     return {
       isLogin: false,
+      isVip: false, // 是否是会员
+      myMember: {}, // 会员信息
       userData: {} };
 
   },
   methods: {
+    //我的会员
+    myVips: function myVips() {
+      var _this = this;
+      this.mPost("/server/m/myMember", {}).then(function (res) {
+        if (res.code == 1) {
+          var data = res.data.myMember;
+          if (data) {
+            // 会员
+            _this.myMember = data;
+            _this.isVip = true;
+          } else {
+            // 非会员
+            _this.isVip = false;
+          }
+        }
+      });
+    },
     linkToOrderTab: function linkToOrderTab(index) {
       uni.setStorageSync('orderTab', index);
       uni.switchTab({
@@ -532,18 +560,22 @@ var _event = _interopRequireDefault(__webpack_require__(/*! ../../common/event.j
         url: url });
 
     },
+    initData: function initData() {
+      this.userData = JSON.parse(uni.getStorageSync('userData'));
+      if (!this.userData.avatarUrl) {
+        this.$set(this.userData, 'avatarUrl', this.userData.headAddress || '');
+      }
+      if (!this.userData.nickName) {
+        this.$set(this.userData, 'nickName', this.userData.nickname || '');
+      }
+      this.myVips();
+    },
     //是否登录了
     checkLogin: function () {var _checkLogin = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {var islogin;return _regenerator.default.wrap(function _callee$(_context) {while (1) {switch (_context.prev = _context.next) {case 0:_context.next = 2;return (
                   this.globelIsLogin());case 2:islogin = _context.sent;
                 this.isLogin = islogin;
                 if (islogin) {
-                  this.userData = JSON.parse(uni.getStorageSync('userData'));
-                  if (!this.userData.avatarUrl) {
-                    this.$set(this.userData, 'avatarUrl', this.userData.headAddress || '');
-                  }
-                  if (!this.userData.nickName) {
-                    this.$set(this.userData, 'nickName', this.userData.nickname || '');
-                  }
+                  this.initData();
                 }case 5:case "end":return _context.stop();}}}, _callee, this);}));function checkLogin() {return _checkLogin.apply(this, arguments);}return checkLogin;}() },
 
 
@@ -736,13 +768,21 @@ var render = function() {
               _c("view", { staticClass: "m-username" }, [
                 _vm._v(_vm._s(_vm.userData.nickName))
               ]),
-              _c("image", {
-                staticStyle: { width: "57rpx", height: "33rpx" },
-                attrs: {
-                  src: "../../static/img/icon/me_icon_VIP_lose.png",
-                  mode: "aspectFit"
-                }
-              })
+              _vm.isVip
+                ? _c("image", {
+                    staticStyle: { width: "57rpx", height: "33rpx" },
+                    attrs: {
+                      src: "/static/img/icon/me_icon_VIP.png",
+                      mode: "aspectFit"
+                    }
+                  })
+                : _c("image", {
+                    staticStyle: { width: "57rpx", height: "33rpx" },
+                    attrs: {
+                      src: "/static/img/icon/me_icon_VIP_lose.png",
+                      mode: "aspectFit"
+                    }
+                  })
             ])
           ])
         : _c(
@@ -758,37 +798,62 @@ var render = function() {
             },
             [_vm._m(0), _vm._m(1)]
           ),
-      _c(
-        "view",
-        {
-          staticClass: "m-card",
-          attrs: { eventid: "09ce8447-1" },
-          on: {
-            tap: function($event) {
-              _vm.linkTo("/pages/user/vip")
-            }
-          }
-        },
-        [
-          _c("m-vip-top", { attrs: { mpcomid: "09ce8447-0" } }, [
-            _c("view", { slot: "name" }, [_vm._v("VIP会员")]),
-            _c("view", { slot: "label" }, [_vm._v("（半年卡6折）")]),
-            _c("view", { slot: "describe" }, [
-              _vm._v("享受专属折扣  福利优惠  定制服务")
-            ]),
-            _c("view", { slot: "right" }, [_vm._v("立即开通>")])
-          ])
-        ],
-        1
-      ),
+      _vm.isVip
+        ? _c(
+            "view",
+            {
+              staticClass: "m-card",
+              attrs: { eventid: "09ce8447-2" },
+              on: {
+                tap: function($event) {
+                  _vm.linkTo("/pages/user/vip")
+                }
+              }
+            },
+            [
+              _c("m-vip-top", { attrs: { mpcomid: "09ce8447-0" } }, [
+                _c("view", { slot: "name" }, [
+                  _vm._v("VIP" + _vm._s(_vm.myMember.discount))
+                ]),
+                _c("view", { slot: "label" }),
+                _c("view", { slot: "describe" }, [
+                  _vm._v(_vm._s(_vm.myMember.memberSynopsis))
+                ])
+              ])
+            ],
+            1
+          )
+        : _c(
+            "view",
+            {
+              staticClass: "m-card",
+              attrs: { eventid: "09ce8447-1" },
+              on: {
+                tap: function($event) {
+                  _vm.linkTo("/pages/user/vip")
+                }
+              }
+            },
+            [
+              _c("m-vip-top", { attrs: { mpcomid: "09ce8447-1" } }, [
+                _c("view", { slot: "name" }, [_vm._v("VIP会员")]),
+                _c("view", { slot: "label" }),
+                _c("view", { slot: "describe" }, [
+                  _vm._v("享受专属折扣  福利优惠  定制服务")
+                ]),
+                _c("view", { slot: "right" }, [_vm._v("立即开通>")])
+              ])
+            ],
+            1
+          ),
       _c("view", { staticClass: "m-order-chose" }, [
         _c("view", { staticClass: "m-title" }, [
-          _c("view", {}, [_vm._v("我的订单")]),
+          _c("view", { staticClass: "m-text" }, [_vm._v("我的订单")]),
           _c(
             "view",
             {
               staticClass: "right",
-              attrs: { eventid: "09ce8447-2" },
+              attrs: { eventid: "09ce8447-3" },
               on: {
                 tap: function($event) {
                   _vm.linkToOrderTab(4)
@@ -803,7 +868,7 @@ var render = function() {
             "view",
             {
               staticClass: "m-item",
-              attrs: { eventid: "09ce8447-3" },
+              attrs: { eventid: "09ce8447-4" },
               on: {
                 tap: function($event) {
                   _vm.linkToOrderTab(1)
@@ -816,7 +881,7 @@ var render = function() {
             "view",
             {
               staticClass: "m-item",
-              attrs: { eventid: "09ce8447-4" },
+              attrs: { eventid: "09ce8447-5" },
               on: {
                 tap: function($event) {
                   _vm.linkToOrderTab(2)
@@ -829,7 +894,7 @@ var render = function() {
             "view",
             {
               staticClass: "m-item",
-              attrs: { eventid: "09ce8447-5" },
+              attrs: { eventid: "09ce8447-6" },
               on: {
                 tap: function($event) {
                   _vm.linkToOrderTab(3)
@@ -850,8 +915,8 @@ var render = function() {
               attrs: {
                 label: "我的优惠券",
                 link: true,
-                eventid: "09ce8447-6",
-                mpcomid: "09ce8447-1"
+                eventid: "09ce8447-7",
+                mpcomid: "09ce8447-2"
               },
               on: {
                 handleFn: function($event) {
@@ -861,10 +926,10 @@ var render = function() {
             },
             [
               _c("image", {
-                staticStyle: { width: "30rpx", height: "30rpx" },
+                staticStyle: { width: "36rpx", height: "36rpx" },
                 attrs: {
-                  src: "../../static/img/icon/me_icon_preferential.png",
-                  mode: "aspectFit"
+                  src: "/static/img/icon/me_icon_preferential.png",
+                  mode: "aspectFull"
                 }
               })
             ]
@@ -875,8 +940,8 @@ var render = function() {
               attrs: {
                 label: "关于我们",
                 link: true,
-                eventid: "09ce8447-7",
-                mpcomid: "09ce8447-2"
+                eventid: "09ce8447-8",
+                mpcomid: "09ce8447-3"
               },
               on: {
                 handleFn: function($event) {
@@ -886,10 +951,10 @@ var render = function() {
             },
             [
               _c("image", {
-                staticStyle: { width: "30rpx", height: "30rpx" },
+                staticStyle: { width: "36rpx", height: "36rpx" },
                 attrs: {
-                  src: "../../static/img/icon/me_icon_about.png",
-                  mode: "aspectFit"
+                  src: "/static/img/icon/me_icon_about.png",
+                  mode: "aspectFull"
                 }
               })
             ]

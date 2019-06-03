@@ -51,6 +51,9 @@
 	border-bottom: 1px solid $color-3;
 	.m-icon{
 		flex: 0 1 50upx;
+		display: flex;
+		align-items: center;
+		justify-content: flex-start;
 	}
 	.m-label{
 		flex: 1;

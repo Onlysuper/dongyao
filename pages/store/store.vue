@@ -17,7 +17,7 @@
 								公告：{{storeData.notice}}
 							</view>
 							<view class="m-time">
-								营业：{{storeData.businessHours}}
+								营业时间：{{storeData.businessHours}}
 							</view>
 						</view>
 						<view class="m-phone" @tap='callPhone(storeData.tel)'>
@@ -92,7 +92,7 @@
 							￥{{item.presentPrice}}
 						</view>
 						<view class="m-controne">
-							<uni-number-box @change="buyNumChange" :value="item.buyCount" :min="0" :max="item.stock" :id="item.id"></uni-number-box>
+							<uni-number-box @change="buyNumChange"  @delete="buyNumDelete" :value="item.buyCount" :min="1" :max="item.stock" :id="item.id"></uni-number-box>
 						</view>
 					</view>
 				</view>
@@ -229,6 +229,8 @@
 				  return obj  
 				});  
 				let proUrlData = encodeURI(JSON.stringify({proUrlData:proArr}));
+				console.log({proUrlData:proArr});
+				return false;
 				uni.navigateTo({
 					url:"/pages/order/pay?storeid="+this.storeid+"&totalCount="+totalCount+"&type="+type+"&userid="+this.userid+'&proUrlData='+proUrlData
 				})
@@ -330,12 +332,19 @@
 								}
 								return {stock:stock,...item};
 							})
-							
+							console.log('总结数据',data);
 							_this.shopCarList=data;
 							// 购物车总商品数，与总价格计算
 							_this.shopCarCount();
 						}
+					}else if(res.code=='0'){
+						_this.shopCarList=[];
+							// 购物车总商品数，与总价格计算
+						_this.shopCarCount();
 					}
+				}).catch(err=>{
+					_this.shopCarList=[];
+					_this.shopCarCount();
 				})
 			},
 			// 清空购物车
@@ -441,9 +450,64 @@
 					});
 				})
 			},
+			//减商品
+			subGoodSum(_data,num=1,type){
+				let _this=this;
+				let buyCount=num;
+				let _id = _data.id;
+				let data= this.productList.find(item=>item.id==_id);
+				let objIndex = this.shopCarList.findIndex(item=>item.id==_id);
+				if(objIndex!=-1 && type=='add'){
+					buyCount=this.shopCarList.find(item=>item.id==_id)['buyCount']+1;
+				}
+				if(buyCount>data.stock){
+					uni.showToast({
+						title:  "库存不足",
+						icon: "none"
+					});
+					buyCount=data.stock;
+				}
+				_this.mPost("/server/sc/sub/product",{
+					productId:data.id,
+					buyCount:buyCount
+				}).then(res=>{
+					if(res.code==1){
+						_this.showShopCar();
+					}
+				}).catch(err=>{
+					uni.showToast({
+						title:  "操作失败，请检查网络",
+						icon: "none"
+					});
+				})
+			},
+			//删除
+			buyNumDelete(data){
+				let num = data.num;
+				let type =data.type;
+				let _this = this;
+				uni.showModal({
+					title: '温馨提示',
+					content: '确定删除此商品吗',
+					// showCancel:false,
+					confirmText:'确定',
+					success: function (res) {
+						if (res.confirm) {
+							_this.subGoodSum(data,0,'change')
+						}
+					}
+				});
+			},
+			//加减
 			buyNumChange(data){
 				let num = data.num;
-				this.addGoodSum(data,num,'change')
+				let type =data.type;
+				let _this = this;
+				if(type=='add'){
+					_this.addGoodSum(data,num,'change')
+				}else if(type=='subtract'){
+					_this.subGoodSum(data,num,'change')
+				}
 			},
 			//购物车总价格，总数量计算
 			shopCarCount(){
@@ -656,6 +720,7 @@
 						flex-direction: row;
 						.m-text-box{
 							flex: 1;
+							margin-left: 20upx;
 							.m-title{
 								font-size: 32upx;
 								color:#333333;

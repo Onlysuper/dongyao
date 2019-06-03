@@ -11,7 +11,7 @@
 				:labelName="item.labelName" 
 				:img="item.pictureUrl" 
 				:price="item.presentPrice" 
-				:oldpric="item.originalPrice"
+				:oldprice="item.originalPrice"
 				:isAssemble="item.isAssemble"
 				></m-product-list>
 			</view>
@@ -35,27 +35,7 @@
 				mloading:'more',
 				search:"",
 				// 附近门店
-				nearStoreList:[{
-					img:"../../static/img/2.jpg",
-					title:"精品秋葵600g",
-					describe:"特价小白菜",
-					price:"￥2.99",
-					oldprice:"￥100"
-				},
-				{
-					img:"../../static/img/2.jpg",
-					title:"精品秋葵600g",
-					describe:"特价小白菜",
-					price:"￥2.99",
-					oldprice:"￥100"
-				},
-				{
-					img:"../../static/img/2.jpg",
-					title:"精品秋葵600g",
-					describe:"特价小白菜",
-					price:"￥2.99",
-					oldprice:"￥100"
-				}]
+				nearStoreList:[]
 			}
 		},
 		

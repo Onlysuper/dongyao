@@ -427,7 +427,7 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
       this.animation = true;
       setTimeout(function () {
         _this.animation = false;
-      }, 1000);
+      }, 100);
     } },
 
   methods: {
@@ -555,6 +555,7 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 
 
 
+
 {
   name: 'uni-number-box',
   props: {
@@ -599,6 +600,7 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 
   watch: {
     value: function value(val) {
+      console.log('改变', val);
       this.inputValue = val;
     } },
 
@@ -606,6 +608,11 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 
 
   methods: {
+    //
+    deleteFn: function deleteFn(type) {
+      console.log('zzz');
+      this.$emit('delete', { num: this.inputValue, id: this.id, type: type });
+    },
     _calcValue: function _calcValue(type) {
       if (this.disabled) {
         return;
@@ -622,7 +629,8 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
         return;
       }
       this.inputValue = value / scale;
-      this.$emit('change', { num: this.inputValue, id: this.id });
+      this.$emit('change', { num: this.inputValue, id: this.id, type: type });
+
     },
     _getDecimalScale: function _getDecimalScale() {
       var scale = 1;
@@ -890,6 +898,8 @@ function bezier(pots, amount) {
         return obj;
       });
       var proUrlData = encodeURI(JSON.stringify({ proUrlData: proArr }));
+      console.log({ proUrlData: proArr });
+      return false;
       uni.navigateTo({
         url: "/pages/order/pay?storeid=" + this.storeid + "&totalCount=" + totalCount + "&type=" + type + "&userid=" + this.userid + '&proUrlData=' + proUrlData });
 
@@ -991,12 +1001,19 @@ function bezier(pots, amount) {
               }
               return _objectSpread({ stock: stock }, item);
             });
-
+            console.log('总结数据', data);
             _this.shopCarList = data;
             // 购物车总商品数，与总价格计算
             _this.shopCarCount();
           }
+        } else if (res.code == '0') {
+          _this.shopCarList = [];
+          // 购物车总商品数，与总价格计算
+          _this.shopCarCount();
         }
+      }).catch(function (err) {
+        _this.shopCarList = [];
+        _this.shopCarCount();
       });
     },
     // 清空购物车
@@ -1102,9 +1119,64 @@ function bezier(pots, amount) {
 
       });
     },
+    //减商品
+    subGoodSum: function subGoodSum(_data) {var num = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1;var type = arguments.length > 2 ? arguments[2] : undefined;
+      var _this = this;
+      var buyCount = num;
+      var _id = _data.id;
+      var data = this.productList.find(function (item) {return item.id == _id;});
+      var objIndex = this.shopCarList.findIndex(function (item) {return item.id == _id;});
+      if (objIndex != -1 && type == 'add') {
+        buyCount = this.shopCarList.find(function (item) {return item.id == _id;})['buyCount'] + 1;
+      }
+      if (buyCount > data.stock) {
+        uni.showToast({
+          title: "库存不足",
+          icon: "none" });
+
+        buyCount = data.stock;
+      }
+      _this.mPost("/server/sc/sub/product", {
+        productId: data.id,
+        buyCount: buyCount }).
+      then(function (res) {
+        if (res.code == 1) {
+          _this.showShopCar();
+        }
+      }).catch(function (err) {
+        uni.showToast({
+          title: "操作失败，请检查网络",
+          icon: "none" });
+
+      });
+    },
+    //删除
+    buyNumDelete: function buyNumDelete(data) {
+      var num = data.num;
+      var type = data.type;
+      var _this = this;
+      uni.showModal({
+        title: '温馨提示',
+        content: '确定删除此商品吗',
+        // showCancel:false,
+        confirmText: '确定',
+        success: function success(res) {
+          if (res.confirm) {
+            _this.subGoodSum(data, 0, 'change');
+          }
+        } });
+
+    },
+    //加减
     buyNumChange: function buyNumChange(data) {
       var num = data.num;
-      this.addGoodSum(data, num, 'change');
+      var type = data.type;
+      var _this = this;
+      if (type == 'add') {
+        _this.addGoodSum(data, num, 'change');
+      } else if (type == 'subtract') {
+        _this.subGoodSum(data, num, 'change');
+      }
     },
     //购物车总价格，总数量计算
     shopCarCount: function shopCarCount() {
@@ -1421,27 +1493,44 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("view", { staticClass: "uni-numbox" }, [
-    _c(
-      "view",
-      {
-        staticClass: "uni-numbox__minus",
-        class: { "uni-numbox--disabled": _vm.disableSubtract || _vm.disabled },
-        attrs: { eventid: "443d2f40-0" },
-        on: {
-          click: function($event) {
-            _vm._calcValue("subtract")
-          }
-        }
-      },
-      [_vm._v("-")]
-    ),
+    _vm.inputValue == 1
+      ? _c(
+          "view",
+          {
+            staticClass: "uni-numbox__minus",
+            class: { "uni-numbox--disabled": false },
+            attrs: { eventid: "443d2f40-1" },
+            on: {
+              click: function($event) {
+                _vm.deleteFn("delete")
+              }
+            }
+          },
+          [_vm._v("-")]
+        )
+      : _c(
+          "view",
+          {
+            staticClass: "uni-numbox__minus",
+            class: {
+              "uni-numbox--disabled": _vm.disableSubtract || _vm.disabled
+            },
+            attrs: { eventid: "443d2f40-0" },
+            on: {
+              click: function($event) {
+                _vm._calcValue("subtract")
+              }
+            }
+          },
+          [_vm._v("-")]
+        ),
     _c("input", {
       staticClass: "uni-numbox__value",
       attrs: {
         type: "number",
         disabled: _vm.disabled,
         value: _vm.inputValue,
-        eventid: "443d2f40-1"
+        eventid: "443d2f40-2"
       },
       on: { blur: _vm._onBlur }
     }),
@@ -1450,7 +1539,7 @@ var render = function() {
       {
         staticClass: "uni-numbox__plus",
         class: { "uni-numbox--disabled": _vm.disableAdd || _vm.disabled },
-        attrs: { eventid: "443d2f40-2" },
+        attrs: { eventid: "443d2f40-3" },
         on: {
           click: function($event) {
             _vm._calcValue("add")
@@ -1505,7 +1594,7 @@ var render = function() {
                   _vm._v("公告：" + _vm._s(_vm.storeData.notice))
                 ]),
                 _c("view", { staticClass: "m-time" }, [
-                  _vm._v("营业：" + _vm._s(_vm.storeData.businessHours))
+                  _vm._v("营业时间：" + _vm._s(_vm.storeData.businessHours))
                 ])
               ]),
               _c(
@@ -1712,13 +1801,16 @@ var render = function() {
                             _c("uni-number-box", {
                               attrs: {
                                 value: item.buyCount,
-                                min: 0,
+                                min: 1,
                                 max: item.stock,
                                 id: item.id,
                                 eventid: "05dd8904-6-" + index,
                                 mpcomid: "05dd8904-2-" + index
                               },
-                              on: { change: _vm.buyNumChange }
+                              on: {
+                                change: _vm.buyNumChange,
+                                delete: _vm.buyNumDelete
+                              }
                             })
                           ],
                           1

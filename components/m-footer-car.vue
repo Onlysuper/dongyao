@@ -42,7 +42,7 @@
 				this.animation=true;
 				setTimeout(()=>{
 					this.animation=false
-				},1000)
+				},100)
 			}
 		},
 		methods:{
@@ -60,13 +60,13 @@
 <style lang="scss">
 	@keyframes myfirst
 	{
-	0%   {transform: scale(0.9,0.9)}
-	50%  {transform: scale(1.2,1.2)}
+	0%   {transform: scale(0.6,0.6)}
+	50%  {transform: scale(1.1,1.1)}
 	// 50%  {background: blue;}
 	100% {transform: scale(1,1)}
 	}
 	.animation{
-		 animation: myfirst 1s;
+		 animation: myfirst 100ms;
 	}
 // 底部
 	.m-footer-car {
@@ -105,7 +105,7 @@
 			}
 		}
 		.m-price{
-			color:#333333;
+			color:#ff582b;
 			font-size: 30upx;
 			text-align: left;
 			flex:1;

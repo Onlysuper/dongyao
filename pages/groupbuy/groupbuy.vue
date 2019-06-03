@@ -15,7 +15,7 @@
 				:labelName="item.labelName" 
 				:img="item.pictureUrl" 
 				:price="item.presentPrice" 
-				:oldpric="item.originalPrice"
+				:oldprice="item.originalPrice"
 				:isAssemble="item.isAssemble">
 				</m-groupbuy-list>
 			</view>

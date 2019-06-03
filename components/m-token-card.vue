@@ -96,6 +96,9 @@
 	box-shadow: 0 0 15upx rgba(0,0,0,0.2);
 	margin: 30upx;
 	padding:30upx;
+	&:active{
+		background: $color-hover;
+	}
 	.m-body{
 		display: flex;
 		flex-direction: row;

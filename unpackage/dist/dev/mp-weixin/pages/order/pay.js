@@ -801,6 +801,7 @@ var _rattenkingDtpicker = _interopRequireDefault(__webpack_require__(/*! @/compo
       var _this = this;
       if (option) {
         var proUrlData = decodeURI(option.proUrlData);
+        console.log(_this.shopCarList);
         _this.shopCarList = JSON.parse(proUrlData)['proUrlData'];
       }
       _this.orderInit();
@@ -824,15 +825,15 @@ var _rattenkingDtpicker = _interopRequireDefault(__webpack_require__(/*! @/compo
     orderInit: function orderInit() {
       var _this = this;
       var products = _this.shopCarList.map(function (item) {return {
-          productId: item.productId,
+          productId: item.productId || item.id,
           cou: item.buyCount };
       });
       var sendData = {
         storeId: _this.storeid,
         totalCount: _this.totalCount,
         type: _this.type,
-        products: products,
-        couponId: _this.couponId };
+        couponId: _this.couponId,
+        products: products };
 
       _this.mPost("/server/pay/calOrderPrice", sendData).then(function (res) {
         if (res.code == '1') {
@@ -849,7 +850,7 @@ var _rattenkingDtpicker = _interopRequireDefault(__webpack_require__(/*! @/compo
     payFn: function payFn() {var _this2 = this;
       var _this = this;
       var products = _this.shopCarList.map(function (item) {return {
-          productId: item.productId,
+          productId: item.productId || item.id,
           cou: item.buyCount };
       });
       var sendData = {

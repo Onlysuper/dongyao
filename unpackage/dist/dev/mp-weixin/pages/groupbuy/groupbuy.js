@@ -459,9 +459,11 @@ var render = function() {
         _c("view", { staticClass: "m-describe" }, [
           _vm._v(_vm._s(_vm.labelName))
         ]),
-        _c("view", { staticClass: "m-price" }, [_vm._v(_vm._s(_vm.price))]),
+        _c("view", { staticClass: "m-price" }, [
+          _vm._v("￥" + _vm._s(_vm.price))
+        ]),
         _c("view", { staticClass: "m-oldprice" }, [
-          _vm._v("非会员价" + _vm._s(_vm.oldprice))
+          _vm._v("原价￥" + _vm._s(_vm.oldprice))
         ])
       ]),
       _vm._m(0)
@@ -529,7 +531,7 @@ var render = function() {
                       labelName: item.labelName,
                       img: item.pictureUrl,
                       price: item.presentPrice,
-                      oldpric: item.originalPrice,
+                      oldprice: item.originalPrice,
                       isAssemble: item.isAssemble,
                       eventid: "02fe9a1a-0-" + index,
                       mpcomid: "02fe9a1a-0-" + index

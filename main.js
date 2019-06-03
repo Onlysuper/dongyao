@@ -49,7 +49,7 @@ Vue.prototype.geoDistance= function(lat1, lng1, lat2, lng2) {
 },
 Vue.prototype.mGet = function(url,data){
 	let _this=this;
-	return new Promise(function(resolve, reject){
+	return new Promise((resolve, reject)=>{
 		uni.request({
 			url: _this.apiurl+url,
 			method: 'GET',
@@ -90,7 +90,7 @@ Vue.prototype.mPost = function(url,data,host){
 	if(host){
 		baseurl=host+url
 	}
-	return new Promise(function(resolve, reject){
+	return new Promise((resolve, reject)=>{
 		uni.request({
 			url:baseurl,
 			method: 'POST',
@@ -128,7 +128,7 @@ Vue.prototype.mPostForm = function(url,data,host){
 		baseurl=host+url
 	}
 	
-	return new Promise(function(resolve, reject){
+	return new Promise((resolve, reject)=>{
 		uni.request({
 			url:baseurl,
 			method: 'POST',
