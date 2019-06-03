@@ -524,26 +524,20 @@ var render = function() {
         _vm.state == "0"
           ? _c("image", {
               staticStyle: { height: "100rpx", width: "100rpx" },
-              attrs: {
-                src: "../../../static/img/icon/member_icon_月卡.png",
-                mode: ""
-              }
+              attrs: { src: "/static/img/icon/member_icon_月卡.png", mode: "" }
             })
           : _vm._e(),
         _vm.state == "1"
           ? _c("image", {
               staticStyle: { height: "100rpx", width: "100rpx" },
-              attrs: {
-                src: "../../../static/img/icon/member_icon_季卡.png",
-                mode: ""
-              }
+              attrs: { src: "/static/img/icon/member_icon_季卡.png", mode: "" }
             })
           : _vm._e(),
         _vm.state == "2"
           ? _c("image", {
               staticStyle: { height: "100rpx", width: "100rpx" },
               attrs: {
-                src: "../../../static/img/icon/member_icon_半年卡.png",
+                src: "/static/img/icon/member_icon_半年卡.png",
                 mode: ""
               }
             })
@@ -551,10 +545,7 @@ var render = function() {
         _vm.state == "3"
           ? _c("image", {
               staticStyle: { height: "100rpx", width: "100rpx" },
-              attrs: {
-                src: "../../../static/img/icon/member_icon_年卡.png",
-                mode: ""
-              }
+              attrs: { src: "/static/img/icon/member_icon_年卡.png", mode: "" }
             })
           : _vm._e()
       ]),
@@ -642,7 +633,7 @@ var render = function() {
                     "margin-right": "10rpx"
                   },
                   attrs: {
-                    src: "../../static/img/icon/me_icon_VIP.png",
+                    src: "/static/img/icon/me_icon_VIP.png",
                     mode: "aspectFit"
                   }
                 }),

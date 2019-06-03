@@ -27,7 +27,7 @@
 						{{myMember.memberType}}{{myMember.discount}}卡
 					</view>
 					<view class="m-describe">
-						<image style="width:59upx;height:59upx;margin-right: 10upx;" src="../../static/img/icon/me_icon_VIP.png" mode="aspectFit"></image>
+						<image style="width:59upx;height:59upx;margin-right: 10upx;" src="/static/img/icon/me_icon_VIP.png" mode="aspectFit"></image>
 						{{myMember.memberSynopsis}}
 					</view>
 				</view>
