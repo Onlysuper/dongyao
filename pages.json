@@ -102,7 +102,7 @@
         },
         // 优惠券
         {
-            "path" : "pages/user/tokencard/tokencard",
+            "path" : "pages/user/tokencard",
             "style" : {
                 "navigationBarTitleText" : "我的优惠券",
                 "app-plus" : {
@@ -113,7 +113,7 @@
         },
         // 关于我
         {
-            "path" : "pages/user/aboutme/aboutme",
+            "path" : "pages/user/aboutme",
             "style" : {
                 "navigationBarTitleText" : "关于我们",
                 "app-plus" : {
@@ -124,7 +124,7 @@
         },
         // 会员
         {
-            "path" : "pages/user/vip/vip",
+            "path" : "pages/user/vip",
             "style" : {
                 "navigationBarTitleText" : "会员中心",
                 "app-plus" : {

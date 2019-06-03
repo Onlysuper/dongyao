@@ -29,13 +29,7 @@
 				</view>
 			</view>
 			<view v-show="describeVisible" class="m-describe">
-				
-				<view class="">
-					{{describe}}
-				</view>
-				<!-- <view class="">
-					2.请在北京限定地区范围进行使用
-				</view> -->
+				<rich-text :nodes="describe"></rich-text>
 			</view>
 		</view>
 	</view>

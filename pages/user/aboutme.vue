@@ -34,7 +34,7 @@
 </template>
 
 <script>
-import Event from '../../../common/event.js'; 
+import Event from '../../common/event.js'; 
 export default {
 	data() {
 		return {};
@@ -52,7 +52,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import "../../../common/globel.scss";
+@import "../../common/globel.scss";
 .m-about-page{
 	 background:#fff !important;
 	 min-height: 100%;

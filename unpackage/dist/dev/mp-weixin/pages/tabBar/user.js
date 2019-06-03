@@ -765,7 +765,7 @@ var render = function() {
           attrs: { eventid: "09ce8447-1" },
           on: {
             tap: function($event) {
-              _vm.linkTo("/pages/user/vip/vip")
+              _vm.linkTo("/pages/user/vip")
             }
           }
         },
@@ -855,7 +855,7 @@ var render = function() {
               },
               on: {
                 handleFn: function($event) {
-                  _vm.linkTo("/pages/user/tokencard/tokencard")
+                  _vm.linkTo("/pages/user/tokencard")
                 }
               }
             },
@@ -880,7 +880,7 @@ var render = function() {
               },
               on: {
                 handleFn: function($event) {
-                  _vm.linkTo("/pages/user/aboutme/aboutme")
+                  _vm.linkTo("/pages/user/aboutme")
                 }
               }
             },

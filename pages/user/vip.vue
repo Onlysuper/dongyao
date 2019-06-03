@@ -27,7 +27,7 @@
 						{{myMember.memberType}}{{myMember.discount}}卡
 					</view>
 					<view class="m-describe">
-						<image style="width:59upx;height:59upx;margin-right: 10upx;" src="../../../static/img/icon/me_icon_VIP.png" mode="aspectFit"></image>
+						<image style="width:59upx;height:59upx;margin-right: 10upx;" src="../../static/img/icon/me_icon_VIP.png" mode="aspectFit"></image>
 						{{myMember.memberSynopsis}}
 					</view>
 				</view>
@@ -198,11 +198,11 @@
 </script>
 
 <style lang="scss">
-@import "../../../common/globel.scss";
+@import "../../common/globel.scss";
 .m-myvip-page{
 	.m-header{
 		width: 100%;
-		background: url("../../../static/img/me_bg_top.png") no-repeat top left;
+		background: url("../../static/img/me_bg_top.png") no-repeat top left;
 		background-size: 100% 350upx;
 		padding-top: 40upx;
 		margin-bottom: 20upx;

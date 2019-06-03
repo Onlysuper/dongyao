@@ -7328,12 +7328,6 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 
 
 
-
-
-
-
-
-
 {
   name: "m-token-card",
   props: {
@@ -8761,7 +8755,12 @@ var render = function() {
             ],
             staticClass: "m-describe"
           },
-          [_c("view", {}, [_vm._v(_vm._s(_vm.describe))])]
+          [
+            _c("rich-text", {
+              attrs: { nodes: _vm.describe, mpcomid: "19451e9a-0" }
+            })
+          ],
+          1
         )
       ])
     ]

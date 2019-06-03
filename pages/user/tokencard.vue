@@ -8,8 +8,8 @@
 		<view v-else class="">
 			 <m-token-card  v-for="(item) in coupons" :key="item.id" :id="item.id"
 			 state="normal" :days="item.dueTime" :price="item.price" :name="item.name" :describe="item.rule"
-			 downimg1="../../../static/img/icon/home_icon_down1.png"
-			 downimg2="../../../static/img/icon/home_icon_down1.png"
+			 downimg1="../../static/img/icon/home_icon_down1.png"
+			 downimg2="../../static/img/icon/home_icon_down1.png"
 			 ></m-token-card>
 			 <uni-load-more :status="mloading"></uni-load-more> 
 		</view>
@@ -27,7 +27,7 @@
 		data() {
 			return {
 				mloading:'more',
-				tabActive:1,
+				tabActive:0,
 				tabList:[
 					{
 						label:"未使用",
@@ -109,7 +109,7 @@
 </script>
 
 <style lang="scss">
-@import "../../../common/globel.scss";
+@import "../../common/globel.scss";
 .m-tokencard{
 	.fixedit{
 		background:#fff;
