@@ -96,6 +96,17 @@
 				})
 			}
 		},
+		// 加载更多
+		onReachBottom(){
+			this.mloading='loading';
+			this.getProducts();
+		},
+		// 重置分页及数据
+		onPullDownRefresh(){
+			page = 1;
+			this.nearStoreList = [];
+			this.getProducts();
+		},
 		onLoad(option){
 			this.search=option.search;
 			page = 1;

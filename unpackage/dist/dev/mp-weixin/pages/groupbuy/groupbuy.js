@@ -282,7 +282,8 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
     goStore: function goStore() {
       this.$emit("goStore", {
         storeid: this.storeid,
-        typeid: this.typeid });
+        typeid: this.typeid,
+        productid: this.productid });
 
 
     } } };exports.default = _default;
@@ -298,7 +299,6 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;
-
 
 
 
@@ -369,9 +369,9 @@ var _uniLoadMore = _interopRequireDefault(__webpack_require__(/*! @/components/u
       });
     },
     //跳转到商家
-    goStore: function goStore(data) {
+    goStore: function goStore(res) {
       uni.navigateTo({
-        url: "/pages/store/store?storeid=" + data.storeid + "&typeid=" + data.typeid });
+        url: "/pages/product/product?id=" + res.productid });
 
     } },
 
@@ -510,7 +510,7 @@ var render = function() {
     { staticClass: "m-groupbuy-page" },
     [
       _vm._m(0),
-      _vm.nearStoreList.length == 0
+      _vm.groupsellList.length == 0
         ? _c("m-empty", { attrs: { mpcomid: "02fe9a1a-1" } })
         : _c(
             "view",

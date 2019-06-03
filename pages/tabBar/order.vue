@@ -167,15 +167,16 @@
 				this.getOrders();
 			}
 		},
-		// 加载更多
-		onReachBottom(){
-			this.mloading='loading';
-			this.getOrders();
-		},
+	
 		onLoad(option){
 			this.tabActive=uni.getStorageSync('orderTab')|| 1;
 			this.checkLogin();
 		
+		},
+		// 加载更多
+		onReachBottom(){
+			this.mloading='loading';
+			this.getOrders();
 		},
 		// 重置分页及数据
 		onPullDownRefresh(){

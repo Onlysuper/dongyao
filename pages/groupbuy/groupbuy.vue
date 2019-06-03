@@ -1,10 +1,9 @@
 <template>
 	<view  class="m-groupbuy-page">
-		
 		<view  class="m-page-title">
 			<image style="width:148upx;height:46upx;" src="../../static/img/icon/purchase_icon_title.png" mode="aspectFit"></image>
 		</view>
-		<m-empty v-if="nearStoreList.length==0"></m-empty>
+		<m-empty v-if="groupsellList.length==0"></m-empty>
 		<view v-else class="">
 			<view  v-for="(item,index) in groupsellList" :key="index" class="m-list">
 				<m-groupbuy-list 
@@ -70,9 +69,9 @@
 				});
 			},
 			//跳转到商家
-			goStore(data){
+			goStore(res){
 				uni.navigateTo({
-					url:"/pages/store/store?storeid="+data.storeid+"&typeid="+data.typeid
+					url:"/pages/product/product?id="+res.productid
 				})
 			}
 		},

@@ -195,6 +195,17 @@ var page = 1,totalpage = 1;var _default =
       });
     } },
 
+  // 加载更多
+  onReachBottom: function onReachBottom() {
+    this.mloading = 'loading';
+    this.getTokencards();
+  },
+  // 重置分页及数据
+  onPullDownRefresh: function onPullDownRefresh() {
+    page = 1;
+    this.coupons = [];
+    this.getTokencards();
+  },
   onLoad: function onLoad() {
     page = 1;
     this.coupons = [];

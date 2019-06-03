@@ -938,8 +938,6 @@ var _mHomeStore = _interopRequireDefault(__webpack_require__(/*! @/components/m-
     },
     // 点击拼团图片
     groupProDetail: function groupProDetail(item) {
-      // console.log(item);
-      // return fales;
       this.linkTo("/pages/product/product?id=" + item.id);
     },
     //点击门店图片

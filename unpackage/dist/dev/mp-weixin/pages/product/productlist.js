@@ -395,6 +395,17 @@ var _mEmpty = _interopRequireDefault(__webpack_require__(/*! @/components/m-resu
       });
     } },
 
+  // 加载更多
+  onReachBottom: function onReachBottom() {
+    this.mloading = 'loading';
+    this.getProducts();
+  },
+  // 重置分页及数据
+  onPullDownRefresh: function onPullDownRefresh() {
+    page = 1;
+    this.nearStoreList = [];
+    this.getProducts();
+  },
   onLoad: function onLoad(option) {
     this.search = option.search;
     page = 1;

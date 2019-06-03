@@ -691,15 +691,16 @@ var page = 1,totalpage = 1;var _default =
       this.getOrders();
     } },
 
-  // 加载更多
-  onReachBottom: function onReachBottom() {
-    this.mloading = 'loading';
-    this.getOrders();
-  },
+
   onLoad: function onLoad(option) {
     this.tabActive = uni.getStorageSync('orderTab') || 1;
     this.checkLogin();
 
+  },
+  // 加载更多
+  onReachBottom: function onReachBottom() {
+    this.mloading = 'loading';
+    this.getOrders();
   },
   // 重置分页及数据
   onPullDownRefresh: function onPullDownRefresh() {

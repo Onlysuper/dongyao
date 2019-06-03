@@ -77,7 +77,8 @@
 			goStore(){
 				this.$emit("goStore",{
 					storeid:this.storeid,
-					typeid:this.typeid
+					typeid:this.typeid,
+					productid:this.productid
 					
 				});
 			}

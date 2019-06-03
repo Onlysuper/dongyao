@@ -67,10 +67,10 @@
 				}).then(res=>{
 					let data = res.data;
 					if(data.coupons){
-							totalpage=data.pages|| 1;
-							var newsList = data.orders;
-							_this.coupons = _this.coupons.concat(newsList);
-							page++;	
+						totalpage=data.pages|| 1;
+						var newsList = data.orders;
+						_this.coupons = _this.coupons.concat(newsList);
+						page++;	
 					}
 					uni.hideLoading();
 					uni.stopPullDownRefresh();
@@ -79,6 +79,17 @@
 					uni.stopPullDownRefresh();
 				});
 			},
+		},
+		// 加载更多
+		onReachBottom(){
+			this.mloading='loading';
+			this.getTokencards();
+		},
+		// 重置分页及数据
+		onPullDownRefresh(){
+			page = 1;
+			this.coupons = [];
+			this.getTokencards();
 		},
 		onLoad(){
 			page = 1;
