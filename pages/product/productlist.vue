@@ -1,56 +1,31 @@
 <template> 
 	<view  class="m-product-list">
-		<view  v-for="(item,index) in nearStoreList" @click="goPro(item.id)" :key="index">
-			<view class="m-page-title">
-				{{item.sName}}
+		<m-empty v-if="nearStoreList.length==0"></m-empty>
+		<view v-else class="">
+			<view v-for="(item,index) in nearStoreList" @click="goPro(item.id)" :key="index">
+				<view class="m-page-title">
+					{{item.sName}}
+				</view>
+				<m-product-list
+				:title="item.synopsis" 
+				:labelName="item.labelName" 
+				:img="item.pictureUrl" 
+				:price="item.presentPrice" 
+				:oldpric="item.originalPrice"
+				:isAssemble="item.isAssemble"
+				></m-product-list>
 			</view>
-			<m-groupbuy-list
-			:title="item.synopsis" 
-			:labelName="item.labelName" 
-			:img="item.pictureUrl" 
-			:price="item.presentPrice" 
-			:oldpric="item.originalPrice"
-			:isAssemble="item.isAssemble"
-			></m-groupbuy-list>
-		<!-- 	title:{
-				type:[String,Number],
-				default:""
-			},
-			topbut:{
-				type:[String,Number],
-				default:""
-			},
-			img:{
-				type:[String,Number],
-				default:""
-			},
-			proname:{
-				type:[String,Number],
-				default:""
-			},
-			extrctime:{
-				type:[String,Number],
-				default:""
-			},
-			describe:{
-				type:[String,Number],
-				default:""
-			},
-			price:{
-				type:[String,Number],
-				default:""
-			},
-			num:{
-				type:[String,Number],
-				default:""
-			} -->
 		</view>
 	</view>
 </template>
 <script>
-	import mGroupbuyList from '@/components/m-groupbuy-list'
-	
+	import mProductList from '@/components/m-product-list'
+	import mEmpty from "@/components/m-result/m-empty.vue";
 	export default {
+		components: {
+			mProductList,
+			mEmpty
+		},
 		data() {
 			return {
 				// 附近门店
@@ -79,20 +54,21 @@
 		},
 		
 		methods:{
-				//跳转到商品详情
-				goPro(id){
-					console.log(id);
-					uni.navigateTo({
-						url:"/pages/product/product?id="+id
-					})
-				}
+			//跳转到商品详情
+			goPro(id){
+				console.log(id);
+				uni.navigateTo({
+					url:"/pages/product/product?id="+id
+				})
+			}
 		},
 		onLoad(option){
 			let search=option.search;
+			console.log(search);
 			this.mPost("/server/p/search/products",{
 				start:0,
 				length:20,
-				name:this.search,
+				name:search,
 			}).then(res=>{
 				if(res.code=='1'){
 					if(res.data&&res.data.list){
@@ -101,10 +77,8 @@
 				}
 				console.log(res);
 			})
-		},
-		components: {
-			mGroupbuyList
-		},
+		}
+		
 	}
 </script>
 <style lang="scss">

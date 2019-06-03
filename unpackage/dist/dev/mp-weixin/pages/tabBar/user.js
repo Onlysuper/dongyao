@@ -538,6 +538,13 @@ var _event = _interopRequireDefault(__webpack_require__(/*! ../../common/event.j
                 this.isLogin = islogin;
                 if (islogin) {
                   this.userData = JSON.parse(uni.getStorageSync('userData'));
+                  if (!this.userData.avatarUrl) {
+                    this.$set(this.userData, 'avatarUrl', this.userData.headAddress || '');
+                  }
+                  if (!this.userData.nickName) {
+                    this.$set(this.userData, 'nickName', this.userData.nickname || '');
+                  }
+
                 }case 5:case "end":return _context.stop();}}}, _callee, this);}));function checkLogin() {return _checkLogin.apply(this, arguments);}return checkLogin;}() },
 
 

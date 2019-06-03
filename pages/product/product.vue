@@ -36,8 +36,7 @@
 				</view>
 			</view>
 			<view class="btn">
-				<view class="joinCart" @tap="pintuan">我要拼</view>
-				<!-- <view class="joinCart" @tap="joinCart">我要拼</view> -->
+				<view v-if="isAssemble" class="joinCart" @tap="pintuan">我要拼</view>
 				<view class="buy" @tap="buy">立即购买</view>
 			</view>
 		</view>

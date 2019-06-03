@@ -56,7 +56,7 @@
 		},
 		methods:{
 			chooseVip(){
-				this.$emit('chooseVip',{id:this.id,describes:this.describes})
+				this.$emit('chooseVip',{id:this.id,describes:this.describes,synopsis:this.synopsis})
 			}
 		}
 	}

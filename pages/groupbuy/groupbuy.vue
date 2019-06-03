@@ -1,5 +1,6 @@
 <template>
 	<view  class="m-groupbuy-page">
+		拼团页面
 		<view  class="m-page-title">
 			<image style="width:148upx;height:46upx;" src="../../static/img/icon/purchase_icon_title.png" mode="aspectFit"></image>
 		</view>

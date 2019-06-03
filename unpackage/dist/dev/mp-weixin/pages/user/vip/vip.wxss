@@ -242,6 +242,10 @@
         background: #e9e9e9;
         width: 200rpx;
 }
+.m-myvip-page .m-main .m-card-describe .m-content {
+      color: #4c4c4c;
+      font-size: 24rpx;
+}
 .m-myvip-page .m-main .m-card-describe .m-list {
       position: relative;
       padding-left: 30rpx;

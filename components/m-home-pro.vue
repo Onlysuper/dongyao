@@ -58,6 +58,7 @@
 	margin-top: 2px;
 	box-sizing: border-box;
 	position: relative;
+	border-radius: 30upx;
 	::before{
 		content: "";
 		display: block;
@@ -67,8 +68,9 @@
 		top: 1px;
 		bottom: 1px;
 		box-sizing: border-box;
-		box-shadow: 0px 0px 3px rgba(235,235,235,0.4);
+		box-shadow: 0px 1px 3px rgba(241,241,241,0.6);
 		z-index: -1;
+		border-radius: 12upx;
 	}
 	
 	&:last-of-type{

@@ -261,7 +261,7 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
   },
   methods: {
     chooseVip: function chooseVip() {
-      this.$emit('chooseVip', { id: this.id, describes: this.describes });
+      this.$emit('chooseVip', { id: this.id, describes: this.describes, synopsis: this.synopsis });
     } } };exports.default = _default;
 
 /***/ }),
@@ -275,8 +275,6 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;
-
-
 
 
 
@@ -349,6 +347,7 @@ var _mVipCard = _interopRequireDefault(__webpack_require__(/*! @/components/m-vi
 
       members: [],
       userData: {},
+      vipName: "",
       vipDescribes: "" //会员卡权益
     };
   },
@@ -367,8 +366,9 @@ var _mVipCard = _interopRequireDefault(__webpack_require__(/*! @/components/m-vi
     },
     // 选择会员卡
     chooseVip: function chooseVip(res) {
-      console.log('选择会员卡' + res);
+      // console.log(res);
       this.chooseVipId = res.id,
+      this.vieName = res.synopsis;
       this.vipDescribes = res.describes;
     },
     changeType: function changeType(memberType) {
@@ -691,30 +691,28 @@ var render = function() {
           [_vm._v("立即续费/购买")]
         ),
         _c("view", { staticClass: "m-card-describe" }, [
-          _vm._m(0),
-          _c("view", { staticClass: "m-content" }, [
-            _c("view", { staticClass: "m-list" }, [
-              _vm._v(_vm._s(_vm.vipDescribes))
-            ])
-          ])
+          _c("view", { staticClass: "m-title" }, [
+            _c("view", { staticClass: "line" }),
+            _vm._v(_vm._s(_vm.vieName) + "介绍"),
+            _c("view", { staticClass: "line" })
+          ]),
+          _c(
+            "view",
+            { staticClass: "m-content" },
+            [
+              _c("rich-text", {
+                attrs: { nodes: _vm.vipDescribes, mpcomid: "45ab7cfc-2" }
+              })
+            ],
+            1
+          )
         ])
       ],
       2
     )
   ])
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("view", { staticClass: "m-title" }, [
-      _c("view", { staticClass: "line" }),
-      _vm._v("月卡介绍"),
-      _c("view", { staticClass: "line" })
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 

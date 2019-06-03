@@ -70,8 +70,9 @@
 		top: 1px;
 		bottom: 1px;
 		box-sizing: border-box;
-		box-shadow: 0px 1px 3px rgba(235,235,235,0.4);
+		box-shadow: 0px 1px 3px rgba(241,241,241,0.6);
 		z-index: -1;
+		border-radius: 12upx;
 		// box-shadow: 0px 1px 3px rgba(247,247,247,1);
 	}
 	.m-img{

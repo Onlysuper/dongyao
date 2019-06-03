@@ -138,19 +138,19 @@ var _mTokenCard = _interopRequireDefault(__webpack_require__(/*! @/components/m-
 {
   data: function data() {
     return {
-      tabActive: "1",
+      tabActive: 1,
       tabList: [
       {
         label: "未使用",
-        id: "0" },
+        id: 0 },
 
       {
         label: "已使用",
-        id: "1" },
+        id: 1 },
 
       {
         label: "已失效",
-        id: "2" }],
+        id: 2 }],
 
 
       coupons: [] };

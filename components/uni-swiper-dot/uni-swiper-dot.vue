@@ -64,8 +64,8 @@
 					color: '#fff',
 					backgroundColor: 'rgba(255, 255, 255, .3)',
 					border: '1px rgba(0, 0, 0, .3) solid',
-					selectedBackgroundColor: 'rgba(255, 255, 255,0.5)',
-					selectedBorder: '1px rgba(78, 184, 125, .9) solid'
+					selectedBackgroundColor: '#e5e5e5',
+					selectedBorder: '1px rgba(255, 255, 255, 0) solid'
 				}
 			};
 		},

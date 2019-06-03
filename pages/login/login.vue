@@ -52,10 +52,12 @@
 							if(res.data){
 								let data = res.data;
 								if(data.isRegister){
+									let saveData = data;
 									_this.needAllow=false;
 									// 	储存用户信息
-									uni.setStorageSync('userData', JSON.stringify(data.userInfo));
-									uni.setStorageSync('phone',  data.userInfo.mobile);
+									// saveData.avatarUrl=data.headAddress||"";
+									uni.setStorageSync('userData', JSON.stringify(saveData.userInfo));
+									uni.setStorageSync('phone',  saveData.userInfo.mobile);
 									uni.showToast({
 										title: "授权成功",
 										icon: "none"
@@ -66,7 +68,7 @@
 										});
 									},1300)
 								}
-								uni.setStorageSync('Authorization', data.authToken);
+								uni.setStorageSync('Authorization', saveData.authToken);
 							}
 							uni.hideLoading();
 						}).catch(err=>{

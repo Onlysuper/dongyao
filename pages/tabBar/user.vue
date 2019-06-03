@@ -134,6 +134,13 @@
 				this.isLogin = islogin;
 				if(islogin){
 					this.userData = JSON.parse(uni.getStorageSync('userData'));
+					if(!this.userData.avatarUrl){
+						this.$set(this.userData,'avatarUrl',this.userData.headAddress||'')
+					}
+					if(!this.userData.nickName){
+						this.$set(this.userData,'nickName',this.userData.nickname||'')
+					}
+					
 				}
 			}
 		},

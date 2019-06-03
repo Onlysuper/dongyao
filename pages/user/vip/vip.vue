@@ -41,12 +41,10 @@
 			<view class="m-button" @tap="buyVipFn">立即续费/购买</view>
 			<view class="m-card-describe">
 				<view class="m-title">
-					<view class="line"></view>月卡介绍<view class="line"></view>
+					<view class="line"></view>{{vieName}}介绍<view class="line"></view>
 				</view>
 				<view class="m-content">
-					<view class="m-list">
-						{{vipDescribes}}
-					</view>
+					<rich-text :nodes="vipDescribes"></rich-text>
 				</view>
 			</view>
 		</view>
@@ -73,6 +71,7 @@
 				},
 				members:[],
 				userData:{},
+				vipName:"",
 				vipDescribes:"" //会员卡权益
 			};
 		},
@@ -91,8 +90,9 @@
 			},
 			// 选择会员卡
 			chooseVip(res){
-				console.log('选择会员卡'+res);
+				// console.log(res);
 				this.chooseVipId=res.id,
+				this.vieName=res.synopsis;
 				this.vipDescribes=res.describes;
 			},
 			changeType(memberType){
@@ -301,6 +301,10 @@
 					background:$color-border3;
 					width: 200upx;
 				}
+			}
+			.m-content{
+				color:$color-5;
+				font-size: $fontsize-5;
 			}
 			.m-list{
 				position: relative;
