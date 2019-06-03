@@ -14,7 +14,7 @@
 								{{storeData.name}}
 							</view>
 							<view class="m-text">
-								{{storeData.notice}}
+								公告：{{storeData.notice}}
 							</view>
 							<view class="m-time">
 								营业：{{storeData.businessHours}}
@@ -639,11 +639,13 @@
 					display: flex;
 					flex-direction: row;
 					justify-content: space-between;
-					align-items: center;
+					align-items: flex-end;
 					.m-img{
 						flex:0 0 140upx;
 						height: 140upx;
 						background:#eee;
+						border-radius: 8upx;
+						overflow: hidden;
 					}
 					.m-body{
 						flex: 1;
@@ -656,7 +658,8 @@
 							flex: 1;
 							.m-title{
 								font-size: 32upx;
-								color:#333333
+								color:#333333;
+								font-weight: bold;
 							}
 							.m-text{
 								font-size: 20upx;

@@ -1,28 +1,32 @@
 <template>
 	<view  class="m-groupbuy-page">
-		拼团页面
+		
 		<view  class="m-page-title">
 			<image style="width:148upx;height:46upx;" src="../../static/img/icon/purchase_icon_title.png" mode="aspectFit"></image>
 		</view>
-		<view  v-for="(item,index) in groupsellList" :key="index" class="m-list">
-			<m-groupbuy-list 
-			@goStore="goStore"
-			:storeid="item.storeId"
-			:typeid="item.typeId"
-			:productid="item.id"
-			:title="item.synopsis" 
-			:labelName="item.labelName" 
-			:img="item.pictureUrl" 
-			:price="item.presentPrice" 
-			:oldpric="item.originalPrice"
-			:isAssemble="item.isAssemble">
-			</m-groupbuy-list>
+		<m-empty v-if="nearStoreList.length==0"></m-empty>
+		<view v-else class="">
+			<view  v-for="(item,index) in groupsellList" :key="index" class="m-list">
+				<m-groupbuy-list 
+				@goStore="goStore"
+				:storeid="item.storeId"
+				:typeid="item.typeId"
+				:productid="item.id"
+				:title="item.synopsis" 
+				:labelName="item.labelName" 
+				:img="item.pictureUrl" 
+				:price="item.presentPrice" 
+				:oldpric="item.originalPrice"
+				:isAssemble="item.isAssemble">
+				</m-groupbuy-list>
+			</view>
 		</view>
 		 <uni-load-more :status="mloading"></uni-load-more>
 	</view>
 </template>
 <script>
 	var page = 0,totalpage=0;
+	import mEmpty from "@/components/m-result/m-empty.vue";
 	import mGroupbuyList from '@/components/m-groupbuy-list'
 	import uniLoadMore from "@/components/uni-load-more/uni-load-more.vue";
 	export default {
@@ -35,7 +39,8 @@
 		},
 		components: {
 			mGroupbuyList,
-			uniLoadMore
+			uniLoadMore,
+			mEmpty
 		},
 		methods:{
 			getGroupsellList(){

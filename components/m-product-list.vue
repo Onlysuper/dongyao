@@ -112,7 +112,7 @@
 			width:100upx;
 			left: 50%;
 			margin-left:-50upx;
-			border-radius: 5upx;
+			border-radius: 8upx;
 		}
 	}
 	.m-text{

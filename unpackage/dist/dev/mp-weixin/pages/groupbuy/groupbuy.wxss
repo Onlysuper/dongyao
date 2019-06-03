@@ -69,7 +69,7 @@
       width: 100rpx;
       left: 50%;
       margin-left: -50rpx;
-      border-radius: 5rpx;
+      border-radius: 8rpx;
 }
 .m-groupbuy-list .m-text {
     -webkit-box-flex: 1;

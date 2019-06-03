@@ -78,6 +78,12 @@
 		methods:{
 			getUser(){
 				this.userData = JSON.parse(uni.getStorageSync('userData'));
+				if(!this.userData.avatarUrl){
+					this.$set(this.userData,'avatarUrl',this.userData.headAddress||'')
+				}
+				if(!this.userData.nickName){
+					this.$set(this.userData,'nickName',this.userData.nickname||'')
+				}
 			},
 			// 会员列表
 			getVips(){

@@ -148,7 +148,7 @@
 						if(data.orders){
 							totalpage=data.pages|| 1;
 							var newsList = data.orders;
-							this.orderList = this.orderList.concat(newsList);
+							_this.orderList = _this.orderList.concat(newsList);
 							page++;
 						}
 					}

@@ -322,6 +322,10 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 
 
 
+
+
+
+var _mEmpty = _interopRequireDefault(__webpack_require__(/*! @/components/m-result/m-empty.vue */ "../../../../../../Users/apple/opt/DONGYAO/components/m-result/m-empty.vue"));
 var _mGroupbuyList = _interopRequireDefault(__webpack_require__(/*! @/components/m-groupbuy-list */ "../../../../../../Users/apple/opt/DONGYAO/components/m-groupbuy-list.vue"));
 var _uniLoadMore = _interopRequireDefault(__webpack_require__(/*! @/components/uni-load-more/uni-load-more.vue */ "../../../../../../Users/apple/opt/DONGYAO/components/uni-load-more/uni-load-more.vue"));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}var page = 0,totalpage = 0;var _default =
 {
@@ -334,7 +338,8 @@ var _uniLoadMore = _interopRequireDefault(__webpack_require__(/*! @/components/u
   },
   components: {
     mGroupbuyList: _mGroupbuyList.default,
-    uniLoadMore: _uniLoadMore.default },
+    uniLoadMore: _uniLoadMore.default,
+    mEmpty: _mEmpty.default },
 
   methods: {
     getGroupsellList: function getGroupsellList() {var _this = this;
@@ -504,38 +509,43 @@ var render = function() {
     "view",
     { staticClass: "m-groupbuy-page" },
     [
-      _vm._v("拼团页面"),
       _vm._m(0),
-      _vm._l(_vm.groupsellList, function(item, index) {
-        return _c(
-          "view",
-          { key: index, staticClass: "m-list" },
-          [
-            _c("m-groupbuy-list", {
-              attrs: {
-                storeid: item.storeId,
-                typeid: item.typeId,
-                productid: item.id,
-                title: item.synopsis,
-                labelName: item.labelName,
-                img: item.pictureUrl,
-                price: item.presentPrice,
-                oldpric: item.originalPrice,
-                isAssemble: item.isAssemble,
-                eventid: "02fe9a1a-0-" + index,
-                mpcomid: "02fe9a1a-0-" + index
-              },
-              on: { goStore: _vm.goStore }
+      _vm.nearStoreList.length == 0
+        ? _c("m-empty", { attrs: { mpcomid: "02fe9a1a-1" } })
+        : _c(
+            "view",
+            {},
+            _vm._l(_vm.groupsellList, function(item, index) {
+              return _c(
+                "view",
+                { key: index, staticClass: "m-list" },
+                [
+                  _c("m-groupbuy-list", {
+                    attrs: {
+                      storeid: item.storeId,
+                      typeid: item.typeId,
+                      productid: item.id,
+                      title: item.synopsis,
+                      labelName: item.labelName,
+                      img: item.pictureUrl,
+                      price: item.presentPrice,
+                      oldpric: item.originalPrice,
+                      isAssemble: item.isAssemble,
+                      eventid: "02fe9a1a-0-" + index,
+                      mpcomid: "02fe9a1a-0-" + index
+                    },
+                    on: { goStore: _vm.goStore }
+                  })
+                ],
+                1
+              )
             })
-          ],
-          1
-        )
-      }),
+          ),
       _c("uni-load-more", {
-        attrs: { status: _vm.mloading, mpcomid: "02fe9a1a-1" }
+        attrs: { status: _vm.mloading, mpcomid: "02fe9a1a-2" }
       })
     ],
-    2
+    1
   )
 }
 var staticRenderFns = [

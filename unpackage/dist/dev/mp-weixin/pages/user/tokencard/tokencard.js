@@ -113,7 +113,7 @@ __webpack_require__.r(__webpack_exports__);
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;
+/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;
 
 
 
@@ -129,15 +129,14 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 
 
 
-
-
-
-
+var _uniLoadMore = _interopRequireDefault(__webpack_require__(/*! @/components/uni-load-more/uni-load-more.vue */ "../../../../../../Users/apple/opt/DONGYAO/components/uni-load-more/uni-load-more.vue"));
 var _mTab = _interopRequireDefault(__webpack_require__(/*! @/components/m-tab.vue */ "../../../../../../Users/apple/opt/DONGYAO/components/m-tab.vue"));
-var _mTokenCard = _interopRequireDefault(__webpack_require__(/*! @/components/m-token-card.vue */ "../../../../../../Users/apple/opt/DONGYAO/components/m-token-card.vue"));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}var _default =
+var _mTokenCard = _interopRequireDefault(__webpack_require__(/*! @/components/m-token-card.vue */ "../../../../../../Users/apple/opt/DONGYAO/components/m-token-card.vue"));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}
+var page = 1,totalpage = 1;var _default =
 {
   data: function data() {
     return {
+      mloading: 'more',
       tabActive: 1,
       tabList: [
       {
@@ -169,20 +168,39 @@ var _mTokenCard = _interopRequireDefault(__webpack_require__(/*! @/components/m-
     // 获取订单
     getTokencards: function getTokencards(type) {
       var _this = this;
+      uni.showLoading({});
+      if (totalpage && page > totalpage) {
+        _this.mloading = 'noMore';
+        uni.hideLoading();
+        uni.stopPullDownRefresh();
+        return;
+      }
       this.mPost('/server/co/myCoupons', {
         type: type,
-        start: 1,
-        length: 1000 }).
+        start: page,
+        length: 20 }).
       then(function (res) {
-        _this.coupons = res.data.coupons;
+        var data = res.data;
+        if (data.coupons) {
+          totalpage = data.pages || 1;
+          var newsList = data.orders;
+          _this.coupons = _this.coupons.concat(newsList);
+          page++;
+        }
+        uni.hideLoading();
+        uni.stopPullDownRefresh();
       }).catch(function (err) {
-        console.log(err);
+        uni.hideLoading();
+        uni.stopPullDownRefresh();
       });
     } },
 
   onLoad: function onLoad() {
+    page = 1;
+    this.coupons = [];
     this.getTokencards(0);
   } };exports.default = _default;
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ "./node_modules/@dcloudio/uni-mp-weixin/dist/index.js")["default"]))
 
 /***/ }),
 
@@ -249,9 +267,9 @@ var render = function() {
           }
         })
       }),
-      _c("view", { staticClass: "m-token-footer" }, [
-        _vm._v("以上为全部可用优惠券")
-      ])
+      _c("uni-load-more", {
+        attrs: { status: _vm.mloading, mpcomid: "79057a58-2" }
+      })
     ],
     2
   )

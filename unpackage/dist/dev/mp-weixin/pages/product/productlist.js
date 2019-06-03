@@ -318,15 +318,21 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 
 
 
+
+
+var _uniLoadMore = _interopRequireDefault(__webpack_require__(/*! @/components/uni-load-more/uni-load-more.vue */ "../../../../../../Users/apple/opt/DONGYAO/components/uni-load-more/uni-load-more.vue"));
 var _mProductList = _interopRequireDefault(__webpack_require__(/*! @/components/m-product-list */ "../../../../../../Users/apple/opt/DONGYAO/components/m-product-list.vue"));
-var _mEmpty = _interopRequireDefault(__webpack_require__(/*! @/components/m-result/m-empty.vue */ "../../../../../../Users/apple/opt/DONGYAO/components/m-result/m-empty.vue"));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}var _default =
+var _mEmpty = _interopRequireDefault(__webpack_require__(/*! @/components/m-result/m-empty.vue */ "../../../../../../Users/apple/opt/DONGYAO/components/m-result/m-empty.vue"));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}var page = 1,totalpage = 1;var _default =
 {
   components: {
     mProductList: _mProductList.default,
-    mEmpty: _mEmpty.default },
+    mEmpty: _mEmpty.default,
+    uniLoadMore: _uniLoadMore.default },
 
   data: function data() {
     return {
+      mloading: 'more',
+      search: "",
       // 附近门店
       nearStoreList: [{
         img: "../../static/img/2.jpg",
@@ -359,23 +365,41 @@ var _mEmpty = _interopRequireDefault(__webpack_require__(/*! @/components/m-resu
       uni.navigateTo({
         url: "/pages/product/product?id=" + id });
 
+    },
+    getProducts: function getProducts() {
+      var _this = this;
+      uni.showLoading({});
+      if (totalpage && page > totalpage) {
+        _this.mloading = 'noMore';
+        uni.hideLoading();
+        uni.stopPullDownRefresh();
+        return;
+      }
+      this.mPost("/server/p/search/products", {
+        start: page,
+        length: 20,
+        name: _this.search }).
+      then(function (res) {
+        var data = res.data;
+        if (data.list) {
+          totalpage = data.pages || 1;
+          var newsList = data.list;
+          _this.nearStoreList = _this.nearStoreList.concat(newsList);
+          page++;
+        }
+        uni.hideLoading();
+        uni.stopPullDownRefresh();
+      }).catch(function (err) {
+        uni.hideLoading();
+        uni.stopPullDownRefresh();
+      });
     } },
 
-  onLoad: function onLoad(option) {var _this = this;
-    var search = option.search;
-    console.log(search);
-    this.mPost("/server/p/search/products", {
-      start: 0,
-      length: 20,
-      name: search }).
-    then(function (res) {
-      if (res.code == '1') {
-        if (res.data && res.data.list) {
-          _this.nearStoreList = res.data.list;
-        }
-      }
-      console.log(res);
-    });
+  onLoad: function onLoad(option) {
+    this.search = option.search;
+    page = 1;
+    this.nearStoreList = [];
+    this.getProducts();
   } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ "./node_modules/@dcloudio/uni-mp-weixin/dist/index.js")["default"]))
 
@@ -515,7 +539,10 @@ var render = function() {
                 1
               )
             })
-          )
+          ),
+      _c("uni-load-more", {
+        attrs: { status: _vm.mloading, mpcomid: "043cc190-2" }
+      })
     ],
     1
   )

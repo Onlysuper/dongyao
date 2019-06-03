@@ -9,20 +9,19 @@
 		  downimg1="../../../static/img/icon/home_icon_down1.png"
 		  downimg2="../../../static/img/icon/home_icon_down1.png"
 		  ></m-token-card>
-		<!-- <m-token-card state="history"></m-token-card>
-		<m-token-card state="lost"></m-token-card> -->
-		<view class="m-token-footer">
-			以上为全部可用优惠券
-		</view>
+		 <uni-load-more :status="mloading"></uni-load-more> 
 	</view>
 </template>
 
 <script>
+	import uniLoadMore from "@/components/uni-load-more/uni-load-more.vue";
 	import mTab from "@/components/m-tab.vue";
 	import mTokenCard from "@/components/m-token-card.vue";
+	var page = 1,totalpage=1;
 	export default {
 		data() {
 			return {
+				mloading:'more',
 				tabActive:1,
 				tabList:[
 					{
@@ -54,18 +53,36 @@
 			// 获取订单
 			getTokencards(type){
 				let _this = this;
+				uni.showLoading({});
+				if(totalpage&&page > totalpage){
+					_this.mloading='noMore';
+					uni.hideLoading();
+					uni.stopPullDownRefresh();
+					return ;
+				}
 				this.mPost('/server/co/myCoupons',{
 					type:type,
-					start:1,
-					length:1000
+					start:page,
+					length:20
 				}).then(res=>{
-					_this.coupons=res.data.coupons;
+					let data = res.data;
+					if(data.coupons){
+							totalpage=data.pages|| 1;
+							var newsList = data.orders;
+							_this.coupons = _this.coupons.concat(newsList);
+							page++;	
+					}
+					uni.hideLoading();
+					uni.stopPullDownRefresh();
 				}).catch(err=>{
-					console.log(err);
+					uni.hideLoading();
+					uni.stopPullDownRefresh();
 				});
 			},
 		},
 		onLoad(){
+			page = 1;
+			this.coupons = [];
 			this.getTokencards(0)
 		}
 	}

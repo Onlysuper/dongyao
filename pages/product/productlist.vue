@@ -6,7 +6,7 @@
 				<view class="m-page-title">
 					{{item.sName}}
 				</view>
-				<m-product-list
+				<m-product-list 
 				:title="item.synopsis" 
 				:labelName="item.labelName" 
 				:img="item.pictureUrl" 
@@ -16,18 +16,24 @@
 				></m-product-list>
 			</view>
 		</view>
+		 <uni-load-more :status="mloading"></uni-load-more> 
 	</view>
 </template>
 <script>
+	var page = 1,totalpage=1;
+	import uniLoadMore from "@/components/uni-load-more/uni-load-more.vue";
 	import mProductList from '@/components/m-product-list'
 	import mEmpty from "@/components/m-result/m-empty.vue";
 	export default {
 		components: {
 			mProductList,
-			mEmpty
+			mEmpty,
+			uniLoadMore
 		},
 		data() {
 			return {
+				mloading:'more',
+				search:"",
 				// 附近门店
 				nearStoreList:[{
 					img:"../../static/img/2.jpg",
@@ -60,23 +66,41 @@
 				uni.navigateTo({
 					url:"/pages/product/product?id="+id
 				})
+			},
+			getProducts(){
+				let _this = this;
+				uni.showLoading({});
+				if(totalpage&&page > totalpage){
+					_this.mloading='noMore';
+					uni.hideLoading();
+					uni.stopPullDownRefresh();
+					return ;
+				}
+				this.mPost("/server/p/search/products",{
+					start:page,
+					length:20,
+					name:_this.search,
+				}).then(res=>{
+					let data = res.data;
+					if(data.list){
+							totalpage=data.pages|| 1;
+							var newsList = data.list;
+							_this.nearStoreList = _this.nearStoreList.concat(newsList);
+							page++;	
+					}
+					uni.hideLoading();
+					uni.stopPullDownRefresh();
+				}).catch(err=>{
+					uni.hideLoading();
+					uni.stopPullDownRefresh();
+				})
 			}
 		},
 		onLoad(option){
-			let search=option.search;
-			console.log(search);
-			this.mPost("/server/p/search/products",{
-				start:0,
-				length:20,
-				name:search,
-			}).then(res=>{
-				if(res.code=='1'){
-					if(res.data&&res.data.list){
-						this.nearStoreList=res.data.list;
-					}
-				}
-				console.log(res);
-			})
+			this.search=option.search;
+			page = 1;
+			this.nearStoreList = [];
+			this.getProducts();
 		}
 		
 	}

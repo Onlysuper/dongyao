@@ -544,7 +544,6 @@ var _event = _interopRequireDefault(__webpack_require__(/*! ../../common/event.j
                   if (!this.userData.nickName) {
                     this.$set(this.userData, 'nickName', this.userData.nickname || '');
                   }
-
                 }case 5:case "end":return _context.stop();}}}, _callee, this);}));function checkLogin() {return _checkLogin.apply(this, arguments);}return checkLogin;}() },
 
 

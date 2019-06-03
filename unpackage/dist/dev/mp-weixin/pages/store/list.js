@@ -283,8 +283,10 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 
 
 
-var _mStoreList = _interopRequireDefault(__webpack_require__(/*! @/components/m-store-list */ "../../../../../../Users/apple/opt/DONGYAO/components/m-store-list.vue"));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}var _default =
 
+
+var _mEmpty = _interopRequireDefault(__webpack_require__(/*! @/components/m-result/m-empty.vue */ "../../../../../../Users/apple/opt/DONGYAO/components/m-result/m-empty.vue"));
+var _mStoreList = _interopRequireDefault(__webpack_require__(/*! @/components/m-store-list */ "../../../../../../Users/apple/opt/DONGYAO/components/m-store-list.vue"));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}var _default =
 {
   data: function data() {
     return {
@@ -292,6 +294,10 @@ var _mStoreList = _interopRequireDefault(__webpack_require__(/*! @/components/m-
       nearStoreList: [] };
 
   },
+  components: {
+    mStoreList: _mStoreList.default,
+    mEmpty: _mEmpty.default },
+
   methods: {
     //跳转到商家
     goStore: function goStore(item) {
@@ -323,9 +329,7 @@ var _mStoreList = _interopRequireDefault(__webpack_require__(/*! @/components/m-
 
       } });
 
-  },
-  components: {
-    mStoreList: _mStoreList.default } };exports.default = _default;
+  } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ "./node_modules/@dcloudio/uni-mp-weixin/dist/index.js")["default"]))
 
 /***/ }),
@@ -405,33 +409,42 @@ var render = function() {
   return _c(
     "view",
     {},
-    _vm._l(_vm.nearStoreList, function(item, index) {
-      return _c("view", { key: index }, [
-        _c(
-          "view",
-          {
-            staticClass: "m-store-list",
-            attrs: { eventid: "5abb2661-0-" + index },
-            on: {
-              tap: function($event) {
-                _vm.goStore(item)
-              }
-            }
-          },
-          [
-            _c("m-store-list", {
-              attrs: {
-                title: item.name,
-                img: item.imgUrl,
-                address: item.address,
-                mpcomid: "5abb2661-0-" + index
-              }
+    [
+      _vm.nearStoreList.length == 0
+        ? _c("m-empty", { attrs: { mpcomid: "5abb2661-1" } })
+        : _c(
+            "view",
+            {},
+            _vm._l(_vm.nearStoreList, function(item, index) {
+              return _c("view", { key: index }, [
+                _c(
+                  "view",
+                  {
+                    staticClass: "m-store-list",
+                    attrs: { eventid: "5abb2661-0-" + index },
+                    on: {
+                      tap: function($event) {
+                        _vm.goStore(item)
+                      }
+                    }
+                  },
+                  [
+                    _c("m-store-list", {
+                      attrs: {
+                        title: item.name,
+                        img: item.imgUrl,
+                        address: item.address,
+                        mpcomid: "5abb2661-0-" + index
+                      }
+                    })
+                  ],
+                  1
+                )
+              ])
             })
-          ],
-          1
-        )
-      ])
-    })
+          )
+    ],
+    1
   )
 }
 var staticRenderFns = []

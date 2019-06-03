@@ -1,22 +1,28 @@
 <template>
 	<view class="">
-		<view v-for="(item,index) in nearStoreList" :key="index">
-			<view @tap="goStore(item)"  class="m-store-list">
-				<m-store-list  :title="item.name" :img="item.imgUrl" :address="item.address"></m-store-list>
+		<m-empty v-if="nearStoreList.length==0"></m-empty>
+		<view v-else class="">
+			<view v-for="(item,index) in nearStoreList" :key="index">
+				<view @tap="goStore(item)"  class="m-store-list">
+					<m-store-list  :title="item.name" :img="item.imgUrl" :address="item.address"></m-store-list>
+				</view>
 			</view>
 		</view>
 	</view>
-	
 </template>
 <script>
+	import mEmpty from "@/components/m-result/m-empty.vue";
 	import mStoreList from '@/components/m-store-list'
-	
 	export default {
 		data() {
 			return {
 				// 附近门店
 				nearStoreList:[]
 			}
+		},
+		components: {
+			mStoreList,
+			mEmpty
 		},
 		methods:{
 				//跳转到商家
@@ -49,10 +55,7 @@
 					})
 				}
 			})
-		},
-		components: {
-			mStoreList
-		},
+		}
 	}
 </script>
 <style lang="scss">

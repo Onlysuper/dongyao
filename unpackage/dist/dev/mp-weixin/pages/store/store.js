@@ -1502,7 +1502,7 @@ var render = function() {
                   _vm._v(_vm._s(_vm.storeData.name))
                 ]),
                 _c("view", { staticClass: "m-text" }, [
-                  _vm._v(_vm._s(_vm.storeData.notice))
+                  _vm._v("公告：" + _vm._s(_vm.storeData.notice))
                 ]),
                 _c("view", { staticClass: "m-time" }, [
                   _vm._v("营业：" + _vm._s(_vm.storeData.businessHours))

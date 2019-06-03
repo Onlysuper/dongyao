@@ -354,6 +354,12 @@ var _mVipCard = _interopRequireDefault(__webpack_require__(/*! @/components/m-vi
   methods: {
     getUser: function getUser() {
       this.userData = JSON.parse(uni.getStorageSync('userData'));
+      if (!this.userData.avatarUrl) {
+        this.$set(this.userData, 'avatarUrl', this.userData.headAddress || '');
+      }
+      if (!this.userData.nickName) {
+        this.$set(this.userData, 'nickName', this.userData.nickname || '');
+      }
     },
     // 会员列表
     getVips: function getVips() {

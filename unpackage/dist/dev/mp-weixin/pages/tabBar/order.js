@@ -652,7 +652,7 @@ var page = 1,totalpage = 1;var _default =
                 }case 5:case "end":return _context.stop();}}}, _callee, this);}));function checkLogin() {return _checkLogin.apply(this, arguments);}return checkLogin;}(),
 
     // 获取订单
-    getOrders: function getOrders() {var _this2 = this;
+    getOrders: function getOrders() {
       var _this = this;
       uni.showLoading({});
       if (totalpage && page > totalpage) {
@@ -672,7 +672,7 @@ var page = 1,totalpage = 1;var _default =
           if (data.orders) {
             totalpage = data.pages || 1;
             var newsList = data.orders;
-            _this2.orderList = _this2.orderList.concat(newsList);
+            _this.orderList = _this.orderList.concat(newsList);
             page++;
           }
         }

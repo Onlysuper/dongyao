@@ -140,7 +140,6 @@
 					if(!this.userData.nickName){
 						this.$set(this.userData,'nickName',this.userData.nickname||'')
 					}
-					
 				}
 			}
 		},
