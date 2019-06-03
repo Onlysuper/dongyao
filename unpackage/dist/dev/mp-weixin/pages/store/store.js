@@ -425,8 +425,9 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
   watch: {
     num: function num() {var _this = this;
       this.animation = true;
-      setTimeout(function () {
+      var time = setTimeout(function () {
         _this.animation = false;
+        clearTimeout(time);
       }, 100);
     } },
 
@@ -950,7 +951,7 @@ function bezier(pots, amount) {
           // 数据计算
           that.addGoodSum(data, 1, 'add');
         }
-      }, 25);
+      }, 10);
     },
 
     //分类切换显示

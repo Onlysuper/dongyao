@@ -40,8 +40,9 @@
 		watch:{
 			num(){
 				this.animation=true;
-				setTimeout(()=>{
-					this.animation=false
+				let time = setTimeout(()=>{
+					this.animation=false;
+					clearTimeout(time)
 				},100)
 			}
 		},
