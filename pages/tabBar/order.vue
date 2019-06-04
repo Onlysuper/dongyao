@@ -94,7 +94,7 @@
 				let proArr = [...data.productList];
 				let proUrlData = encodeURI(JSON.stringify({proUrlData:proArr}));
 				uni.navigateTo({
-					url:"/pages/order/pay?storeid="+storeId+"&totalCount="+totalCount+"&type="+type+'&couponId='+couponId+'&proUrlData='+proUrlData
+					url:"/pages/order/pay?storeid="+storeId+"&totalCount="+totalCount+"&type="+type+'&couponId='+couponId+'&where=orderPage'+'&proUrlData='+proUrlData
 				})
 			},
 			// 评论

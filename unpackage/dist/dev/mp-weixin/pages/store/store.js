@@ -899,8 +899,6 @@ function bezier(pots, amount) {
         return obj;
       });
       var proUrlData = encodeURI(JSON.stringify({ proUrlData: proArr }));
-      console.log({ proUrlData: proArr });
-      return false;
       uni.navigateTo({
         url: "/pages/order/pay?storeid=" + this.storeid + "&totalCount=" + totalCount + "&type=" + type + "&userid=" + this.userid + '&proUrlData=' + proUrlData });
 
@@ -1092,6 +1090,7 @@ function bezier(pots, amount) {
     addGoodSum: function addGoodSum(_data) {var num = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1;var type = arguments.length > 2 ? arguments[2] : undefined;
       var _id = _data.id;
       var data = this.productList.find(function (item) {return item.id == _id;});
+      console.log(data);
       var _this = this;
       var buyCount = num;
       var objIndex = this.shopCarList.findIndex(function (item) {return item.id == _id;});

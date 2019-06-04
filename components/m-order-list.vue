@@ -29,12 +29,15 @@
 		</view>
 		<view class="m-body">
 			<view class="m-img-container">
-				<!-- <view class="m-img-box" v-for="(item) in productList" :key="item.id">
+				<view class="m-img-box" v-for="(item) in productListNew" :key="item.id">
 					<image style="width:100%;height:100%" :src="item.pictures[0].pictureUrl" mode="aspectFit"></image>
-				</view> -->
-				<view  @tap="detailGood" class="m-img-box">
-					<image style="width:100%;height:100%" :src="productList[0].pictures[0].pictureUrl" mode="aspectFull"></image>
 				</view>
+				<view v-if="productList.length>3" class="m-img-box">
+					<image style="width:100%;height:100%" src="/static/img/icon/lve.jpg" mode="aspectFit"></image>
+				</view>
+				<!-- <view  @tap="detailGood" class="m-img-box">
+					<image style="width:100%;height:100%" :src="productList[0].pictures[0].pictureUrl" mode="aspectFull"></image>
+				</view> -->
 			</view>
 			<view @tap="detailGood" class="m-text-right">
 				<view class="price">
@@ -148,6 +151,11 @@
 				
 			};
 		},
+		computed:{
+			productListNew(){
+				return this.productList.slice(0,4);
+			}
+		},
 		methods:{
 		 touchOnGoods(e){
 			 this.$emit("touchOnGoods",{
@@ -214,12 +222,7 @@
 		justify-content: space-between;
 		align-items: center;
 		margin-top: 40upx;
-		.m-img-box{
-			width: 130upx;
-			height: 130upx;
-			border-radius: 100%;
-			overflow: hidden;
-		}
+		
 		.m-text-box{
 			flex:1;
 			padding-left: 15upx;
@@ -240,6 +243,17 @@
 			.num{
 				font-size: $fontsize-4;
 				color:$color-5;
+			}
+		}
+		.m-img-container{
+			display: flex;
+			flex-direction: row;
+			.m-img-box{
+				width: 110upx;
+				height: 110upx;
+				border-radius: 100%;
+				overflow: hidden;
+				margin-right: 10upx;
 			}
 		}
 	}

@@ -25,7 +25,7 @@
 		<view class="place"></view>
 		<!-- 轮播图 -->
 		<view class="swiper-box">
-			 <uni-swiper-dot
+			 <!-- <uni-swiper-dot
 			  :info="swiperList"
 			  :current="current"
 			  :mode="mode"
@@ -47,8 +47,8 @@
 				  </view>
 				</swiper-item>
 			  </swiper>
-			</uni-swiper-dot>
-			<!-- <uni-swiper-dot :info="swiperList" :current="current" field="content" :mode="mode">
+			</uni-swiper-dot> -->
+			<uni-swiper-dot :info="swiperList" :current="current" field="content" :mode="mode">
 				<swiper class="swiper-box" @change="change">
 					<swiper-item v-for="(item ,index) in swiperList" :key="index">
 						<view class="swiper-item">
@@ -56,7 +56,7 @@
 						</view>
 					</swiper-item>
 				</swiper>
-			</uni-swiper-dot> -->
+			</uni-swiper-dot>
 		</view>
 		<!-- 超值热卖 -->
 		<view class="m-container">

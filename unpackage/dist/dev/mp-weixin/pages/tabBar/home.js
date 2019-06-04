@@ -1487,9 +1487,8 @@ var render = function() {
             attrs: {
               info: _vm.swiperList,
               current: _vm.current,
-              mode: _vm.mode,
-              "dots-styles": _vm.dotsStyles,
               field: "content",
+              mode: _vm.mode,
               mpcomid: "09c88d5b-1"
             }
           },
@@ -1498,7 +1497,7 @@ var render = function() {
               "swiper",
               {
                 staticClass: "swiper-box",
-                attrs: { eventid: "09c88d5b-3" },
+                attrs: { eventid: "09c88d5b-4" },
                 on: { change: _vm.change }
               },
               _vm._l(_vm.swiperList, function(item, index) {
@@ -1506,15 +1505,19 @@ var render = function() {
                   "swiper-item",
                   { key: index, attrs: { mpcomid: "09c88d5b-0-" + index } },
                   [
-                    _c(
-                      "view",
-                      { staticClass: "swiper-item", class: item.colorClass },
-                      [
-                        _c("image", {
-                          attrs: { src: item.imgUrl, mode: "aspectFill" }
-                        })
-                      ]
-                    )
+                    _c("view", { staticClass: "swiper-item" }, [
+                      _c("image", {
+                        attrs: {
+                          src: item.imgUrl,
+                          eventid: "09c88d5b-3-" + index
+                        },
+                        on: {
+                          tap: function($event) {
+                            _vm.swiperChange(index)
+                          }
+                        }
+                      })
+                    ])
                   ]
                 )
               })
@@ -1536,7 +1539,7 @@ var render = function() {
               title: "超值热卖",
               labelColor: "#666666",
               label: "换一换",
-              eventid: "09c88d5b-4",
+              eventid: "09c88d5b-5",
               mpcomid: "09c88d5b-2"
             },
             on: { titleHandle: _vm.getHotsellList }
@@ -1565,7 +1568,7 @@ var render = function() {
                   key: index,
                   attrs: {
                     rowData: item,
-                    eventid: "09c88d5b-5-" + index,
+                    eventid: "09c88d5b-6-" + index,
                     mpcomid: "09c88d5b-3-" + index
                   },
                   on: {
@@ -1590,7 +1593,7 @@ var render = function() {
           attrs: {
             title: "今日必拼",
             label: "查看更多 >",
-            eventid: "09c88d5b-6",
+            eventid: "09c88d5b-7",
             mpcomid: "09c88d5b-5"
           },
           on: { titleHandle: _vm.pintuanHandle }
@@ -1616,7 +1619,7 @@ var render = function() {
                           key: index,
                           attrs: {
                             rowData: item,
-                            eventid: "09c88d5b-7-" + index,
+                            eventid: "09c88d5b-8-" + index,
                             mpcomid: "09c88d5b-6-" + index
                           },
                           on: {
@@ -1646,7 +1649,7 @@ var render = function() {
           attrs: {
             title: "附近门店",
             label: "查看全部 >",
-            eventid: "09c88d5b-8",
+            eventid: "09c88d5b-9",
             mpcomid: "09c88d5b-8"
           },
           on: { titleHandle: _vm.storeHandle }
@@ -1662,7 +1665,7 @@ var render = function() {
                   attrs: {
                     tips: item.tips,
                     rowData: item,
-                    eventid: "09c88d5b-9-" + index,
+                    eventid: "09c88d5b-10-" + index,
                     mpcomid: "09c88d5b-9-" + index
                   },
                   on: { handleFn: _vm.storeDetail }

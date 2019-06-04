@@ -729,6 +729,8 @@ var _GetDate = _interopRequireDefault(__webpack_require__(/*! ./GetDate.js */ ".
 
 
 
+
+
 var _event = _interopRequireDefault(__webpack_require__(/*! ../../common/event.js */ "../../../../../../Users/apple/opt/DONGYAO/common/event.js"));
 
 
@@ -799,10 +801,19 @@ var _rattenkingDtpicker = _interopRequireDefault(__webpack_require__(/*! @/compo
     // 支付数据
     getData: function getData(option) {
       var _this = this;
+      var where = option.where;
+
       if (option) {
         var proUrlData = decodeURI(option.proUrlData);
-        console.log(_this.shopCarList);
         _this.shopCarList = JSON.parse(proUrlData)['proUrlData'];
+        if (where == 'orderPage') {
+          _this.shopCarList = _this.shopCarList.map(function (item) {
+            // console.log(item)
+            return _objectSpread({}, item, { pictureUrl: item['pictures'][0]['pictureUrl'] });
+          });
+          console.log(_this.shopCarList);
+        }
+
       }
       _this.orderInit();
     },
@@ -1158,7 +1169,7 @@ var render = function() {
       _c("view", { staticClass: "m-row" }, [
         _c("view", { staticClass: "m-label" }, [_vm._v("商品折扣")]),
         _c("view", { staticClass: "m-discount" }, [
-          _vm._v("-¥" + _vm._s(_vm.discount))
+          _vm._v(_vm._s(_vm.discount))
         ])
       ]),
       _c("view", { staticClass: "m-row" }, [

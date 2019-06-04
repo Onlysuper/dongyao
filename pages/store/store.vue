@@ -229,8 +229,6 @@
 				  return obj  
 				});  
 				let proUrlData = encodeURI(JSON.stringify({proUrlData:proArr}));
-				console.log({proUrlData:proArr});
-				return false;
 				uni.navigateTo({
 					url:"/pages/order/pay?storeid="+this.storeid+"&totalCount="+totalCount+"&type="+type+"&userid="+this.userid+'&proUrlData='+proUrlData
 				})
@@ -422,6 +420,7 @@
 			addGoodSum(_data,num=1,type){
 				let _id = _data.id;
 				let data= this.productList.find(item=>item.id==_id);
+				console.log(data);
 				let _this=this;
 				let buyCount=num;
 				let objIndex = this.shopCarList.findIndex(item=>item.id==_id);

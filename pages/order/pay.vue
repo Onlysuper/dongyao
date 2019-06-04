@@ -51,7 +51,9 @@
 				:oldprice="item.originalPrice"
 				:imgurl="item.pictureUrl"
 				:num="item.buyCount"
-				 ></m-order-pro>
+				 >
+				 
+				 </m-order-pro>
 			</view>
 			<!-- 价钱 -->
 			<view class="m-pro-message">
@@ -68,7 +70,7 @@
 						商品折扣
 					</view>
 					<view class="m-discount">
-						-¥{{discount}}
+						{{discount}}
 					</view>
 				</view>
 				<view class="m-row">
@@ -202,10 +204,19 @@
 			// 支付数据
 			getData(option){
 				let _this= this;
+				let where = option.where;
+				
 				if(option){
 					let proUrlData=decodeURI(option.proUrlData);
-					console.log(_this.shopCarList);
 					_this.shopCarList=JSON.parse(proUrlData)['proUrlData'];
+					if(where=='orderPage'){
+						_this.shopCarList=_this.shopCarList.map(item=>{
+							// console.log(item)
+							return {...item,...{pictureUrl:item['pictures'][0]['pictureUrl']}}
+						})
+						console.log(_this.shopCarList);
+					}
+					
 				}
 				_this.orderInit()
 			},

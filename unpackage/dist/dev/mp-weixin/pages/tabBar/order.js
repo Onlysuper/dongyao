@@ -416,6 +416,9 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 
 
 
+
+
+
 {
   name: "m-product-list",
   props: {
@@ -479,6 +482,11 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 
 
   },
+  computed: {
+    productListNew: function productListNew() {
+      return this.productList.slice(0, 4);
+    } },
+
   methods: {
     touchOnGoods: function touchOnGoods(e) {
       this.$emit("touchOnGoods", {
@@ -618,7 +626,7 @@ var page = 1,totalpage = 1;var _default =
       var proArr = _toConsumableArray(data.productList);
       var proUrlData = encodeURI(JSON.stringify({ proUrlData: proArr }));
       uni.navigateTo({
-        url: "/pages/order/pay?storeid=" + storeId + "&totalCount=" + totalCount + "&type=" + type + '&couponId=' + couponId + '&proUrlData=' + proUrlData });
+        url: "/pages/order/pay?storeid=" + storeId + "&totalCount=" + totalCount + "&type=" + type + '&couponId=' + couponId + '&where=orderPage' + '&proUrlData=' + proUrlData });
 
     },
     // 评论
@@ -831,30 +839,34 @@ var render = function() {
         : _vm._e()
     ]),
     _c("view", { staticClass: "m-body" }, [
-      _c("view", { staticClass: "m-img-container" }, [
-        _c(
-          "view",
-          {
-            staticClass: "m-img-box",
-            attrs: { eventid: "1a6ae60c-0" },
-            on: { tap: _vm.detailGood }
-          },
-          [
-            _c("image", {
-              staticStyle: { width: "100%", height: "100%" },
-              attrs: {
-                src: _vm.productList[0].pictures[0].pictureUrl,
-                mode: "aspectFull"
-              }
-            })
-          ]
-        )
-      ]),
+      _c(
+        "view",
+        { staticClass: "m-img-container" },
+        [
+          _vm._l(_vm.productListNew, function(item, index) {
+            return _c("view", { key: item.id, staticClass: "m-img-box" }, [
+              _c("image", {
+                staticStyle: { width: "100%", height: "100%" },
+                attrs: { src: item.pictures[0].pictureUrl, mode: "aspectFit" }
+              })
+            ])
+          }),
+          _vm.productList.length > 3
+            ? _c("view", { staticClass: "m-img-box" }, [
+                _c("image", {
+                  staticStyle: { width: "100%", height: "100%" },
+                  attrs: { src: "/static/img/icon/lve.jpg", mode: "aspectFit" }
+                })
+              ])
+            : _vm._e()
+        ],
+        2
+      ),
       _c(
         "view",
         {
           staticClass: "m-text-right",
-          attrs: { eventid: "1a6ae60c-1" },
+          attrs: { eventid: "1a6ae60c-0" },
           on: { tap: _vm.detailGood }
         },
         [
@@ -887,7 +899,7 @@ var render = function() {
         _vm.status == 1
           ? _c(
               "view",
-              { attrs: { eventid: "1a6ae60c-4" }, on: { tap: _vm.takeGood } },
+              { attrs: { eventid: "1a6ae60c-3" }, on: { tap: _vm.takeGood } },
               [
                 _c(
                   "view",
@@ -905,7 +917,7 @@ var render = function() {
           : _vm.status == 2
           ? _c(
               "view",
-              { attrs: { eventid: "1a6ae60c-2" }, on: { tap: _vm.payGood } },
+              { attrs: { eventid: "1a6ae60c-1" }, on: { tap: _vm.payGood } },
               [
                 _c(
                   "view",
@@ -931,7 +943,7 @@ var render = function() {
                     border: "1px solid #ef7251",
                     "margin-left": "10rpx"
                   },
-                  attrs: { eventid: "1a6ae60c-3" },
+                  attrs: { eventid: "1a6ae60c-2" },
                   on: { tap: _vm.commentGood }
                 },
                 [_vm._v("评论")]
