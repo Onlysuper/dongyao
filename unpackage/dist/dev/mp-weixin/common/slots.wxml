@@ -5,6 +5,7 @@
 <import src="/components/m-home-hotpro.vue.wxml" />
 <import src="/components/m-home-pro.vue.wxml" />
 <import src="/components/m-home-store.vue.wxml" />
+<import src="/components/uni-rate/uni-rate.vue.wxml" />
 
 <template name="09ce8447-default-09ce8447-0"></template>
 

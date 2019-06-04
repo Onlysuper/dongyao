@@ -346,7 +346,12 @@ var _uniRate = _interopRequireDefault(__webpack_require__(/*! @/components/uni-r
   components: { uniRate: _uniRate.default },
   data: function data() {
     return {
-      details: {}, // 详情
+      details: {
+        placeOrigin: "",
+        specs: "",
+        qualityGuaranteePeriod: "",
+        storageMode: "" },
+      // 详情
       timeSpan: '', //距团购结束
       pintunNum: '', // 拼团人数
       //控制渐变标题栏的参数
@@ -1168,7 +1173,7 @@ var render = function() {
             _vm._v("产地:" + _vm._s(_vm.details.placeOrigin))
           ]),
           _c("view", { staticClass: "m-cell" }, [
-            _vm._v("储存:" + _vm._s(_vm.details.placeOrigin))
+            _vm._v("储存:" + _vm._s(_vm.details.storageMode))
           ])
         ]),
         _c("view", { staticClass: "m-row" }, [

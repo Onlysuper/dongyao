@@ -1758,9 +1758,9 @@ __WXML_GLOBAL__.ops_cached.$gwx_27=[];
 Z([3,'8ff3bae4'])
 Z([3,'_view 8ff3bae4 m-login-page'])
 Z([3,'_view 8ff3bae4 m-img-box'])
-Z([3,'东尧蔬菜'])
+Z([3,'千畔优品'])
 Z([3,'_view 8ff3bae4'])
-Z([3,'您暂未授权\x27东尧蔬菜\x27小程序获取你的信息，讲无法正常使用小程序的功能。\n		如果需要正常使用，请点击\x22授权\x22按钮，打开头像，昵称等信息的权限'])
+Z([3,'您暂未授权\x27千畔优品\x27小程序获取你的信息，讲无法正常使用小程序的功能。\n		如果需要正常使用，请点击\x22授权\x22按钮，打开头像，昵称等信息的权限'])
 Z(z[4])
 })(__WXML_GLOBAL__.ops_cached.$gwx_27);return __WXML_GLOBAL__.ops_cached.$gwx_27
 }
@@ -1779,7 +1779,7 @@ __WXML_GLOBAL__.ops_cached.$gwx_29=[];
 Z([3,'703bed5e'])
 Z([3,'_view 703bed5e m-login-page'])
 Z([3,'_view 703bed5e m-img-box'])
-Z([3,'东尧蔬菜登录'])
+Z([3,'千畔优品登录'])
 Z([3,'_view 703bed5e'])
 })(__WXML_GLOBAL__.ops_cached.$gwx_29);return __WXML_GLOBAL__.ops_cached.$gwx_29
 }
@@ -1808,7 +1808,7 @@ Z([3,'支付成功后显示提货码'])
 Z([3,'_view 69f9dad0 m-store-box'])
 Z([3,'_view 69f9dad0 m-name'])
 Z([3,'_view 69f9dad0 m-body'])
-Z([3,'东尧蔬菜001号(中关村店)'])
+Z([3,'千畔优品001号(中关村店)'])
 Z([3,'handleProxy'])
 Z([3,'_view 69f9dad0 m-phone'])
 Z([[7],[3,'$k']])

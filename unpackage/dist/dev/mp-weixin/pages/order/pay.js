@@ -731,6 +731,7 @@ var _GetDate = _interopRequireDefault(__webpack_require__(/*! ./GetDate.js */ ".
 
 
 
+
 var _event = _interopRequireDefault(__webpack_require__(/*! ../../common/event.js */ "../../../../../../Users/apple/opt/DONGYAO/common/event.js"));
 
 
@@ -762,6 +763,7 @@ var _rattenkingDtpicker = _interopRequireDefault(__webpack_require__(/*! @/compo
     "q+": Math.floor((date.getMonth() + 3) / 3), //季度   
     "S": date.getMilliseconds() //毫秒   
   };if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (date.getFullYear() + "").substr(4 - RegExp.$1.length));for (var k in o) {if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, RegExp.$1.length == 1 ? o[k] : ("00" + o[k]).substr(("" + o[k]).length));}return fmt;}var _default = { components: { mMap: _mMap.default, mOrderPro: _mOrderPro.default, ruiDatePicker: _rattenkingDtpicker.default }, data: function data() {return {
+      payLoading: false,
       storeid: '',
       storeData: {},
       distance: '',
@@ -860,6 +862,7 @@ var _rattenkingDtpicker = _interopRequireDefault(__webpack_require__(/*! @/compo
     // 立即支付
     payFn: function payFn() {var _this2 = this;
       var _this = this;
+      _this.payLoading = true;
       var products = _this.shopCarList.map(function (item) {return {
           productId: item.productId || item.id,
           cou: item.buyCount };
@@ -880,6 +883,7 @@ var _rattenkingDtpicker = _interopRequireDefault(__webpack_require__(/*! @/compo
         sendData['outTradeNo'] = this.outTradeNo; //订单id，第一次下单不需要，待支付订单支付时需要传入
       }
       _this.mPost("/server/pay/wxpay", sendData).then(function (res) {
+        _this.payLoading = false;
         var data = res.data;
         if (!data.paySign) {
           _this2.paySuccess();
@@ -895,21 +899,29 @@ var _rattenkingDtpicker = _interopRequireDefault(__webpack_require__(/*! @/compo
           signType: data.signType,
           paySign: data.paySign };
 
+        _this2.payLoading = true;
         uni.requestPayment(_objectSpread({},
         paydata, {
           success: function success(res) {
+            _this.payLoading = false;
             _this.paySuccess();
           },
           fail: function fail(err) {
+            _this.payLoading = false;
             //取消支付
             uni.setStorageSync('orderTab', 2);
             uni.switchTab({
               url: '/pages/tabBar/order' });
 
             // _this.clearShopcar()
+          },
+          complete: function complete() {
+            _this.payLoading = false;
           } }));
 
 
+      }).catch(function (err) {
+        _this.payLoading = false;
       });
     },
     //支付成功
@@ -1079,178 +1091,188 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("view", { staticClass: "m-pay-page" }, [
-    _c("view", { staticClass: "m-top-back" }),
-    _c("view", { staticClass: "m-top-map" }, [
-      _c("view", { staticClass: "m-container" }, [
-        _c("view", { staticClass: "m-title" }, [_vm._v("到店自取")]),
-        _c(
-          "view",
-          { staticClass: "m-content" },
-          [
-            _c("view", { staticClass: "m-address" }, [
-              _vm._v(_vm._s(_vm.storeData.address))
-            ]),
-            _c("m-map", {
-              attrs: {
-                latitude: _vm.storeData.lat,
-                longitude: _vm.storeData.lng,
-                userlat: _vm.latitude,
-                userlng: _vm.longitude,
-                distance: _vm.geoDistance(
-                  _vm.latitude,
-                  _vm.longitude,
-                  _vm.storeData.lat,
-                  _vm.storeData.lng
-                ),
-                mpcomid: "4d5cf31c-0"
-              }
-            }),
-            _c("view", { staticClass: "m-footer" }, [
-              _c("view", { staticClass: "m-item" }, [
-                _c("view", { staticClass: "m-text" }, [_vm._v("自取时间")]),
-                _c(
-                  "view",
-                  { staticClass: "m-light" },
-                  [
-                    _c("ruiDatePicker", {
-                      attrs: {
-                        fields: "minute",
-                        start: _vm.today,
-                        end: "2030-12-30 23:59",
-                        value: _vm.aboutPickingTime,
-                        eventid: "4d5cf31c-0",
-                        mpcomid: "4d5cf31c-1"
-                      },
-                      on: { change: _vm.bindChange, cancel: _vm.bindCancel }
-                    })
-                  ],
-                  1
-                )
+  return _c(
+    "view",
+    { staticClass: "m-pay-page" },
+    [
+      _c("view", { staticClass: "m-top-back" }),
+      _c("view", { staticClass: "m-top-map" }, [
+        _c("view", { staticClass: "m-container" }, [
+          _c("view", { staticClass: "m-title" }, [_vm._v("到店自取")]),
+          _c(
+            "view",
+            { staticClass: "m-content" },
+            [
+              _c("view", { staticClass: "m-address" }, [
+                _vm._v(_vm._s(_vm.storeData.address))
               ]),
-              _c("view", { staticClass: "m-item" }, [
-                _c("view", { staticClass: "m-text" }, [_vm._v("预留电话")]),
-                _c("view", { staticClass: "m-light" }, [
-                  _c("input", {
-                    attrs: { type: "text", value: _vm.reserveTel }
-                  })
+              _c("m-map", {
+                attrs: {
+                  latitude: _vm.storeData.lat,
+                  longitude: _vm.storeData.lng,
+                  userlat: _vm.latitude,
+                  userlng: _vm.longitude,
+                  distance: _vm.geoDistance(
+                    _vm.latitude,
+                    _vm.longitude,
+                    _vm.storeData.lat,
+                    _vm.storeData.lng
+                  ),
+                  mpcomid: "4d5cf31c-0"
+                }
+              }),
+              _c("view", { staticClass: "m-footer" }, [
+                _c("view", { staticClass: "m-item" }, [
+                  _c("view", { staticClass: "m-text" }, [_vm._v("自取时间")]),
+                  _c(
+                    "view",
+                    { staticClass: "m-light" },
+                    [
+                      _c("ruiDatePicker", {
+                        attrs: {
+                          fields: "minute",
+                          start: _vm.today,
+                          end: "2030-12-30 23:59",
+                          value: _vm.aboutPickingTime,
+                          eventid: "4d5cf31c-0",
+                          mpcomid: "4d5cf31c-1"
+                        },
+                        on: { change: _vm.bindChange, cancel: _vm.bindCancel }
+                      })
+                    ],
+                    1
+                  )
+                ]),
+                _c("view", { staticClass: "m-item" }, [
+                  _c("view", { staticClass: "m-text" }, [_vm._v("预留电话")]),
+                  _c("view", { staticClass: "m-light" }, [
+                    _c("input", {
+                      attrs: { type: "text", value: _vm.reserveTel }
+                    })
+                  ])
                 ])
               ])
-            ])
-          ],
-          1
-        )
-      ])
-    ]),
-    _c(
-      "view",
-      { staticClass: "m-pro-container" },
-      _vm._l(_vm.shopCarList, function(item, index) {
-        return _c("m-order-pro", {
-          key: item.id,
-          attrs: {
-            title: item.synopsis,
-            price: item.presentPrice,
-            oldprice: item.originalPrice,
-            imgurl: item.pictureUrl,
-            num: item.buyCount,
-            mpcomid: "4d5cf31c-2-" + index
-          }
-        })
-      })
-    ),
-    _c("view", { staticClass: "m-pro-message" }, [
-      _c("view", { staticClass: "m-row" }, [
-        _c("view", { staticClass: "m-label" }, [_vm._v("商品原价")]),
-        _c("view", { staticClass: "m-price" }, [
-          _vm._v("¥" + _vm._s(_vm.totalPrice))
+            ],
+            1
+          )
         ])
       ]),
-      _c("view", { staticClass: "m-row" }, [
-        _c("view", { staticClass: "m-label" }, [_vm._v("商品折扣")]),
-        _c("view", { staticClass: "m-discount" }, [
-          _vm._v(_vm._s(_vm.discount))
-        ])
-      ]),
-      _c("view", { staticClass: "m-row" }, [
-        _c("view", { staticClass: "m-label" }, [_vm._v("商品优惠")]),
-        _c("view", { staticClass: "m-discount" }, [
-          _vm._v("-¥" + _vm._s(_vm.yhPrice))
-        ])
-      ]),
-      _c("view", { staticClass: "m-row" }, [
-        _c("view", { staticClass: "m-label" }, [_vm._v("优惠券抵用")]),
-        _c("view", { staticClass: "m-discount" }, [
-          _vm._v("-¥" + _vm._s(_vm.couponPrice))
-        ])
-      ]),
-      _c("view", { staticClass: "m-row" }, [
-        _c("view", { staticClass: "m-label" }, [_vm._v("优惠券")]),
-        !_vm.haveTokenCard
-          ? _c("view", { staticClass: "m-token" }, [_vm._v("暂无可用>")])
-          : _c(
-              "view",
-              {
-                staticClass: "m-token active",
-                attrs: { eventid: "4d5cf31c-1" },
-                on: { tap: _vm.choseTokenFn }
-              },
-              [_vm._v("选择优惠券>")]
-            )
-      ]),
-      _c("view", { staticClass: "m-footer" }, [
-        _vm._v("合计"),
-        _c("view", { staticClass: "count" }, [
-          _vm._v("￥" + _vm._s(_vm.payPrice))
-        ])
-      ])
-    ]),
-    _c("view", { staticClass: "m-paytype" }, [
-      _c("view", { staticClass: "m-title" }, [_vm._v("支付方式")]),
-      _c("view", { staticClass: "m-row" }, [
-        _vm._m(0),
-        _c(
-          "view",
-          {
-            staticClass: "m-radio",
-            attrs: { eventid: "4d5cf31c-2" },
-            on: {
-              tap: function($event) {
-                _vm.paytypeFn("wx")
-              }
+      _c(
+        "view",
+        { staticClass: "m-pro-container" },
+        _vm._l(_vm.shopCarList, function(item, index) {
+          return _c("m-order-pro", {
+            key: item.id,
+            attrs: {
+              title: item.synopsis,
+              price: item.presentPrice,
+              oldprice: item.originalPrice,
+              imgurl: item.pictureUrl,
+              num: item.buyCount,
+              mpcomid: "4d5cf31c-2-" + index
             }
+          })
+        })
+      ),
+      _c("view", { staticClass: "m-pro-message" }, [
+        _c("view", { staticClass: "m-row" }, [
+          _c("view", { staticClass: "m-label" }, [_vm._v("商品原价")]),
+          _c("view", { staticClass: "m-price" }, [
+            _vm._v("¥" + _vm._s(_vm.totalPrice))
+          ])
+        ]),
+        _c("view", { staticClass: "m-row" }, [
+          _c("view", { staticClass: "m-label" }, [_vm._v("商品折扣")]),
+          _c("view", { staticClass: "m-discount" }, [
+            _vm._v(_vm._s(_vm.discount))
+          ])
+        ]),
+        _c("view", { staticClass: "m-row" }, [
+          _c("view", { staticClass: "m-label" }, [_vm._v("商品优惠")]),
+          _c("view", { staticClass: "m-discount" }, [
+            _vm._v("-¥" + _vm._s(_vm.yhPrice))
+          ])
+        ]),
+        _c("view", { staticClass: "m-row" }, [
+          _c("view", { staticClass: "m-label" }, [_vm._v("优惠券抵用")]),
+          _c("view", { staticClass: "m-discount" }, [
+            _vm._v("-¥" + _vm._s(_vm.couponPrice))
+          ])
+        ]),
+        _c("view", { staticClass: "m-row" }, [
+          _c("view", { staticClass: "m-label" }, [_vm._v("优惠券")]),
+          !_vm.haveTokenCard
+            ? _c("view", { staticClass: "m-token" }, [_vm._v("暂无可用>")])
+            : _c(
+                "view",
+                {
+                  staticClass: "m-token active",
+                  attrs: { eventid: "4d5cf31c-1" },
+                  on: { tap: _vm.choseTokenFn }
+                },
+                [_vm._v("选择优惠券>")]
+              )
+        ]),
+        _c("view", { staticClass: "m-footer" }, [
+          _vm._v("合计"),
+          _c("view", { staticClass: "count" }, [
+            _vm._v("￥" + _vm._s(_vm.payPrice))
+          ])
+        ])
+      ]),
+      _c("view", { staticClass: "m-paytype" }, [
+        _c("view", { staticClass: "m-title" }, [_vm._v("支付方式")]),
+        _c("view", { staticClass: "m-row" }, [
+          _vm._m(0),
+          _c(
+            "view",
+            {
+              staticClass: "m-radio",
+              attrs: { eventid: "4d5cf31c-2" },
+              on: {
+                tap: function($event) {
+                  _vm.paytypeFn("wx")
+                }
+              }
+            },
+            [
+              _vm.paytype == "wx"
+                ? _c("image", {
+                    staticStyle: { width: "34rpx", height: "30rpx" },
+                    attrs: {
+                      src: "../../static/img/icon/pay_icon_ok.png",
+                      mode: "aspectFit"
+                    }
+                  })
+                : _c("image", {
+                    staticStyle: { width: "34rpx", height: "30rpx" },
+                    attrs: {
+                      src: "../../static/img/icon/pay_icon_ok2.png",
+                      mode: "aspectFit"
+                    }
+                  })
+            ]
+          )
+        ])
+      ]),
+      _c("view", { staticClass: "place" }),
+      _c(
+        "button",
+        {
+          staticClass: "m-footer-but",
+          attrs: {
+            loading: _vm.payLoading,
+            disabled: _vm.payLoading,
+            type: "primary",
+            eventid: "4d5cf31c-3"
           },
-          [
-            _vm.paytype == "wx"
-              ? _c("image", {
-                  staticStyle: { width: "34rpx", height: "30rpx" },
-                  attrs: {
-                    src: "../../static/img/icon/pay_icon_ok.png",
-                    mode: "aspectFit"
-                  }
-                })
-              : _c("image", {
-                  staticStyle: { width: "34rpx", height: "30rpx" },
-                  attrs: {
-                    src: "../../static/img/icon/pay_icon_ok2.png",
-                    mode: "aspectFit"
-                  }
-                })
-          ]
-        )
-      ])
-    ]),
-    _c("view", { staticClass: "place" }),
-    _c(
-      "view",
-      {
-        staticClass: "m-footer-but",
-        attrs: { eventid: "4d5cf31c-3" },
-        on: { tap: _vm.payFn }
-      },
-      [_vm._v("立即支付￥" + _vm._s(_vm.payPrice))]
-    )
-  ])
+          on: { tap: _vm.payFn }
+        },
+        [_vm._v("立即支付￥" + _vm._s(_vm.payPrice))]
+      )
+    ],
+    1
+  )
 }
 var staticRenderFns = [
   function() {

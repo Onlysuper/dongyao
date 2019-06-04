@@ -29,6 +29,14 @@
 							已完成交易
 						</view>
 						<view class="m-describe">
+							感谢您对千畔优品的信任
+						</view>
+					</view>
+					<view v-else class="m-content">
+						<view class="m-title">
+							订单详情
+						</view>
+						<view class="m-describe">
 							感谢您对东尧蔬菜的信任
 						</view>
 					</view>
@@ -48,21 +56,21 @@
 				</view>
 				<view v-if="state==3" class="m-time">
 					<!-- 已经提货 -->
-					提货时间：{{store.actualPickingTime}}
+					提货时间：{{order.actualPickingTime}}
 				</view>
 				<view v-else class="m-time">
 					<!-- 预计提货 -->
-					提货时间：{{store.aboutPickingTime}}
+					提货时间：{{order.aboutPickingTime}}
 				</view>
 			</view>
 			<!-- 商品列表 -->
 			<view class="m-pro-container">
 				<m-order-pro
 				v-for="(item) in productList" :key="item.id"
-				:title="item.synopsis"
+				:title="item.productName"
 				:price="item.presentPrice"
 				:oldprice="item.originalPrice"
-				:imgurl="item.pictureUrl"
+				:imgurl="item['pictures'][0].pictureUrl"
 				:num="item.buyCount"
 				 ></m-order-pro>
 				 <view class="m-footer">
@@ -86,9 +94,10 @@
 			</view>
 		<view class="place"></view>
 		<!-- 分割 -->
-		<view v-if="state==2" @click="payFn" class="m-footer-but">
-			立即支付￥{{order.totalPrice}}
-		</view>
+		<!-- <view  class="m-footer-but"> -->
+			<button :loading="payLoading" :disabled="payLoading" v-if="state==2" @click="payFn" class="m-footer-but" type="primary">立即支付￥{{order.totalPrice}}</button>
+			
+		<!-- </view> -->
 	</view>
 </template>
 
@@ -102,6 +111,7 @@
 		},
 		data() {
 			return {
+				payLoading:false,
 				order:{},// 订单详情
 				productList:[],//购买的产品列表
 				store:{},//商家详情
@@ -137,6 +147,7 @@
 			},
 			// 立即支付
 			payFn(){
+				this.payLoading=true;
 				let _this=this;
 				let products=_this.productList.map(item=>{return {
 					productId:item.id,
@@ -154,6 +165,7 @@
 				}
 				_this.mPost("/server/pay/wxpay",sendData).then(res=>{
 					if(res.code==1){
+						
 						let data = res.data;
 					// 调起支付
 						let _package = data.prepay_id;
@@ -165,6 +177,7 @@
 							signType: data.signType,
 							paySign: data.paySign,
 						}
+						_this.payLoading=true;
 						uni.requestPayment({
 							...paydata,
 							success: function(res) {
@@ -184,6 +197,7 @@
 										}
 									}
 								});
+								_this.payLoading=false;
 							},
 							fail: function(err) {
 								uni.showModal({
@@ -199,9 +213,16 @@
 										}
 									}
 								});
+								_this.payLoading=false;
+							},
+							complete() {
+								_this.payLoading=false;
 							}
 						});
 					}
+					_this.payLoading=false;
+				}).catch(err=>{
+					_this.payLoading=false;
 				})
 			},
 		},
@@ -409,6 +430,7 @@
 		width: 100%;
 		z-index: 100;
 		background:$color-active;
+		border-radius: 0;
 		
 	}
 }

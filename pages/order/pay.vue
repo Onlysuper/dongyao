@@ -127,9 +127,10 @@
 		<!-- 确定支付按钮 -->
 		<view class="place"></view>
 		<!-- 分割 -->
-		<view @tap="payFn" class="m-footer-but">
+		<!-- <view @tap="payFn" class="m-footer-but">
 			立即支付￥{{payPrice}}
-		</view>
+		</view> -->
+		<button :loading="payLoading" :disabled="payLoading"  @tap="payFn" class="m-footer-but" type="primary">立即支付￥{{payPrice}}</button>
 	</view>
 </template>
 
@@ -165,6 +166,7 @@
 		},
 		data() {
 			return {
+				payLoading:false,
 				storeid:'',
 				storeData:{},
 				distance:'',
@@ -263,6 +265,7 @@
 			// 立即支付
 			payFn(){
 				let _this=this;
+				_this.payLoading=true;
 				let products=_this.shopCarList.map(item=>{return {
 					productId:item.productId||item.id,
 					cou:item.buyCount,
@@ -283,6 +286,7 @@
 					sendData['outTradeNo']=this.outTradeNo; //订单id，第一次下单不需要，待支付订单支付时需要传入
 				}
 				_this.mPost("/server/pay/wxpay",sendData).then(res=>{
+					_this.payLoading=false;
 					let data = res.data;
 					if(!data.paySign){
 						this.paySuccess();
@@ -298,21 +302,29 @@
 						signType: data.signType,
 						paySign: data.paySign,
 					}
+					this.payLoading=true;
 					uni.requestPayment({
 						...paydata,
 						success: function(res) {
+							_this.payLoading=false;
 							_this.paySuccess()
 						},
 						fail: function(err) {
+							_this.payLoading=false;
 							//取消支付
 							uni.setStorageSync('orderTab', 2);
 							uni.switchTab({  
 								url: '/pages/tabBar/order'  
 							}); 
 							 // _this.clearShopcar()
+						},
+						complete() {
+							_this.payLoading=false;
 						}
 					});
 					
+				}).catch(err=>{
+					_this.payLoading=false;
 				})
 			},
 			//支付成功
@@ -643,7 +655,7 @@
 		width: 100%;
 		z-index: 100;
 		background:$color-active;
-		
+		border-radius: 0;
 	}
 }
 </style>

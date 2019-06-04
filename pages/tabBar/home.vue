@@ -354,9 +354,9 @@
 	align-items: center;
 	position: fixed;
 	top: 0;
-	z-index: 10;
+	z-index: 11;
 	background-color: #fff;
-
+	
 	/*  #ifdef  APP-PLUS  */
 	top: var(--status-bar-height);
 	/*  #endif  */

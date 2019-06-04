@@ -231,8 +231,8 @@
 				color:#4c4c4c;
 			}
 			.m-describe{
-				font-size: $fontsize-4;
-				color:#999999;
+				font-size: $fontsize-8;
+				color:#999999; 
 			}
 		}
 		.m-text-right{
@@ -249,11 +249,11 @@
 			display: flex;
 			flex-direction: row;
 			.m-img-box{
-				width: 110upx;
-				height: 110upx;
+				width: 100upx;
+				height: 100upx;
 				border-radius: 100%;
 				overflow: hidden;
-				margin-right: 10upx;
+				margin-right: 8upx;
 			}
 		}
 	}
