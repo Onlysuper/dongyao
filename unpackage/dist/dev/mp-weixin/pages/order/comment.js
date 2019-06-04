@@ -348,7 +348,7 @@ var _uniRate = _interopRequireDefault(__webpack_require__(/*! @/components/uni-r
       this.productList.forEach(function (pro, index) {
         // 将选择的图片组成一个Promise数组，准备进行并行上传
         var formData = {
-          productId: pro.id,
+          productId: pro.productId,
           anonymous: _this.anonymous[index] || 0,
           orderId: _this.orderid,
           starLevel: _this.levels[index] || 5,

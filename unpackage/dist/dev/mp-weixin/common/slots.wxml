@@ -5,17 +5,16 @@
 <import src="/components/m-home-hotpro.vue.wxml" />
 <import src="/components/m-home-pro.vue.wxml" />
 <import src="/components/m-home-store.vue.wxml" />
-<import src="/components/m-store-pro.vue.wxml" />
-<import src="/components/m-footer-car.vue.wxml" />
-<import src="/components/uni-number-box/uni-number-box.vue.wxml" />
 
 <template name="09ce8447-default-09ce8447-0"></template>
 
-<template name="09ce8447-name-09ce8447-0">VIP{{myMember.discount}}</template>
+<template name="09ce8447-name-09ce8447-0">{{myMember.memberDesc}}</template>
 
 <template name="09ce8447-label-09ce8447-0"></template>
 
 <template name="09ce8447-describe-09ce8447-0">{{myMember.memberSynopsis}}</template>
+
+<template name="09ce8447-right-09ce8447-0">立即续费></template>
 
 <template name="09ce8447-default-09ce8447-1"></template>
 

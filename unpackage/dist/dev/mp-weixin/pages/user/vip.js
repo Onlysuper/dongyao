@@ -624,10 +624,7 @@ var render = function() {
         _vm.isVip
           ? _c("view", { staticClass: "m-footer" }, [
               _c("view", { staticClass: "m-title" }, [
-                _vm._v(
-                  _vm._s(_vm.myMember.memberType) +
-                    _vm._s(_vm.myMember.discount)
-                )
+                _vm._v(_vm._s(_vm.myMember.memberDesc))
               ]),
               _c("view", { staticClass: "m-describe" }, [
                 _c("image", {

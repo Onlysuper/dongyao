@@ -99,7 +99,6 @@
 			},
 			// 评论
 			commentGood(res){
-				// console.log('评论')
 				let data = res.data;
 				let orderid = data.order.id;
 				let newProduct = [...data.productList];

@@ -529,6 +529,7 @@ export default {
 .description{
 	background:#fff;
 	font-size: $fontsize-4;
+	padding: 30upx;
 }
 .mvideo{
 	width: 100%;

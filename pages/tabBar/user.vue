@@ -28,9 +28,12 @@
 			</view>
 			<view v-if="isVip" class="m-card" @tap="linkTo('/pages/user/vip')">
 				<m-vip-top>
-					<view slot="name">VIP{{myMember.discount}}</view>
+					<view slot="name">{{myMember.memberDesc}}</view>
 					<view slot="label"></view>
 					<view slot="describe">{{myMember.memberSynopsis}}</view>
+					<view slot="right">
+						立即续费>
+					</view>
 				</m-vip-top>
 			</view>
 			<view v-else class="m-card" @tap="linkTo('/pages/user/vip')">

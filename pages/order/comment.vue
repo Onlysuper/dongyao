@@ -233,7 +233,7 @@
 				this.productList.forEach((pro,index)=>{
 					// 将选择的图片组成一个Promise数组，准备进行并行上传
 					let formData={
-						productId:pro.id,
+						productId:pro.productId,
 						anonymous:_this.anonymous[index]||0,
 						orderId:_this.orderid,
 						starLevel:_this.levels[index]||5,

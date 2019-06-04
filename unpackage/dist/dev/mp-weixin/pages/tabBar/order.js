@@ -631,7 +631,6 @@ var page = 1,totalpage = 1;var _default =
     },
     // 评论
     commentGood: function commentGood(res) {
-      // console.log('评论')
       var data = res.data;
       var orderid = data.order.id;
       var newProduct = _toConsumableArray(data.productList);
