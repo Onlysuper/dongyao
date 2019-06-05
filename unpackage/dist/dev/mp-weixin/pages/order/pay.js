@@ -769,7 +769,7 @@ var _rattenkingDtpicker = _interopRequireDefault(__webpack_require__(/*! @/compo
       distance: '',
       today: dateFtt("yyyy-MM-dd hh:mm", new Date()),
       aboutPickingTime: dateFtt("yyyy-MM-dd hh:mm", new Date()), //预约时间
-      reserveTel: uni.getStorageSync('phone'), // 预约手机号
+      reserveTel: "", // 预约手机号
       paytype: "wx", //支付方式
       type: "", //是否是拼团订单
       latitude: 39.909,
@@ -990,6 +990,7 @@ var _rattenkingDtpicker = _interopRequireDefault(__webpack_require__(/*! @/compo
 
   // 
   onLoad: function onLoad(option) {
+    this.reserveTel = option.reserveTel || uni.getStorageSync('phone') || "";
     this.couponId = option.couponId || "",
     this.storeid = option.storeid;
     this.totalCount = option.totalCount,
@@ -1147,7 +1148,24 @@ var render = function() {
                   _c("view", { staticClass: "m-text" }, [_vm._v("预留电话")]),
                   _c("view", { staticClass: "m-light" }, [
                     _c("input", {
-                      attrs: { type: "text", value: _vm.reserveTel }
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.reserveTel,
+                          expression: "reserveTel"
+                        }
+                      ],
+                      attrs: { type: "text", eventid: "4d5cf31c-1" },
+                      domProps: { value: _vm.reserveTel },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.reserveTel = $event.target.value
+                        }
+                      }
                     })
                   ])
                 ])
@@ -1207,7 +1225,7 @@ var render = function() {
                 "view",
                 {
                   staticClass: "m-token active",
-                  attrs: { eventid: "4d5cf31c-1" },
+                  attrs: { eventid: "4d5cf31c-2" },
                   on: { tap: _vm.choseTokenFn }
                 },
                 [_vm._v("选择优惠券>")]
@@ -1228,7 +1246,7 @@ var render = function() {
             "view",
             {
               staticClass: "m-radio",
-              attrs: { eventid: "4d5cf31c-2" },
+              attrs: { eventid: "4d5cf31c-3" },
               on: {
                 tap: function($event) {
                   _vm.paytypeFn("wx")
@@ -1264,7 +1282,7 @@ var render = function() {
             loading: _vm.payLoading,
             disabled: _vm.payLoading,
             type: "primary",
-            eventid: "4d5cf31c-3"
+            eventid: "4d5cf31c-4"
           },
           on: { tap: _vm.payFn }
         },

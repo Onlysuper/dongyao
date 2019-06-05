@@ -34,7 +34,7 @@
 									预留电话
 								</view>
 								<view class="m-light">
-									<input style="" type="text" :value="reserveTel" />
+									<input style="" type="text" v-model="reserveTel" />
 									
 								</view>
 							</view>
@@ -172,7 +172,7 @@
 				distance:'',
 				today:dateFtt("yyyy-MM-dd hh:mm",new Date()),
 				aboutPickingTime:dateFtt("yyyy-MM-dd hh:mm",new Date()),//预约时间
-				reserveTel:uni.getStorageSync('phone'),// 预约手机号
+				reserveTel:"",// 预约手机号
 				paytype:"wx",//支付方式
 				type:"",//是否是拼团订单
 				latitude: 39.909,
@@ -393,6 +393,7 @@
 		},
 		// 
 		onLoad(option){
+			this.reserveTel=option.reserveTel||uni.getStorageSync('phone')||"";
 			this.couponId=option.couponId|| "",
 			this.storeid=option.storeid;
 			this.totalCount=option.totalCount,

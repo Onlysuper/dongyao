@@ -25,7 +25,6 @@
 						<image style="width:120upx;height:120upx"  :src="item" mode="" @tap="handleImagePreview(proIndex,index)"></image>
 						<view class="delete" @tap="removeImage(proIndex,index)">
 							 <icon type="clear" size="26"/>
-							 
 						</view>
 					</view>
 					<view @click="chooseImg(proIndex)" class="m-img-item">
@@ -36,9 +35,6 @@
 			<view class="m-footer">
 				是否匿名 <switch type="checkbox" style="margin-left: 20upx;" @change="switchChange($event,proIndex)" />
 			</view>
-			<!-- <view  @tap="commentFn(pro,proIndex)" class="">
-				提交评论
-			</view> -->
 		</view>
 		
 		<view @tap="commentFn" class="m-footer-but">

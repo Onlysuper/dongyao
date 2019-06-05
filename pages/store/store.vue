@@ -228,6 +228,13 @@
 				  totalCount+=obj.buyCount;
 				  return obj  
 				});  
+				if(totalCount<1){
+					uni.showToast({
+						title:  "购物车没有商品",
+						icon: "none"
+					});
+					return false
+				}
 				let proUrlData = encodeURI(JSON.stringify({proUrlData:proArr}));
 				uni.navigateTo({
 					url:"/pages/order/pay?storeid="+this.storeid+"&totalCount="+totalCount+"&type="+type+"&userid="+this.userid+'&proUrlData='+proUrlData

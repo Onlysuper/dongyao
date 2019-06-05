@@ -623,10 +623,11 @@ var page = 1,totalpage = 1;var _default =
       var totalCount = newOrder.totalCount; // 商品件数
       var type = newOrder.paymentType; // 是团购还是直接购买
       var couponId = newOrder.couponId; // 优惠券id
+      var reserveTel = newOrder.reserveTel; //预留电话
       var proArr = _toConsumableArray(data.productList);
       var proUrlData = encodeURI(JSON.stringify({ proUrlData: proArr }));
       uni.navigateTo({
-        url: "/pages/order/pay?storeid=" + storeId + "&totalCount=" + totalCount + "&type=" + type + '&couponId=' + couponId + '&where=orderPage' + '&proUrlData=' + proUrlData });
+        url: "/pages/order/pay?storeid=".concat(storeId, "&totalCount=").concat(totalCount, "&type=").concat(type, "&couponId=").concat(couponId, "&where=orderPage&reserveTel=").concat(reserveTel, "&proUrlData=").concat(proUrlData) });
 
     },
     // 评论

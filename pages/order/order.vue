@@ -123,6 +123,12 @@
 			};
 		},
 		methods:{
+				//拨打电话
+			callPhone(phone){
+				uni.makePhoneCall({
+					phoneNumber: phone //仅为示例
+				});
+			},
 			getLocation(){
 				uni.getLocation({//获取当前的位置坐标
 					type: 'wgs84',

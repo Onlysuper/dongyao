@@ -49,7 +49,7 @@
 			  </swiper>
 			</uni-swiper-dot> -->
 			<uni-swiper-dot :info="swiperList" :current="current" field="content" :mode="mode">
-				<swiper class="swiper-box" @change="change">
+				<swiper class="swiper-box" @change="change" :autoplay="true" :indicator-dots="false" :interval="3000" :duration="500" :circular="true">
 					<swiper-item v-for="(item ,index) in swiperList" :key="index">
 						<view class="swiper-item">
 							<image :src="item.imgUrl" @tap="swiperChange(index)"></image>
@@ -57,6 +57,7 @@
 					</swiper-item>
 				</swiper>
 			</uni-swiper-dot>
+			<!-- <m-swiper :list="swiperList"></m-swiper> -->
 		</view>
 		<!-- 超值热卖 -->
 		<view class="m-container">
@@ -100,6 +101,7 @@
 	import mHomePro from '@/components/m-home-pro'
 	import mHomeHotpro from '@/components/m-home-hotpro'
 	import mHomeStore from '@/components/m-home-store'
+	import mSwiper from "@/components/m-swiper/m-swiper.vue"
 	export default {
 		data() {
 			return {
