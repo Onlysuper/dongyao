@@ -98,9 +98,9 @@
 				{{goodsData.synopsis}}
 			</view>
 			<view class="tip-box">
-				<!-- <view class="item">
-					{{goodsData.describes}}
-				</view> -->
+				<view class="item">
+					{{goodsData.labelName}}
+				</view>
 			</view>
 			<view class="price-box">
 				<view class="price">￥{{goodsData.presentPrice}}</view>
@@ -109,7 +109,7 @@
 					商品库存：{{goodsData.stock}}
 				</view>
 				<view class="pickTime">
-					取货时间：4月1日取货
+					取货时间：{{goodsData.pickTimeStr}}
 				</view>
 			</view>
 		</view>
