@@ -368,10 +368,10 @@ var _uniRate = _interopRequireDefault(__webpack_require__(/*! @/components/uni-r
           Promise.all(arr).then(function (res) {
             //上传成功
             uni.showModal({
-              title: '上传成功',
-              content: '可在我的订单中查看详情',
+              title: '评论成功',
+              content: '前往您的订单列表吗？',
               showCancel: false,
-              confirmText: '查看',
+              confirmText: '确定',
               success: function success(res) {
                 if (res.confirm) {
                   uni.setStorageSync('orderTab', 4);
@@ -394,15 +394,25 @@ var _uniRate = _interopRequireDefault(__webpack_require__(/*! @/components/uni-r
 
           });
         } else {
-          var sendData = {
-            formData: formData,
-            filePath: "",
-            name: 'file' };
+          _this.mPost("/server/o/noImgCommentOn", formData).then(function (res) {
+            uni.showModal({
+              title: '评论成功',
+              content: '前往您的订单列表吗？',
+              showCancel: false,
+              confirmText: '确定',
+              success: function success(res) {
+                if (res.confirm) {
+                  uni.setStorageSync('orderTab', 4);
+                  uni.switchTab({
+                    url: '/pages/tabBar/order' });
 
-          _this.mPost("/server/o/commentOn", sendData).then(function (res) {
-            uni.showToast({
-              title: "评论成功",
-              icon: "none" });
+                } else
+                if (res.cancel) {
+                  uni.switchTab({
+                    url: '/pages/tabBar/home' });
+
+                }
+              } });
 
           }).catch(function (err) {
             uni.showToast({
