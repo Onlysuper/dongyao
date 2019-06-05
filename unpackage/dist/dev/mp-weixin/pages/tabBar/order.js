@@ -841,7 +841,11 @@ var render = function() {
     _c("view", { staticClass: "m-body" }, [
       _c(
         "view",
-        { staticClass: "m-img-container" },
+        {
+          staticClass: "m-img-container",
+          attrs: { eventid: "1a6ae60c-0" },
+          on: { tap: _vm.detailGood }
+        },
         [
           _vm._l(_vm.productListNew, function(item, index) {
             return _c("view", { key: item.id, staticClass: "m-img-box" }, [
@@ -866,7 +870,7 @@ var render = function() {
         "view",
         {
           staticClass: "m-text-right",
-          attrs: { eventid: "1a6ae60c-0" },
+          attrs: { eventid: "1a6ae60c-1" },
           on: { tap: _vm.detailGood }
         },
         [
@@ -899,7 +903,7 @@ var render = function() {
         _vm.status == 1
           ? _c(
               "view",
-              { attrs: { eventid: "1a6ae60c-3" }, on: { tap: _vm.takeGood } },
+              { attrs: { eventid: "1a6ae60c-4" }, on: { tap: _vm.takeGood } },
               [
                 _c(
                   "view",
@@ -917,7 +921,7 @@ var render = function() {
           : _vm.status == 2
           ? _c(
               "view",
-              { attrs: { eventid: "1a6ae60c-1" }, on: { tap: _vm.payGood } },
+              { attrs: { eventid: "1a6ae60c-2" }, on: { tap: _vm.payGood } },
               [
                 _c(
                   "view",
@@ -943,7 +947,7 @@ var render = function() {
                     border: "1px solid #ef7251",
                     "margin-left": "10rpx"
                   },
-                  attrs: { eventid: "1a6ae60c-2" },
+                  attrs: { eventid: "1a6ae60c-3" },
                   on: { tap: _vm.commentGood }
                 },
                 [_vm._v("评论")]

@@ -594,7 +594,7 @@
 				color:#ff9e87
 			}
 			.m-token{
-				color:#a7a7a7;
+				color:$color-1;
 				&.m-token{
 					color:$color-active;
 				}

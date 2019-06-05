@@ -217,6 +217,8 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
+
 var _mMap = _interopRequireDefault(__webpack_require__(/*! @/components/m-map */ "../../../../../../Users/apple/opt/DONGYAO/components/m-map.vue"));
 var _mOrderPro = _interopRequireDefault(__webpack_require__(/*! @/components/m-order-pro */ "../../../../../../Users/apple/opt/DONGYAO/components/m-order-pro.vue"));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function _objectSpread(target) {for (var i = 1; i < arguments.length; i++) {var source = arguments[i] != null ? arguments[i] : {};var ownKeys = Object.keys(source);if (typeof Object.getOwnPropertySymbols === 'function') {ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) {return Object.getOwnPropertyDescriptor(source, sym).enumerable;}));}ownKeys.forEach(function (key) {_defineProperty(target, key, source[key]);});}return target;}function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}var _default =
 {
@@ -243,6 +245,11 @@ var _mOrderPro = _interopRequireDefault(__webpack_require__(/*! @/components/m-o
       uni.makePhoneCall({
         phoneNumber: phone //仅为示例
       });
+    },
+    detail: function detail(id) {
+      uni.navigateTo({
+        url: "/pages/product/product?id=" + id });
+
     },
     getLocation: function getLocation() {
       uni.getLocation({ //获取当前的位置坐标
@@ -480,13 +487,16 @@ var render = function() {
             return _c("m-order-pro", {
               key: item.id,
               attrs: {
+                productid: item.productId,
                 title: item.productName,
                 price: item.presentPrice,
                 oldprice: item.originalPrice,
                 imgurl: item["pictures"][0].pictureUrl,
                 num: item.buyCount,
+                eventid: "69f9dad0-1-" + index,
                 mpcomid: "69f9dad0-0-" + index
-              }
+              },
+              on: { detail: _vm.detail }
             })
           }),
           _c("view", { staticClass: "m-footer" }, [
@@ -518,7 +528,7 @@ var render = function() {
                 loading: _vm.payLoading,
                 disabled: _vm.payLoading,
                 type: "primary",
-                eventid: "69f9dad0-1"
+                eventid: "69f9dad0-2"
               },
               on: { click: _vm.payFn }
             },

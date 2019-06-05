@@ -1,6 +1,6 @@
 <template>
 	<view class="m-pro-list">
-		<view class="img-box">
+		<view @tap="detail" class="img-box">
 			<image style="width:130upx;height:130upx;" :src="imgurl" mode="aspectFit"></image>
 		</view>
 		<view class="m-text-box">
@@ -49,6 +49,10 @@
 				type:String,
 				value:"",
 			},
+			productid:{
+				type:[String,Number],
+				value:"",
+			}
 			
 		},
 		data() {
@@ -59,6 +63,9 @@
 		methods:{
 			titleHandle(){
 				this.$emit("titleHandle")
+			},
+			detail(id){
+				this.$emit("detail",this.productid)
 			}
 		}
 	}

@@ -46,7 +46,7 @@
 				</template>
 			</view>
 			<view v-else class="empty-row">
-				暂无商品
+				~暂无商品~
 			</view>
 		</view>
 		<view class="m-container">
@@ -61,7 +61,7 @@
 				</scroll-view>
 			</view>
 			<view v-else class="empty-row">
-				今日暂无拼团商品
+				~今日暂无拼团商品~
 			</view>
 		</view>
 		<view class="m-container">
@@ -72,7 +72,7 @@
 				</template>
 			</view>
 			<view v-else class="empty-row">
-				暂无门店
+				~暂无门店~
 			</view>
 		</view>
 		

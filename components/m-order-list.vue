@@ -28,7 +28,7 @@
 			</view>
 		</view>
 		<view class="m-body">
-			<view class="m-img-container">
+			<view  @tap="detailGood" class="m-img-container">
 				<view class="m-img-box" v-for="(item) in productListNew" :key="item.id">
 					<image style="width:100%;height:100%" :src="item.pictures[0].pictureUrl" mode="aspectFit"></image>
 				</view>

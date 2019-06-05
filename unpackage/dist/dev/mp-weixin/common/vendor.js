@@ -7133,6 +7133,10 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 
     imgurl: {
       type: String,
+      value: "" },
+
+    productid: {
+      type: [String, Number],
       value: "" } },
 
 
@@ -7145,6 +7149,9 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
   methods: {
     titleHandle: function titleHandle() {
       this.$emit("titleHandle");
+    },
+    detail: function detail(id) {
+      this.$emit("detail", this.productid);
     } } };exports.default = _default;
 
 /***/ }),
@@ -8518,12 +8525,20 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("view", { staticClass: "m-pro-list" }, [
-    _c("view", { staticClass: "img-box" }, [
-      _c("image", {
-        staticStyle: { width: "130rpx", height: "130rpx" },
-        attrs: { src: _vm.imgurl, mode: "aspectFit" }
-      })
-    ]),
+    _c(
+      "view",
+      {
+        staticClass: "img-box",
+        attrs: { eventid: "1f53d102-0" },
+        on: { tap: _vm.detail }
+      },
+      [
+        _c("image", {
+          staticStyle: { width: "130rpx", height: "130rpx" },
+          attrs: { src: _vm.imgurl, mode: "aspectFit" }
+        })
+      ]
+    ),
     _c("view", { staticClass: "m-text-box" }, [
       _c("view", { staticClass: "m-body" }, [
         _c("view", { staticClass: "m-pro-title" }, [_vm._v(_vm._s(_vm.title))]),

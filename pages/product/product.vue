@@ -292,7 +292,7 @@ export default {
 					_this.descriptionStr=data.describes;
 					_this.storeId = data.storeId;
 					_this.timeSpan = data.timeSpan;
-					_this.details=data.details;
+					_this.details=Object.assign(_this.details,data.details) ;
 					// 轮播图
 					if(data.pictures){
 						_this.swiperList=[...data.pictures];

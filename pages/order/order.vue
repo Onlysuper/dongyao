@@ -66,7 +66,9 @@
 			<!-- 商品列表 -->
 			<view class="m-pro-container">
 				<m-order-pro
+				@detail="detail"
 				v-for="(item) in productList" :key="item.id"
+				:productid="item.productId"
 				:title="item.productName"
 				:price="item.presentPrice"
 				:oldprice="item.originalPrice"
@@ -128,6 +130,11 @@
 				uni.makePhoneCall({
 					phoneNumber: phone //仅为示例
 				});
+			},
+			detail(id){
+				uni.navigateTo({
+					url:"/pages/product/product?id="+id
+				})
 			},
 			getLocation(){
 				uni.getLocation({//获取当前的位置坐标

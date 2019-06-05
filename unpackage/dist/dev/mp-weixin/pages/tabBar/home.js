@@ -1790,7 +1790,7 @@ var render = function() {
               ],
               2
             )
-          : _c("view", { staticClass: "empty-row" }, [_vm._v("暂无商品")])
+          : _c("view", { staticClass: "empty-row" }, [_vm._v("~暂无商品~")])
       ],
       1
     ),
@@ -1849,7 +1849,7 @@ var render = function() {
               1
             )
           : _c("view", { staticClass: "empty-row" }, [
-              _vm._v("今日暂无拼团商品")
+              _vm._v("~今日暂无拼团商品~")
             ])
       ],
       1
@@ -1889,7 +1889,7 @@ var render = function() {
               ],
               2
             )
-          : _c("view", { staticClass: "empty-row" }, [_vm._v("暂无门店")])
+          : _c("view", { staticClass: "empty-row" }, [_vm._v("~暂无门店~")])
       ],
       1
     )
