@@ -341,7 +341,7 @@ var _mEmpty = _interopRequireDefault(__webpack_require__(/*! @/components/m-resu
   methods: {
     //跳转到商品详情
     goPro: function goPro(id) {
-      console.log(id);
+      // console.log(id);
       uni.navigateTo({
         url: "/pages/product/product?id=" + id });
 

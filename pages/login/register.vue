@@ -1,7 +1,7 @@
 <template>
 	<view class="m-login-page">
 		<view class="m-img-box">
-			东尧蔬菜登录
+			千畔优品登录
 		</view>
 
 		<view class="">

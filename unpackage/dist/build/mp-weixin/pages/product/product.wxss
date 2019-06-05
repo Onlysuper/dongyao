@@ -24,12 +24,16 @@
 /* 垂直间距 */
 /* 透明度 */
 /* 文章场景相关 */
+page {
+  -webkit-font-smoothing: antialiased;
+}
 .split-place {
   height: 100rpx;
 }
 .description {
   background: #fff;
   font-size: 26rpx;
+  padding: 30rpx;
 }
 .mvideo {
   width: 100%;
@@ -440,6 +444,30 @@ page {
 .spec .row .arrow .icon {
       color: #ccc;
 }
+.pro-detail .m-header {
+  color: #333333;
+  font-size: 32rpx;
+  padding: 30rpx 0;
+}
+.pro-detail .m-row {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: row;
+      -ms-flex-direction: row;
+          flex-direction: row;
+}
+.pro-detail .m-row .m-cell {
+    -webkit-box-flex: 1;
+    -webkit-flex: 1;
+        -ms-flex: 1;
+            flex: 1;
+    font-size: 28rpx;
+    color: #4c4c4c;
+}
 .pintuan {
   background: #fff;
 }
@@ -755,6 +783,7 @@ page {
 .footer .btn .joinCart {
       background-color: #4eb87d;
       text-align: center;
+      border-right: 1px solid #7fc19c;
 }
 .footer .btn .buy {
       background-color: #4eb87d;

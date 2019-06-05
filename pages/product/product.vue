@@ -202,7 +202,7 @@
 						产地:{{details.placeOrigin}}
 					</view>
 					<view class="m-cell">
-						储存:{{details.placeOrigin}}
+						储存:{{details.storageMode}}
 					</view>
 				</view>
 				<view class="m-row">
@@ -234,7 +234,12 @@ export default {
 	components: {uniRate},
 	data() {
 		return {
-			details:{}, // 详情
+			details:{
+				placeOrigin:"",
+				specs:"",
+				qualityGuaranteePeriod:"",
+				storageMode:"",
+			}, // 详情
 			timeSpan:'',//距团购结束
 			pintunNum:'',// 拼团人数
 			//控制渐变标题栏的参数
@@ -290,7 +295,7 @@ export default {
 					_this.descriptionStr=data.describes;
 					_this.storeId = data.storeId;
 					_this.timeSpan = data.timeSpan;
-					_this.details=data.details;
+					_this.details=Object.assign(_this.details,data.details) ;
 					// 轮播图
 					if(data.pictures){
 						_this.swiperList=[...data.pictures];
@@ -532,6 +537,7 @@ export default {
 .description{
 	background:#fff;
 	font-size: $fontsize-4;
+	padding: 30upx;
 }
 .mvideo{
 	width: 100%;

@@ -5,7 +5,7 @@
 				<view class="m-message">
 					<view class="m-img">
 						<!-- imgUrl -->
-						<image style="width:100%;height: 100%;" :src="storeData.imgUrl" mode="aspectFit"></image>
+						<image @tap="previewImage(storeData.imgUrl)" style="width:100%;height: 100%;" :src="storeData.imgUrl" mode="aspectFit"></image>
 	
 					</view>
 					<view class="m-body">
@@ -21,11 +21,9 @@
 							</view>
 						</view>
 						<view class="m-phone" @tap='callPhone(storeData.tel)'>
-							<image  style="width: 40upx;height:40upx;margin-left: 20upx;" src="../../static/img/icon/shop_icon_phone.png" mode="aspectFit"></image>
-							
+							<image style="width: 40upx;height:40upx;margin-left: 20upx;" src="/static/img/icon/shop_icon_phone.png" mode="aspectFit"></image>
 						</view>
 					</view>
-					<!--  -->
 				</view>
 			</view>
 		</view>
@@ -206,6 +204,12 @@
 // 				console.log('cunzai'+_index);
 // 				return (_index!=-1);
 // 			},
+			// 查看大图
+			previewImage(url){
+				uni.previewImage({
+					urls: [url]
+				});
+			},
 			//产品详情
 			proDetail(data){
 				uni.navigateTo({
@@ -228,9 +232,14 @@
 				  totalCount+=obj.buyCount;
 				  return obj  
 				});  
+				if(totalCount<1){
+					uni.showToast({
+						title:  "购物车没有商品",
+						icon: "none"
+					});
+					return false
+				}
 				let proUrlData = encodeURI(JSON.stringify({proUrlData:proArr}));
-				console.log({proUrlData:proArr});
-				return false;
 				uni.navigateTo({
 					url:"/pages/order/pay?storeid="+this.storeid+"&totalCount="+totalCount+"&type="+type+"&userid="+this.userid+'&proUrlData='+proUrlData
 				})
@@ -286,17 +295,19 @@
 			
 			//分类切换显示
 			showCategory(){
+				console.log('切换');
 				uni.showLoading({});
 				if(totalpage&&page > totalpage){
 					// uni.hideLoading({"title":"已经加载全部", icon:"none"});
 					uni.hideLoading();
 					return ;
 				}
+				let _this = this;
 				this.mPost("/server/p/search/products",{
 					start:page,
 					length:10,
-					typeId:this.typeid,
-					storeId:this.storeId
+					typeId:_this.typeid*1,
+					storeId:_this.storeid*1
 				}).then(res=>{
 					if(res.code=='1'){
 						if(res.data&&res.data.list){
@@ -422,6 +433,7 @@
 			addGoodSum(_data,num=1,type){
 				let _id = _data.id;
 				let data= this.productList.find(item=>item.id==_id);
+				console.log(data);
 				let _this=this;
 				let buyCount=num;
 				let objIndex = this.shopCarList.findIndex(item=>item.id==_id);

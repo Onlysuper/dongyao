@@ -273,10 +273,6 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-
-
-
-
 var _uniRate = _interopRequireDefault(__webpack_require__(/*! @/components/uni-rate/uni-rate.vue */ "../../../../../../Users/apple/opt/DONGYAO/components/uni-rate/uni-rate.vue"));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function _objectSpread(target) {for (var i = 1; i < arguments.length; i++) {var source = arguments[i] != null ? arguments[i] : {};var ownKeys = Object.keys(source);if (typeof Object.getOwnPropertySymbols === 'function') {ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) {return Object.getOwnPropertyDescriptor(source, sym).enumerable;}));}ownKeys.forEach(function (key) {_defineProperty(target, key, source[key]);});}return target;}function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}var _default =
 {
   components: {
@@ -348,56 +344,74 @@ var _uniRate = _interopRequireDefault(__webpack_require__(/*! @/components/uni-r
       this.productList.forEach(function (pro, index) {
         // 将选择的图片组成一个Promise数组，准备进行并行上传
         var formData = {
-          productId: pro.id,
+          productId: pro.productId,
           anonymous: _this.anonymous[index] || 0,
           orderId: _this.orderid,
           starLevel: _this.levels[index] || 5,
           commentContent: _this.textAreaVals[index] };
 
-        if (!_this3.imgsUrl[index] || _this3.imgsUrl[index].length == 0) {
-          return false;
-        }
-        var arr = _this3.imgsUrl[index].map(function (path) {
-          var sendData = {
-            url: _this.apiurl + "/server/o/commentOn",
-            header: {
-              "Cache-Control": "no-cache",
-              Authorization: uni.getStorageSync('Authorization') },
 
-            filePath: path,
+        if (_this3.imgsUrl[index] && _this3.imgsUrl[index].length > 0) {
+          var arr = _this3.imgsUrl[index].forEach(function (path) {
+            var sendData = {
+              url: _this.apiurl + "/server/o/commentOn",
+              header: {
+                "Cache-Control": "no-cache",
+                Authorization: uni.getStorageSync('Authorization') },
+
+              filePath: path,
+              formData: formData,
+              name: 'file' };
+
+            return uni.uploadFile(_objectSpread({}, sendData));
+          });
+          Promise.all(arr).then(function (res) {
+            //上传成功
+            uni.showModal({
+              title: '上传成功',
+              content: '可在我的订单中查看详情',
+              showCancel: false,
+              confirmText: '查看',
+              success: function success(res) {
+                if (res.confirm) {
+                  uni.setStorageSync('orderTab', 4);
+                  uni.switchTab({
+                    url: '/pages/tabBar/order' });
+
+                } else
+                if (res.cancel) {
+                  uni.switchTab({
+                    url: '/pages/tabBar/home' });
+
+                }
+              } });
+
+          }).catch(function (err) {
+            //上传失败
+            uni.showToast({
+              title: "上传失败",
+              icon: "none" });
+
+          });
+        } else {
+          var sendData = {
             formData: formData,
+            filePath: "",
             name: 'file' };
 
-          return uni.uploadFile(_objectSpread({}, sendData));
-        });
-        Promise.all(arr).then(function (res) {
-          //上传成功
-          uni.showModal({
-            title: '上传成功',
-            content: '可在我的订单中查看详情',
-            showCancel: false,
-            confirmText: '查看',
-            success: function success(res) {
-              if (res.confirm) {
-                uni.setStorageSync('orderTab', 4);
-                uni.switchTab({
-                  url: '/pages/tabBar/order' });
+          _this.mPost("/server/o/commentOn", sendData).then(function (res) {
+            uni.showToast({
+              title: "评论成功",
+              icon: "none" });
 
-              } else
-              if (res.cancel) {
-                uni.switchTab({
-                  url: '/pages/tabBar/home' });
+          }).catch(function (err) {
+            uni.showToast({
+              title: err,
+              icon: "none" });
 
-              }
-            } });
+          });
+        }
 
-        }).catch(function (err) {
-          //上传失败
-          uni.showToast({
-            title: "上传失败",
-            icon: "none" });
-
-        });
       });
     } },
 

@@ -24,6 +24,9 @@
 /* 垂直间距 */
 /* 透明度 */
 /* 文章场景相关 */
+page {
+  -webkit-font-smoothing: antialiased;
+}
 .split-place {
   height: 100rpx;
 }
@@ -443,6 +446,9 @@
 /* 垂直间距 */
 /* 透明度 */
 /* 文章场景相关 */
+page {
+  -webkit-font-smoothing: antialiased;
+}
 .split-place {
   height: 100rpx;
 }
@@ -565,6 +571,9 @@
 /* 垂直间距 */
 /* 透明度 */
 /* 文章场景相关 */
+page {
+  -webkit-font-smoothing: antialiased;
+}
 .split-place {
   height: 100rpx;
 }
@@ -606,6 +615,9 @@
 /* 垂直间距 */
 /* 透明度 */
 /* 文章场景相关 */
+page {
+  -webkit-font-smoothing: antialiased;
+}
 .split-place {
   height: 100rpx;
 }
@@ -847,6 +859,9 @@
 /* 垂直间距 */
 /* 透明度 */
 /* 文章场景相关 */
+page {
+  -webkit-font-smoothing: antialiased;
+}
 .split-place {
   height: 100rpx;
 }
@@ -857,6 +872,9 @@
           box-shadow: 0 0 15rpx rgba(0, 0, 0, 0.2);
   margin: 30rpx;
   padding: 30rpx;
+}
+.m-token-card:active {
+    background: #eee;
 }
 .m-token-card .m-body {
     display: -webkit-box;

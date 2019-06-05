@@ -221,6 +221,9 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 
 
 
+
+
+
 {
   name: "m-store-list",
   props: {
@@ -233,6 +236,10 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
       default: "" },
 
     address: {
+      type: String,
+      default: "" },
+
+    fencingRange: {
       type: String,
       default: "" }
 
@@ -381,6 +388,9 @@ var render = function() {
     _c("view", { staticClass: "m-text" }, [
       _c("view", { staticClass: "m-title" }, [_vm._v(_vm._s(_vm.title))]),
       _c("view", { staticClass: "m-address" }, [_vm._v(_vm._s(_vm.address))])
+    ]),
+    _c("view", { staticClass: "m-distence" }, [
+      _vm._v(_vm._s(_vm.fencingRange) + "km")
     ])
   ])
 }
@@ -433,6 +443,7 @@ var render = function() {
                       attrs: {
                         title: item.name,
                         img: item.imgUrl,
+                        fencingRange: item.fencingRange,
                         address: item.address,
                         mpcomid: "5abb2661-0-" + index
                       }

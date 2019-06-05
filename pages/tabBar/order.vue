@@ -91,15 +91,15 @@
 				let totalCount = newOrder.totalCount; // 商品件数
 				let type= newOrder.paymentType; // 是团购还是直接购买
 				let couponId = newOrder.couponId; // 优惠券id
+				let reserveTel=newOrder.reserveTel;//预留电话
 				let proArr = [...data.productList];
 				let proUrlData = encodeURI(JSON.stringify({proUrlData:proArr}));
 				uni.navigateTo({
-					url:"/pages/order/pay?storeid="+storeId+"&totalCount="+totalCount+"&type="+type+'&couponId='+couponId+'&proUrlData='+proUrlData
+					url:`/pages/order/pay?storeid=${storeId}&totalCount=${totalCount}&type=${type}&couponId=${couponId}&where=orderPage&reserveTel=${reserveTel}&proUrlData=${proUrlData}`
 				})
 			},
 			// 评论
 			commentGood(res){
-				// console.log('评论')
 				let data = res.data;
 				let orderid = data.order.id;
 				let newProduct = [...data.productList];

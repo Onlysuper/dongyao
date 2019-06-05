@@ -776,8 +776,6 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 
 
 
-
-
 var _mFooterCar = _interopRequireDefault(__webpack_require__(/*! @/components/m-footer-car */ "../../../../../../Users/apple/opt/DONGYAO/components/m-footer-car.vue"));
 var _mStorePro = _interopRequireDefault(__webpack_require__(/*! @/components/m-store-pro */ "../../../../../../Users/apple/opt/DONGYAO/components/m-store-pro.vue"));
 var _uniNumberBox = _interopRequireDefault(__webpack_require__(/*! @/components/uni-number-box/uni-number-box.vue */ "../../../../../../Users/apple/opt/DONGYAO/components/uni-number-box/uni-number-box.vue"));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function _toConsumableArray(arr) {return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread();}function _nonIterableSpread() {throw new TypeError("Invalid attempt to spread non-iterable instance");}function _iterableToArray(iter) {if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter);}function _arrayWithoutHoles(arr) {if (Array.isArray(arr)) {for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) {arr2[i] = arr[i];}return arr2;}}function _objectSpread(target) {for (var i = 1; i < arguments.length; i++) {var source = arguments[i] != null ? arguments[i] : {};var ownKeys = Object.keys(source);if (typeof Object.getOwnPropertySymbols === 'function') {ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) {return Object.getOwnPropertyDescriptor(source, sym).enumerable;}));}ownKeys.forEach(function (key) {_defineProperty(target, key, source[key]);});}return target;}function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}var page = 1,totalpage = 0;
@@ -876,6 +874,12 @@ function bezier(pots, amount) {
     // 				console.log('cunzai'+_index);
     // 				return (_index!=-1);
     // 			},
+    // 查看大图
+    previewImage: function previewImage(url) {
+      uni.previewImage({
+        urls: [url] });
+
+    },
     //产品详情
     proDetail: function proDetail(data) {
       uni.navigateTo({
@@ -898,9 +902,14 @@ function bezier(pots, amount) {
         totalCount += obj.buyCount;
         return obj;
       });
+      if (totalCount < 1) {
+        uni.showToast({
+          title: "购物车没有商品",
+          icon: "none" });
+
+        return false;
+      }
       var proUrlData = encodeURI(JSON.stringify({ proUrlData: proArr }));
-      console.log({ proUrlData: proArr });
-      return false;
       uni.navigateTo({
         url: "/pages/order/pay?storeid=" + this.storeid + "&totalCount=" + totalCount + "&type=" + type + "&userid=" + this.userid + '&proUrlData=' + proUrlData });
 
@@ -956,17 +965,19 @@ function bezier(pots, amount) {
 
     //分类切换显示
     showCategory: function showCategory() {var _this2 = this;
+      console.log('切换');
       uni.showLoading({});
       if (totalpage && page > totalpage) {
         // uni.hideLoading({"title":"已经加载全部", icon:"none"});
         uni.hideLoading();
         return;
       }
+      var _this = this;
       this.mPost("/server/p/search/products", {
         start: page,
         length: 10,
-        typeId: this.typeid,
-        storeId: this.storeId }).
+        typeId: _this.typeid * 1,
+        storeId: _this.storeid * 1 }).
       then(function (res) {
         if (res.code == '1') {
           if (res.data && res.data.list) {
@@ -1092,6 +1103,7 @@ function bezier(pots, amount) {
     addGoodSum: function addGoodSum(_data) {var num = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1;var type = arguments.length > 2 ? arguments[2] : undefined;
       var _id = _data.id;
       var data = this.productList.find(function (item) {return item.id == _id;});
+      console.log(data);
       var _this = this;
       var buyCount = num;
       var objIndex = this.shopCarList.findIndex(function (item) {return item.id == _id;});
@@ -1583,7 +1595,16 @@ var render = function() {
             _c("view", { staticClass: "m-img" }, [
               _c("image", {
                 staticStyle: { width: "100%", height: "100%" },
-                attrs: { src: _vm.storeData.imgUrl, mode: "aspectFit" }
+                attrs: {
+                  src: _vm.storeData.imgUrl,
+                  mode: "aspectFit",
+                  eventid: "05dd8904-0"
+                },
+                on: {
+                  tap: function($event) {
+                    _vm.previewImage(_vm.storeData.imgUrl)
+                  }
+                }
               })
             ]),
             _c("view", { staticClass: "m-body" }, [
@@ -1602,7 +1623,7 @@ var render = function() {
                 "view",
                 {
                   staticClass: "m-phone",
-                  attrs: { eventid: "05dd8904-0" },
+                  attrs: { eventid: "05dd8904-1" },
                   on: {
                     tap: function($event) {
                       _vm.callPhone(_vm.storeData.tel)
@@ -1617,7 +1638,7 @@ var render = function() {
                       "margin-left": "20rpx"
                     },
                     attrs: {
-                      src: "../../static/img/icon/shop_icon_phone.png",
+                      src: "/static/img/icon/shop_icon_phone.png",
                       mode: "aspectFit"
                     }
                   })
@@ -1641,7 +1662,7 @@ var render = function() {
                   key: item.id,
                   staticClass: "row",
                   class: [item.id == _vm.typeid ? "on" : ""],
-                  attrs: { eventid: "05dd8904-1-" + index },
+                  attrs: { eventid: "05dd8904-2-" + index },
                   on: {
                     tap: function($event) {
                       _vm.checkType(item.id)
@@ -1665,7 +1686,7 @@ var render = function() {
                 "scroll-with-animation": true,
                 "scroll-y": "true",
                 "scroll-top": _vm.scrollTop,
-                eventid: "05dd8904-3"
+                eventid: "05dd8904-4"
               },
               on: {
                 scrolltoupper: _vm.upper,
@@ -1694,7 +1715,7 @@ var render = function() {
                               presentPrice: category.presentPrice,
                               originalPrice: category.originalPrice,
                               isadd: category.isadd,
-                              eventid: "05dd8904-2-" + index,
+                              eventid: "05dd8904-3-" + index,
                               mpcomid: "05dd8904-0-" + index
                             },
                             on: {
@@ -1723,7 +1744,7 @@ var render = function() {
           title: "去结算",
           price: _vm.shopCarListPrice,
           num: _vm.shopCarListLength,
-          eventid: "05dd8904-4",
+          eventid: "05dd8904-5",
           mpcomid: "05dd8904-1"
         },
         on: {
@@ -1738,7 +1759,7 @@ var render = function() {
         {
           staticClass: "popup spec",
           class: _vm.specClass,
-          attrs: { eventid: "05dd8904-9" },
+          attrs: { eventid: "05dd8904-10" },
           on: {
             touchmove: function($event) {
               $event.stopPropagation()
@@ -1754,7 +1775,7 @@ var render = function() {
             "view",
             {
               staticClass: "layer",
-              attrs: { eventid: "05dd8904-8" },
+              attrs: { eventid: "05dd8904-9" },
               on: {
                 tap: function($event) {
                   $event.stopPropagation()
@@ -1778,7 +1799,7 @@ var render = function() {
                       "view",
                       {
                         staticClass: "m-clear-car",
-                        attrs: { eventid: "05dd8904-5" },
+                        attrs: { eventid: "05dd8904-6" },
                         on: { tap: _vm.clearShopcar }
                       },
                       [_vm._v("清空购物车")]
@@ -1805,7 +1826,7 @@ var render = function() {
                                 min: 1,
                                 max: item.stock,
                                 id: item.id,
-                                eventid: "05dd8904-6-" + index,
+                                eventid: "05dd8904-7-" + index,
                                 mpcomid: "05dd8904-2-" + index
                               },
                               on: {
@@ -1827,7 +1848,7 @@ var render = function() {
                   title: "去结算",
                   price: _vm.shopCarListPrice,
                   num: _vm.shopCarListLength,
-                  eventid: "05dd8904-7",
+                  eventid: "05dd8904-8",
                   mpcomid: "05dd8904-3"
                 },
                 on: {

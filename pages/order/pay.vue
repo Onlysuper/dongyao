@@ -34,7 +34,7 @@
 									预留电话
 								</view>
 								<view class="m-light">
-									<input style="" type="text" :value="reserveTel" />
+									<input style="" type="text" v-model="reserveTel" />
 									
 								</view>
 							</view>
@@ -51,7 +51,9 @@
 				:oldprice="item.originalPrice"
 				:imgurl="item.pictureUrl"
 				:num="item.buyCount"
-				 ></m-order-pro>
+				 >
+				 
+				 </m-order-pro>
 			</view>
 			<!-- 价钱 -->
 			<view class="m-pro-message">
@@ -68,7 +70,7 @@
 						商品折扣
 					</view>
 					<view class="m-discount">
-						-¥{{discount}}
+						{{discount}}
 					</view>
 				</view>
 				<view class="m-row">
@@ -125,9 +127,10 @@
 		<!-- 确定支付按钮 -->
 		<view class="place"></view>
 		<!-- 分割 -->
-		<view @tap="payFn" class="m-footer-but">
+		<!-- <view @tap="payFn" class="m-footer-but">
 			立即支付￥{{payPrice}}
-		</view>
+		</view> -->
+		<button :loading="payLoading" :disabled="payLoading"  @tap="payFn" class="m-footer-but" type="primary">立即支付￥{{payPrice}}</button>
 	</view>
 </template>
 
@@ -163,12 +166,13 @@
 		},
 		data() {
 			return {
+				payLoading:false,
 				storeid:'',
 				storeData:{},
 				distance:'',
 				today:dateFtt("yyyy-MM-dd hh:mm",new Date()),
 				aboutPickingTime:dateFtt("yyyy-MM-dd hh:mm",new Date()),//预约时间
-				reserveTel:uni.getStorageSync('phone'),// 预约手机号
+				reserveTel:"",// 预约手机号
 				paytype:"wx",//支付方式
 				type:"",//是否是拼团订单
 				latitude: 39.909,
@@ -203,9 +207,20 @@
 			getData(option){
 				let _this= this;
 				if(option){
+					let where = '';
+					if(option.where){
+						where = option.where;
+					}
 					let proUrlData=decodeURI(option.proUrlData);
-					console.log(_this.shopCarList);
 					_this.shopCarList=JSON.parse(proUrlData)['proUrlData'];
+					if(where=='orderPage'){
+						_this.shopCarList=_this.shopCarList.map(item=>{
+							// console.log(item)
+							return {...item,...{pictureUrl:item['pictures'][0]['pictureUrl']}}
+						})
+						console.log(_this.shopCarList);
+					}
+					
 				}
 				_this.orderInit()
 			},
@@ -252,6 +267,7 @@
 			// 立即支付
 			payFn(){
 				let _this=this;
+				_this.payLoading=true;
 				let products=_this.shopCarList.map(item=>{return {
 					productId:item.productId||item.id,
 					cou:item.buyCount,
@@ -272,6 +288,7 @@
 					sendData['outTradeNo']=this.outTradeNo; //订单id，第一次下单不需要，待支付订单支付时需要传入
 				}
 				_this.mPost("/server/pay/wxpay",sendData).then(res=>{
+					_this.payLoading=false;
 					let data = res.data;
 					if(!data.paySign){
 						this.paySuccess();
@@ -287,21 +304,29 @@
 						signType: data.signType,
 						paySign: data.paySign,
 					}
+					this.payLoading=true;
 					uni.requestPayment({
 						...paydata,
 						success: function(res) {
+							_this.payLoading=false;
 							_this.paySuccess()
 						},
 						fail: function(err) {
+							_this.payLoading=false;
 							//取消支付
 							uni.setStorageSync('orderTab', 2);
 							uni.switchTab({  
 								url: '/pages/tabBar/order'  
 							}); 
 							 // _this.clearShopcar()
+						},
+						complete() {
+							_this.payLoading=false;
 						}
 					});
 					
+				}).catch(err=>{
+					_this.payLoading=false;
 				})
 			},
 			//支付成功
@@ -370,6 +395,7 @@
 		},
 		// 
 		onLoad(option){
+			this.reserveTel=option.reserveTel||uni.getStorageSync('phone')||"";
 			this.couponId=option.couponId|| "",
 			this.storeid=option.storeid;
 			this.totalCount=option.totalCount,
@@ -568,7 +594,7 @@
 				color:#ff9e87
 			}
 			.m-token{
-				color:#a7a7a7;
+				color:$color-1;
 				&.m-token{
 					color:$color-active;
 				}
@@ -632,7 +658,7 @@
 		width: 100%;
 		z-index: 100;
 		background:$color-active;
-		
+		border-radius: 0;
 	}
 }
 </style>

@@ -209,7 +209,7 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("view", { staticClass: "m-login-page" }, [
-    _c("view", { staticClass: "m-img-box" }, [_vm._v("东尧蔬菜登录")]),
+    _c("view", { staticClass: "m-img-box" }, [_vm._v("千畔优品登录")]),
     _c(
       "view",
       {},

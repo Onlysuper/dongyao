@@ -25,7 +25,6 @@
 						<image style="width:120upx;height:120upx"  :src="item" mode="" @tap="handleImagePreview(proIndex,index)"></image>
 						<view class="delete" @tap="removeImage(proIndex,index)">
 							 <icon type="clear" size="26"/>
-							 
 						</view>
 					</view>
 					<view @click="chooseImg(proIndex)" class="m-img-item">
@@ -36,9 +35,6 @@
 			<view class="m-footer">
 				是否匿名 <switch type="checkbox" style="margin-left: 20upx;" @change="switchChange($event,proIndex)" />
 			</view>
-			<!-- <view  @tap="commentFn(pro,proIndex)" class="">
-				提交评论
-			</view> -->
 		</view>
 		
 		<view @tap="commentFn" class="m-footer-but">
@@ -233,56 +229,74 @@
 				this.productList.forEach((pro,index)=>{
 					// 将选择的图片组成一个Promise数组，准备进行并行上传
 					let formData={
-						productId:pro.id,
+						productId:pro.productId,
 						anonymous:_this.anonymous[index]||0,
 						orderId:_this.orderid,
 						starLevel:_this.levels[index]||5,
 						commentContent:_this.textAreaVals[index],
 					}
-					if((!this.imgsUrl[index])||this.imgsUrl[index].length==0){
-						return false;
-					}
-					const arr = this.imgsUrl[index].map(path => {
+					
+					if((this.imgsUrl[index])&&this.imgsUrl[index].length>0){
+						const arr = this.imgsUrl[index].forEach(path => {
+							let sendData = {
+							  url: _this.apiurl+"/server/o/commentOn",
+							  header:{
+								 "Cache-Control": "no-cache",
+								 Authorization :uni.getStorageSync('Authorization')
+							  },
+							  filePath: path,
+							  formData:formData,
+							  name: 'file',
+							}
+							return uni.uploadFile({...sendData})
+						})
+						Promise.all(arr).then(res => {
+							  //上传成功
+							  uni.showModal({
+							  	title: '上传成功',
+							  	content: '可在我的订单中查看详情',
+							  	showCancel:false,
+							  	confirmText:'查看',
+							  	success: function (res) {
+							  		if (res.confirm) {
+							  			uni.setStorageSync('orderTab', 4);
+							  			uni.switchTab({  
+							  				url: '/pages/tabBar/order'  
+							  			});
+							  		} 
+							  		else if (res.cancel) {
+							  			uni.switchTab({  
+							  				url: '/pages/tabBar/home'  
+							  			});
+							  		}
+							  	}
+							});
+						}).catch(err=>{
+							   //上传失败
+							uni.showToast({
+								title: "上传失败",
+								icon: "none"
+							});
+						})
+					}else{
 						let sendData = {
-						  url: _this.apiurl+"/server/o/commentOn",
-						  header:{
-							 "Cache-Control": "no-cache",
-							 Authorization :uni.getStorageSync('Authorization')
-						  },
-						  filePath: path,
 						  formData:formData,
-						  name: 'file',
+						   filePath: "",
+							name: 'file',
 						}
-						return uni.uploadFile({...sendData})
-					})
-					Promise.all(arr).then(res => {
-						  //上传成功
-						  uni.showModal({
-						  	title: '上传成功',
-						  	content: '可在我的订单中查看详情',
-						  	showCancel:false,
-						  	confirmText:'查看',
-						  	success: function (res) {
-						  		if (res.confirm) {
-						  			uni.setStorageSync('orderTab', 4);
-						  			uni.switchTab({  
-						  				url: '/pages/tabBar/order'  
-						  			});
-						  		} 
-						  		else if (res.cancel) {
-						  			uni.switchTab({  
-						  				url: '/pages/tabBar/home'  
-						  			});
-						  		}
-						  	}
-						});
-					}).catch(err=>{
-						   //上传失败
-						uni.showToast({
-							title: "上传失败",
-							icon: "none"
-						});
-					})
+						_this.mPost("/server/o/commentOn",sendData).then(res=>{
+							uni.showToast({
+								title: "评论成功",
+								icon: "none"
+							});
+						}).catch(err=>{
+							uni.showToast({
+								title: err,
+								icon: "none"
+							});
+						})
+					}
+					
 				})
 			}
 		},

@@ -282,5 +282,6 @@ page {
     width: 100%;
     z-index: 100;
     background: #4eb87d;
+    border-radius: 0;
 }
 

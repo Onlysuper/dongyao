@@ -115,6 +115,9 @@ uni-swiper{
 /* 垂直间距 */
 /* 透明度 */
 /* 文章场景相关 */
+page {
+  -webkit-font-smoothing: antialiased;
+}
 .split-place {
   height: 100rpx;
 }
@@ -126,10 +129,9 @@ uni-swiper{
           flex-direction: column;
   margin-left: 10rpx;
   margin-bottom: 30rpx;
-  padding: 20rpx;
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
-  border-radius: 10rpx;
+  border-radius: 12rpx;
   -webkit-box-flex: 0;
   -webkit-flex: 0 0 225rpx;
       -ms-flex: 0 0 225rpx;
@@ -137,7 +139,13 @@ uni-swiper{
   margin-top: 2px;
   box-sizing: border-box;
   position: relative;
-  border-radius: 30rpx;
+  background: #fff;
+}
+.m-pro-item .m-content {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    padding: 20rpx;
 }
 .m-pro-item ::before {
     content: "";
@@ -149,9 +157,9 @@ uni-swiper{
     bottom: 1px;
     -webkit-box-sizing: border-box;
             box-sizing: border-box;
-    -webkit-box-shadow: 0px 1px 3px rgba(241, 241, 241, 0.6);
-            box-shadow: 0px 1px 3px rgba(241, 241, 241, 0.6);
-    z-index: -1;
+    -webkit-box-shadow: 0px 0px 3px rgba(241, 241, 241, 0.6);
+            box-shadow: 0px 0px 3px rgba(241, 241, 241, 0.6);
+    z-index: 1;
     border-radius: 12rpx;
 }
 .m-pro-item:last-of-type {
@@ -181,7 +189,7 @@ uni-swiper{
     -o-text-overflow: ellipsis;
        text-overflow: ellipsis;
     display: -webkit-box;
-    -webkit-line-clamp: 2;
+    -webkit-line-clamp: 1;
     -webkit-box-orient: vertical;
 }
 .m-pro-item .m-price {
@@ -237,6 +245,9 @@ uni-swiper{
 /* 垂直间距 */
 /* 透明度 */
 /* 文章场景相关 */
+page {
+  -webkit-font-smoothing: antialiased;
+}
 .split-place {
   height: 100rpx;
 }
@@ -249,10 +260,9 @@ uni-swiper{
   margin-left: 10rpx;
   margin-right: 0rpx;
   margin-bottom: 30rpx;
-  padding: 20rpx;
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
-  border-radius: 10rpx;
+  border-radius: 12rpx;
   -webkit-box-flex: 0;
   -webkit-flex: 0 0 225rpx;
       -ms-flex: 0 0 225rpx;
@@ -260,9 +270,16 @@ uni-swiper{
   margin-top: 2px;
   box-sizing: border-box;
   position: relative;
+  background: #fff;
 }
 .m-hotpro-item:active {
     background: #eee;
+}
+.m-hotpro-item .m-content {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    padding: 20rpx;
 }
 .m-hotpro-item ::before {
     content: "";
@@ -274,9 +291,9 @@ uni-swiper{
     bottom: 1px;
     -webkit-box-sizing: border-box;
             box-sizing: border-box;
-    -webkit-box-shadow: 0px 1px 3px rgba(241, 241, 241, 0.6);
-            box-shadow: 0px 1px 3px rgba(241, 241, 241, 0.6);
-    z-index: -1;
+    -webkit-box-shadow: 0px 0px 3px rgba(241, 241, 241, 0.6);
+            box-shadow: 0px 0px 3px rgba(241, 241, 241, 0.6);
+    z-index: 1;
     border-radius: 12rpx;
 }
 .m-hotpro-item .m-img {
@@ -296,7 +313,7 @@ uni-swiper{
     -o-text-overflow: ellipsis;
        text-overflow: ellipsis;
     display: -webkit-box;
-    -webkit-line-clamp: 2;
+    -webkit-line-clamp: 1;
     -webkit-box-orient: vertical;
 }
 .m-hotpro-item .m-price {
@@ -352,6 +369,9 @@ uni-swiper{
 /* 垂直间距 */
 /* 透明度 */
 /* 文章场景相关 */
+page {
+  -webkit-font-smoothing: antialiased;
+}
 .split-place {
   height: 100rpx;
 }
@@ -554,7 +574,7 @@ uni-swiper{
           align-items: center;
   position: fixed;
   top: 0;
-  z-index: 10;
+  z-index: 11;
   background-color: #fff;
 
 }

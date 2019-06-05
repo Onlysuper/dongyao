@@ -12,6 +12,9 @@
 				{{address}}
 			</view>
 		</view>
+		<view class="m-distence">
+			{{fencingRange}}km
+		</view>
 	</view>
 </template>
 
@@ -30,6 +33,10 @@
 			address:{
 				type:String,
 				default:"",
+			},
+			fencingRange:{
+				type:String,
+				default:""
 			},
 // 			rowData:{
 // 				type:Object,
@@ -86,6 +93,12 @@
 			margin-top: 10upx;
 			color:#808080;
 		}
+	}
+	.m-distence{
+		flex: 0 1 100upx;
+		color:#b2b2b2;
+		font-size: 20upx;
+		text-align: right
 	}
 }
 </style>

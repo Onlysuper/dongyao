@@ -26,12 +26,12 @@
 /* 文章场景相关 */
 @-webkit-keyframes myfirst {
 0% {
-    -webkit-transform: scale(0.9, 0.9);
-            transform: scale(0.9, 0.9);
+    -webkit-transform: scale(0.6, 0.6);
+            transform: scale(0.6, 0.6);
 }
 50% {
-    -webkit-transform: scale(1.2, 1.2);
-            transform: scale(1.2, 1.2);
+    -webkit-transform: scale(1.1, 1.1);
+            transform: scale(1.1, 1.1);
 }
 100% {
     -webkit-transform: scale(1, 1);
@@ -40,12 +40,12 @@
 }
 @keyframes myfirst {
 0% {
-    -webkit-transform: scale(0.9, 0.9);
-            transform: scale(0.9, 0.9);
+    -webkit-transform: scale(0.6, 0.6);
+            transform: scale(0.6, 0.6);
 }
 50% {
-    -webkit-transform: scale(1.2, 1.2);
-            transform: scale(1.2, 1.2);
+    -webkit-transform: scale(1.1, 1.1);
+            transform: scale(1.1, 1.1);
 }
 100% {
     -webkit-transform: scale(1, 1);
@@ -53,8 +53,8 @@
 }
 }
 .animation {
-  -webkit-animation: myfirst 1s;
-          animation: myfirst 1s;
+  -webkit-animation: myfirst 100ms;
+          animation: myfirst 100ms;
 }
 .m-footer-car {
   position: fixed;
@@ -101,7 +101,7 @@
       z-index: 100;
 }
 .m-footer-car .m-price {
-    color: #333333;
+    color: #ff582b;
     font-size: 30rpx;
     text-align: left;
     -webkit-box-flex: 1;
@@ -137,6 +137,9 @@
 /* 垂直间距 */
 /* 透明度 */
 /* 文章场景相关 */
+page {
+  -webkit-font-smoothing: antialiased;
+}
 .split-place {
   height: 100rpx;
 }
@@ -362,6 +365,9 @@
 /* 垂直间距 */
 /* 透明度 */
 /* 文章场景相关 */
+page {
+  -webkit-font-smoothing: antialiased;
+}
 .split-place {
   height: 100rpx;
 }
@@ -565,6 +571,7 @@
             -webkit-flex: 1;
                 -ms-flex: 1;
                     flex: 1;
+            margin-left: 20rpx;
 }
 .m-store-store .m-store-banner .m-content .m-message .m-body .m-text-box .m-title {
               font-size: 32rpx;

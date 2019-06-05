@@ -5,23 +5,23 @@
 <import src="/components/m-home-store.vue.wxml" />
 <import src="/components/m-vip-top.vue.wxml" />
 <import src="/components/m-cell.vue.wxml" />
+<import src="/components/m-result/m-empty.vue.wxml" />
+<import src="/components/m-store-list.vue.wxml" />
 <import src="/components/m-tab.vue.wxml" />
 <import src="/components/m-need-login.vue.wxml" />
-<import src="/components/m-result/m-empty.vue.wxml" />
 <import src="/components/m-order-list.vue.wxml" />
 <import src="/components/uni-load-more/uni-load-more.vue.wxml" />
-<import src="/components/m-store-list.vue.wxml" />
-<import src="/components/m-product-list.vue.wxml" />
+<import src="/components/uni-rate/uni-rate.vue.wxml" />
+<import src="/components/m-groupbuy-list.vue.wxml" />
 <import src="/components/m-store-pro.vue.wxml" />
 <import src="/components/m-footer-car.vue.wxml" />
 <import src="/components/uni-number-box/uni-number-box.vue.wxml" />
-<import src="/components/m-groupbuy-list.vue.wxml" />
+<import src="/components/m-product-list.vue.wxml" />
 <import src="/components/m-token-card.vue.wxml" />
-<import src="/components/uni-rate/uni-rate.vue.wxml" />
-<import src="/components/m-vip-card.vue.wxml" />
 <import src="/components/m-map.vue.wxml" />
 <import src="/components/rattenking-dtpicker/rattenking-dtpicker.vue.wxml" />
 <import src="/components/m-order-pro.vue.wxml" />
+<import src="/components/m-vip-card.vue.wxml" />
 <import src="/components/uni-icon/uni-icon.vue.wxml" />
 <import src="/common/slots.wxml" />
 
@@ -31,15 +31,25 @@
 
 <template name="09ce8447-default-09ce8447-0"></template>
 
-<template name="09ce8447-name-09ce8447-0">VIP会员</template>
+<template name="09ce8447-name-09ce8447-0">{{myMember.memberDesc}}</template>
 
-<template name="09ce8447-label-09ce8447-0">（半年卡6折）</template>
+<template name="09ce8447-label-09ce8447-0"></template>
 
-<template name="09ce8447-describe-09ce8447-0">享受专属折扣  福利优惠  定制服务</template>
+<template name="09ce8447-describe-09ce8447-0">{{myMember.memberSynopsis}}</template>
 
-<template name="09ce8447-right-09ce8447-0">立即开通></template>
+<template name="09ce8447-right-09ce8447-0">立即续费></template>
 
-<template name="09ce8447-default-09ce8447-1"><image style="width:30rpx;height:30rpx;" src="../../static/img/icon/me_icon_preferential.png" mode="aspectFit" class="_image 09ce8447"></image></template>
+<template name="09ce8447-default-09ce8447-1"></template>
 
-<template name="09ce8447-default-09ce8447-2"><image style="width:30rpx;height:30rpx;" src="../../static/img/icon/me_icon_about.png" mode="aspectFit" class="_image 09ce8447"></image></template>
+<template name="09ce8447-name-09ce8447-1">VIP会员</template>
+
+<template name="09ce8447-label-09ce8447-1"></template>
+
+<template name="09ce8447-describe-09ce8447-1">享受专属折扣  福利优惠  定制服务</template>
+
+<template name="09ce8447-right-09ce8447-1">立即开通></template>
+
+<template name="09ce8447-default-09ce8447-2"><image style="width:36rpx;height:36rpx;" src="/static/img/icon/me_icon_preferential.png" mode="aspectFull" class="_image 09ce8447"></image></template>
+
+<template name="09ce8447-default-09ce8447-3"><image style="width:36rpx;height:36rpx;" src="/static/img/icon/me_icon_about.png" mode="aspectFull" class="_image 09ce8447"></image></template>
 

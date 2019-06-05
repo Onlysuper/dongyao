@@ -70,6 +70,15 @@
       margin-top: 10rpx;
       color: #808080;
 }
+.m-store-list-box .m-distence {
+    -webkit-box-flex: 0;
+    -webkit-flex: 0 1 100rpx;
+        -ms-flex: 0 1 100rpx;
+            flex: 0 1 100rpx;
+    color: #b2b2b2;
+    font-size: 20rpx;
+    text-align: right;
+}
 
 @charset "UTF-8";
 /**

@@ -24,7 +24,7 @@
 				</view>
 				<view v-if="isVip" class="m-footer">
 					<view class="m-title">
-						{{myMember.memberType}}{{myMember.discount}}
+						{{myMember.memberDesc}}
 					</view>
 					<view class="m-describe">
 						<image style="width:59upx;height:59upx;margin-right: 10upx;" src="/static/img/icon/me_icon_VIP.png" mode="aspectFit"></image>

@@ -4,7 +4,7 @@
 		<view v-else class="">
 			<view v-for="(item,index) in nearStoreList" :key="index">
 				<view @tap="goStore(item)"  class="m-store-list">
-					<m-store-list  :title="item.name" :img="item.imgUrl" :address="item.address"></m-store-list>
+					<m-store-list  :title="item.name" :img="item.imgUrl" :fencingRange="item.fencingRange" :address="item.address"></m-store-list>
 				</view>
 			</view>
 		</view>

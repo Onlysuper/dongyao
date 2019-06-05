@@ -42,7 +42,7 @@
 		methods:{
 			//跳转到商品详情
 			goPro(id){
-				console.log(id);
+				// console.log(id);
 				uni.navigateTo({
 					url:"/pages/product/product?id="+id
 				})

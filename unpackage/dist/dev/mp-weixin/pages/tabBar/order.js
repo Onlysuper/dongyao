@@ -416,6 +416,9 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 
 
 
+
+
+
 {
   name: "m-product-list",
   props: {
@@ -479,6 +482,11 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 
 
   },
+  computed: {
+    productListNew: function productListNew() {
+      return this.productList.slice(0, 4);
+    } },
+
   methods: {
     touchOnGoods: function touchOnGoods(e) {
       this.$emit("touchOnGoods", {
@@ -615,15 +623,15 @@ var page = 1,totalpage = 1;var _default =
       var totalCount = newOrder.totalCount; // 商品件数
       var type = newOrder.paymentType; // 是团购还是直接购买
       var couponId = newOrder.couponId; // 优惠券id
+      var reserveTel = newOrder.reserveTel; //预留电话
       var proArr = _toConsumableArray(data.productList);
       var proUrlData = encodeURI(JSON.stringify({ proUrlData: proArr }));
       uni.navigateTo({
-        url: "/pages/order/pay?storeid=" + storeId + "&totalCount=" + totalCount + "&type=" + type + '&couponId=' + couponId + '&proUrlData=' + proUrlData });
+        url: "/pages/order/pay?storeid=".concat(storeId, "&totalCount=").concat(totalCount, "&type=").concat(type, "&couponId=").concat(couponId, "&where=orderPage&reserveTel=").concat(reserveTel, "&proUrlData=").concat(proUrlData) });
 
     },
     // 评论
     commentGood: function commentGood(res) {
-      // console.log('评论')
       var data = res.data;
       var orderid = data.order.id;
       var newProduct = _toConsumableArray(data.productList);
@@ -831,25 +839,33 @@ var render = function() {
         : _vm._e()
     ]),
     _c("view", { staticClass: "m-body" }, [
-      _c("view", { staticClass: "m-img-container" }, [
-        _c(
-          "view",
-          {
-            staticClass: "m-img-box",
-            attrs: { eventid: "1a6ae60c-0" },
-            on: { tap: _vm.detailGood }
-          },
-          [
-            _c("image", {
-              staticStyle: { width: "100%", height: "100%" },
-              attrs: {
-                src: _vm.productList[0].pictures[0].pictureUrl,
-                mode: "aspectFull"
-              }
-            })
-          ]
-        )
-      ]),
+      _c(
+        "view",
+        {
+          staticClass: "m-img-container",
+          attrs: { eventid: "1a6ae60c-0" },
+          on: { tap: _vm.detailGood }
+        },
+        [
+          _vm._l(_vm.productListNew, function(item, index) {
+            return _c("view", { key: item.id, staticClass: "m-img-box" }, [
+              _c("image", {
+                staticStyle: { width: "100%", height: "100%" },
+                attrs: { src: item.pictures[0].pictureUrl, mode: "aspectFit" }
+              })
+            ])
+          }),
+          _vm.productList.length > 3
+            ? _c("view", { staticClass: "m-img-box" }, [
+                _c("image", {
+                  staticStyle: { width: "100%", height: "100%" },
+                  attrs: { src: "/static/img/icon/lve.jpg", mode: "aspectFit" }
+                })
+              ])
+            : _vm._e()
+        ],
+        2
+      ),
       _c(
         "view",
         {
