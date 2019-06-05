@@ -4,7 +4,7 @@
 		<view class="m-img" @tap="proDetail">
 			<image style="width: 100%;height: 100%;border-radius: 100%;" :src="pictureUrl" mode="aspectFill"></image>
 			<view v-if="isAssemble==1" class="m-pin">
-				可拼团
+				拼团商品
 			</view>
 		</view>
 		<view class="m-text">
@@ -26,7 +26,7 @@
 				</view>
 			</view>
 		</view>
-		<view class="m-distance">
+		<view class="m-distance" v-if="isAssemble == 0">
 			<image v-if="!isAdd" @tap="touchOnGoods" style="width:40upx;height: 40upx;" src="../../static/img/icon/shop_icon_buy.png" mode="aspectFit"></image>
 			<image v-else @tap="touchOnGoods" style="width:40upx;height: 40upx;" src="../../static/img/icon/shop_icon_buy_chose.png" mode="aspectFit"></image>
 		</view>
