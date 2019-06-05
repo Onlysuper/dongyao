@@ -803,9 +803,11 @@ var _rattenkingDtpicker = _interopRequireDefault(__webpack_require__(/*! @/compo
     // 支付数据
     getData: function getData(option) {
       var _this = this;
-      var where = option.where;
-
       if (option) {
+        var where = '';
+        if (option.where) {
+          where = option.where;
+        }
         var proUrlData = decodeURI(option.proUrlData);
         _this.shopCarList = JSON.parse(proUrlData)['proUrlData'];
         if (where == 'orderPage') {

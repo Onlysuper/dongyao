@@ -966,21 +966,6 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 var _uniSwiperDot = _interopRequireDefault(__webpack_require__(/*! @/components/uni-swiper-dot/uni-swiper-dot */ "../../../../../../Users/apple/opt/DONGYAO/components/uni-swiper-dot/uni-swiper-dot.vue"));
 var _mTitle = _interopRequireDefault(__webpack_require__(/*! @/components/m-title */ "../../../../../../Users/apple/opt/DONGYAO/components/m-title.vue"));
 var _mHomePro = _interopRequireDefault(__webpack_require__(/*! @/components/m-home-pro */ "../../../../../../Users/apple/opt/DONGYAO/components/m-home-pro.vue"));
@@ -1780,30 +1765,32 @@ var render = function() {
             })
           ]
         ),
-        _c(
-          "view",
-          { staticClass: "m-content m-hotsell" },
-          [
-            _vm._l(_vm.hotProList, function(item, index) {
-              return [
-                _c("m-home-hotpro", {
-                  key: index,
-                  attrs: {
-                    rowData: item,
-                    eventid: "09c88d5b-6-" + index,
-                    mpcomid: "09c88d5b-3-" + index
-                  },
-                  on: {
-                    handleFn: function($event) {
-                      _vm.hotProDetail(item)
-                    }
-                  }
+        _vm.hotProList.length > 0
+          ? _c(
+              "view",
+              { staticClass: "m-content m-hotsell" },
+              [
+                _vm._l(_vm.hotProList, function(item, index) {
+                  return [
+                    _c("m-home-hotpro", {
+                      key: index,
+                      attrs: {
+                        rowData: item,
+                        eventid: "09c88d5b-6-" + index,
+                        mpcomid: "09c88d5b-3-" + index
+                      },
+                      on: {
+                        handleFn: function($event) {
+                          _vm.hotProDetail(item)
+                        }
+                      }
+                    })
+                  ]
                 })
-              ]
-            })
-          ],
-          2
-        )
+              ],
+              2
+            )
+          : _c("view", { staticClass: "empty-row" }, [_vm._v("暂无商品")])
       ],
       1
     ),
@@ -1820,46 +1807,50 @@ var render = function() {
           },
           on: { titleHandle: _vm.pintuanHandle }
         }),
-        _c(
-          "view",
-          { staticClass: "m-content m-pin" },
-          [
-            _c(
-              "scroll-view",
-              {
-                staticClass: "scroll-view",
-                attrs: { "scroll-x": "true", "scroll-left": "0" }
-              },
+        _vm.groupsellList.length > 0
+          ? _c(
+              "view",
+              { staticClass: "m-content m-pin" },
               [
                 _c(
-                  "view",
-                  { staticClass: "m-togethoer" },
+                  "scroll-view",
+                  {
+                    staticClass: "scroll-view",
+                    attrs: { "scroll-x": "true", "scroll-left": "0" }
+                  },
                   [
-                    _vm._l(_vm.groupsellList, function(item, index) {
-                      return [
-                        _c("m-home-pro", {
-                          key: index,
-                          attrs: {
-                            rowData: item,
-                            eventid: "09c88d5b-8-" + index,
-                            mpcomid: "09c88d5b-6-" + index
-                          },
-                          on: {
-                            handleFn: function($event) {
-                              _vm.groupProDetail(item)
-                            }
-                          }
+                    _c(
+                      "view",
+                      { staticClass: "m-togethoer" },
+                      [
+                        _vm._l(_vm.groupsellList, function(item, index) {
+                          return [
+                            _c("m-home-pro", {
+                              key: index,
+                              attrs: {
+                                rowData: item,
+                                eventid: "09c88d5b-8-" + index,
+                                mpcomid: "09c88d5b-6-" + index
+                              },
+                              on: {
+                                handleFn: function($event) {
+                                  _vm.groupProDetail(item)
+                                }
+                              }
+                            })
+                          ]
                         })
-                      ]
-                    })
-                  ],
-                  2
+                      ],
+                      2
+                    )
+                  ]
                 )
-              ]
+              ],
+              1
             )
-          ],
-          1
-        )
+          : _c("view", { staticClass: "empty-row" }, [
+              _vm._v("今日暂无拼团商品")
+            ])
       ],
       1
     ),
@@ -1876,27 +1867,29 @@ var render = function() {
           },
           on: { titleHandle: _vm.storeHandle }
         }),
-        _c(
-          "view",
-          { staticClass: "m-content m-store" },
-          [
-            _vm._l(_vm.nearStoreList, function(item, index) {
-              return [
-                _c("m-home-store", {
-                  key: index,
-                  attrs: {
-                    tips: item.tips,
-                    rowData: item,
-                    eventid: "09c88d5b-10-" + index,
-                    mpcomid: "09c88d5b-9-" + index
-                  },
-                  on: { handleFn: _vm.storeDetail }
+        _vm.nearStoreList.length > 0
+          ? _c(
+              "view",
+              { staticClass: "m-content m-store" },
+              [
+                _vm._l(_vm.nearStoreList, function(item, index) {
+                  return [
+                    _c("m-home-store", {
+                      key: index,
+                      attrs: {
+                        tips: item.tips,
+                        rowData: item,
+                        eventid: "09c88d5b-10-" + index,
+                        mpcomid: "09c88d5b-9-" + index
+                      },
+                      on: { handleFn: _vm.storeDetail }
+                    })
+                  ]
                 })
-              ]
-            })
-          ],
-          2
-        )
+              ],
+              2
+            )
+          : _c("view", { staticClass: "empty-row" }, [_vm._v("暂无门店")])
       ],
       1
     )

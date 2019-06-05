@@ -547,6 +547,19 @@ page {
 /* 垂直间距 */
 /* 透明度 */
 /* 文章场景相关 */
+page {
+  -webkit-font-smoothing: antialiased;
+}
+.split-place {
+  height: 100rpx;
+}
+.empty-row {
+  text-align: center;
+  font-size: 28rpx;
+  color: #a7a7a7;
+  padding: 66rpx 20px;
+  background: #f9f9f9;
+}
 .swiper-box {
   position: relative;
   width: 100%;

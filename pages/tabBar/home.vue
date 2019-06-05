@@ -25,29 +25,6 @@
 		<view class="place"></view>
 		<!-- 轮播图 -->
 		<view class="swiper-box">
-			 <!-- <uni-swiper-dot
-			  :info="swiperList"
-			  :current="current"
-			  :mode="mode"
-			  :dots-styles="dotsStyles"
-			  field="content"
-			>
-			  <swiper
-				class="swiper-box"
-				@change="change">
-				<swiper-item
-				  v-for="(item ,index) in swiperList"
-				  :key="index">
-				  <view
-					:class="item.colorClass"
-					class="swiper-item">
-					<image
-					  :src="item.imgUrl"
-					  mode="aspectFill"/>
-				  </view>
-				</swiper-item>
-			  </swiper>
-			</uni-swiper-dot> -->
 			<uni-swiper-dot :info="swiperList" :current="current" field="content" :mode="mode">
 				<swiper class="swiper-box" @change="change" :autoplay="true" :indicator-dots="false" :interval="3000" :duration="500" :circular="true">
 					<swiper-item v-for="(item ,index) in swiperList" :key="index">
@@ -57,22 +34,24 @@
 					</swiper-item>
 				</swiper>
 			</uni-swiper-dot>
-			<!-- <m-swiper :list="swiperList"></m-swiper> -->
 		</view>
 		<!-- 超值热卖 -->
 		<view class="m-container">
 			<m-title title="超值热卖" labelColor="#666666" label="换一换" @titleHandle="getHotsellList">
 					<image style="width:30upx;height:20upx;margin-right:10upx;" src="../../static/img/icon/home_icon_refresh.png" mode="aspectFit"></image>
 			</m-title>
-			<view class="m-content m-hotsell">
+			<view v-if="hotProList.length>0" class="m-content m-hotsell">
 				<template v-for="(item,index) in hotProList">
 					<m-home-hotpro @handleFn="hotProDetail(item)"  :key="index" :rowData="item"></m-home-hotpro>
 				</template>
 			</view>
+			<view v-else class="empty-row">
+				暂无商品
+			</view>
 		</view>
 		<view class="m-container">
 			<m-title title="今日必拼" label="查看更多 >" @titleHandle="pintuanHandle"></m-title>
-			<view class="m-content m-pin" >
+			<view v-if="groupsellList.length>0" class="m-content m-pin" >
 				<scroll-view class="scroll-view" scroll-x="true"  scroll-left="0">
 					<view class="m-togethoer">
 						<template v-for="(item,index) in groupsellList">
@@ -81,13 +60,19 @@
 					</view>
 				</scroll-view>
 			</view>
+			<view v-else class="empty-row">
+				今日暂无拼团商品
+			</view>
 		</view>
 		<view class="m-container">
 			<m-title title="附近门店" label="查看全部 >" @titleHandle="storeHandle"></m-title>
-			<view class="m-content m-store">
+			<view v-if="nearStoreList.length>0" class="m-content m-store">
 				<template v-for="(item,index) in nearStoreList">
 					<m-home-store @handleFn="storeDetail" :tips="item.tips" :key="index" :rowData="item"></m-home-store>
 				</template>
+			</view>
+			<view v-else class="empty-row">
+				暂无门店
 			</view>
 		</view>
 		
@@ -261,7 +246,14 @@
 </script>
 
 <style lang="scss">
-
+@import "../../common/globel.scss";
+.empty-row{
+	text-align: center;
+	font-size: $fontsize-9;
+	color:$color-1;
+	padding: 66upx 20px;
+	background:#f9f9f9;
+}
 .swiper-box {
 	position: relative;
 	width: 100%;

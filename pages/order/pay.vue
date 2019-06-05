@@ -206,9 +206,11 @@
 			// 支付数据
 			getData(option){
 				let _this= this;
-				let where = option.where;
-				
 				if(option){
+					let where = '';
+					if(option.where){
+						where = option.where;
+					}
 					let proUrlData=decodeURI(option.proUrlData);
 					_this.shopCarList=JSON.parse(proUrlData)['proUrlData'];
 					if(where=='orderPage'){
