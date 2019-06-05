@@ -37,7 +37,7 @@
 			</view>
 			<view class="btn">
 				<view v-if="isAssemble" class="joinCart" @tap="pintuan">我要拼</view>
-				<view class="buy" @tap="buy">立即购买</view>
+				<view v-else class="buy" @tap="buy">立即购买</view>
 			</view>
 		</view>
 		<!-- 服务-模态层弹窗 -->
@@ -107,6 +107,9 @@
 				<view class="oldprice">￥{{goodsData.originalPrice}}</view>
 				<view class="num">
 					商品库存：{{goodsData.stock}}
+				</view>
+				<view class="pickTime">
+					取货时间：4月1日取货
 				</view>
 			</view>
 		</view>
@@ -776,10 +779,17 @@ page {
 			color:$color-6;
 		}
 		.num{
+			display: inline-block;
 			margin-left:30upx;
 			padding-left: 20upx;
 			font-size: $fontsize-5;
 			border-left: 1px solid $color-3;
+		}
+		.pickTime{
+			flex-grow:1;
+			text-align: right;
+			color:$color-price;
+			font-size: $fontsize-5;
 		}
 	}
 }
@@ -859,8 +869,14 @@ page {
 			color:$color-2;
 		}
 		.text-box{
+			margin-top: 10upx;
 			color:$color-6;
 			font-size: $fontsize-3;
+		}
+		.time{
+			color:$color-price;
+			margin-left: 10upx;
+			font-size: $fontsize-2;
 		}
 	}
 	.user-list-box{
