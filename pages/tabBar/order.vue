@@ -16,7 +16,7 @@
 			 :rowData="item"
 			 :key="index"
 			 :status="item.order.state"
-			 :price="item.order.totalPrice"
+			 :price="item.order.paymentPrice"
 			 :num="item.order.totalCount"
 			 :createTime="item.order.createTime"
 			 :extrctime="item.order.actualPickingTime"

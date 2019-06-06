@@ -1,10 +1,10 @@
 <template>
 	<view class="m-login-page">
 		<view class="m-img-box">
-			千畔优品
+			千畦优品
 		</view>
 		<view class="describe">
-			您暂未授权'千畔优品'小程序获取你的信息，讲无法正常使用小程序的功能。
+			您暂未授权'千畦优品'小程序获取你的信息，讲无法正常使用小程序的功能。
 			如果需要正常使用，请点击"授权"按钮，打开头像，昵称等信息的权限
 		</view>
 		<view class="m-but">
@@ -67,7 +67,7 @@
 										uni.switchTab({  
 											url: '/pages/tabBar/home'  
 										});
-									},1300)
+									},1000)
 								}
 							}
 							uni.hideLoading();

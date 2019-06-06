@@ -15,18 +15,24 @@
 						<m-map :latitude="storeData.lat" :longitude="storeData.lng" :userlat="latitude" :userlng="longitude" :distance="geoDistance(latitude,longitude,storeData.lat,storeData.lng)"></m-map>
 						<view class="m-footer">
 							<view class="m-item">
-								<view class="m-text">
+								<view class="m-text picktime_text">
 									自取时间
 								</view>
 								<view class="m-light">
-									<ruiDatePicker
+									<!-- <ruiDatePicker
 										fields="minute"
 										:start="today"
 										end="2030-12-30 23:59"
 										:value="aboutPickingTime"
 										@change="bindChange"
 										@cancel="bindCancel"
-									></ruiDatePicker>
+									></ruiDatePicker> -->
+									 <picker mode="date" :value="date" :start="startDate" :end="endDate" @change="bindDateChange">
+										<view class="uni-input">{{date}}</view>
+									 </picker>
+									 <picker mode="time" :value="time" start="09:01" end="21:01" @change="bindTimeChange">
+										<view class="uni-input">{{time}}</view>
+									 </picker>
 								</view>
 							</view>
 							<view class="m-item">
@@ -165,13 +171,16 @@
 			ruiDatePicker
 		},
 		data() {
+			const currentDate = this.getDate({
+				format: true
+			})
 			return {
 				payLoading:false,
 				storeid:'',
 				storeData:{},
 				distance:'',
 				today:dateFtt("yyyy-MM-dd hh:mm",new Date()),
-				aboutPickingTime:dateFtt("yyyy-MM-dd hh:mm",new Date()),//预约时间
+				aboutPickingTime:undefined,//预约时间
 				reserveTel:"",// 预约手机号
 				paytype:"wx",//支付方式
 				type:"",//是否是拼团订单
@@ -189,11 +198,40 @@
 				couponId:0,
 				// 结算end
 				// 优惠券start
-				haveTokenCard:false
+				haveTokenCard:false,
 				// 优惠券end
+				date: "选择日期",
+				time: "选择时间"
 			};
 		},
 		methods:{ 
+			startDate() {
+				return this.getDate('start');
+			},
+			endDate() {
+				return this.getDate('end');
+			},
+			 bindDateChange: function(e) {
+				this.date = e.target.value
+			},
+			bindTimeChange: function(e) {
+				this.time = e.target.value
+			},
+			getDate(type) {
+				const date = new Date();
+				let year = date.getFullYear();
+				let month = date.getMonth() + 1;
+				let day = date.getDate();
+
+				if (type === 'start') {
+					year = year - 60;
+				} else if (type === 'end') {
+					year = year + 2;
+				}
+				month = month > 9 ? month : '0' + month;;
+				day = day > 9 ? day : '0' + day;
+				return `${year}-${month}-${day}`;
+			},
 			// 选择优惠券
 			choseTokenFn(){
 				uni.navigateTo({
@@ -268,66 +306,74 @@
 			payFn(){
 				let _this=this;
 				_this.payLoading=true;
-				let products=_this.shopCarList.map(item=>{return {
-					productId:item.productId||item.id,
-					cou:item.buyCount,
-				}})
-				let sendData ={
-					storeId:_this.storeid,//门店id
-					totalCount:_this.totalCount,//商品总数量
-					type:_this.type,//标识是普通下单还是拼团下单 1：普通 2：拼团
-					couponId:_this.couponId,//优惠券id,
-					aboutPickingTime:_this.aboutPickingTime?_this.aboutPickingTime+":00":"",//预计取货时间 yyyy-MM-dd hh:mm
-					reserveTel:_this.reserveTel,//预留手机号
-					products:products//商品数组对象
-				}
-				if(_this.couponId){
-					sendData['couponId']=this.couponId;
-				}
-				if(_this.outTradeNo){
-					sendData['outTradeNo']=this.outTradeNo; //订单id，第一次下单不需要，待支付订单支付时需要传入
-				}
-				_this.mPost("/server/pay/wxpay",sendData).then(res=>{
-					_this.payLoading=false;
-					let data = res.data;
-					if(!data.paySign){
-						this.paySuccess();
-						return
-					}
-					// 调起支付
-					let _package = data.prepay_id;
-					let paydata = {
-						provider: 'wxpay',
-						timeStamp: data.timeStamp+'',
-						nonceStr: data.nonceStr,
-						package: data.package,
-						signType: data.signType,
-						paySign: data.paySign,
-					}
-					this.payLoading=true;
-					uni.requestPayment({
-						...paydata,
-						success: function(res) {
-							_this.payLoading=false;
-							_this.paySuccess()
-						},
-						fail: function(err) {
-							_this.payLoading=false;
-							//取消支付
-							uni.setStorageSync('orderTab', 2);
-							uni.switchTab({  
-								url: '/pages/tabBar/order'  
-							}); 
-							 // _this.clearShopcar()
-						},
-						complete() {
-							_this.payLoading=false;
-						}
+				this.aboutPickingTime = this.date+" "+this.time;
+				if(!this.aboutPickingTime){
+					uni.showToast({
+						title: '请填写取货时间~',
+						duration: 1500
 					});
-					
-				}).catch(err=>{
-					_this.payLoading=false;
-				})
+				}else{
+					let products=_this.shopCarList.map(item=>{return {
+						productId:item.productId||item.id,
+						cou:item.buyCount,
+					}})
+					let sendData ={
+						storeId:_this.storeid,//门店id
+						totalCount:_this.totalCount,//商品总数量
+						type:_this.type,//标识是普通下单还是拼团下单 1：普通 2：拼团
+						couponId:_this.couponId,//优惠券id,
+						aboutPickingTime:_this.aboutPickingTime?_this.aboutPickingTime+":00":"",//预计取货时间 yyyy-MM-dd hh:mm
+						reserveTel:_this.reserveTel,//预留手机号
+						products:products//商品数组对象
+					}
+					if(_this.couponId){
+						sendData['couponId']=this.couponId;
+					}
+					if(_this.outTradeNo){
+						sendData['outTradeNo']=this.outTradeNo; //订单id，第一次下单不需要，待支付订单支付时需要传入
+					}
+					_this.mPost("/server/pay/wxpay",sendData).then(res=>{
+						_this.payLoading=false;
+						let data = res.data;
+						if(!data.paySign){
+							this.paySuccess();
+							return
+						}
+						// 调起支付
+						let _package = data.prepay_id;
+						let paydata = {
+							provider: 'wxpay',
+							timeStamp: data.timeStamp+'',
+							nonceStr: data.nonceStr,
+							package: data.package,
+							signType: data.signType,
+							paySign: data.paySign,
+						}
+						this.payLoading=true;
+						uni.requestPayment({
+							...paydata,
+							success: function(res) {
+								_this.payLoading=false;
+								_this.paySuccess()
+							},
+							fail: function(err) {
+								_this.payLoading=false;
+								//取消支付
+								uni.setStorageSync('orderTab', 2);
+								uni.switchTab({  
+									url: '/pages/tabBar/order'  
+								}); 
+								 // _this.clearShopcar()
+							},
+							complete() {
+								_this.payLoading=false;
+							}
+						});
+						
+					}).catch(err=>{
+						_this.payLoading=false;
+					})
+				}
 			},
 			//支付成功
 			paySuccess(){
@@ -490,11 +536,15 @@
 						flex: 1;
 						.m-text{
 							color:$color-4;
-							font-size: $fontsize-6
+							font-size: $fontsize-3
+						}
+						.picktime_text{
+							color:$color-price;
+							font-size: $fontsize-3
 						}
 						.m-light{
 							color:$color-5;
-							font-size: $fontsize-6;
+							font-size: $fontsize-5;
 							height: 40upx;
 							display: flex;
 							justify-content:flex-start;
@@ -503,6 +553,9 @@
 								height: 40upx;
 								justify-content:flex-start;
 								align-items: center;
+							}
+							.uni-input{
+								margin-right: 15upx;
 							}
 						}
 						&:last-child{

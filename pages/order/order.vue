@@ -72,11 +72,11 @@
 				:title="item.productName"
 				:price="item.presentPrice"
 				:oldprice="item.originalPrice"
-				:imgurl="item['pictures'][0].pictureUrl"
+				:imgurl="item.pictures[0].pictureUrl"
 				:num="item.buyCount"
 				 ></m-order-pro>
 				 <view class="m-footer">
-					合计<view class="count">￥{{order.totalPrice}}</view>
+					合计<view class="count">￥{{order.paymentPrice}}</view>
 				 </view>
 			</view>
 			<!-- 订单明细 -->
