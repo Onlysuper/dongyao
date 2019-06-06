@@ -1014,7 +1014,7 @@ var _mSwiper = _interopRequireDefault(__webpack_require__(/*! @/components/m-swi
     },
     // banner图片
     getBanners: function getBanners() {var _this2 = this;
-      this.mGet('/server/b/banners', {}).then(function (res) {
+      this.$apis.getBanners({}).then(function (res) {
         _this2.swiperList = res.data;
       }).catch(function (err) {
         console.log(err);
@@ -1022,7 +1022,7 @@ var _mSwiper = _interopRequireDefault(__webpack_require__(/*! @/components/m-swi
     },
     //热卖列表
     getHotsellList: function getHotsellList() {var _this3 = this;
-      this.mPost('/server/p/hot/products', {
+      this.$apis.postHotProduct({
         start: this.hotsellPage,
         length: 6 }).
       then(function (res) {
@@ -1038,10 +1038,11 @@ var _mSwiper = _interopRequireDefault(__webpack_require__(/*! @/components/m-swi
     //拼团列表
     getGroupsellList: function getGroupsellList() {
       var _this = this;
-      this.mPost('/server/p/group/products', {
+      this.$apis.postGroupProducts({
         start: this.hotsellPage,
         length: 500 }).
       then(function (res) {
+        console.log(res);
         if (res.data) {
           var data = res.data;
           if (data.list) {
@@ -1055,7 +1056,7 @@ var _mSwiper = _interopRequireDefault(__webpack_require__(/*! @/components/m-swi
     //门店列表
     getStoreList: function getStoreList(lng, lat) {
       var _this = this;
-      _this.mPost('/server/s/vicinity/stores', {
+      _this.$apis.postStoreList({
         "lng": lng || 116.206845,
         "lat": lat || 39.762155 }).
       then(function (res) {
@@ -1063,7 +1064,6 @@ var _mSwiper = _interopRequireDefault(__webpack_require__(/*! @/components/m-swi
           var data = res.data;
           _this.nearStoreList = data;
         }
-
       }).catch(function (err) {
         console.log(err);
         // uni.stopPullDownRefresh();

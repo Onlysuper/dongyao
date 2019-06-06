@@ -670,7 +670,7 @@ var page = 1,totalpage = 1;var _default =
         uni.stopPullDownRefresh();
         return;
       }
-      this.mPost('/server/o/myOrders', {
+      this.$apis.postMyOrders({
         state: _this.tabActive,
         start: page,
         length: 20 }).

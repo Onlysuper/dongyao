@@ -263,7 +263,7 @@ var _mOrderPro = _interopRequireDefault(__webpack_require__(/*! @/components/m-o
     getOrder: function getOrder() {var _this2 = this;
       var _this = this;
       var orderid = _this.orderid || '';
-      this.mPost("/server/o/orderDetail", orderid).then(function (res) {
+      this.$apis.postOrderDetail(orderid).then(function (res) {
         var data = res.data;
         _this2.order = data.order, // 订单详情
         _this2.productList = data.productList, //购买的产品列表
@@ -291,63 +291,63 @@ var _mOrderPro = _interopRequireDefault(__webpack_require__(/*! @/components/m-o
         outTradeNo: _this.order.id,
         reserveTel: _this.order.reserveTel //预留手机号
       };
-      _this.mPost("/server/pay/wxpay", sendData).then(function (res) {
-        if (res.code == 1) {
+      _this.$apis.postWxpay(sendData).then(function (res) {
 
-          var data = res.data;
-          // 调起支付
-          var _package = data.prepay_id;
-          var paydata = {
-            provider: 'wxpay',
-            timeStamp: data.timeStamp + '',
-            nonceStr: data.nonceStr,
-            package: data.package,
-            signType: data.signType,
-            paySign: data.paySign };
 
-          _this.payLoading = true;
-          uni.requestPayment(_objectSpread({},
-          paydata, {
-            success: function success(res) {
-              uni.showModal({
-                title: '支付成功',
-                content: '可在我的订单中查看订单详情',
-                // showCancel:false,
-                confirmText: '查看订单',
-                success: function success(res) {
-                  if (res.confirm) {
-                    // uni.reLaunch({url: '/pages/tabBar/order'})
-                    uni.switchTab({
-                      url: '/pages/tabBar/order' });
+        var data = res.data;
+        // 调起支付
+        var _package = data.prepay_id;
+        var paydata = {
+          provider: 'wxpay',
+          timeStamp: data.timeStamp + '',
+          nonceStr: data.nonceStr,
+          package: data.package,
+          signType: data.signType,
+          paySign: data.paySign };
 
-                  } else if (res.cancel) {
-                    console.log('用户点击取消');
-                  }
-                } });
+        _this.payLoading = true;
+        uni.requestPayment(_objectSpread({},
+        paydata, {
+          success: function success(res) {
+            uni.showModal({
+              title: '支付成功',
+              content: '可在我的订单中查看订单详情',
+              // showCancel:false,
+              confirmText: '查看订单',
+              success: function success(res) {
+                if (res.confirm) {
+                  // uni.reLaunch({url: '/pages/tabBar/order'})
+                  uni.switchTab({
+                    url: '/pages/tabBar/order' });
 
-              _this.payLoading = false;
-            },
-            fail: function fail(err) {
-              uni.showModal({
-                title: '支付失败',
-                content: '请您在重新尝试一下支付',
-                // showCancel:false,
-                confirmText: '重新支付',
-                success: function success(res) {
-                  if (res.confirm) {
-                    _this.payFn();
-                  } else if (res.cancel) {
-                    console.log('用户点击取消');
-                  }
-                } });
+                } else if (res.cancel) {
+                  console.log('用户点击取消');
+                }
+              } });
 
-              _this.payLoading = false;
-            },
-            complete: function complete() {
-              _this.payLoading = false;
-            } }));
+            _this.payLoading = false;
+          },
+          fail: function fail(err) {
+            uni.showModal({
+              title: '支付失败',
+              content: '请您在重新尝试一下支付',
+              // showCancel:false,
+              confirmText: '重新支付',
+              success: function success(res) {
+                if (res.confirm) {
+                  _this.payFn();
+                } else if (res.cancel) {
+                  console.log('用户点击取消');
+                }
+              } });
 
-        }
+            _this.payLoading = false;
+          },
+          complete: function complete() {
+            _this.payLoading = false;
+          } }));
+
+
         _this.payLoading = false;
       }).catch(function (err) {
         _this.payLoading = false;

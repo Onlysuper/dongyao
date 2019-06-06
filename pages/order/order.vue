@@ -148,7 +148,7 @@
 			getOrder(){
 				let _this = this;
 				let orderid=_this.orderid||''
-				this.mPost("/server/o/orderDetail",orderid).then(res=>{
+				this.$apis.postOrderDetail(orderid).then(res=>{
 					let data = res.data;
 					this.order=data.order,// 订单详情
 					this.productList=data.productList,//购买的产品列表
@@ -176,8 +176,8 @@
 					outTradeNo:_this.order.id,
 					reserveTel:_this.order.reserveTel,//预留手机号
 				}
-				_this.mPost("/server/pay/wxpay",sendData).then(res=>{
-					if(res.code==1){
+				_this.$apis.postWxpay(sendData).then(res=>{
+
 						
 						let data = res.data;
 					// 调起支付
@@ -232,7 +232,7 @@
 								_this.payLoading=false;
 							}
 						});
-					}
+
 					_this.payLoading=false;
 				}).catch(err=>{
 					_this.payLoading=false;

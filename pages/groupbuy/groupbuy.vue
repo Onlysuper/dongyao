@@ -50,7 +50,7 @@
 					uni.stopPullDownRefresh();
 					return ;
 				}
-				this.mPost('/server/p/group/products',{
+				this.$apis.postGroupProducts({
 					start:page,
 					length:20
 				}).then(res=>{
@@ -60,13 +60,10 @@
 								totalpage=data.pages;
 								var newsList = data.list;
 								this.groupsellList = this.groupsellList.concat(newsList);
-								uni.hideLoading();
 								page++;
 							}
 						}
-				}).catch(err=>{
-					uni.hideLoading();
-				});
+				})
 			},
 			//跳转到商家
 			goStore(res){

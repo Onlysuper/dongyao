@@ -355,7 +355,7 @@ var _mEmpty = _interopRequireDefault(__webpack_require__(/*! @/components/m-resu
         uni.stopPullDownRefresh();
         return;
       }
-      this.mPost("/server/p/search/products", {
+      this.$apis.postSearchProducts({
         start: page,
         length: 20,
         name: _this.search }).

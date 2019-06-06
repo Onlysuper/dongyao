@@ -364,16 +364,13 @@ var _mVipCard = _interopRequireDefault(__webpack_require__(/*! @/components/m-vi
     // 会员列表
     getVips: function getVips() {var _this2 = this;
       var _this = this;
-      this.mPost("/server/m/members", {}).then(function (res) {
-        if (res.code == 1) {
-          _this.members = res.data.members;
-          if (!_this.isVip) {
-            //非会员
-            _this2.chooseVipId = _this.members[0].id;
-            _this2.vipName = _this.members[0].synopsis;
-            _this2.vipDescribes = _this.members[0].describes;
-          }
-
+      this.$apis.postMembers({}).then(function (res) {
+        _this.members = res.data.members;
+        if (!_this.isVip) {
+          //非会员
+          _this2.chooseVipId = _this.members[0].id;
+          _this2.vipName = _this.members[0].synopsis;
+          _this2.vipDescribes = _this.members[0].describes;
         }
       });
     },
@@ -399,34 +396,34 @@ var _mVipCard = _interopRequireDefault(__webpack_require__(/*! @/components/m-vi
     //我的会员
     myVips: function myVips() {var _this3 = this;
       var _this = this;
-      this.mPost("/server/m/myMember", {}).then(function (res) {
-        if (res.code == 1) {
-          var data = res.data.myMember;
-          if (data) {
-            // 会员
-            _this.isVip = true;
-            if (data && data['memberType']) {
-              data['memberType'] = _this.changeType(data['memberType']);
-            }
-            if (data && data['discount']) {
-              data['discount'] = data['discount'];
-            }
-            _this.myMember = data;
-            _this.chooseVipId = data['memberId'];
-            _this.vipName = data['discount'];
-            _this.vipDescribes = data['memberSynopsis'];
-          } else {
-            // 非会员
-            _this.isVip = false;
+      this.$apis.postMyMember({}).then(function (res) {
+
+        var data = res.data.myMember;
+        if (data) {
+          // 会员
+          _this.isVip = true;
+          if (data && data['memberType']) {
+            data['memberType'] = _this.changeType(data['memberType']);
           }
-          _this3.getVips();
+          if (data && data['discount']) {
+            data['discount'] = data['discount'];
+          }
+          _this.myMember = data;
+          _this.chooseVipId = data['memberId'];
+          _this.vipName = data['discount'];
+          _this.vipDescribes = data['memberSynopsis'];
+        } else {
+          // 非会员
+          _this.isVip = false;
         }
+        _this3.getVips();
+
       });
     },
     //购买vip
     buyVipFn: function buyVipFn() {
       var _this = this;
-      this.mPost("/server/m/buyMember", _this.chooseVipId).then(function (res) {
+      this.$apis.postBuyMember(_this.chooseVipId).then(function (res) {
         var data = res.data;
         if (data) {
           var paydata = {

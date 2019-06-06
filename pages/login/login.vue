@@ -47,10 +47,10 @@
 			        success: function(loginRes) {
 			            let code = loginRes.code;
 						//存储登录code
-						_this.mPost('/auth/wxLogin',code,"https://dy.gantangerbus.com/da"
-						).then(res=>{
+						_this.$apis.postWxLogin(code).then(res=>{
 							if(res.data){
 								let data = res.data;
+								uni.setStorageSync('Authorization', data.authToken);
 								if(data.isRegister){
 									let saveData = data;
 									_this.needAllow=false;
@@ -58,7 +58,6 @@
 									// saveData.avatarUrl=data.headAddress||"";
 									uni.setStorageSync('userData', JSON.stringify(saveData.userInfo));
 									uni.setStorageSync('phone',  saveData.userInfo.mobile);
-									uni.setStorageSync('Authorization', saveData.authToken);
 									uni.showToast({
 										title: "授权成功",
 										icon: "none"
@@ -70,10 +69,7 @@
 									},1300)
 								}
 							}
-							uni.hideLoading();
-						}).catch(err=>{
-							uni.hideLoading();
-						});
+						})
 			        },
 			    });
 			},
@@ -85,7 +81,6 @@
 				}
 				let _this = this;
 				if (!res.detail.iv) {
-					
 					uni.showToast({
 						title: "您取消了授权,登录失败",
 						icon: "none"
@@ -99,7 +94,7 @@
 						// 	储存用户信息
 						uni.setStorageSync('userData', JSON.stringify(infoRes.userInfo));
 						uni.showLoading({});
-						_this.mPost('/auth/wxUserInfo',infoRes.userInfo,"https://dy.gantangerbus.com/da").then(res=>{
+						_this.$apis.postWxUserInfo(infoRes.userInfo).then(res=>{
 							uni.navigateTo({  
 								url: '/pages/login/register'  
 							}); 

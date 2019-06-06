@@ -88,8 +88,7 @@
 			// 会员列表
 			getVips(){
 				let _this = this;
-				this.mPost("/server/m/members",{}).then(res=>{
-					if(res.code==1){
+				this.$apis.postMembers({}).then(res=>{
 						_this.members=res.data.members;
 						if(!_this.isVip){
 							//非会员
@@ -97,8 +96,6 @@
 							this.vipName=_this.members[0].synopsis;
 							this.vipDescribes=_this.members[0].describes;
 						}
-
-					}
 				})
 			},
 			// 选择会员卡
@@ -123,8 +120,8 @@
 			//我的会员
 			myVips(){
 				let _this = this;
-				this.mPost("/server/m/myMember",{}).then(res=>{
-					if(res.code==1){
+				this.$apis.postMyMember({}).then(res=>{
+					
 						let data = res.data.myMember;
 						if(data){
 							// 会员
@@ -144,13 +141,13 @@
 							_this.isVip = false
 						}
 						this.getVips();
-					}
+					
 				})
 			},
 			//购买vip
 			buyVipFn(){
 				let _this = this;
-				this.mPost("/server/m/buyMember",_this.chooseVipId).then(res=>{
+				this.$apis.postBuyMember(_this.chooseVipId).then(res=>{
 					let data =res.data;
 					if(data){
 						let paydata = {

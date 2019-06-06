@@ -43,17 +43,15 @@
 				let _this = this;
 			    if (e.detail.errMsg == 'getPhoneNumber:fail user deny') {  
 			    } else {  
-					_this.mPost('/auth/wxBindPhone',{// 	储存用户信息
+					_this.$apis.postWxBindPhone({// 	储存用户信息
 						...e.detail
-					},"https://dy.gantangerbus.com/da").then(res=>{
+					}).then(res=>{
 							uni.setStorageSync('phone', res.data.phone);
 							uni.showToast({
 									title:"已授权",
 							})
 							_this.goback()
-					}).catch(err=>{
-
-					});
+					})
 			    }  
 			}
 		},

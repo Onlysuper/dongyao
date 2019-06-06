@@ -149,7 +149,7 @@ var _mTokenCard = _interopRequireDefault(__webpack_require__(/*! @/components/m-
         uni.showToast({ "title": "已经加载全部", icon: "none" });
         return;
       }
-      this.mPost('/server/co/usableCoupons', {
+      this.$apis.postUsableCoupons({
         storeId: _this.storeid,
         start: page,
         length: 20 }).

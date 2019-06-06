@@ -227,15 +227,13 @@
 			// 优惠券
 			tokenCard(){
 				let _this=this;
-				_this.mPost("/server/co/usableCoupons",{
+				_this.$apis.postUsableCoupons({
 					storeId:_this.storeid,
 					start:1,
 					length:1000,
 				}).then(res=>{
-					if(res.code==1){
-						if(res.data.coupons&&res.data.coupons.length>0){
-							_this.haveTokenCard=true
-						}
+					if(res.data.coupons&&res.data.coupons.length>0){
+						_this.haveTokenCard=true
 					}
 				})
 			},
@@ -253,7 +251,8 @@
 					couponId:_this.couponId,
 					products:products, 
 				}
-				_this.mPost("/server/pay/calOrderPrice",sendData).then(res=>{
+				
+				_this.$apis.postCalOrderPrice(sendData).then(res=>{
 					if(res.code=='1'){
 						let data= res.data;
 						_this.totalPrice=data.totalPrice;
@@ -287,7 +286,7 @@
 				if(_this.outTradeNo){
 					sendData['outTradeNo']=this.outTradeNo; //订单id，第一次下单不需要，待支付订单支付时需要传入
 				}
-				_this.mPost("/server/pay/wxpay",sendData).then(res=>{
+				_this.$apis.postWxpay(sendData).then(res=>{
 					_this.payLoading=false;
 					let data = res.data;
 					if(!data.paySign){
@@ -352,7 +351,7 @@
 			// 清空购物车
 			clearShopcar(){
 				let _this = this;
-				_this.mPost("/server/sc/delete/all",{
+				_this.$apis.clearShopCar({
 					// userId:this.userid
 				}).then(res=>{
 					if(res.code=='1'){
@@ -366,7 +365,7 @@
 			},
 			//门店详情
 			storeDetail(){
-				this.mPost("/server/s/storeById",{
+				this.$apis.postStore({
 					id:this.storeid
 				}).then(res=>{
 					this.storeData = res.data;

@@ -158,16 +158,14 @@ var _event = _interopRequireDefault(__webpack_require__(/*! ../../common/event.j
       var _this = this;
       if (e.detail.errMsg == 'getPhoneNumber:fail user deny') {
       } else {
-        _this.mPost('/auth/wxBindPhone', _objectSpread({},
-        e.detail),
-        "https://dy.gantangerbus.com/da").then(function (res) {
+        _this.$apis.postWxBindPhone(_objectSpread({},
+        e.detail)).
+        then(function (res) {
           uni.setStorageSync('phone', res.data.phone);
           uni.showToast({
             title: "已授权" });
 
           _this.goback();
-        }).catch(function (err) {
-
         });
       }
     } },

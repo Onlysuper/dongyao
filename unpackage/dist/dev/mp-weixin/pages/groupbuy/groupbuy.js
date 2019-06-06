@@ -350,7 +350,7 @@ var _uniLoadMore = _interopRequireDefault(__webpack_require__(/*! @/components/u
         uni.stopPullDownRefresh();
         return;
       }
-      this.mPost('/server/p/group/products', {
+      this.$apis.postGroupProducts({
         start: page,
         length: 20 }).
       then(function (res) {
@@ -360,12 +360,9 @@ var _uniLoadMore = _interopRequireDefault(__webpack_require__(/*! @/components/u
             totalpage = data.pages;
             var newsList = data.list;
             _this.groupsellList = _this.groupsellList.concat(newsList);
-            uni.hideLoading();
             page++;
           }
         }
-      }).catch(function (err) {
-        uni.hideLoading();
       });
     },
     //跳转到商家

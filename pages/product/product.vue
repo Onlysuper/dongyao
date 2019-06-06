@@ -282,7 +282,7 @@ export default {
 		//option为object类型，会序列化上个页面传递的参数
 		let id=option.id;
 		// 商品基本信息
-		_this.mPost("/server/p/product",{
+		_this.$apis.postProducts({
 			id:id,
 		}).then(res=>{
 			if(res.code=='1'){
@@ -339,7 +339,7 @@ export default {
 		// 拼团用户列表
 		getPintuanUsers(id){
 			let _this = this;
-			this.mPost("/server/g/group/buy/users",{
+			this.$apis.postGroupBuyUsers({
 				start:0,
 				length:100,
 				productId:id
@@ -353,7 +353,7 @@ export default {
 		//评论列表
 		getComments(id){
 			let _this = this;
-			this.mPost("/server/c/comments",{
+			this.$apis.postComments({
 				start:0,
 				length:100,
 				productId:id
@@ -368,7 +368,7 @@ export default {
 		//好评度
 		getDegree(id){
 			let _this = this;
-			this.mPost("/server/c/praise/degree",{
+			this.$apis.postDegree({
 				productId:id
 			}).then(res=>{
 				if(res.code=='1'){

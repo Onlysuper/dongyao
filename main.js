@@ -3,29 +3,31 @@ import App from './App'
 
 Vue.config.productionTip = false
 Vue.prototype.apiurl = 'https://dy.gantangerbus.com/dy'; 
-var service=(res)=>{
-	console.log(res);
-	if(res.statusCode==200){
-		if(res.data.code=='-1'){
-			// 请求失败
-			uni.showToast({
-				title:  "请求出错",
-				icon: "none"
-			});
-		}else if(res.data.code=='-2'){
-			// 重新登录
-			let backurl = encodeURI("/pages/tabBar/user");
-			uni.redirectTo({
-				url:'/pages/login/login?back='+backurl 
-			})
-		}
-	}else{
-		uni.showToast({
-			title:  "请求出错"+res.statusCod,
-			icon: "none"
-		});
-	}
-}
+import * as $apis from './apis/index.js'
+Vue.prototype.$apis = $apis;
+// var service=(res)=>{
+// 	console.log(res);
+// 	if(res.statusCode==200){
+// 		if(res.data.code=='-1'){
+// 			// 请求失败
+// 			uni.showToast({
+// 				title:  "请求出错",
+// 				icon: "none"
+// 			});
+// 		}else if(res.data.code=='-2'){
+// 			// 重新登录
+// 			let backurl = encodeURI("/pages/tabBar/user");
+// 			uni.redirectTo({
+// 				url:'/pages/login/login?back='+backurl 
+// 			})
+// 		}
+// 	}else{
+// 		uni.showToast({
+// 			title:  "请求出错"+res.statusCod,
+// 			icon: "none"
+// 		});
+// 	}
+// }
 //经纬度转换成三角函数中度分表形式。
 Vue.prototype.rad= function(d) {
   return d * Math.PI / 180.0;
@@ -47,118 +49,118 @@ Vue.prototype.geoDistance= function(lat1, lng1, lat2, lng2) {
   s = Math.round(s * 10000) / 10000; //输出为公里
   return (s.toFixed(1))+'km';
 },
-Vue.prototype.mGet = function(url,data){
-	let _this=this;
-	return new Promise((resolve, reject)=>{
-		uni.request({
-			url: _this.apiurl+url,
-			method: 'GET',
-			header:{
-				"Cache-Control": "no-cache",
-				"Content-Type": "application/json;charset=UTF-8",
-				"Authorization":uni.getStorageSync('Authorization')
-			},
-			data: {...data},
-			success: res => {
-				if(res.data.code==1){
-					resolve(res.data)
-				}else{
-					service(res);
-					uni.showToast({
-						title:  "服务器开小差了，稍后重试",
-						icon: "none"
-					});
-					reject(res.data)
-				}
-			},
-			fail:error=>{
-				uni.showToast({
-					title:  "请求超时，当前网络不稳定",
-					icon: "none"
-				});
-				reject(error)
-			}
-// 			complete() {
-// 				uni.stopPullDownRefresh();
+// Vue.prototype.mGet = function(url,data){
+// 	let _this=this;
+// 	return new Promise((resolve, reject)=>{
+// 		uni.request({
+// 			url: _this.apiurl+url,
+// 			method: 'GET',
+// 			header:{
+// 				"Cache-Control": "no-cache",
+// 				"Content-Type": "application/json;charset=UTF-8",
+// 				"Authorization":uni.getStorageSync('Authorization')
+// 			},
+// 			data: {...data},
+// 			success: res => {
+// 				if(res.data.code==1){
+// 					resolve(res.data)
+// 				}else{
+// 					service(res);
+// 					uni.showToast({
+// 						title:  "服务器开小差了，稍后重试",
+// 						icon: "none"
+// 					});
+// 					reject(res.data)
+// 				}
+// 			},
+// 			fail:error=>{
+// 				uni.showToast({
+// 					title:  "请求超时，当前网络不稳定",
+// 					icon: "none"
+// 				});
+// 				reject(error)
 // 			}
-		})
-	});
-}
-Vue.prototype.mPost = function(url,data,host){
-	let _this=this;
-	let baseurl = _this.apiurl+url;
-	if(host){
-		baseurl=host+url
-	}
-	return new Promise((resolve, reject)=>{
-		uni.request({
-			url:baseurl,
-			method: 'POST',
-			header:{
-				"Cache-Control": "no-cache",
-				"Content-Type": "application/json;charset=UTF-8",
-				"Authorization":uni.getStorageSync('Authorization')
-			},
-			data: data,
-			success: res => {
-				if(res.data.code==1){
-					resolve(res.data)
-				}else{
-					service(res);
-					reject(res.data)
-				}
-			},
-			fail:error=>{
-				uni.showToast({
-					title:  "请求超时，当前网络不稳定",
-					icon: "none"
-				});
-				reject(error)
-			}
-// 			complete() {
-// 				uni.stopPullDownRefresh();
+// // 			complete() {
+// // 				uni.stopPullDownRefresh();
+// // 			}
+// 		})
+// 	});
+// }
+// Vue.prototype.mPost = function(url,data,host){
+// 	let _this=this;
+// 	let baseurl = _this.apiurl+url;
+// 	if(host){
+// 		baseurl=host+url
+// 	}
+// 	return new Promise((resolve, reject)=>{
+// 		uni.request({
+// 			url:baseurl,
+// 			method: 'POST',
+// 			header:{
+// 				"Cache-Control": "no-cache",
+// 				"Content-Type": "application/json;charset=UTF-8",
+// 				"Authorization":uni.getStorageSync('Authorization')
+// 			},
+// 			data: data,
+// 			success: res => {
+// 				if(res.data.code==1){
+// 					resolve(res.data)
+// 				}else{
+// 					service(res);
+// 					reject(res.data)
+// 				}
+// 			},
+// 			fail:error=>{
+// 				uni.showToast({
+// 					title:  "请求超时，当前网络不稳定",
+// 					icon: "none"
+// 				});
+// 				reject(error)
 // 			}
-		})
-	});
-}
-Vue.prototype.mPostForm = function(url,data,host){
-	let _this=this;
-	let baseurl = _this.apiurl+url;
-	if(host){
-		baseurl=host+url
-	}
-	
-	return new Promise((resolve, reject)=>{
-		uni.request({
-			url:baseurl,
-			method: 'POST',
-			header:{
-				"Cache-Control": "no-cache",
-				"Content-Type": "application/x-www-form-urlencoded",
-				"Authorization":uni.getStorageSync('Authorization')
-			},
-			data: data,
-			success: res => {
-				if(res.data.code==1){
-					resolve(res.data)
-				}else{
-					service(res);
-					reject(res.data)
-				}
-			},
-			fail:error=>{
-				uni.showToast({
-					title:  "操作失败，请检查网络",
-					icon: "none"
-				});
-				reject(error)
-			}
-// 			complete() {
-// 				uni.stopPullDownRefresh();
+// // 			complete() {
+// // 				uni.stopPullDownRefresh();
+// // 			}
+// 		})
+// 	});
+// }
+// Vue.prototype.mPostForm = function(url,data,host){
+// 	let _this=this;
+// 	let baseurl = _this.apiurl+url;
+// 	if(host){
+// 		baseurl=host+url
+// 	}
+// 	
+// 	return new Promise((resolve, reject)=>{
+// 		uni.request({
+// 			url:baseurl,
+// 			method: 'POST',
+// 			header:{
+// 				"Cache-Control": "no-cache",
+// 				"Content-Type": "application/x-www-form-urlencoded",
+// 				"Authorization":uni.getStorageSync('Authorization')
+// 			},
+// 			data: data,
+// 			success: res => {
+// 				if(res.data.code==1){
+// 					resolve(res.data)
+// 				}else{
+// 					service(res);
+// 					reject(res.data)
+// 				}
+// 			},
+// 			fail:error=>{
+// 				uni.showToast({
+// 					title:  "操作失败，请检查网络",
+// 					icon: "none"
+// 				});
+// 				reject(error)
 // 			}
-		})
-	});
-}
+// // 			complete() {
+// // 				uni.stopPullDownRefresh();
+// // 			}
+// 		})
+// 	});
+// }
 
 /**
      * 乘法，解决js精度损失问题

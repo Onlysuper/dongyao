@@ -162,10 +162,10 @@ __webpack_require__.r(__webpack_exports__);
                   success: function success(loginRes) {
                     var code = loginRes.code;
                     //存储登录code
-                    _this.mPost('/auth/wxLogin', code, "https://dy.gantangerbus.com/da").
-                    then(function (res) {
+                    _this.$apis.postWxLogin(code).then(function (res) {
                       if (res.data) {
                         var data = res.data;
+                        uni.setStorageSync('Authorization', data.authToken);
                         if (data.isRegister) {
                           var saveData = data;
                           _this.needAllow = false;
@@ -173,7 +173,6 @@ __webpack_require__.r(__webpack_exports__);
                           // saveData.avatarUrl=data.headAddress||"";
                           uni.setStorageSync('userData', JSON.stringify(saveData.userInfo));
                           uni.setStorageSync('phone', saveData.userInfo.mobile);
-                          uni.setStorageSync('Authorization', saveData.authToken);
                           uni.showToast({
                             title: "授权成功",
                             icon: "none" });
@@ -185,9 +184,6 @@ __webpack_require__.r(__webpack_exports__);
                           }, 1300);
                         }
                       }
-                      uni.hideLoading();
-                    }).catch(function (err) {
-                      uni.hideLoading();
                     });
                   } });case 4:case "end":return _context.stop();}}}, _callee, this);}));function saveCode() {return _saveCode.apply(this, arguments);}return saveCode;}(),
 
@@ -200,7 +196,6 @@ __webpack_require__.r(__webpack_exports__);
       }
       var _this = this;
       if (!res.detail.iv) {
-
         uni.showToast({
           title: "您取消了授权,登录失败",
           icon: "none" });
@@ -214,7 +209,7 @@ __webpack_require__.r(__webpack_exports__);
           // 	储存用户信息
           uni.setStorageSync('userData', JSON.stringify(infoRes.userInfo));
           uni.showLoading({});
-          _this.mPost('/auth/wxUserInfo', infoRes.userInfo, "https://dy.gantangerbus.com/da").then(function (res) {
+          _this.$apis.postWxUserInfo(infoRes.userInfo).then(function (res) {
             uni.navigateTo({
               url: '/pages/login/register' });
 

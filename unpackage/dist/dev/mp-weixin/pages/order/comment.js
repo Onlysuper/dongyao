@@ -394,7 +394,7 @@ var _uniRate = _interopRequireDefault(__webpack_require__(/*! @/components/uni-r
 
           });
         } else {
-          _this.mPost("/server/o/noImgCommentOn", formData).then(function (res) {
+          _this.$apis.postNoImgCommentOn(formData).then(function (res) {
             uni.showModal({
               title: '评论成功',
               content: '前往您的订单列表吗？',
@@ -413,11 +413,6 @@ var _uniRate = _interopRequireDefault(__webpack_require__(/*! @/components/uni-r
 
                 }
               } });
-
-          }).catch(function (err) {
-            uni.showToast({
-              title: err,
-              icon: "none" });
 
           });
         }

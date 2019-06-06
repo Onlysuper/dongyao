@@ -824,15 +824,13 @@ var _rattenkingDtpicker = _interopRequireDefault(__webpack_require__(/*! @/compo
     // 优惠券
     tokenCard: function tokenCard() {
       var _this = this;
-      _this.mPost("/server/co/usableCoupons", {
+      _this.$apis.postUsableCoupons({
         storeId: _this.storeid,
         start: 1,
         length: 1000 }).
       then(function (res) {
-        if (res.code == 1) {
-          if (res.data.coupons && res.data.coupons.length > 0) {
-            _this.haveTokenCard = true;
-          }
+        if (res.data.coupons && res.data.coupons.length > 0) {
+          _this.haveTokenCard = true;
         }
       });
     },
@@ -850,7 +848,8 @@ var _rattenkingDtpicker = _interopRequireDefault(__webpack_require__(/*! @/compo
         couponId: _this.couponId,
         products: products };
 
-      _this.mPost("/server/pay/calOrderPrice", sendData).then(function (res) {
+
+      _this.$apis.postCalOrderPrice(sendData).then(function (res) {
         if (res.code == '1') {
           var data = res.data;
           _this.totalPrice = data.totalPrice;
@@ -884,7 +883,7 @@ var _rattenkingDtpicker = _interopRequireDefault(__webpack_require__(/*! @/compo
       if (_this.outTradeNo) {
         sendData['outTradeNo'] = this.outTradeNo; //订单id，第一次下单不需要，待支付订单支付时需要传入
       }
-      _this.mPost("/server/pay/wxpay", sendData).then(function (res) {
+      _this.$apis.postWxpay(sendData).then(function (res) {
         _this.payLoading = false;
         var data = res.data;
         if (!data.paySign) {
@@ -949,7 +948,7 @@ var _rattenkingDtpicker = _interopRequireDefault(__webpack_require__(/*! @/compo
     // 清空购物车
     clearShopcar: function clearShopcar() {
       var _this = this;
-      _this.mPost("/server/sc/delete/all", {
+      _this.$apis.clearShopCar({
         // userId:this.userid
       }).then(function (res) {
         if (res.code == '1') {
@@ -963,7 +962,7 @@ var _rattenkingDtpicker = _interopRequireDefault(__webpack_require__(/*! @/compo
     },
     //门店详情
     storeDetail: function storeDetail() {var _this3 = this;
-      this.mPost("/server/s/storeById", {
+      this.$apis.postStore({
         id: this.storeid }).
       then(function (res) {
         _this3.storeData = res.data;

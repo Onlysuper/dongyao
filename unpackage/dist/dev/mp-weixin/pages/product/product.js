@@ -397,7 +397,7 @@ var _uniRate = _interopRequireDefault(__webpack_require__(/*! @/components/uni-r
     //option为object类型，会序列化上个页面传递的参数
     var id = option.id;
     // 商品基本信息
-    _this.mPost("/server/p/product", {
+    _this.$apis.postProducts({
       id: id }).
     then(function (res) {
       if (res.code == '1') {
@@ -454,7 +454,7 @@ var _uniRate = _interopRequireDefault(__webpack_require__(/*! @/components/uni-r
     // 拼团用户列表
     getPintuanUsers: function getPintuanUsers(id) {
       var _this = this;
-      this.mPost("/server/g/group/buy/users", {
+      this.$apis.postGroupBuyUsers({
         start: 0,
         length: 100,
         productId: id }).
@@ -468,7 +468,7 @@ var _uniRate = _interopRequireDefault(__webpack_require__(/*! @/components/uni-r
     //评论列表
     getComments: function getComments(id) {
       var _this = this;
-      this.mPost("/server/c/comments", {
+      this.$apis.postComments({
         start: 0,
         length: 100,
         productId: id }).
@@ -483,7 +483,7 @@ var _uniRate = _interopRequireDefault(__webpack_require__(/*! @/components/uni-r
     //好评度
     getDegree: function getDegree(id) {
       var _this = this;
-      this.mPost("/server/c/praise/degree", {
+      this.$apis.postDegree({
         productId: id }).
       then(function (res) {
         if (res.code == '1') {

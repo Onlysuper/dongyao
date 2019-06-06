@@ -973,7 +973,7 @@ function bezier(pots, amount) {
         return;
       }
       var _this = this;
-      this.mPost("/server/p/search/products", {
+      this.$apis.postSearchProducts({
         start: page,
         length: 10,
         typeId: _this.typeid * 1,
@@ -998,7 +998,7 @@ function bezier(pots, amount) {
     // 获取购物车列表信息
     showShopCar: function showShopCar() {var _this3 = this;
       var _this = this;
-      this.mPost("/server/sc/find/cart", {}).
+      this.$apis.postCars({}).
       then(function (res) {
         if (res.code == '1') {
           if (res.data) {
@@ -1031,7 +1031,7 @@ function bezier(pots, amount) {
     // 清空购物车
     clearShopcar: function clearShopcar() {
       var _this = this;
-      _this.mPost("/server/sc/delete/all", {}).
+      _this.$apis.clearShopCar({}).
 
       then(function (res) {
         uni.showModal({
@@ -1118,17 +1118,11 @@ function bezier(pots, amount) {
 
         buyCount = data.stock;
       }
-      _this.mPost("/server/sc/add/product", {
+      _this.$apis.postAddCars({
         productId: data.id,
         buyCount: buyCount }).
       then(function (res) {
-        if (res.code == 1) {
-          _this.showShopCar();
-        }
-      }).catch(function (err) {
-        uni.showToast({
-          title: "操作失败，请检查网络",
-          icon: "none" });
+        _this.showShopCar();
 
       });
     },
@@ -1149,17 +1143,12 @@ function bezier(pots, amount) {
 
         buyCount = data.stock;
       }
-      _this.mPost("/server/sc/sub/product", {
+      _this.$apis.postSubCars({
         productId: data.id,
         buyCount: buyCount }).
       then(function (res) {
-        if (res.code == 1) {
-          _this.showShopCar();
-        }
-      }).catch(function (err) {
-        uni.showToast({
-          title: "操作失败，请检查网络",
-          icon: "none" });
+
+        _this.showShopCar();
 
       });
     },
@@ -1203,15 +1192,12 @@ function bezier(pots, amount) {
         return obj;
       });
       products = JSON.stringify(products);
-      _this.mPost("/server/p/calProductsPrice", products).then(function (res) {
-        if (res.code == 1) {
-          _this.shopCarListPrice = res.data.totalPrice;
-          _this.shopCarListLength = pronum;
-          // if(pronum==0)
-        }
-        console.log(res);
-      }).catch(function (err) {
-        console.log(err);
+      _this.$apis.postSumCars(products).then(function (res) {
+
+        _this.shopCarListPrice = res.data.totalPrice;
+        _this.shopCarListLength = pronum;
+        // if(pronum==0)
+
       });
     },
 
@@ -1242,7 +1228,7 @@ function bezier(pots, amount) {
     },
     initTypes: function initTypes() {var _this5 = this;
       //商品分类
-      this.mPost("/server/t/types", {}).
+      this.$apis.postProductType({}).
       then(function (res) {
         if (res.code == '1') {
           _this5.storeMenu = res.data;
@@ -1252,7 +1238,7 @@ function bezier(pots, amount) {
     // 商家基本信息
     initBusiness: function initBusiness() {var _this6 = this;
       var _this = this;
-      this.mPost("/server/s/storeById", {
+      this.$apis.postStore({
         id: _this.storeid }).
       then(function (res) {
         if (res.code == '1') {

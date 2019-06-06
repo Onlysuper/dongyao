@@ -518,18 +518,18 @@ var _event = _interopRequireDefault(__webpack_require__(/*! ../../common/event.j
     //我的会员
     myVips: function myVips() {
       var _this = this;
-      this.mPost("/server/m/myMember", {}).then(function (res) {
-        if (res.code == 1) {
-          var data = res.data.myMember;
-          if (data) {
-            // 会员
-            _this.myMember = data;
-            _this.isVip = true;
-          } else {
-            // 非会员
-            _this.isVip = false;
-          }
+      this.$apis.postMyMember({}).then(function (res) {
+
+        var data = res.data.myMember;
+        if (data) {
+          // 会员
+          _this.myMember = data;
+          _this.isVip = true;
+        } else {
+          // 非会员
+          _this.isVip = false;
         }
+
       });
     },
     linkToOrderTab: function linkToOrderTab(index) {

@@ -279,7 +279,7 @@
 							});
 						})
 					}else{
-						_this.mPost("/server/o/noImgCommentOn",formData).then(res=>{
+						_this.$apis.postNoImgCommentOn(formData).then(res=>{
 							uni.showModal({
 							  	title: '评论成功',
 							  	content: '前往您的订单列表吗？',
@@ -298,11 +298,6 @@
 										});
 							  		}
 							  	}
-							});
-						}).catch(err=>{
-							uni.showToast({
-								title: err,
-								icon: "none"
 							});
 						})
 					}
