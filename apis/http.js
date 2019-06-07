@@ -24,8 +24,8 @@ function HTTP(obj, config) {
 				"Authorization":uni.getStorageSync('Authorization')
 			},
 			success: (res) => {
-				console.log('成功',res)
-				uni.hideLoading();
+	
+				config.loading && uni.hideLoading();
 				// 状态码为200 
 				if (res.statusCode == 200) {
 					let data = res.data;

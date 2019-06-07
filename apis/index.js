@@ -7,7 +7,9 @@ const baseUrl = 'https://dy.gantangerbus.com/dy';
 export const getBanners = (data) => http.GET(`${baseUrl}/server/b/banners`, data);
 
 //存储登录微信code
-export const postWxLogin = (data) => http.POST('https://dy.gantangerbus.com/da/auth/wxLogin', data);
+export const postWxLogin = (data) => http.POST('https://dy.gantangerbus.com/da/auth/wxLogin', data,{
+	loading:false
+});
 
 // 储存用户信息
 export const postWxUserInfo = (data) => http.POST('https://dy.gantangerbus.com/da/auth/wxUserInfo', data);
