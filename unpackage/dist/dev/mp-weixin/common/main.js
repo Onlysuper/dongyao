@@ -105,8 +105,8 @@ function HTTP(obj, config) {
         "Authorization": uni.getStorageSync('Authorization') },
 
       success: function success(res) {
-        console.log('成功', res);
-        uni.hideLoading();
+
+        config.loading && uni.hideLoading();
         // 状态码为200 
         if (res.statusCode == 200) {
           var data = res.data;
@@ -201,7 +201,9 @@ var baseUrl = 'https://dy.gantangerbus.com/dy';
 var getBanners = function getBanners(data) {return _http.default.GET("".concat(baseUrl, "/server/b/banners"), data);};
 
 //存储登录微信code
-exports.getBanners = getBanners;var postWxLogin = function postWxLogin(data) {return _http.default.POST('https://dy.gantangerbus.com/da/auth/wxLogin', data);};
+exports.getBanners = getBanners;var postWxLogin = function postWxLogin(data) {return _http.default.POST('https://dy.gantangerbus.com/da/auth/wxLogin', data, {
+    loading: false });};
+
 
 // 储存用户信息
 exports.postWxLogin = postWxLogin;var postWxUserInfo = function postWxUserInfo(data) {return _http.default.POST('https://dy.gantangerbus.com/da/auth/wxUserInfo', data);};
