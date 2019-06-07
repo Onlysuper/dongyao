@@ -108,12 +108,12 @@
 		justify-content: flex-start;
 		align-items: center;
 		.new{
-			font-size: 26upx;
+			font-size: 28upx;
 			font-weight: bold;
 			color: #ff582b;
 		}
 		.old{
-			font-size: 18upx;
+			font-size: 22upx;
 			margin-left: 10upx;
 			color:#b2b2b2;
 			text-decoration: line-through

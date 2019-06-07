@@ -2,7 +2,7 @@
 	<!-- 公用商品列表 -->
 	<view class="m-order-pro-list">
 		<view class="m-header">
-			<view class="">
+			<view class="m-title">
 				{{title}}
 				<view class="m-time">
 					{{createTime}}
@@ -209,8 +209,11 @@
 			color:#4eb87d;
 			white-space:nowrap
 		}
+		.m-title{
+			font-size: $fontsize-1;
+		}
 		.m-time{
-			font-size: $fontsize-6;
+			font-size: $fontsize-4;
 			color:$color-5;
 			display: inline;
 			padding-left: 20upx;
@@ -268,7 +271,7 @@
 			font-size: 26upx;
 			.m-describe{
 				white-space:nowrap;
-				font-size: $fontsize-6;
+				font-size: $fontsize-3;
 				color:$color-5;
 			}
 		}
