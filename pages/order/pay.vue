@@ -15,18 +15,12 @@
 						<m-map :latitude="storeData.lat" :longitude="storeData.lng" :userlat="latitude" :userlng="longitude" :distance="geoDistance(latitude,longitude,storeData.lat,storeData.lng)"></m-map>
 						<view class="m-footer">
 							<view class="m-item">
+
 								<view class="m-text picktime_text">
 									自取时间
 								</view>
 								<view class="m-light">
-									<!-- <ruiDatePicker
-										fields="minute"
-										:start="today"
-										end="2030-12-30 23:59"
-										:value="aboutPickingTime"
-										@change="bindChange"
-										@cancel="bindCancel"
-									></ruiDatePicker> -->
+									
 									 <picker mode="date" :value="date" :start="startDate" :end="endDate" @change="bindDateChange">
 										<view class="uni-input">{{date}}</view>
 									 </picker>
@@ -265,15 +259,15 @@
 			// 优惠券
 			tokenCard(){
 				let _this=this;
-				_this.mPost("/server/co/usableCoupons",{
+
+				_this.$apis.postUsableCoupons({
 					storeId:_this.storeid,
 					start:1,
 					length:1000,
 				}).then(res=>{
-					if(res.code==1){
-						if(res.data.coupons&&res.data.coupons.length>0){
-							_this.haveTokenCard=true
-						}
+					
+					if(res.data.coupons&&res.data.coupons.length>0){
+						_this.haveTokenCard=true
 					}
 				})
 			},
@@ -291,7 +285,8 @@
 					couponId:_this.couponId,
 					products:products, 
 				}
-				_this.mPost("/server/pay/calOrderPrice",sendData).then(res=>{
+				
+				_this.$apis.postCalOrderPrice(sendData).then(res=>{
 					if(res.code=='1'){
 						let data= res.data;
 						_this.totalPrice=data.totalPrice;
@@ -305,75 +300,75 @@
 			// 立即支付
 			payFn(){
 				let _this=this;
-				_this.payLoading=true;
-				this.aboutPickingTime = this.date+" "+this.time;
-				if(!this.aboutPickingTime){
+				this.aboutPickingTime = this.date +" "+this.time;
+				if(this.date == '选择日期' || this.time == '选择时间'){
 					uni.showToast({
-						title: '请填写取货时间~',
-						duration: 1500
+						title:  "请选择取货日期",
+						icon: "none"
 					});
-				}else{
-					let products=_this.shopCarList.map(item=>{return {
-						productId:item.productId||item.id,
-						cou:item.buyCount,
-					}})
-					let sendData ={
-						storeId:_this.storeid,//门店id
-						totalCount:_this.totalCount,//商品总数量
-						type:_this.type,//标识是普通下单还是拼团下单 1：普通 2：拼团
-						couponId:_this.couponId,//优惠券id,
-						aboutPickingTime:_this.aboutPickingTime?_this.aboutPickingTime+":00":"",//预计取货时间 yyyy-MM-dd hh:mm
-						reserveTel:_this.reserveTel,//预留手机号
-						products:products//商品数组对象
-					}
-					if(_this.couponId){
-						sendData['couponId']=this.couponId;
-					}
-					if(_this.outTradeNo){
-						sendData['outTradeNo']=this.outTradeNo; //订单id，第一次下单不需要，待支付订单支付时需要传入
-					}
-					_this.mPost("/server/pay/wxpay",sendData).then(res=>{
-						_this.payLoading=false;
-						let data = res.data;
-						if(!data.paySign){
-							this.paySuccess();
-							return
-						}
-						// 调起支付
-						let _package = data.prepay_id;
-						let paydata = {
-							provider: 'wxpay',
-							timeStamp: data.timeStamp+'',
-							nonceStr: data.nonceStr,
-							package: data.package,
-							signType: data.signType,
-							paySign: data.paySign,
-						}
-						this.payLoading=true;
-						uni.requestPayment({
-							...paydata,
-							success: function(res) {
-								_this.payLoading=false;
-								_this.paySuccess()
-							},
-							fail: function(err) {
-								_this.payLoading=false;
-								//取消支付
-								uni.setStorageSync('orderTab', 2);
-								uni.switchTab({  
-									url: '/pages/tabBar/order'  
-								}); 
-								 // _this.clearShopcar()
-							},
-							complete() {
-								_this.payLoading=false;
-							}
-						});
-						
-					}).catch(err=>{
-						_this.payLoading=false;
-					})
+					return false
 				}
+				_this.payLoading=true;
+				let products=_this.shopCarList.map(item=>{return {
+					productId:item.productId||item.id,
+					cou:item.buyCount,
+				}})
+				let sendData ={
+					storeId:_this.storeid,//门店id
+					totalCount:_this.totalCount,//商品总数量
+					type:_this.type,//标识是普通下单还是拼团下单 1：普通 2：拼团
+					couponId:_this.couponId,//优惠券id,
+					aboutPickingTime:_this.aboutPickingTime?_this.aboutPickingTime+":00":"",//预计取货时间 yyyy-MM-dd hh:mm
+					reserveTel:_this.reserveTel,//预留手机号
+					products:products//商品数组对象
+				}
+				if(_this.couponId){
+					sendData['couponId']=this.couponId;
+				}
+				if(_this.outTradeNo){
+					sendData['outTradeNo']=this.outTradeNo; //订单id，第一次下单不需要，待支付订单支付时需要传入
+				}
+				_this.$apis.postWxpay(sendData).then(res=>{
+					_this.payLoading=false;
+					let data = res.data;
+					if(!data.paySign){
+						this.paySuccess();
+						return
+					}
+					// 调起支付
+					let _package = data.prepay_id;
+					let paydata = {
+						provider: 'wxpay',
+						timeStamp: data.timeStamp+'',
+						nonceStr: data.nonceStr,
+						package: data.package,
+						signType: data.signType,
+						paySign: data.paySign,
+					}
+					this.payLoading=true;
+					uni.requestPayment({
+						...paydata,
+						success: function(res) {
+							_this.payLoading=false;
+							_this.paySuccess()
+						},
+						fail: function(err) {
+							_this.payLoading=false;
+							//取消支付
+							uni.setStorageSync('orderTab', 2);
+							uni.switchTab({  
+								url: '/pages/tabBar/order'  
+							}); 
+							 // _this.clearShopcar()
+						},
+						complete() {
+							_this.payLoading=false;
+						}
+					});
+					
+				}).catch(err=>{
+					_this.payLoading=false;
+				})
 			},
 			//支付成功
 			paySuccess(){
@@ -398,7 +393,7 @@
 			// 清空购物车
 			clearShopcar(){
 				let _this = this;
-				_this.mPost("/server/sc/delete/all",{
+				_this.$apis.clearShopCar({
 					// userId:this.userid
 				}).then(res=>{
 					if(res.code=='1'){
@@ -412,7 +407,8 @@
 			},
 			//门店详情
 			storeDetail(){
-				this.mPost("/server/s/storeById",{
+				
+				this.$apis.postStore({
 					id:this.storeid
 				}).then(res=>{
 					this.storeData = res.data;
@@ -441,12 +437,17 @@
 		},
 		// 
 		onLoad(option){
+			if(option.aboutPickingTime){
+				let tempTime = option.aboutPickingTime.split(" ");
+				this.date = tempTime[0],
+				this.time = tempTime[1].substring(0,tempTime[1].length-3);
+			}
 			this.reserveTel=option.reserveTel||uni.getStorageSync('phone')||"";
 			this.couponId=option.couponId|| "",
 			this.storeid=option.storeid;
 			this.totalCount=option.totalCount,
-			this.type=option.type
 			// 位置
+			this.type=option.type
 			this.storeLocation();
 			//店铺详情
 			this.storeDetail();

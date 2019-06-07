@@ -108,7 +108,7 @@
 				<view class="num">
 					商品库存：{{goodsData.stock}}
 				</view>
-				<view class="pickTime">
+				<view v-if="isAssemble == 1" class="pickTime">
 					取货时间：{{goodsData.pickTimeStr}}
 				</view>
 			</view>
@@ -123,14 +123,13 @@
 					<view class="time">
 						{{timeSpan}}
 					</view>
-
 				</view>
 				<view class="text-box">
 					已有{{pintunNum}}人下单 可直接参与
 				</view>
 			</view>
-			<view class="user-list-box">
-				<view class="item-box" v-for="item in pintuanData" :key="item.id">
+			<view class="user-list-box" v-if="pintuanData.length > 0">
+				<view  class="item-box" v-for="item in pintuanData" :key="item.id">
 					<view class="img-box">
 						<image style="width:80upx;height:80upx" :src="item.headAddress" mode="aspectFit"></image>
 					</view>
@@ -147,9 +146,12 @@
 					</view>
 				</view>
 			</view>
+			<view v-else class="empty-row">
+				~暂无拼团用户~
+			</view>
 		</view>
 		<!-- 评价 -->
-		<view class="info-box comments" id="comments">
+		<view v-if="commentData.length > 0" class="info-box comments" id="comments">
 			<view class="m-header">
 				<view class="m-label">
 					商品评价
@@ -188,7 +190,14 @@
 					</view>
 				</view>
 			</view>
-			
+		</view>
+		<view v-else class="info-box comments" id="comments">
+			<view class="m-label">
+				商品评价
+			</view>
+			<view  class="empty-row">
+				~暂无品论~
+			</view>
 		</view>
 		<view class="info-box pro-detail">
 			<view class="m-header">
@@ -285,7 +294,7 @@ export default {
 		//option为object类型，会序列化上个页面传递的参数
 		let id=option.id;
 		// 商品基本信息
-		_this.mPost("/server/p/product",{
+		_this.$apis.postProducts({
 			id:id,
 		}).then(res=>{
 			if(res.code=='1'){
@@ -342,7 +351,7 @@ export default {
 		// 拼团用户列表
 		getPintuanUsers(id){
 			let _this = this;
-			this.mPost("/server/g/group/buy/users",{
+			this.$apis.postGroupBuyUsers({
 				start:0,
 				length:100,
 				productId:id
@@ -356,7 +365,7 @@ export default {
 		//评论列表
 		getComments(id){
 			let _this = this;
-			this.mPost("/server/c/comments",{
+			this.$apis.postComments({
 				start:0,
 				length:100,
 				productId:id
@@ -371,7 +380,7 @@ export default {
 		//好评度
 		getDegree(id){
 			let _this = this;
-			this.mPost("/server/c/praise/degree",{
+			this.$apis.postDegree({
 				productId:id
 			}).then(res=>{
 				if(res.code=='1'){
@@ -875,9 +884,9 @@ page {
 			color:$color-2;
 		}
 		.text-box{
-			margin-top: 10upx;
+			margin-top: 12upx;
 			color:$color-6;
-			font-size: $fontsize-3;
+			font-size: $fontsize-2;
 		}
 		.time{
 			color:$color-price;
@@ -1222,5 +1231,12 @@ page {
 		}
 		
 	}
+}
+.empty-row{
+	text-align: center;
+	font-size: $fontsize-9;
+	color:$color-1;
+	padding: 66upx 20px;
+	// background:#f9f9f9;
 }
 </style>

@@ -303,7 +303,7 @@
 					return ;
 				}
 				let _this = this;
-				this.mPost("/server/p/search/products",{
+				this.$apis.postSearchProducts({
 					start:page,
 					length:10,
 					typeId:_this.typeid*1,
@@ -328,7 +328,7 @@
 			// 获取购物车列表信息
 			showShopCar(){
 				let _this = this;
-				this.mPost("/server/sc/find/cart",{
+				this.$apis.postCars({
 				}).then(res=>{
 					if(res.code=='1'){
 						if(res.data){
@@ -361,7 +361,7 @@
 			// 清空购物车
 			clearShopcar(){
 				let _this = this;
-				_this.mPost("/server/sc/delete/all",{
+				_this.$apis.clearShopCar({
 					
 				}).then(res=>{
 					uni.showModal({
@@ -448,18 +448,12 @@
 					});
 					buyCount=data.stock;
 				}
-				_this.mPost("/server/sc/add/product",{
+				_this.$apis.postAddCars({
 					productId:data.id,
 					buyCount:buyCount
 				}).then(res=>{
-					if(res.code==1){
 						_this.showShopCar();
-					}
-				}).catch(err=>{
-					uni.showToast({
-						title:  "操作失败，请检查网络",
-						icon: "none"
-					});
+					
 				})
 			},
 			//减商品
@@ -479,18 +473,13 @@
 					});
 					buyCount=data.stock;
 				}
-				_this.mPost("/server/sc/sub/product",{
+				_this.$apis.postSubCars({
 					productId:data.id,
 					buyCount:buyCount
 				}).then(res=>{
-					if(res.code==1){
+					
 						_this.showShopCar();
-					}
-				}).catch(err=>{
-					uni.showToast({
-						title:  "操作失败，请检查网络",
-						icon: "none"
-					});
+					
 				})
 			},
 			//删除
@@ -533,15 +522,12 @@
 							  return obj  
 							});  
 				products = JSON.stringify(products);
-				_this.mPost("/server/p/calProductsPrice",products).then(res=>{
-					if(res.code==1){
+				_this.$apis.postSumCars(products).then(res=>{
+					
 						_this.shopCarListPrice=res.data.totalPrice;
 						_this.shopCarListLength=pronum;
 						// if(pronum==0)
-					}
-					console.log(res);
-				}).catch(err=>{
-					console.log(err)
+					
 				})
 			},
 			
@@ -572,7 +558,7 @@
 			},
 			initTypes(){
 				//商品分类
-				this.mPost("/server/t/types",{
+				this.$apis.postProductType({
 				}).then(res=>{
 					if(res.code=='1'){
 						this.storeMenu=res.data;
@@ -582,7 +568,7 @@
 			// 商家基本信息
 			initBusiness(){
 				let _this = this;
-				this.mPost("/server/s/storeById",{
+				this.$apis.postStore({
 					id:_this.storeid
 				}).then(res=>{
 					if(res.code=='1'){
@@ -739,7 +725,7 @@
 								font-weight: bold;
 							}
 							.m-text{
-								font-size: 20upx;
+								font-size: 24upx;
 								color:#999999;
 								line-height: 38upx;
 								margin-top: 10upx;
@@ -747,7 +733,7 @@
 								padding-right: 30upx;width: 100%;
 							}
 							.m-time{
-								font-size: 20upx;
+								font-size: 24upx;
 								color:#999999;
 								margin-top: 10upx;
 								white-space: nowrap;

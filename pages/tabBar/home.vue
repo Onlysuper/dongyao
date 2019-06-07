@@ -129,7 +129,7 @@
 			},
 			// banner图片
 			getBanners(){
-				this.mGet('/server/b/banners',{}).then(res=>{
+				this.$apis.getBanners({}).then(res=>{
 						this.swiperList=res.data;
 				}).catch(err=>{
 					console.log(err);
@@ -137,7 +137,7 @@
 			},
 			//热卖列表
 			getHotsellList(){
-				this.mPost('/server/p/hot/products',{
+				this.$apis.postHotProduct({
 					start:this.hotsellPage,
 					length:6
 				}).then(res=>{
@@ -153,10 +153,11 @@
 			//拼团列表
 			getGroupsellList(){
 				let _this=this;
-				this.mPost('/server/p/group/products',{
+				this.$apis.postGroupProducts({
 					start:this.hotsellPage,
 					length:500
 				}).then(res=>{
+					console.log(res);
 						if(res.data){
 							let data = res.data;
 							if(data.list){
@@ -170,15 +171,14 @@
 			//门店列表
 			getStoreList(lng,lat){
 				let _this=this;
-				_this.mPost('/server/s/vicinity/stores',{
+				_this.$apis.postStoreList({
 					"lng":lng || 116.206845,
 					"lat":lat || 39.762155,
 				}).then(res=>{
 					if(res.data){
 						let data = res.data;
-							_this.nearStoreList = data;
+						_this.nearStoreList = data;
 					}
-					
 				}).catch(err=>{
 					console.log(err);
 					// uni.stopPullDownRefresh();

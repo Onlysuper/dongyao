@@ -69,7 +69,7 @@
 					uni.stopPullDownRefresh();
 					return ;
 				}
-				this.mPost('/server/co/myCoupons',{
+				this.$apis.postMyCoupons({
 					type:type,
 					start:page,
 					length:20

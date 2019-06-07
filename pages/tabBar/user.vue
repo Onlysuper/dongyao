@@ -114,18 +114,18 @@
 			//我的会员
 			myVips(){
 				let _this = this;
-				this.mPost("/server/m/myMember",{}).then(res=>{
-					if(res.code==1){
-						let data = res.data.myMember;
-						if(data){
-							// 会员
-							_this.myMember=data;
-							_this.isVip = true;
-						}else{
-							// 非会员
-							_this.isVip = false
-						}
+				this.$apis.postMyMember({}).then(res=>{
+					
+					let data = res.data.myMember;
+					if(data){
+						// 会员
+						_this.myMember=data;
+						_this.isVip = true;
+					}else{
+						// 非会员
+						_this.isVip = false
 					}
+				
 				})
 			},
 			linkToOrderTab(index){

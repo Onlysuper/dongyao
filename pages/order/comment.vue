@@ -252,11 +252,11 @@
 						})
 						Promise.all(arr).then(res => {
 							  //上传成功
-							  uni.showModal({
-							  	title: '上传成功',
-							  	content: '可在我的订单中查看详情',
+							uni.showModal({
+							  	title: '评论成功',
+							  	content: '前往您的订单列表吗？',
 							  	showCancel:false,
-							  	confirmText:'查看',
+							  	confirmText:'确定',
 							  	success: function (res) {
 							  		if (res.confirm) {
 							  			uni.setStorageSync('orderTab', 4);
@@ -265,9 +265,9 @@
 							  			});
 							  		} 
 							  		else if (res.cancel) {
-							  			uni.switchTab({  
-							  				url: '/pages/tabBar/home'  
-							  			});
+										uni.switchTab({  
+											url: '/pages/tabBar/home'  
+										});
 							  		}
 							  	}
 							});
@@ -279,20 +279,25 @@
 							});
 						})
 					}else{
-						let sendData = {
-						  formData:formData,
-						   filePath: "",
-							name: 'file',
-						}
-						_this.mPost("/server/o/commentOn",sendData).then(res=>{
-							uni.showToast({
-								title: "评论成功",
-								icon: "none"
-							});
-						}).catch(err=>{
-							uni.showToast({
-								title: err,
-								icon: "none"
+						_this.$apis.postNoImgCommentOn(formData).then(res=>{
+							uni.showModal({
+							  	title: '评论成功',
+							  	content: '前往您的订单列表吗？',
+							  	showCancel:false,
+							  	confirmText:'确定',
+							  	success: function (res) {
+							  		if (res.confirm) {
+							  			uni.setStorageSync('orderTab', 4);
+							  			uni.switchTab({  
+							  				url: '/pages/tabBar/order'  
+							  			});
+							  		} 
+							  		else if (res.cancel) {
+										uni.switchTab({  
+											url: '/pages/tabBar/home'  
+										});
+							  		}
+							  	}
 							});
 						})
 					}
