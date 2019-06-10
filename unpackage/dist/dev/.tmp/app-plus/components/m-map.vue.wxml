@@ -1,1 +1,0 @@
-<template name="23065426"><view class="_view 23065426 m-map"><map style="width: 100%; height: 370rpx;" controls="{{controls}}" circles="{{circles}}" polyline="{{polyline}}" scale="{{scale}}" latitude="{{latitude}}" longitude="{{longitude}}" markers="{{covers}}" class="_map 23065426"></map></view></template>

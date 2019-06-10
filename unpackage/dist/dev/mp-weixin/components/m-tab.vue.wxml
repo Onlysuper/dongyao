@@ -1,1 +1,0 @@
-<template name="23061fb4"><view class="_view 23061fb4 m-tab"><view bindtap="handleProxy" wx:key="index" key="{{index}}" data-eventid="{{'23061fb4-0-'+index}}" data-comkey="{{$k}}" wx:for="{{rowdata}}" wx:for-index="index" wx:for-item="item" class="_view 23061fb4 {{['m-item', [item.id == tabActive ? 'actived' : '']]}}">{{item.label}}</view></view></template>

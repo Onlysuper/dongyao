@@ -1,6 +1,0 @@
-{
-  "navigationBarTitleText": "我的订单",
-  "navigationBarTextStyle": "black",
-  "enablePullDownRefresh": true,
-  "onReachBottomDistance": 50
-}
