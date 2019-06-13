@@ -668,8 +668,7 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;
-
+/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _regenerator = _interopRequireDefault(__webpack_require__(/*! ./node_modules/@babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js"));
 
 
 
@@ -778,7 +777,7 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 
 var _mFooterCar = _interopRequireDefault(__webpack_require__(/*! @/components/m-footer-car */ "../../../../../../Users/apple/opt/DONGYAO/components/m-footer-car.vue"));
 var _mStorePro = _interopRequireDefault(__webpack_require__(/*! @/components/m-store-pro */ "../../../../../../Users/apple/opt/DONGYAO/components/m-store-pro.vue"));
-var _uniNumberBox = _interopRequireDefault(__webpack_require__(/*! @/components/uni-number-box/uni-number-box.vue */ "../../../../../../Users/apple/opt/DONGYAO/components/uni-number-box/uni-number-box.vue"));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function _toConsumableArray(arr) {return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread();}function _nonIterableSpread() {throw new TypeError("Invalid attempt to spread non-iterable instance");}function _iterableToArray(iter) {if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter);}function _arrayWithoutHoles(arr) {if (Array.isArray(arr)) {for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) {arr2[i] = arr[i];}return arr2;}}function _objectSpread(target) {for (var i = 1; i < arguments.length; i++) {var source = arguments[i] != null ? arguments[i] : {};var ownKeys = Object.keys(source);if (typeof Object.getOwnPropertySymbols === 'function') {ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) {return Object.getOwnPropertyDescriptor(source, sym).enumerable;}));}ownKeys.forEach(function (key) {_defineProperty(target, key, source[key]);});}return target;}function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}var page = 1,totalpage = 0;
+var _uniNumberBox = _interopRequireDefault(__webpack_require__(/*! @/components/uni-number-box/uni-number-box.vue */ "../../../../../../Users/apple/opt/DONGYAO/components/uni-number-box/uni-number-box.vue"));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function _toConsumableArray(arr) {return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread();}function _nonIterableSpread() {throw new TypeError("Invalid attempt to spread non-iterable instance");}function _iterableToArray(iter) {if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter);}function _arrayWithoutHoles(arr) {if (Array.isArray(arr)) {for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) {arr2[i] = arr[i];}return arr2;}}function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {try {var info = gen[key](arg);var value = info.value;} catch (error) {reject(error);return;}if (info.done) {resolve(value);} else {Promise.resolve(value).then(_next, _throw);}}function _asyncToGenerator(fn) {return function () {var self = this,args = arguments;return new Promise(function (resolve, reject) {var gen = fn.apply(self, args);function _next(value) {asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value);}function _throw(err) {asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err);}_next(undefined);});};}function _objectSpread(target) {for (var i = 1; i < arguments.length; i++) {var source = arguments[i] != null ? arguments[i] : {};var ownKeys = Object.keys(source);if (typeof Object.getOwnPropertySymbols === 'function') {ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) {return Object.getOwnPropertyDescriptor(source, sym).enumerable;}));}ownKeys.forEach(function (key) {_defineProperty(target, key, source[key]);});}return target;}function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}var page = 1,totalpage = 0;
 // 抛物线计算
 function bezier(pots, amount) {
   var pot;
@@ -996,38 +995,37 @@ function bezier(pots, amount) {
       });
     },
     // 获取购物车列表信息
-    showShopCar: function showShopCar() {var _this3 = this;
-      var _this = this;
-      this.$apis.postCars({}).
-      then(function (res) {
-        if (res.code == '1') {
-          if (res.data) {
-            var data = _toConsumableArray(res.data);
-            data = data.map(function (item) {
-              var _id = item.id;
-              // 产品列表商品是否出现在购物车中
-              _this3.productLis = _this3.productLis;
-              var stock = 0;
-              if (_this.productList.findIndex(function (pro) {return pro.id == _id;}) != -1 && _this.productList.find(function (pro) {return pro.id == _id;})['stock']['stock']) {
-                stock = _this.productList.find(function (pro) {return pro.id == _id;})['stock'];
-              }
-              return _objectSpread({ stock: stock }, item);
-            });
-            console.log('总结数据', data);
-            _this.shopCarList = data;
-            // 购物车总商品数，与总价格计算
-            _this.shopCarCount();
-          }
-        } else if (res.code == '0') {
-          _this.shopCarList = [];
-          // 购物车总商品数，与总价格计算
-          _this.shopCarCount();
-        }
-      }).catch(function (err) {
-        _this.shopCarList = [];
-        _this.shopCarCount();
-      });
-    },
+    showShopCar: function () {var _showShopCar = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {var _this3 = this;var _this;return _regenerator.default.wrap(function _callee$(_context) {while (1) {switch (_context.prev = _context.next) {case 0:
+                _this = this;_context.next = 3;return (
+                  this.$apis.postCars({}).
+                  then(function (res) {
+                    if (res.code == '1') {
+                      if (res.data) {
+                        var data = _toConsumableArray(res.data);
+                        data = data.map(function (item) {
+                          var _id = item.id;
+                          // 产品列表商品是否出现在购物车中
+                          _this3.productLis = _this3.productLis;
+                          var stock = 0;
+                          if (_this.productList.findIndex(function (pro) {return pro.id == _id;}) != -1 && _this.productList.find(function (pro) {return pro.id == _id;})['stock']['stock']) {
+                            stock = _this.productList.find(function (pro) {return pro.id == _id;})['stock'];
+                          }
+                          return _objectSpread({ stock: stock }, item);
+                        });
+                        _this.shopCarList = data;
+                        // 购物车总商品数，与总价格计算
+                        _this.shopCarCount();
+                      }
+                    } else if (res.code == '0') {
+                      _this.shopCarList = [];
+                      // 购物车总商品数，与总价格计算
+                      _this.shopCarCount();
+                    }
+                  }).catch(function (err) {
+                    _this.shopCarList = [];
+                    _this.shopCarCount();
+                  }));case 3:case "end":return _context.stop();}}}, _callee, this);}));function showShopCar() {return _showShopCar.apply(this, arguments);}return showShopCar;}(),
+
     // 清空购物车
     clearShopcar: function clearShopcar() {
       var _this = this;
@@ -1100,58 +1098,59 @@ function bezier(pots, amount) {
 
     },
     // 加入购物车
-    addGoodSum: function addGoodSum(_data) {var num = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1;var type = arguments.length > 2 ? arguments[2] : undefined;
-      var _id = _data.id;
-      var data = this.productList.find(function (item) {return item.id == _id;});
-      console.log(data);
-      var _this = this;
-      var buyCount = num;
-      var objIndex = this.shopCarList.findIndex(function (item) {return item.id == _id;});
-      if (objIndex != -1 && type == 'add') {
-        console.log();
-        buyCount = this.shopCarList.find(function (item) {return item.id == _id;})['buyCount'] + 1;
-      }
-      if (buyCount > data.stock) {
-        uni.showToast({
-          title: "库存不足",
-          icon: "none" });
+    addGoodSum: function () {var _addGoodSum = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2(_data) {var num,type,_id,data,_this,buyCount,objIndex,postAddCars,_args2 = arguments;return _regenerator.default.wrap(function _callee2$(_context2) {while (1) {switch (_context2.prev = _context2.next) {case 0:num = _args2.length > 1 && _args2[1] !== undefined ? _args2[1] : 1;type = _args2.length > 2 ? _args2[2] : undefined;
+                _id = _data.id;
+                data = this.productList.find(function (item) {return item.id == _id;});
+                console.log(data);
+                _this = this;
+                buyCount = num;
+                objIndex = this.shopCarList.findIndex(function (item) {return item.id == _id;});
+                if (objIndex != -1 && type == 'add') {
+                  console.log();
+                  buyCount = this.shopCarList.find(function (item) {return item.id == _id;})['buyCount'] + 1;
+                }
+                if (buyCount > data.stock) {
+                  uni.showToast({
+                    title: "库存不足",
+                    icon: "none" });
 
-        buyCount = data.stock;
-      }
-      _this.$apis.postAddCars({
-        productId: data.id,
-        buyCount: buyCount }).
-      then(function (res) {
-        _this.showShopCar();
+                  buyCount = data.stock;
+                }_context2.next = 12;return (
+                  _this.$apis.postAddCars({
+                    productId: data.id,
+                    buyCount: buyCount }));case 12:postAddCars = _context2.sent;
 
-      });
-    },
+                if (postAddCars.code == '1') {
+                  _this.showShopCar();
+                }
+                // 				.then(res=>{
+                // 					_this.showShopCar();
+                // 				})
+              case 14:case "end":return _context2.stop();}}}, _callee2, this);}));function addGoodSum(_x) {return _addGoodSum.apply(this, arguments);}return addGoodSum;}(),
     //减商品
-    subGoodSum: function subGoodSum(_data) {var num = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1;var type = arguments.length > 2 ? arguments[2] : undefined;
-      var _this = this;
-      var buyCount = num;
-      var _id = _data.id;
-      var data = this.productList.find(function (item) {return item.id == _id;});
-      var objIndex = this.shopCarList.findIndex(function (item) {return item.id == _id;});
-      if (objIndex != -1 && type == 'add') {
-        buyCount = this.shopCarList.find(function (item) {return item.id == _id;})['buyCount'] + 1;
-      }
-      if (buyCount > data.stock) {
-        uni.showToast({
-          title: "库存不足",
-          icon: "none" });
+    subGoodSum: function () {var _subGoodSum = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee3(_data) {var num,type,_this,buyCount,_id,data,objIndex,_args3 = arguments;return _regenerator.default.wrap(function _callee3$(_context3) {while (1) {switch (_context3.prev = _context3.next) {case 0:num = _args3.length > 1 && _args3[1] !== undefined ? _args3[1] : 1;type = _args3.length > 2 ? _args3[2] : undefined;
+                _this = this;
+                buyCount = num;
+                _id = _data.id;
+                data = this.productList.find(function (item) {return item.id == _id;});
+                objIndex = this.shopCarList.findIndex(function (item) {return item.id == _id;});
+                if (objIndex != -1 && type == 'add') {
+                  buyCount = this.shopCarList.find(function (item) {return item.id == _id;})['buyCount'] + 1;
+                }
+                if (buyCount > data.stock) {
+                  uni.showToast({
+                    title: "库存不足",
+                    icon: "none" });
 
-        buyCount = data.stock;
-      }
-      _this.$apis.postSubCars({
-        productId: data.id,
-        buyCount: buyCount }).
-      then(function (res) {
+                  buyCount = data.stock;
+                }_context3.next = 11;return (
+                  _this.$apis.postSubCars({
+                    productId: data.id,
+                    buyCount: buyCount }).
+                  then(function (res) {
+                    _this.showShopCar();
+                  }));case 11:case "end":return _context3.stop();}}}, _callee3, this);}));function subGoodSum(_x2) {return _subGoodSum.apply(this, arguments);}return subGoodSum;}(),
 
-        _this.showShopCar();
-
-      });
-    },
     //删除
     buyNumDelete: function buyNumDelete(data) {
       var num = data.num;

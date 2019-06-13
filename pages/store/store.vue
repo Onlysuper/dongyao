@@ -6,7 +6,6 @@
 					<view class="m-img">
 						<!-- imgUrl -->
 						<image @tap="previewImage(storeData.imgUrl)" style="width:100%;height: 100%;" :src="storeData.imgUrl" mode="aspectFit"></image>
-	
 					</view>
 					<view class="m-body">
 						<view class="m-text-box">
@@ -326,9 +325,9 @@
 				})
 			},
 			// 获取购物车列表信息
-			showShopCar(){
+			async showShopCar(){
 				let _this = this;
-				this.$apis.postCars({
+				await this.$apis.postCars({
 				}).then(res=>{
 					if(res.code=='1'){
 						if(res.data){
@@ -343,7 +342,6 @@
 								}
 								return {stock:stock,...item};
 							})
-							console.log('总结数据',data);
 							_this.shopCarList=data;
 							// 购物车总商品数，与总价格计算
 							_this.shopCarCount();
@@ -430,7 +428,7 @@
 				//  #endif  
 			},
 			// 加入购物车
-			addGoodSum(_data,num=1,type){
+			async addGoodSum (_data,num=1,type){
 				let _id = _data.id;
 				let data= this.productList.find(item=>item.id==_id);
 				console.log(data);
@@ -448,16 +446,19 @@
 					});
 					buyCount=data.stock;
 				}
-				_this.$apis.postAddCars({
+				let postAddCars = await _this.$apis.postAddCars({
 					productId:data.id,
 					buyCount:buyCount
-				}).then(res=>{
-						_this.showShopCar();
-					
 				})
+				if(postAddCars.code=='1'){
+					_this.showShopCar();
+				}
+// 				.then(res=>{
+// 					_this.showShopCar();
+// 				})
 			},
 			//减商品
-			subGoodSum(_data,num=1,type){
+			async subGoodSum(_data,num=1,type){
 				let _this=this;
 				let buyCount=num;
 				let _id = _data.id;
@@ -473,13 +474,11 @@
 					});
 					buyCount=data.stock;
 				}
-				_this.$apis.postSubCars({
+				await _this.$apis.postSubCars({
 					productId:data.id,
 					buyCount:buyCount
 				}).then(res=>{
-					
 						_this.showShopCar();
-					
 				})
 			},
 			//删除
