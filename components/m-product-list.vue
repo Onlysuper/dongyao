@@ -121,11 +121,12 @@
 		.m-title{
 			font-size: $fontsize-9;
 			color:#333333;
+			font-weight: $fontweight-1;
 		}
 		.m-describe{
-			font-size:$fontsize-6;
-			margin-top: 5upx;
-			color:#808080;
+			font-size:$fontsize-2;
+			margin-top: 10upx;
+			color:#4c4c4c;
 		}
 		.m-price{
 			color:#ff582b;
@@ -135,7 +136,7 @@
 		}
 		.m-oldprice{
 			color:#999;
-			font-size: $fontsize-6;
+			font-size: $fontsize-5;
 		}
 	}
 }

@@ -118,18 +118,19 @@
 			<view class="m-header">
 				<view class="time-box">
 					<view class="">
-						距团购结束
+						距结束
 					</view>
 					<view class="time">
 						{{timeSpan}}
 					</view>
 				</view>
 				<view class="text-box">
-					已有{{pintunNum}}人下单 可直接参与
+					已有<span class="text-num">
+					{{pintunNum}}</span>人下单 可直接参与
 				</view>
 			</view>
 			<view class="user-list-box" v-if="pintuanData.length > 0">
-				<view  class="item-box" v-for="item in pintuanData" :key="item.id">
+				<view  class="item-box" v-for="(item, index) in pintuanData" :key="item.id">
 					<view class="img-box">
 						<image style="width:80upx;height:80upx" :src="item.headAddress" mode="aspectFit"></image>
 					</view>
@@ -140,9 +141,9 @@
 						<view class="">
 							{{item.pickingTime}}下单
 						</view>
-						<!-- <view class="">
-							第一位用户
-						</view> -->
+						<view class="">
+							第{{pintunNum-index}}位用户
+						</view>
 					</view>
 				</view>
 			</view>
@@ -790,7 +791,7 @@ page {
 		.oldprice{
 			display: inline-block;
 			margin-left: 20upx;
-			font-size: $fontsize-6;
+			font-size: $fontsize-5;
 			color:$color-6;
 		}
 		.num{
@@ -804,7 +805,7 @@ page {
 			flex-grow:1;
 			text-align: right;
 			color:$color-price;
-			font-size: $fontsize-5;
+			font-size: $fontsize-3;
 		}
 	}
 }
@@ -875,22 +876,28 @@ page {
 	.m-header{
 		border-bottom: 1px solid $color-border2;
 		padding: 30upx 0;
+		display: flex;
+		justify-content:space-between; 
 		.time-box{
 			display: flex;
 			flex-direction: row;
 			align-items: center;
-			justify-content: flex-start;
 			font-size:$fontsize-9;
-			color:$color-2;
+			color:$color-5;
 		}
 		.text-box{
-			margin-top: 12upx;
-			color:$color-6;
+			color:$color-7;
+			font-size: $fontsize-3;
+		}
+		.text-num{
+			color:$color-8;
+			font-weight: 500;
 			font-size: $fontsize-2;
 		}
 		.time{
-			color:$color-price;
+			color:white;
 			margin-left: 10upx;
+			background-color: $color-8;
 			font-size: $fontsize-2;
 		}
 	}
@@ -920,7 +927,7 @@ page {
 			}
 			.time-box{
 				flex: 1 1 200upx;
-				color:$color-6;
+				color:$color-9;
 				font-size:$fontsize-5;
 				text-align:right;
 			}
