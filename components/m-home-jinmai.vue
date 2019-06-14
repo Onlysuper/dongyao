@@ -1,17 +1,17 @@
 <template>
 	<!-- 首页产品图文 -->
-	<view class="m-pro-item">
-		<view class="m-content" @tap="handleFn">
-			<view class="m-img">
-				<image style="width: 100%;height: 100%;" :src="rowData.pictureUrl" mode="aspectFull"></image>
+	<view class="m-jinmai-item">
+		<view @tap="handleFn" class="m-content">
+			<view class="m-img" >
+				<image :src="rowData.pictureUrl" mode="aspectFull"></image>
 			</view>
 			<view class="m-pro">
-				<!-- <view class="m-title">
+				<view class="m-title">
 					{{rowData.synopsis}}
-				</view> -->
+				</view>
 				<view class="m-price">
 					<view class="new">{{rowData.presentPrice}}</view>
-					<!-- <view class="old">{{rowData.originalPrice}}</view> -->
+					<view class="old">{{rowData.originalPrice}}</view>
 				</view>
 			</view>
 		</view>
@@ -47,25 +47,28 @@
 
 <style lang="scss">
 @import "../common/globel.scss";
-.m-pro-item{
+.m-jinmai-item{
 	flex-direction: column;
 	margin-left: 10upx;
+	margin-right: 0upx;
 	margin-bottom: 30upx;
+	// box-shadow: 0px 1px 3px rgba(0,0,0,0.2);
+	
 	box-sizing: border-box;
 	border-radius: 12upx;
-	flex:0 0 160upx;
-	margin-top: 20px;
+	flex:0 0 225upx;
+	margin-top: 2px;
 	box-sizing: border-box;
 	position: relative;
 	background:#fff;
-	.m-pro{
-		text-align: center;
+	&:active{
+		background:$color-hover
 	}
 	.m-content{
 		position: relative;
 		z-index: 10;
 		width: 100%;
-		padding: 10upx; 
+		padding: 20upx; 
 		// height: 225upx;
 	}
 // 	::before{
@@ -80,27 +83,18 @@
 // 		box-shadow: 0px 0px 3px rgba(241,241,241,0.6);
 // 		z-index: 1;
 // 		border-radius: 12upx;
+// 		
 // 	}
-	
-// 	&:last-of-type{
-// 		// background:red;
-// 		margin-right: 3px;
-// 		flex:0 0 218upx;
-// 	}
-// 	&:last-of-type::after{
-// 		// right: 3px !important;
-// 	}
-	&:active{
-		background:$color-hover
-	}
 	.m-img{
 		box-sizing: border-box;
-		flex:0 0 150upx;
-		height: 150upx;
-		// background:#eee;
+		flex:0 0 170upx;
+		height: 170upx;
 		image{
 			border-radius: 100%;
+			height: 170upx;
+			width:170upx
 		}
+		// background:#eee;
 	}
 	.m-title{
 		font-size: $fontsize-9;
@@ -118,13 +112,10 @@
 		margin-top: 10upx;
 		justify-content: flex-start;
 		align-items: center;
-		text-align: center;
 		.new{
 			font-size: 28upx;
 			font-weight: bold;
 			color: #ff582b;
-			width: 100%;
-			text-align: center;
 		}
 		.old{
 			font-size: 22upx;

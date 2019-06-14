@@ -37,19 +37,57 @@
 		</view>
 		<!-- 超值热卖 -->
 		<view class="m-container">
-			<m-title title="超值热卖" labelColor="#666666" label="换一换" @titleHandle="getHotsellList">
+			<m-title title="净购热卖" labelColor="#666666" label="换一换" @titleHandle="getHotsellList">
 					<image style="width:30upx;height:20upx;margin-right:10upx;" src="../../static/img/icon/home_icon_refresh.png" mode="aspectFit"></image>
 			</m-title>
 			<view v-if="hotProList.length>0" class="m-content m-hotsell">
 				<template v-for="(item,index) in hotProList">
-					<m-home-hotpro @handleFn="hotProDetail(item)"  :key="index" :rowData="item"></m-home-hotpro>
+					<m-home-jinmai @handleFn="hotProDetail(item)"  :key="index" :rowData="item"></m-home-jinmai>
 				</template>
 			</view>
 			<view v-else class="empty-row">
 				~暂无商品~
 			</view>
 		</view>
-		<view class="m-container">
+		<view class="m-container new-pin">
+			<view class="m-header">
+				<view class="">
+					今日必拼
+				</view> | 
+				<view class="text-small">
+					拼着买更新鲜
+				</view>
+			</view>
+			<view class="m-container">
+				<view class="m-together">
+					<template v-for="(item,index) in groupsellList">
+						<m-home-pro @handleFn="groupProDetail(item)" :key="index" :rowData="item"></m-home-pro>
+					</template>
+				</view>
+				<view @click="pintuanHandle" class="m-operation">
+					<view style="margin-bottom: 15upx;">
+						立即<br/>抢购
+					</view>
+					<image style="width: 40upx;height: 40upx;" src="/static/img/home_icon_down1.png" mode="aspectFull"></image>
+				</view>
+			</view>
+			
+			<!-- <m-title title="今日必拼" label="查看更多 >" @titleHandle="pintuanHandle"></m-title>
+			<view v-if="groupsellList.length>0" class="m-content m-pin" >
+				<scroll-view class="scroll-view" scroll-x="true"  scroll-left="0">
+					<view class="m-togethoer">
+						<template v-for="(item,index) in groupsellList">
+							<m-home-pro @handleFn="groupProDetail(item)" :key="index" :rowData="item"></m-home-pro>
+						</template>
+					</view>
+				</scroll-view>
+			</view>
+			<view v-else class="empty-row">
+				~今日暂无拼团商品~
+			</view> -->
+		</view>
+		
+		<!-- <view class="m-container">
 			<m-title title="今日必拼" label="查看更多 >" @titleHandle="pintuanHandle"></m-title>
 			<view v-if="groupsellList.length>0" class="m-content m-pin" >
 				<scroll-view class="scroll-view" scroll-x="true"  scroll-left="0">
@@ -62,6 +100,21 @@
 			</view>
 			<view v-else class="empty-row">
 				~今日暂无拼团商品~
+			</view>
+		</view> -->
+		<!-- 超值热卖 -->
+		<view class="m-container">
+			<!-- <m-title title="超值热卖" labelColor="#666666" label="换一换" @titleHandle="getHotsellList">
+					<image style="width:30upx;height:20upx;margin-right:10upx;" src="../../static/img/icon/home_icon_refresh.png" mode="aspectFit"></image>
+			</m-title> -->
+			<m-title title="超值热卖" label="查看更多 >" @titleHandle="getHotsellList"></m-title>
+			<view v-if="hotProList.length>0" class="m-content m-hotsell">
+				<template v-for="(item,index) in hotProList">
+					<m-home-hotpro @handleFn="hotProDetail(item)"  :key="index" :rowData="item"></m-home-hotpro>
+				</template>
+			</view>
+			<view v-else class="empty-row">
+				~暂无商品~
 			</view>
 		</view>
 		<view class="m-container">
@@ -85,6 +138,7 @@
 	import mTitle from '@/components/m-title'
 	import mHomePro from '@/components/m-home-pro'
 	import mHomeHotpro from '@/components/m-home-hotpro'
+	import mHomeJinmai from '@/components/m-home-jinmai'
 	import mHomeStore from '@/components/m-home-store'
 	import mSwiper from "@/components/m-swiper/m-swiper.vue"
 	export default {
@@ -106,9 +160,7 @@
 				// 拼团列表
 				groupsellList:[],
 				// 附近门店
-				nearStoreList:[{}],
-				current: 0,
-				mode: 'long',
+				nearStoreList:[{}]
 			};
 		},
 		components: {
@@ -116,7 +168,8 @@
 			mTitle,
 			mHomePro,
 			mHomeHotpro,
-			mHomeStore
+			mHomeStore,
+			mHomeJinmai
 		},
 		methods:{
 			change(e) {
@@ -155,7 +208,7 @@
 				let _this=this;
 				this.$apis.postGroupProducts({
 					start:this.hotsellPage,
-					length:500
+					length:3
 				}).then(res=>{
 					console.log(res);
 						if(res.data){
@@ -247,6 +300,65 @@
 
 <style lang="scss">
 @import "../../common/globel.scss";
+.new-pin{
+	// display: flex;
+	border-radius: 20rpx;
+	margin: 0 20upx;
+	box-shadow: 0px 0px 3px rgba(241,241,241,0.6);
+	overflow: hidden;
+	.m-header{
+		display: flex;
+		flex-direction: row;
+		color:#fff;
+		background:url('../../static/img/home_list_bg1.png') center;
+		background:#3c3c3c;
+		backgrlund-size:cover;
+		align-items: center;
+		// padding: 20upx;
+		view{
+			padding:  20upx;
+		}
+		.text-small{
+			font-size: 24upx
+		}
+	}
+	.m-container{
+		display: flex;
+		flex-direction: row;
+		.m-together{
+			flex:1;
+			display: flex;
+			flex-direction: row;
+		}
+		.m-operation{
+			flex: 0 0 180rpx;
+			text-align: center;
+			font-weight: bold;
+			font-size: 32upx;
+			color: $color-5;
+			line-height: 1.2;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			position: relative;
+			margin-left: 30upx;
+			&:after{
+				content: "";
+				display: block;
+				width: 1px;
+				height: 100upx;
+				background:#eee;
+				position: absolute;
+				left: 0;
+				top: 50%;
+				margin-top: -50upx;
+// 				top: 50upx;
+// 				bottom: 50upx;
+			}
+		}
+	}
+}
 .empty-row{
 	text-align: center;
 	font-size: $fontsize-9;

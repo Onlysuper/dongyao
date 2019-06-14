@@ -3,15 +3,15 @@
 	<view class="m-pro-item">
 		<view class="m-content" @tap="handleFn">
 			<view class="m-img">
-				<image style="width: 100%;height: 100%;" :src="rowData.pictureUrl" mode="aspectFull"></image>
+				<image style="width: 100%;height: 100%;" :src="rowData.pictureUrl" mode="aspectFit"></image>
 			</view>
 			<view class="m-pro">
-				<!-- <view class="m-title">
+				<view class="m-title">
 					{{rowData.synopsis}}
-				</view> -->
+				</view>
 				<view class="m-price">
 					<view class="new">{{rowData.presentPrice}}</view>
-					<!-- <view class="old">{{rowData.originalPrice}}</view> -->
+					<view class="old">{{rowData.originalPrice}}</view>
 				</view>
 			</view>
 		</view>
@@ -53,54 +53,48 @@
 	margin-bottom: 30upx;
 	box-sizing: border-box;
 	border-radius: 12upx;
-	flex:0 0 160upx;
-	margin-top: 20px;
+	flex:0 0 225upx;
+	margin-top: 2px;
 	box-sizing: border-box;
 	position: relative;
 	background:#fff;
-	.m-pro{
-		text-align: center;
-	}
 	.m-content{
 		position: relative;
 		z-index: 10;
 		width: 100%;
-		padding: 10upx; 
+		padding: 20upx; 
 		// height: 225upx;
 	}
-// 	::before{
-// 		content: "";
-// 		display: block;
-// 		position: absolute;
-// 		left:0px;
-// 		right: 2px;
-// 		top: 1px;
-// 		bottom: 1px;
-// 		box-sizing: border-box;
-// 		box-shadow: 0px 0px 3px rgba(241,241,241,0.6);
-// 		z-index: 1;
-// 		border-radius: 12upx;
-// 	}
+	::before{
+		content: "";
+		display: block;
+		position: absolute;
+		left:0px;
+		right: 2px;
+		top: 1px;
+		bottom: 1px;
+		box-sizing: border-box;
+		box-shadow: 0px 0px 3px rgba(241,241,241,0.6);
+		z-index: 1;
+		border-radius: 12upx;
+	}
 	
-// 	&:last-of-type{
-// 		// background:red;
-// 		margin-right: 3px;
-// 		flex:0 0 218upx;
-// 	}
-// 	&:last-of-type::after{
-// 		// right: 3px !important;
-// 	}
+	&:last-of-type{
+		// background:red;
+		margin-right: 3px;
+		flex:0 0 218upx;
+	}
+	&:last-of-type::after{
+		// right: 3px !important;
+	}
 	&:active{
 		background:$color-hover
 	}
 	.m-img{
 		box-sizing: border-box;
-		flex:0 0 150upx;
-		height: 150upx;
+		flex:0 0 170upx;
+		height: 170upx;
 		// background:#eee;
-		image{
-			border-radius: 100%;
-		}
 	}
 	.m-title{
 		font-size: $fontsize-9;
@@ -118,13 +112,10 @@
 		margin-top: 10upx;
 		justify-content: flex-start;
 		align-items: center;
-		text-align: center;
 		.new{
 			font-size: 28upx;
 			font-weight: bold;
 			color: #ff582b;
-			width: 100%;
-			text-align: center;
 		}
 		.old{
 			font-size: 22upx;

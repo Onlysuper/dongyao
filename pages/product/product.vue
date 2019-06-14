@@ -129,23 +129,28 @@
 					{{pintunNum}}</span>人下单 可直接参与
 				</view>
 			</view>
+			
 			<view class="user-list-box" v-if="pintuanData.length > 0">
-				<view  class="item-box" v-for="(item, index) in pintuanData" :key="item.id">
-					<view class="img-box">
-						<image style="width:80upx;height:80upx" :src="item.headAddress" mode="aspectFit"></image>
-					</view>
-					<view class="body-box">
-						{{item.nickname}}
-					</view>
-					<view class="time-box">
-						<view class="">
-							{{item.pickingTime}}下单
+				<swiper class="swiper" :display-multiple-items='3' :indicator-dots="false" :autoplay="autoplay" :interval="interval" :duration="duration" :vertical="true">
+					<swiper-item v-for="(item, index) in pintuanData" :key="item.id">
+						<view class="item-box">
+							<view class="img-box">
+								<image style="width:80upx;height:80upx" :src="item.headAddress" mode="aspectFit"></image>
+							</view>
+							<view class="body-box">
+								{{item.nickname}}
+							</view>
+							<view class="time-box">
+								<view class="">
+									{{item.pickingTime}}下单
+								</view>
+								<view class="">
+									第{{pintunNum-index}}位用户
+								</view>
+							</view>
 						</view>
-						<view class="">
-							第{{pintunNum-index}}位用户
-						</view>
-					</view>
-				</view>
+					</swiper-item>
+				</swiper>
 			</view>
 			<view v-else class="empty-row">
 				~暂无拼团用户~
@@ -244,6 +249,10 @@ export default {
 	components: {uniRate},
 	data() {
 		return {
+			indicatorDots: true,
+            autoplay: true,
+            interval: 2000,
+            duration: 500,
 			details:{
 				placeOrigin:"",
 				specs:"",
@@ -927,9 +936,14 @@ page {
 			}
 			.time-box{
 				flex: 1 1 200upx;
-				color:$color-9;
+				color:$color-1;
 				font-size:$fontsize-5;
 				text-align:right;
+				:first-of-type{
+					color:#77818b;
+					font-size: $fontsize-4;
+					// font-weight: bold;
+				}
 			}
 		}
 	}
