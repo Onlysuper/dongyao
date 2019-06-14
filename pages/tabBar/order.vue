@@ -16,7 +16,7 @@
 			 :rowData="item"
 			 :key="index"
 			 :status="item.order.state"
-			 :price="item.order.totalPrice"
+			 :price="item.order.paymentPrice"
 			 :num="item.order.totalCount"
 			 :createTime="item.order.createTime"
 			 :extrctime="item.order.actualPickingTime"
@@ -92,10 +92,11 @@
 				let type= newOrder.paymentType; // 是团购还是直接购买
 				let couponId = newOrder.couponId; // 优惠券id
 				let reserveTel=newOrder.reserveTel;//预留电话
+				let aboutPickingTime = newOrder.aboutPickingTime; //取货时间
 				let proArr = [...data.productList];
 				let proUrlData = encodeURI(JSON.stringify({proUrlData:proArr}));
 				uni.navigateTo({
-					url:`/pages/order/pay?storeid=${storeId}&totalCount=${totalCount}&type=${type}&couponId=${couponId}&where=orderPage&reserveTel=${reserveTel}&proUrlData=${proUrlData}`
+					url:`/pages/order/pay?storeid=${storeId}&totalCount=${totalCount}&type=${type}&couponId=${couponId}&where=orderPage&reserveTel=${reserveTel}&aboutPickingTime=${aboutPickingTime}&proUrlData=${proUrlData}`
 				})
 			},
 			// 评论

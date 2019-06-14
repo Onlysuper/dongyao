@@ -724,7 +724,7 @@
 								font-weight: bold;
 							}
 							.m-text{
-								font-size: 20upx;
+								font-size: 24upx;
 								color:#999999;
 								line-height: 38upx;
 								margin-top: 10upx;
@@ -732,7 +732,7 @@
 								padding-right: 30upx;width: 100%;
 							}
 							.m-time{
-								font-size: 20upx;
+								font-size: 24upx;
 								color:#999999;
 								margin-top: 10upx;
 								white-space: nowrap;

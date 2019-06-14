@@ -1,8 +1,0 @@
-{
-  "navigationBarTitleText": "千畔优品",
-  "navigationBarTextStyle": "black",
-  "enablePullDownRefresh": true,
-  "onReachBottomDistance": 50,
-  "titleNView": false,
-  "softinputNavBar": "none"
-}

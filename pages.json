@@ -5,7 +5,7 @@
             // 首页
             "path" : "pages/tabBar/home",
             "style" : {
-                "navigationBarTitleText" : "千畔优品",
+                "navigationBarTitleText" : "千畦优品",
                 "navigationBarTextStyle" : "black",
                 "enablePullDownRefresh" : false,
                 "onReachBottomDistance" : 50,
@@ -168,7 +168,7 @@
         {
             "path" : "pages/order/pay",
             "style" : {
-                "navigationBarTitleText" : "千畔优品",
+                "navigationBarTitleText" : "千畦优品",
                 "app-plus" : {
                     "titleNView" : false, //禁用原生导航栏
                     "softinputNavBar" : "none"
@@ -215,7 +215,7 @@
         {
             "path" : "pages/login/login",
             "style" : {
-                "navigationBarTitleText" : "千畔优品",
+                "navigationBarTitleText" : "千畦优品",
                 "app-plus" : {
                     "titleNView" : false, //禁用原生导航栏
                     "softinputNavBar" : "none"
@@ -225,7 +225,7 @@
 		{
 		    "path" : "pages/login/register",
 		    "style" : {
-		        "navigationBarTitleText" : "千畔优品",
+		        "navigationBarTitleText" : "千畦优品",
 		        "app-plus" : {
 		            "titleNView" : false, //禁用原生导航栏
 		            "softinputNavBar" : "none"

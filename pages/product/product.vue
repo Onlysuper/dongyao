@@ -2,7 +2,7 @@
 	<view>
 		<view class="status" :style="{ opacity: afterHeaderOpacity }"></view>
 		<view class="header">
-			<!-- 头部-默认显示 -->
+			<!-- 头部 - 默认显示 -->
 			<view class="before" :style="{ opacity: 1 - afterHeaderOpacity, zIndex: beforeHeaderzIndex }">
 				<view class="back"><view class="icon xiangqian" @tap="back" v-if="showBack"></view></view> 
 				<view class="middle"></view>
@@ -37,7 +37,7 @@
 			</view>
 			<view class="btn">
 				<view v-if="isAssemble" class="joinCart" @tap="pintuan">我要拼</view>
-				<view class="buy" @tap="buy">立即购买</view>
+				<view v-else class="buy" @tap="buy">立即购买</view>
 			</view>
 		</view>
 		<!-- 服务-模态层弹窗 -->
@@ -98,15 +98,18 @@
 				{{goodsData.synopsis}}
 			</view>
 			<view class="tip-box">
-				<!-- <view class="item">
-					{{goodsData.describes}}
-				</view> -->
+				<view class="item">
+					{{goodsData.labelName}}
+				</view>
 			</view>
 			<view class="price-box">
 				<view class="price">￥{{goodsData.presentPrice}}</view>
 				<view class="oldprice">￥{{goodsData.originalPrice}}</view>
 				<view class="num">
 					商品库存：{{goodsData.stock}}
+				</view>
+				<view v-if="isAssemble == 1" class="pickTime">
+					取货时间：{{goodsData.pickTimeStr}}
 				</view>
 			</view>
 		</view>
@@ -120,14 +123,13 @@
 					<view class="time">
 						{{timeSpan}}
 					</view>
-
 				</view>
 				<view class="text-box">
 					已有{{pintunNum}}人下单 可直接参与
 				</view>
 			</view>
-			<view class="user-list-box">
-				<view class="item-box" v-for="item in pintuanData" :key="item.id">
+			<view class="user-list-box" v-if="pintuanData.length > 0">
+				<view  class="item-box" v-for="item in pintuanData" :key="item.id">
 					<view class="img-box">
 						<image style="width:80upx;height:80upx" :src="item.headAddress" mode="aspectFit"></image>
 					</view>
@@ -144,9 +146,12 @@
 					</view>
 				</view>
 			</view>
+			<view v-else class="empty-row">
+				~暂无拼团用户~
+			</view>
 		</view>
 		<!-- 评价 -->
-		<view class="info-box comments" id="comments">
+		<view v-if="commentData.length > 0" class="info-box comments" id="comments">
 			<view class="m-header">
 				<view class="m-label">
 					商品评价
@@ -185,7 +190,14 @@
 					</view>
 				</view>
 			</view>
-			
+		</view>
+		<view v-else class="info-box comments" id="comments">
+			<view class="m-label">
+				商品评价
+			</view>
+			<view  class="empty-row">
+				~暂无品论~
+			</view>
 		</view>
 		<view class="info-box pro-detail">
 			<view class="m-header">
@@ -782,10 +794,17 @@ page {
 			color:$color-6;
 		}
 		.num{
+			display: inline-block;
 			margin-left:30upx;
 			padding-left: 20upx;
 			font-size: $fontsize-5;
 			border-left: 1px solid $color-3;
+		}
+		.pickTime{
+			flex-grow:1;
+			text-align: right;
+			color:$color-price;
+			font-size: $fontsize-5;
 		}
 	}
 }
@@ -865,8 +884,14 @@ page {
 			color:$color-2;
 		}
 		.text-box{
+			margin-top: 12upx;
 			color:$color-6;
-			font-size: $fontsize-3;
+			font-size: $fontsize-2;
+		}
+		.time{
+			color:$color-price;
+			margin-left: 10upx;
+			font-size: $fontsize-2;
 		}
 	}
 	.user-list-box{
@@ -1206,5 +1231,12 @@ page {
 		}
 		
 	}
+}
+.empty-row{
+	text-align: center;
+	font-size: $fontsize-9;
+	color:$color-1;
+	padding: 66upx 20px;
+	// background:#f9f9f9;
 }
 </style>

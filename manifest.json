@@ -1,6 +1,6 @@
 {
     "name" : "DONGYAO",
-    "appid" : "__UNI__C045B58",
+    "appid" : "__UNI__B17199E",
     "description" : "",
     "versionName" : "1.0.0",
     "versionCode" : "100",
@@ -55,7 +55,10 @@
     "mp-weixin" : {
         "appid" : "wx3310c8b66487c71a",
         "setting" : {
-            "urlCheck" : true
+            "urlCheck" : true,
+            "es6" : true,
+            "postcss" : true,
+            "minified" : true
         },
         // "devServer" : {
         // "port" : 8080,
@@ -67,9 +70,9 @@
                 "desc" : "您的位置信息将用户小程序接口的展示效果"
             }
         },
-		"networkTimeout":{
-			"request": 30000
-		}
+        "networkTimeout" : {
+            "request" : 30000
+        }
     },
     "h5" : {}
 }

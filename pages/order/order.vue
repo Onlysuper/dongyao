@@ -72,11 +72,11 @@
 				:title="item.productName"
 				:price="item.presentPrice"
 				:oldprice="item.originalPrice"
-				:imgurl="item['pictures'][0].pictureUrl"
+				:imgurl="item.pictures[0].pictureUrl"
 				:num="item.buyCount"
 				 ></m-order-pro>
 				 <view class="m-footer">
-					合计<view class="count">￥{{order.totalPrice}}</view>
+					合计<view class="count">￥{{order.paymentPrice}}</view>
 				 </view>
 			</view>
 			<!-- 订单明细 -->
@@ -149,6 +149,7 @@
 				let _this = this;
 				let orderid=_this.orderid||''
 				this.$apis.postOrderDetail(orderid).then(res=>{
+					debugger;
 					let data = res.data;
 					this.order=data.order,// 订单详情
 					this.productList=data.productList,//购买的产品列表

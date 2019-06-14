@@ -15,18 +15,18 @@
 						<m-map :latitude="storeData.lat" :longitude="storeData.lng" :userlat="latitude" :userlng="longitude" :distance="geoDistance(latitude,longitude,storeData.lat,storeData.lng)"></m-map>
 						<view class="m-footer">
 							<view class="m-item">
-								<view class="m-text">
+
+								<view class="m-text picktime_text">
 									自取时间
 								</view>
 								<view class="m-light">
-									<ruiDatePicker
-										fields="minute"
-										:start="today"
-										end="2030-12-30 23:59"
-										:value="aboutPickingTime"
-										@change="bindChange"
-										@cancel="bindCancel"
-									></ruiDatePicker>
+									
+									 <picker mode="date" :value="date" :start="startDate" :end="endDate" @change="bindDateChange">
+										<view class="uni-input">{{date}}</view>
+									 </picker>
+									 <picker mode="time" :value="time" start="09:01" end="21:01" @change="bindTimeChange">
+										<view class="uni-input">{{time}}</view>
+									 </picker>
 								</view>
 							</view>
 							<view class="m-item">
@@ -165,13 +165,16 @@
 			ruiDatePicker
 		},
 		data() {
+			const currentDate = this.getDate({
+				format: true
+			})
 			return {
 				payLoading:false,
 				storeid:'',
 				storeData:{},
 				distance:'',
 				today:dateFtt("yyyy-MM-dd hh:mm",new Date()),
-				aboutPickingTime:dateFtt("yyyy-MM-dd hh:mm",new Date()),//预约时间
+				aboutPickingTime:undefined,//预约时间
 				reserveTel:"",// 预约手机号
 				paytype:"wx",//支付方式
 				type:"",//是否是拼团订单
@@ -189,11 +192,40 @@
 				couponId:0,
 				// 结算end
 				// 优惠券start
-				haveTokenCard:false
+				haveTokenCard:false,
 				// 优惠券end
+				date: "选择日期",
+				time: "选择时间"
 			};
 		},
 		methods:{ 
+			startDate() {
+				return this.getDate('start');
+			},
+			endDate() {
+				return this.getDate('end');
+			},
+			 bindDateChange: function(e) {
+				this.date = e.target.value
+			},
+			bindTimeChange: function(e) {
+				this.time = e.target.value
+			},
+			getDate(type) {
+				const date = new Date();
+				let year = date.getFullYear();
+				let month = date.getMonth() + 1;
+				let day = date.getDate();
+
+				if (type === 'start') {
+					year = year - 60;
+				} else if (type === 'end') {
+					year = year + 2;
+				}
+				month = month > 9 ? month : '0' + month;;
+				day = day > 9 ? day : '0' + day;
+				return `${year}-${month}-${day}`;
+			},
 			// 选择优惠券
 			choseTokenFn(){
 				uni.navigateTo({
@@ -227,11 +259,13 @@
 			// 优惠券
 			tokenCard(){
 				let _this=this;
+
 				_this.$apis.postUsableCoupons({
 					storeId:_this.storeid,
 					start:1,
 					length:1000,
 				}).then(res=>{
+					
 					if(res.data.coupons&&res.data.coupons.length>0){
 						_this.haveTokenCard=true
 					}
@@ -266,6 +300,14 @@
 			// 立即支付
 			payFn(){
 				let _this=this;
+				this.aboutPickingTime = this.date +" "+this.time;
+				if(this.date == '选择日期' || this.time == '选择时间'){
+					uni.showToast({
+						title:  "请选择取货日期",
+						icon: "none"
+					});
+					return false
+				}
 				_this.payLoading=true;
 				let products=_this.shopCarList.map(item=>{return {
 					productId:item.productId||item.id,
@@ -365,6 +407,7 @@
 			},
 			//门店详情
 			storeDetail(){
+				
 				this.$apis.postStore({
 					id:this.storeid
 				}).then(res=>{
@@ -394,12 +437,17 @@
 		},
 		// 
 		onLoad(option){
+			if(option.aboutPickingTime){
+				let tempTime = option.aboutPickingTime.split(" ");
+				this.date = tempTime[0],
+				this.time = tempTime[1].substring(0,tempTime[1].length-3);
+			}
 			this.reserveTel=option.reserveTel||uni.getStorageSync('phone')||"";
 			this.couponId=option.couponId|| "",
 			this.storeid=option.storeid;
 			this.totalCount=option.totalCount,
-			this.type=option.type
 			// 位置
+			this.type=option.type
 			this.storeLocation();
 			//店铺详情
 			this.storeDetail();
@@ -489,11 +537,15 @@
 						flex: 1;
 						.m-text{
 							color:$color-4;
-							font-size: $fontsize-6
+							font-size: $fontsize-3
+						}
+						.picktime_text{
+							color:$color-price;
+							font-size: $fontsize-3
 						}
 						.m-light{
 							color:$color-5;
-							font-size: $fontsize-6;
+							font-size: $fontsize-5;
 							height: 40upx;
 							display: flex;
 							justify-content:flex-start;
@@ -502,6 +554,9 @@
 								height: 40upx;
 								justify-content:flex-start;
 								align-items: center;
+							}
+							.uni-input{
+								margin-right: 15upx;
 							}
 						}
 						&:last-child{

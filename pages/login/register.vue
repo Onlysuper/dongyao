@@ -1,7 +1,7 @@
 <template>
 	<view class="m-login-page">
 		<view class="m-img-box">
-			千畔优品登录
+			千畦优品登录
 		</view>
 
 		<view class="">
@@ -42,15 +42,26 @@
 			getPhoneNumber: function(e) {   
 				let _this = this;
 			    if (e.detail.errMsg == 'getPhoneNumber:fail user deny') {  
-			    } else {  
-					_this.$apis.postWxBindPhone({// 	储存用户信息
-						...e.detail
-					}).then(res=>{
+				} else {  
+					// _this.mPost('/auth/wxBindPhone',{// 	储存用户信息
+					// 	...e.detail
+					// },"https://dy.gantangerbus.com/da").then(res=>{
+					// 		uni.setStorageSync('phone', res.data.phone);
+					// 		uni.showToast({
+					// 				title:"已授权",
+					// 		})
+					// 		_this.goback()
+					// }).catch(err=>{
+					// 	})
+					// });
+					_this.$apis.postWxBindPhone(e.detail).then(res=>{
+						if(res.code  == 1){
 							uni.setStorageSync('phone', res.data.phone);
 							uni.showToast({
-									title:"已授权",
+								title:"已授权"
 							})
 							_this.goback()
+						}
 					})
 			    }  
 			}
