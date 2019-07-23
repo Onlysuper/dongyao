@@ -1,23 +1,17 @@
 <template>
 	<view style="background: #fff;">
 		<!-- 状态栏 -->
-		<view class="status" :style="{ position: headerPosition,top:statusTop,opacity: afterHeaderOpacity}"></view>
+		<view class="status" :style="{ position: headerPosition, top: statusTop, opacity: afterHeaderOpacity }"></view>
 		<!-- 顶部导航栏 -->
-		<view class="header" :style="{ position: headerPosition,top:headerTop,opacity: afterHeaderOpacity }">
+		<view class="header" :style="{ position: headerPosition, top: headerTop, opacity: afterHeaderOpacity }">
 			<!-- 定位城市 -->
 			<view class="addr" @tap="choseStore">
-				<view class="icon">
-					<image style="width:100%;height:100%" src="../../static/img/icon/home_icon_gps.png" mode="aspectFit"></image>
-				</view>
+				<view class="icon"><image style="width:100%;height:100%" src="../../static/img/icon/home_icon_gps.png" mode="aspectFit"></image></view>
 				请选择门店
 			</view>
 			<!-- 搜索框 -->
 			<view class="input-box">
-				<input
-					v-model="searchValue"
-					placeholder="默认关键字"
-					placeholder-style="color:#c0c0c0;"
-				/>
+				<input v-model="searchValue" placeholder="默认关键字" placeholder-style="color:#c0c0c0;" />
 				<image @tap="toSearch()" class="icon" style="width:13px;height:100%" src="../../static/img/icon/home_icon_search.png" mode="aspectFit"></image>
 			</view>
 		</view>
@@ -27,310 +21,303 @@
 		<view class="swiper-box">
 			<uni-swiper-dot :info="swiperList" :current="current" field="content" :mode="mode">
 				<swiper class="swiper-box" @change="change" :autoplay="true" :indicator-dots="false" :interval="3000" :duration="500" :circular="true">
-					<swiper-item v-for="(item ,index) in swiperList" :key="index">
-						<view class="swiper-item">
-							<image :src="item.imgUrl" @tap="swiperChange(index)"></image>
-						</view>
+					<swiper-item v-for="(item, index) in swiperList" :key="index">
+						<view class="swiper-item"><image :src="item.imgUrl" @tap="swiperChange(index)"></image></view>
 					</swiper-item>
 				</swiper>
 			</uni-swiper-dot>
 		</view>
-		<!-- 超值热卖 -->
+		<!-- 净购热卖 -->
 		<view class="m-container">
-			<m-title title="净购热卖" labelColor="#666666" label="换一换" @titleHandle="getHotsellList">
-					<image style="width:30upx;height:20upx;margin-right:10upx;" src="../../static/img/icon/home_icon_refresh.png" mode="aspectFit"></image>
+			<m-title title="净菜购买" labelColor="#666666" label="换一换" @titleHandle="getJcsellList">
+				<image style="width:30upx;height:20upx;margin-right:10upx;" src="../../static/img/icon/home_icon_refresh.png" mode="aspectFit"></image>
 			</m-title>
-			<view v-if="hotProList.length>0" class="m-content m-hotsell">
-				<template v-for="(item,index) in hotProList">
-					<m-home-jinmai @handleFn="hotProDetail(item)"  :key="index" :rowData="item"></m-home-jinmai>
+			<view v-if="jcProList.length > 0" class="m-content m-hotsell">
+				<template v-for="(item, index) in jcProList">
+					<m-home-jinmai @handleFn="hotProDetail(item)" :key="index" :rowData="item"></m-home-jinmai>
 				</template>
 			</view>
-			<view v-else class="empty-row">
-				~暂无商品~
-			</view>
+			<view v-else class="empty-row">~暂无商品~</view>
 		</view>
 		<view class="m-container new-pin">
-			<view class="m-header">
-				<view class="">
-					今日必拼
-				</view> | 
-				<view class="text-small">
-					拼着买更新鲜
-				</view>
+			<view class="m-header" style="background: url('https://dongyaoxiaoxiaochegnxu.oss-cn-beijing.aliyuncs.com/css/home_list_bg.png') center;">
+				<view class="">今日必拼</view>
+				|
+				<view class="text-small">拼着买更新鲜</view>
 			</view>
 			<view class="m-container">
 				<view class="m-together">
-					<template v-for="(item,index) in groupsellList">
+					<template v-for="(item, index) in groupsellList">
 						<m-home-pro @handleFn="groupProDetail(item)" :key="index" :rowData="item"></m-home-pro>
 					</template>
 				</view>
 				<view @click="pintuanHandle" class="m-operation">
 					<view style="margin-bottom: 15upx;">
-						立即<br/>抢购
+						立即
+						<br />
+						预购
 					</view>
 					<image style="width: 40upx;height: 40upx;" src="/static/img/home_icon_down1.png" mode="aspectFull"></image>
 				</view>
 			</view>
-			
-			<!-- <m-title title="今日必拼" label="查看更多 >" @titleHandle="pintuanHandle"></m-title>
-			<view v-if="groupsellList.length>0" class="m-content m-pin" >
-				<scroll-view class="scroll-view" scroll-x="true"  scroll-left="0">
-					<view class="m-togethoer">
-						<template v-for="(item,index) in groupsellList">
-							<m-home-pro @handleFn="groupProDetail(item)" :key="index" :rowData="item"></m-home-pro>
-						</template>
-					</view>
-				</scroll-view>
-			</view>
-			<view v-else class="empty-row">
-				~今日暂无拼团商品~
-			</view> -->
 		</view>
-		
-		<!-- <view class="m-container">
-			<m-title title="今日必拼" label="查看更多 >" @titleHandle="pintuanHandle"></m-title>
-			<view v-if="groupsellList.length>0" class="m-content m-pin" >
-				<scroll-view class="scroll-view" scroll-x="true"  scroll-left="0">
-					<view class="m-togethoer">
-						<template v-for="(item,index) in groupsellList">
-							<m-home-pro @handleFn="groupProDetail(item)" :key="index" :rowData="item"></m-home-pro>
-						</template>
-					</view>
-				</scroll-view>
-			</view>
-			<view v-else class="empty-row">
-				~今日暂无拼团商品~
-			</view>
-		</view> -->
+
 		<!-- 超值热卖 -->
 		<view class="m-container">
-			<!-- <m-title title="超值热卖" labelColor="#666666" label="换一换" @titleHandle="getHotsellList">
-					<image style="width:30upx;height:20upx;margin-right:10upx;" src="../../static/img/icon/home_icon_refresh.png" mode="aspectFit"></image>
-			</m-title> -->
-			<m-title title="超值热卖" label="查看更多 >" @titleHandle="getHotsellList"></m-title>
-			<view v-if="hotProList.length>0" class="m-content m-hotsell">
-				<template v-for="(item,index) in hotProList">
-					<m-home-hotpro @handleFn="hotProDetail(item)"  :key="index" :rowData="item"></m-home-hotpro>
-				</template>
+			<m-title title="超值热卖" label="换一换 >" @titleHandle="getHotsellList"></m-title>
+			<view v-if="hotProList.length > 0" class="m-content .m-chaozhi">
+				<scroll-view class="scroll-view" scroll-x="true" scroll-left="0">
+					<view class="m-togethoer">
+						<template v-for="(item, index) in hotProList">
+							<m-home-hotpro @handleFn="hotProDetail(item)" :key="index" :rowData="item"></m-home-hotpro>
+						</template>
+					</view>
+				</scroll-view>
 			</view>
-			<view v-else class="empty-row">
-				~暂无商品~
-			</view>
+			<view v-else class="empty-row">~暂无商品~</view>
 		</view>
 		<view class="m-container">
 			<m-title title="附近门店" label="查看全部 >" @titleHandle="storeHandle"></m-title>
-			<view v-if="nearStoreList.length>0" class="m-content m-store">
-				<template v-for="(item,index) in nearStoreList">
+			<view v-if="nearStoreList.length > 0" class="m-content m-store">
+				<template v-for="(item, index) in nearStoreList">
 					<m-home-store @handleFn="storeDetail" :tips="item.tips" :key="index" :rowData="item"></m-home-store>
 				</template>
 			</view>
-			<view v-else class="empty-row">
-				~暂无门店~
-			</view>
+			<view v-else class="empty-row">~暂无门店~</view>
 		</view>
-		
-		
 	</view>
 </template>
 
 <script>
-	import uniSwiperDot from '@/components/uni-swiper-dot/uni-swiper-dot'
-	import mTitle from '@/components/m-title'
-	import mHomePro from '@/components/m-home-pro'
-	import mHomeHotpro from '@/components/m-home-hotpro'
-	import mHomeJinmai from '@/components/m-home-jinmai'
-	import mHomeStore from '@/components/m-home-store'
-	import mSwiper from "@/components/m-swiper/m-swiper.vue"
-	export default {
-		data() {
-			return {
-				 current: 0,
-            mode: 'long',
-				
-				searchValue:"",
-				afterHeaderOpacity: 1,//不透明度
-				headerPosition: 'fixed',
-				headerTop:null,
-				statusTop:null,
-				// 轮播图片
-				swiperList: [],
-				// 热卖
-				hotsellPage:1,
-				hotProList:[],
-				// 拼团列表
-				groupsellList:[],
-				// 附近门店
-				nearStoreList:[{}]
-			};
+import uniSwiperDot from '@/components/uni-swiper-dot/uni-swiper-dot';
+import mTitle from '@/components/m-title';
+import mHomePro from '@/components/m-home-pro';
+import mHomeHotpro from '@/components/m-home-hotpro';
+import mHomeJinmai from '@/components/m-home-jinmai';
+import mHomeStore from '@/components/m-home-store';
+import mSwiper from '@/components/m-swiper/m-swiper.vue';
+export default {
+	data() {
+		return {
+			current: 0,
+			mode: 'long',
+			afterHeaderOpacity: 1, //不透明度
+			headerPosition: 'fixed',
+			headerTop: null,
+			statusTop: null,
+			// 轮播图片
+			swiperList: [],
+			// 热卖
+			hotsellPage: 1,
+			jcsellPage: 1,
+			hotProList: [],
+			jcProList: [],
+			// 拼团列表
+			groupsellList: [],
+			// 附近门店
+			nearStoreList: []
+		};
+	},
+	components: {
+		uniSwiperDot,
+		mTitle,
+		mHomePro,
+		mHomeHotpro,
+		mHomeStore,
+		mHomeJinmai
+	},
+	methods: {
+		change(e) {
+			this.current = e.detail.current;
 		},
-		components: {
-			uniSwiperDot,
-			mTitle,
-			mHomePro,
-			mHomeHotpro,
-			mHomeStore,
-			mHomeJinmai
+
+		//首页搜索
+		toSearch() {
+			this.linkTo('/pages/product/productlist?search=' + this.searchValue);
 		},
-		methods:{
-			change(e) {
-				this.current = e.detail.current;
-			},
-			
-			//首页搜索
-			toSearch(){
-				this.linkTo("/pages/product/productlist?search="+this.searchValue)
-			},
-			// banner图片
-			getBanners(){
-				this.$apis.getBanners({}).then(res=>{
-						this.swiperList=res.data;
-				}).catch(err=>{
+		// banner图片
+		getBanners() {
+			this.$apis
+				.getBanners({})
+				.then(res => {
+					this.swiperList = res.data;
+				})
+				.catch(err => {
 					console.log(err);
 				});
-			},
-			//热卖列表
-			getHotsellList(){
-				this.$apis.postHotProduct({
-					start:this.hotsellPage,
-					length:6
-				}).then(res=>{
-					if(res.data){
+		},
+		//净菜列表
+		getJcsellList() {
+			this.$apis
+				.postJCProduct({
+					start: this.jcsellPage,
+					length: 6
+				})
+				.then(res => {
+					if (res.data) {
+						let data = res.data;
+						this.jcProList = data.list;
+						this.jcsellPage = data.nextPage;
+					}
+				})
+				.catch(err => {
+					console.log(err);
+				});
+		},
+		//热卖列表
+		getHotsellList() {
+			this.$apis
+				.postHotProduct({
+					start: this.hotsellPage,
+					length: 6
+				})
+				.then(res => {
+					if (res.data) {
 						let data = res.data;
 						this.hotProList = data.list;
-						this.hotsellPage=data.nextPage;
+						this.hotsellPage = data.nextPage;
 					}
-				}).catch(err=>{
+				})
+				.catch(err => {
 					console.log(err);
 				});
-			},
-			//拼团列表
-			getGroupsellList(){
-				let _this=this;
-				this.$apis.postGroupProducts({
-					start:this.hotsellPage,
-					length:3
-				}).then(res=>{
+		},
+		//拼团列表
+		getGroupsellList() {
+			let _this = this;
+			this.$apis
+				.postGroupProducts({
+					start: this.hotsellPage,
+					length: 3
+				})
+				.then(res => {
 					console.log(res);
-						if(res.data){
-							let data = res.data;
-							if(data.list){
-								_this.groupsellList = data.list;
-							}
+					if (res.data) {
+						let data = res.data;
+						if (data.list) {
+							_this.groupsellList = data.list;
 						}
-				}).catch(err=>{
+					}
+				})
+				.catch(err => {
 					console.log(err);
 				});
-			},
-			//门店列表
-			getStoreList(lng,lat){
-				let _this=this;
-				_this.$apis.postStoreList({
-					"lng":lng || 116.206845,
-					"lat":lat || 39.762155,
-				}).then(res=>{
-					if(res.data){
+		},
+		//门店列表
+		getStoreList(lng, lat) {
+			let _this = this;
+			_this.$apis
+				.postStoreList({
+					lng: lng || 116.206845,
+					lat: lat || 39.762155
+				})
+				.then(res => {
+					if (res.data) {
 						let data = res.data;
 						_this.nearStoreList = data;
 					}
-				}).catch(err=>{
+				})
+				.catch(err => {
 					console.log(err);
 					// uni.stopPullDownRefresh();
 				});
-			},
-			// 门店更多
-			choseStore(){
-				this.linkTo("/pages/store/list")
-			},
-			//点击热卖图片
-			hotProDetail(item){
-				this.linkTo("/pages/store/store?storeid="+item.storeId+"&typeid="+item.storeId)
-			},
-			// 点击拼团图片
-			groupProDetail(item){
-				this.linkTo("/pages/product/product?id="+item.id)
-			},
-			//点击门店图片
-			storeDetail(id){
-				this.linkTo("/pages/store/store?storeid="+id)
-			},
-			swiperChange(e) {
-				this.current = e;
-				this.current = e.detail.current;
-			},
-			// 拼团
-			pintuanHandle(){
-				this.linkTo("/pages/groupbuy/groupbuy")
-			},
-			//附近门店
-			storeHandle(){
-				this.linkTo("/pages/store/list")
-				
-			},
-			async linkTo(url){
-				let islogin = await this.globelIsLogin();
-				if(islogin){ // 是否登录了
-					uni.navigateTo({
-						url:url
-					})
-				}else{
-					uni.navigateTo({
-						url:"/pages/login/login"
-					})	
-				}
+		},
+		// 门店更多
+		choseStore() {
+			this.linkTo('/pages/store/list');
+		},
+		//点击热卖图片
+		hotProDetail(item) {
+			this.linkTo('/pages/store/store?storeid=' + item.storeId + '&typeid=' + item.typeId);
+		},
+		// 点击拼团图片
+		groupProDetail(item) {
+			this.linkTo('/pages/product/product?id=' + item.id);
+		},
+		//点击门店图片
+		storeDetail(id) {
+			this.linkTo('/pages/store/store?storeid=' + id);
+		},
+		swiperChange(e) {
+			this.current = e;
+			this.current = e.detail.current;
+		},
+		// 拼团
+		pintuanHandle() {
+			this.linkTo('/pages/groupbuy/groupbuy');
+		},
+		//附近门店
+		storeHandle() {
+			this.linkTo('/pages/store/list');
+		},
+		async linkTo(url) {
+			let islogin = await this.globelIsLogin();
+			if (islogin) {
+				// 是否登录了
+				uni.navigateTo({
+					url: url
+				});
+			} else {
+				uni.navigateTo({
+					url: '/pages/login/login'
+				});
 			}
-		},
-		onLoad(){
-			let _this = this;
-			uni.getLocation({//获取当前的位置坐标
-				type: 'wgs84',
-				success: function (res) {
-					_this.getStoreList(res.longitude,res.latitude);
-				}
-			}); 
-			this.getBanners();
-			this.getHotsellList();
-			this.getGroupsellList();
-		},
-		onPullDownRefresh(){
-			let _this = this;
-			uni.stopPullDownRefresh();
 		}
+	},
+	onLoad() {
+		let _this = this;
+		uni.getLocation({
+			//获取当前的位置坐标
+			type: 'wgs84',
+			success: function(res) {
+				_this.getStoreList(res.longitude, res.latitude);
+			}
+		});
+		this.getBanners();
+		this.getHotsellList();
+		this.getJcsellList();
+		this.getGroupsellList();
+	},
+	onPullDownRefresh() {
+		let _this = this;
+		uni.stopPullDownRefresh();
 	}
+};
 </script>
 
 <style lang="scss">
-@import "../../common/globel.scss";
-.new-pin{
+@import '../../common/globel.scss';
+.new-pin {
 	// display: flex;
 	border-radius: 20rpx;
 	margin: 0 20upx;
-	box-shadow: 0px 0px 3px rgba(241,241,241,0.6);
+	box-shadow: 0px 0px 10px #eee;
 	overflow: hidden;
-	.m-header{
+	.m-header {
 		display: flex;
 		flex-direction: row;
-		color:#fff;
-		background:url('../../static/img/home_list_bg1.png') center;
-		background:#3c3c3c;
-		backgrlund-size:cover;
+		color: #fff;
+		// background:url('~@static/img/home_list_bg1.png') center;
+		// background:#3c3c3c;
+		background-size: cover;
 		align-items: center;
 		// padding: 20upx;
-		view{
-			padding:  20upx;
+		view {
+			padding: 20upx;
 		}
-		.text-small{
-			font-size: 24upx
+		.text-small {
+			font-size: 24upx;
 		}
 	}
-	.m-container{
+	.m-container {
 		display: flex;
 		flex-direction: row;
-		.m-together{
-			flex:1;
+		.m-together {
+			flex: 1;
 			display: flex;
 			flex-direction: row;
 		}
-		.m-operation{
+		.m-operation {
 			flex: 0 0 180rpx;
 			text-align: center;
 			font-weight: bold;
@@ -343,33 +330,33 @@
 			justify-content: center;
 			position: relative;
 			margin-left: 30upx;
-			&:after{
-				content: "";
+			&:after {
+				content: '';
 				display: block;
 				width: 1px;
 				height: 100upx;
-				background:#eee;
+				background: #eee;
 				position: absolute;
 				left: 0;
 				top: 50%;
 				margin-top: -50upx;
-// 				top: 50upx;
-// 				bottom: 50upx;
+				// 				top: 50upx;
+				// 				bottom: 50upx;
 			}
 		}
 	}
 }
-.empty-row{
+.empty-row {
 	text-align: center;
 	font-size: $fontsize-9;
-	color:$color-1;
+	color: $color-1;
 	padding: 66upx 20px;
-	background:#f9f9f9;
+	background: #f9f9f9;
 }
 .swiper-box {
 	position: relative;
 	width: 100%;
-	height:300upx;
+	height: 300upx;
 	swiper {
 		width: 100%;
 		height: 300upx;
@@ -380,7 +367,7 @@
 			}
 		}
 	}
-	.indicator{
+	.indicator {
 		display: flex;
 		justify-content: center;
 		align-items: center;
@@ -425,7 +412,7 @@
 		}
 	}
 }
-.pullDown-effects{
+.pullDown-effects {
 	position: fixed;
 	//top: calc(100upx - 36vw);
 	top: 0;
@@ -435,7 +422,7 @@
 	/*  #ifdef  APP-PLUS  */
 	padding-top: var(--status-bar-height);
 	/*  #endif  */
-	image{
+	image {
 		width: 100%;
 		height: 36vw;
 	}
@@ -462,7 +449,7 @@
 	top: 0;
 	z-index: 11;
 	background-color: #fff;
-	
+
 	/*  #ifdef  APP-PLUS  */
 	top: var(--status-bar-height);
 	/*  #endif  */
@@ -475,7 +462,7 @@
 		display: flex;
 		align-items: center;
 		font-size: 26upx;
-		color:#4c4c4c;
+		color: #4c4c4c;
 		.icon {
 			height: 35upx;
 			margin-right: 5upx;
@@ -493,7 +480,7 @@
 		position: relative;
 		display: flex;
 		align-items: center;
-		
+
 		.icon {
 			display: flex;
 			align-items: center;
@@ -519,7 +506,6 @@
 	margin-top: var(--status-bar-height);
 	/*  #endif  */
 }
-
 
 .category-list {
 	width: 92%;
@@ -716,51 +702,62 @@
 		}
 	}
 }
-.scroll-view{
+.scroll-view {
 }
-.m-content{
+.m-content {
 	// padding: 10upx;
 	width: 96%;
-// 	margin:0 auto;
+	// 	margin:0 auto;
 	margin-left: 2%;
 	padding-top: 0;
 	box-sizing: border-box;
 	padding: 20upx;
-	// 热
-	&.m-hotsell{
+	// 净
+	&.m-hotsell {
 		display: flex;
 		flex-wrap: wrap;
 		flex-direction: row;
 		margin-left: 0;
 		width: 100%;
 	}
-	&.m-pin{
+	&.m-pin {
 		margin-left: 0;
 		width: 100%;
 	}
-	&.m-store{
+	&.m-store {
 		display: block;
 		// padding:20upx;
 	}
-// 	&.m-today-pin{
-// 		padding-left: 20upx;
-// 		padding-right: 20upx;
-// 	}
+	// 超值
+	&.m-chaozhi {
+		display: flex;
+		flex-wrap: wrap;
+		flex-direction: row;
+		background: #f5f5f5;
+		justify-content: space-between;
+		align-items: center;
+		padding: 15upx;
+		// padding-top: 15upx;
+	}
+	// 	&.m-today-pin{
+	// 		padding-left: 20upx;
+	// 		padding-right: 20upx;
+	// 	}
 	// 拼
-	.m-togethoer{
+	.m-togethoer {
 		display: flex;
 		display: flex;
 		flex-direction: row;
 		flex-wrap: nowrap;
 		// overflow: hidden;
-		.m-pro-item{
-// 			&:first-of-type{
-// 				margin-left:0px;
-// 			}
-// 			&:last-of-type{
-// 				margin-right:0px;
-// 			}
-// 			
+		.m-pro-item {
+			// 			&:first-of-type{
+			// 				margin-left:0px;
+			// 			}
+			// 			&:last-of-type{
+			// 				margin-right:0px;
+			// 			}
+			//
 		}
 	}
 }

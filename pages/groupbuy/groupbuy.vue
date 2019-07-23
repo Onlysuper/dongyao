@@ -50,9 +50,10 @@
 					uni.stopPullDownRefresh();
 					return ;
 				}
-				this.$apis.postGroupProducts({
+				this.$apis.postSearchProducts({
 					start:page,
-					length:20
+					length:20,
+					isAssemble:1,
 				}).then(res=>{
 						if(res.data){
 							let data = res.data;
@@ -63,6 +64,7 @@
 								page++;
 							}
 						}
+						uni.hideLoading()
 				})
 			},
 			//跳转到商家

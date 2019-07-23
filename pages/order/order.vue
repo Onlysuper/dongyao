@@ -2,6 +2,17 @@
 	<view class="m-pay-page">
 		<!-- <scroll-view  scroll-y="true" class="content" > -->
 			<view class="m-top-back"></view>
+			<view v-if="state == 1" class="m-top-state">待取货</view>
+			<view v-if="state == 2" class="m-top-state">待付款</view>
+			<view v-if="state == 3" class="m-top-state">待评价</view>
+			<view v-if="state == 4" class="m-top-state">已退款</view>
+			<view v-if="state == 5" class="m-top-state">已取消</view>
+			<view v-if="state == 6" class="m-top-state">已失效</view>
+			<view v-if="state == 7" class="m-top-state">代发货</view>
+			<view v-if="state == 8" class="m-top-state">配送中</view>
+			<view v-if="state == 9" class="m-top-state">已完成</view>
+			
+			<!-- <view class="m-top-state">订单已完成</view> -->
 			<!--  商品支付下单 -->
 			<view class="m-top-map">
 				<view class="m-container">
@@ -16,26 +27,61 @@
 					</view>
 					<!-- 待支付 -->
 					<view v-else-if="state==2" class="m-content waitepay">
-						<view class="m-title">
+						<!-- <view class="m-title">
 							待支付
+						</view> -->
+						<view class="m-describe" v-if="carryType == 1">
+							支付成功后显示提货码 
 						</view>
-						<view class="m-describe">
-							支付成功后显示提货码
+						<view class="m-address" v-else>
+							<view class="m-address-left">
+								<view>{{orderAddress.name}} </view>
+								<view>收货地址:</view>
+							</view>
+							<view class="m-address-right">
+								<view>{{orderAddress.mobile}}</view>
+								<view>{{orderAddress.address}}</view>
+							</view>
 						</view>
 					</view>
-					<!-- 交易完成 -->
+					<!-- 待评价-->
 					<view v-else-if="state==3" class="m-content">
-						<view class="m-title">
-							已完成交易
+						<view class="m-comment-btn" @tap="commentGood">
+							评价
 						</view>
 						<view class="m-describe">
-							感谢您对千畔优品的信任
+							对我们还算满意吗?评价一下吧~
+						</view>
+					</view>
+					<!-- 待评价-->
+					<view v-else-if="state==8" class="m-content">
+						<view class="m-comment-btn" @tap="receivedGoods">
+							确认收货
+						</view>
+						<view class="m-describe">
+							很高兴为您服务，收到商品了吗?
+						</view>
+					</view>
+					<view v-else-if="state==5" class="m-content">
+						<!-- <view class="m-title">
+							订单详情
+						</view> -->
+						<view class="m-describe">
+							订单已取消~
+						</view>
+					</view>
+					<view v-else-if="state==6" class="m-content">
+						<!-- <view class="m-title">
+							订单详情
+						</view> -->
+						<view class="m-describe">
+							订单已失效~
 						</view>
 					</view>
 					<view v-else class="m-content">
-						<view class="m-title">
+						<!-- <view class="m-title">
 							订单详情
-						</view>
+						</view> -->
 						<view class="m-describe">
 							感谢您对东尧蔬菜的信任
 						</view>
@@ -94,7 +140,16 @@
 					下单时间：{{order.createTime}}
 				</view>
 			</view>
+			
+			<!-- 订单操作 -->
+			<view class="m-order-opt">
+				<view class="m-delete" v-if="state==2||state==3||state==4||state==5||state==6||state==9" @tap="orderDel">删除订单</view>
+				<view class="m-cancel" v-if="state==1||state==7" @tap="orderCancel">取消订单</view>
+			</view>
+			
 		<view class="place"></view>
+		
+		
 		<!-- 分割 -->
 		<!-- <view  class="m-footer-but"> -->
 			<button :loading="payLoading" :disabled="payLoading" v-if="state==2" @click="payFn" class="m-footer-but" type="primary">立即支付￥{{order.totalPrice}}</button>
@@ -116,8 +171,11 @@
 				payLoading:false,
 				order:{},// 订单详情
 				productList:[],//购买的产品列表
+				orderAddress:{},
 				store:{},//商家详情
 				state:'', // 订单状态
+				isCarry:'', 
+				carryType:undefined,
 				orderid:"",
 				paytype:"",//支付方式
 				latitude: 39.909,
@@ -136,8 +194,8 @@
 					url:"/pages/product/product?id="+id
 				})
 			},
-			getLocation(){
-				uni.getLocation({//获取当前的位置坐标
+			async getLocation(){
+				await uni.getLocation({//获取当前的位置坐标
 					type: 'wgs84',
 					success: function (res) {
 						console.log('当前位置的经度：' + res.longitude);
@@ -149,14 +207,79 @@
 				let _this = this;
 				let orderid=_this.orderid||''
 				this.$apis.postOrderDetail(orderid).then(res=>{
-					debugger;
 					let data = res.data;
 					this.order=data.order,// 订单详情
 					this.productList=data.productList,//购买的产品列表
+					this.orderAddress = data.orderAddress,
 					this.store=data.store,//商家详情
-					this.state=this.order.state //订单状态
+					this.state=this.order.state, //订单状态
+					this.isCarry = this.order.isCarry,
+					this.carryType = this.order.carryType
 				}).catch(err=>{
 					console.log(err)
+				})
+			},
+			//确认收获
+			receivedGoods(){
+				let orderid=this.orderid||''
+				this.$apis.postReceivedGoods(orderid).then(res=>{
+					if(res.code == 1){
+						this.getOrder();
+					}
+					
+				}).catch(err=>{
+					console.log(err)
+				})
+			},
+			//取消订单
+			orderCancel(){
+				let orderid=this.orderid||''
+				uni.showModal({
+					title: '提示',
+					content: '您确定要取消订单吗?',
+					success: function (res) {
+						if (res.confirm) {
+							this.$apis.postOrderRefund(orderid).then(res=>{
+								if(res.code == 1){
+									this.getOrder();
+								}
+							}).catch(err=>{
+								console.log(err)
+							})
+						} else if (res.cancel) {
+						}
+					}
+				});
+			},
+			//删除订单
+			orderDel(){
+				let orderid=this.orderid||''
+				uni.showModal({
+					title: '提示',
+					content: '您确定要删除订单吗?',
+					success: function (res) {
+						if (res.confirm) {
+							this.$apis.postOrderDel(orderid).then(res=>{
+								if(res.code == 1){
+									uni.switchTab({  
+										url: '/pages/tabBar/order'  
+									}); 
+								}
+							}).catch(err=>{
+								console.log(err)
+							})
+						} else if (res.cancel) {
+						}
+					}
+				});
+				
+			},
+			// 评论
+			commentGood(){
+				let pData = [...this.productList];
+				let ProductUrlData = encodeURI(JSON.stringify({ProductUrlData:pData}));
+				uni.navigateTo({
+					url:"/pages/order/comment?orderid="+this.orderid+"&ProductUrlData="+ProductUrlData
 				})
 			},
 			// 立即支付
@@ -250,7 +373,7 @@
 		},
 		onUnload() {
 			let index = 4;
-			if(this.state==1||this.state==2||this.state==3){
+			if(this.state==1||this.state==   2||this.state==3){
 				index = this.state;
 			}
 			uni.setStorageSync('orderTab', index);
@@ -265,8 +388,7 @@
 	position: absolute;
 	top: 0;
 	left: 0;
-	background:gray;
-	height:204upx;
+	height:270upx;
 	background:#34c191;
 	z-index: 1;
 }
@@ -280,8 +402,18 @@
 	bottom: 0;
 	right: 0;
 	background:#f7f7f7;
-	.m-top-map{
+	.m-top-state{
+		font-weight: 900;
+		color: #333;
+		font-size: 36upx;
+		padding: 30upx;
+		position: relative;
+		z-index: 2;
+		letter-spacing:2rpx;
 		padding-top:30upx;
+	}
+	.m-top-map{
+		// padding-top:20upx;
 		background:#fff;
 		position: relative;
 		.m-container{
@@ -301,13 +433,46 @@
 				text-align: center;
 				.m-title{
 					font-size: $fontsize-1;
-					color:$color-2;
+					color:#FF7F50;
+					font-weight:600;
 				}
 				.m-describe{
 					font-size: $fontsize-9;
 					color:$color-5;
 					padding-bottom: 20upx;
 					margin-top: 20upx;
+				}
+				.m-address{
+					display: flex;
+					flex-direction: row;
+					color:$color-5;
+					font-size: $fontsize-9;
+					// align-content: center;
+					padding: 10upx;
+					align-content: flex-start;
+					align-items: flex-start;
+					.m-address-left{
+						display: flex;
+						flex-direction: column;
+						align-items: flex-start;
+						justify-content: flex-start;
+						width: 28%;
+						text-align: left;
+					}
+					.m-address-right{
+						display: flex;
+						flex-direction: column;
+						align-items: flex-start;
+						justify-content: flex-start;
+						text-align: left;
+					}
+				}
+				.m-comment-btn{
+					display: inline-block;
+					padding: 10upx 30upx;
+					border-radius: 80upx;
+					color:$color-5;
+					border:1px solid #34c191;
 				}
 				&.waitepay{
 					.m-title,.m-describe{
@@ -431,6 +596,33 @@
 			margin-top: 20upx;
 		}
 	}
+	.m-order-opt{
+		margin-top: 30upx;
+		padding:20upx 30upx;
+		background:#fff;
+		font-size:$fontsize-2;
+		display: flex;
+		justify-content:flex-end;
+		align-items: center;
+		.m-delete{
+			color: red;
+			width: 150rpx;
+			height: 30rpx;
+			padding:15rpx 15upx;
+			text-align:center;
+			line-height:30upx;
+		}
+		.m-cancel{
+			color:white;
+			background:#34c191;
+			width:150upx;
+			height:30upx;
+			border-radius:30upx;
+			padding:15rpx 15upx;
+			text-align:center;
+			line-height:30upx;
+		}
+	}
 	.m-footer-but{
 		text-align: center;
 		color:#fff;
@@ -445,7 +637,6 @@
 		z-index: 100;
 		background:$color-active;
 		border-radius: 0;
-		
 	}
 }
 </style>

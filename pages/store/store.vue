@@ -158,7 +158,7 @@
 		},
 		data() {
 			return {
-				typeid:1,
+				typeid:1000,
 				scrollTop: 0,
 				// userid:1,
 				shopCarList:[],
@@ -182,7 +182,7 @@
 				// showCategoryIndex:0,
 				//分类列表
 				storeMenu:[
-					{id:1,title:'家用电器',banner:'../../static/img/category/banner.jpg',list:[
+					{id:1000,title:'家用电器',banner:'../../static/img/category/banner.jpg',list:[
 						{
 							name:'精品秋葵600g',
 							descripe:"脆糯营养，口感好，健康绿色",
@@ -287,7 +287,7 @@
 					  clearInterval(that.timer);
 					  that.hide_good_box= true;
 					  // 数据计算
-					  that.addGoodSum(data,1,'add');
+					  that.addGoodSum(data,1,'change');
 					}
 				}, 10);
 			},
@@ -295,7 +295,9 @@
 			//分类切换显示
 			showCategory(){
 				console.log('切换');
-				uni.showLoading({});
+				uni.showLoading({
+					title: '加载中'
+				});
 				if(totalpage&&page > totalpage){
 					// uni.hideLoading({"title":"已经加载全部", icon:"none"});
 					uni.hideLoading();
@@ -314,8 +316,6 @@
 							totalpage=data.pages;
 							var newsList = data.list;
 							this.productList = this.productList.concat(newsList);
-							// 当前购物车信息
-							this.showShopCar();
 							uni.hideLoading();
 							page++;
 						}
@@ -328,10 +328,11 @@
 			async showShopCar(){
 				let _this = this;
 				await this.$apis.postCars({
+					storeId:this.storeid
 				}).then(res=>{
 					if(res.code=='1'){
-						if(res.data){
-							let data=[...res.data];
+						if(res.data[0].productList){
+							let data=[...res.data[0].productList];
 							data = data.map(item=>{
 								let _id = item.id;
 								// 产品列表商品是否出现在购物车中
@@ -360,7 +361,7 @@
 			clearShopcar(){
 				let _this = this;
 				_this.$apis.clearShopCar({
-					
+					storeId:_this.storeid
 				}).then(res=>{
 					uni.showModal({
 						title: '提示',
@@ -409,7 +410,7 @@
 			discard(){
 				
 			},
-			busHandle(){
+			async busHandle(){
 				let hh = 0;
 				const that = this;
 				that.busPos['x'] = 45;//购物车的位置
@@ -431,11 +432,10 @@
 			async addGoodSum (_data,num=1,type){
 				let _id = _data.id;
 				let data= this.productList.find(item=>item.id==_id);
-				console.log(data);
 				let _this=this;
 				let buyCount=num;
 				let objIndex = this.shopCarList.findIndex(item=>item.id==_id);
-				if(objIndex!=-1 && type=='add'){
+				if(objIndex!=-1 && type=='change'){
 					console.log()
 					buyCount=this.shopCarList.find(item=>item.id==_id)['buyCount']+1;
 				}
@@ -447,15 +447,13 @@
 					buyCount=data.stock;
 				}
 				let postAddCars = await _this.$apis.postAddCars({
+					storeId:data.storeId,
 					productId:data.id,
 					buyCount:buyCount
 				})
 				if(postAddCars.code=='1'){
 					_this.showShopCar();
 				}
-// 				.then(res=>{
-// 					_this.showShopCar();
-// 				})
 			},
 			//减商品
 			async subGoodSum(_data,num=1,type){
@@ -464,8 +462,8 @@
 				let _id = _data.id;
 				let data= this.productList.find(item=>item.id==_id);
 				let objIndex = this.shopCarList.findIndex(item=>item.id==_id);
-				if(objIndex!=-1 && type=='add'){
-					buyCount=this.shopCarList.find(item=>item.id==_id)['buyCount']+1;
+				if(objIndex!=-1 && type=='change'){
+					buyCount=this.shopCarList.find(item=>item.id==_id)['buyCount']-1;
 				}
 				if(buyCount>data.stock){
 					uni.showToast({
@@ -475,6 +473,7 @@
 					buyCount=data.stock;
 				}
 				await _this.$apis.postSubCars({
+					storeId:data.storeId,
 					productId:data.id,
 					buyCount:buyCount
 				}).then(res=>{
@@ -579,11 +578,13 @@
 		
 		onLoad(option) {
 			this.storeid=option.storeid;
-			this.typeid=option.typeid || 1;
+			this.typeid=option.typeid || 1000;
 			this.busHandle();//购物车样式
 			this.initBusiness();
 			this.initTypes();
 			this.initProducts();
+			// 当前购物车信息
+			this.showShopCar();
 			// this.checkType(this.typeid);
 		},
 		

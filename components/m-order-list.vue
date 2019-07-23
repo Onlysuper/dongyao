@@ -11,10 +11,10 @@
 			<view style="color:#ee6641" v-if="status==1">
 				待取货
 			</view>
-			<view style="color:#b2aaaa" v-else-if="status==2">
+			<view style="color:#FF4500" v-else-if="status==2">
 				等待付款
 			</view>
-			<view style="color:#b2aaaa" v-else-if="status==3">
+			<view style="color:#32CD32" v-else-if="status==3">
 				待评论
 			</view>
 			<view style="color:#b2aaaa" v-else-if="status==4">
@@ -25,6 +25,15 @@
 			</view>
 			<view style="color:#b2aaaa" v-else-if="status==6">
 				已失效
+			</view>
+			<view style="color:#ee6641" v-else-if="status==7">
+				待发货
+			</view>
+			<view style="color:#ee6641" v-else-if="status==8">
+				待收货
+			</view>
+			<view style="color:#333333" v-else-if="status==9">
+				已完成
 			</view>
 		</view>
 		<view class="m-body">
@@ -58,7 +67,10 @@
 					<view v-if="status==3" class="m-describe">
 						提货时间:{{extrctime}}
 					</view>
-					<view v-else class="m-describe">
+					<view v-else-if="carryType ==2" class="m-describe">
+						<!-- 提货时间:{{aboutPickingTime}} -->
+					</view>
+					<view v-else="carryType ==2" class="m-describe">
 						提货时间:{{aboutPickingTime}}
 					</view>
 					<view class="m-describe">
@@ -68,18 +80,23 @@
 			</view>
 			<view class="footright">
 				<view @tap="takeGood" v-if="status==1">
-					<view class="but" style="color:#a7a7a7;border:1px solid #a7a7a7">
+					<view class="but " style="background-color: #ff9900; color:#FFFFFF;border:1px solid #ff9900;">
 						取货
 					</view>
 				</view>
 				<view @tap="payGood" v-else-if="status==2">
-					<view  class="but" style="color:#ef7251;border:1px solid #ef7251">
+					<view  class="but" style="color:#FF4500;border:1px solid #FF4500;">
 						立即付款
 					</view>
 				</view>
 				<view  v-else-if="status==3">
-					<view @tap="commentGood" class="but" style="color:#ef7251;border:1px solid #ef7251;margin-left: 10upx;">
+					<view @tap="commentGood" class="but" style="color:#32CD32;border:1px solid #32CD32;margin-left: 10upx;">
 						评论
+					</view>
+				</view>
+				<view  v-else-if="status==8">
+					<view @tap="receivedGoods" class="but" style="color:#32CD32;border:1px solid #32CD32;margin-left: 10upx;">
+						确认收货
 					</view>
 				</view>
 			</view>
@@ -126,6 +143,10 @@
 				default:""
 			},
 			extrctime:{ // 取货时间
+				type:[String,Number],
+				default:""
+			},
+			carryType:{ // 配送类型
 				type:[String,Number],
 				default:""
 			},
@@ -182,6 +203,10 @@
 		 // 评论
 		 commentGood(){
 		 	this.$emit('commentGood',{data:this.rowData})	 	 
+		 },
+		  // 评论
+		 receivedGoods(){
+		 	this.$emit('receivedGoods',{data:this.rowData})	 	 
 		 }
 		},
 // 		onLoad(){
@@ -281,7 +306,7 @@
 			text-align: right;
 			.but{
 				display: inline-block;
-				padding: 10upx 20upx;
+				padding: 10upx 30upx;
 				border-radius: 80upx;
 				border: 1px solid $color-border2;
 				color:$color-5;

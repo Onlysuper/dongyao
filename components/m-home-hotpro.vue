@@ -49,9 +49,9 @@
 @import "../common/globel.scss";
 .m-hotpro-item{
 	flex-direction: column;
-	margin-left: 10upx;
+	// margin-left: 10upx;
 	margin-right: 0upx;
-	margin-bottom: 30upx;
+	// margin-bottom: 30upx;
 	// box-shadow: 0px 1px 3px rgba(0,0,0,0.2);
 	
 	box-sizing: border-box;

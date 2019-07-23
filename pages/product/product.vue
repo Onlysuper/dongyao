@@ -34,10 +34,19 @@
 					</view>
 					<view class="text">进店</view>
 				</view>
+				<view v-if="!isAssemble" class="box" @tap="goCart">
+					<view class="icon store">
+						<image style="width:38upx;height:100%" src="../../static/img/icon/buy_cart.png" mode="aspectFit"></image>
+					</view>
+					<view :class="['m-num']" v-if="totalNum>0">
+						{{totalNum}}
+					</view>
+					<view class="text">购物车</view>
+				</view>
 			</view>
 			<view class="btn">
 				<view v-if="isAssemble" class="joinCart" @tap="pintuan">我要拼</view>
-				<view v-else class="buy" @tap="buy">立即购买</view>
+				<view v-else class="buy" @tap="buy">加入购物车</view>
 			</view>
 		</view>
 		<!-- 服务-模态层弹窗 -->
@@ -289,7 +298,10 @@ export default {
 			degreeData:"",//好评度
 			selectSpec:null,//选中规格
 			//商品描述html
-			descriptionStr:'<div style="text-align:center;"></div>'
+			descriptionStr:'<div style="text-align:center;"></div>',
+			totalNum:0,
+			productId:undefined,
+			shopCarList:[],
 		};
 	},
 	onReady(){
@@ -324,6 +336,7 @@ export default {
 					if(_this.isAssemble){
 						_this.getPintuanUsers(id);
 					}
+					_this.productId = id;
 				}
 			}
 		})
@@ -332,6 +345,8 @@ export default {
 		//好评度
 		_this.getDegree(id);
 		// this.calcAnchor();//计算锚点高度，页面数据是ajax加载时，请把此行放在数据渲染完成事件中执行以保证高度计算正确
+	
+		_this.initCartNum();
 	},
 	onPageScroll(e) {
 		//锚点切换
@@ -357,6 +372,13 @@ export default {
 			uni.navigateTo({
 				url:"/pages/store/store?storeid="+this.storeId
 			})
+		},
+		//购物车
+		goCart(){
+			console.log('进购物车');
+			uni.switchTab({  
+			    url: '/pages/tabBar/buy_cart'  
+			});  
 		},
 		// 拼团用户列表
 		getPintuanUsers(id){
@@ -404,6 +426,25 @@ export default {
 		swiperChange(event) {
 			this.currentSwiper = event.detail.current;
 		},
+		initCartNum(){
+			let _this = this;
+			_this.$apis.postCars({
+				storeId:-1
+			}).then(res=>{
+				if(res.code=='1'){
+					for (var i = 0; i < res.data.length; i++) {
+						if(res.data[i].sId == _this.storeId){
+							_this.shopCarList = res.data[i].productList;
+						}
+						for (var j = 0; j < res.data[i].productList.length; j++) {
+							let buyCount  = res.data[i].productList[j].buyCount;
+							_this.totalNum += buyCount;
+						}
+					}
+				}
+			}).catch(err=>{
+			})
+		},
 // 		//消息列表
 // 		toMsg(){
 // 			uni.navigateTo({
@@ -432,9 +473,9 @@ export default {
 		},
 		//拼团
 		pintuan(){
-			this.joinCart(2)
+			this.groupBug(2)
 		},
-		joinCart(type){
+		groupBug(type){
 			let _this = this;
 			var newobj={...this.goodsData};  
 			newobj['describes']="";
@@ -443,8 +484,26 @@ export default {
 			let proUrlData = encodeURI(JSON.stringify({proUrlData:proArr}));
 			let totalCount = 1;
 			uni.navigateTo({
-				url:"/pages/order/pay?storeid="+_this.storeId+"&totalCount="+totalCount+"&type="+type+'&proUrlData='+proUrlData
+				url:"/pages/order/pay?storeid="+_this.storeId+"&totalCount="+totalCount+"&type="+type+'&proUrlData='+proUrlData+'&aboutPickingTime='+newobj.pickTime
 			})
+		},
+		async joinCart(type){
+			let _this = this;
+			let buyCount = 0 ; // = this.shopCarList.find(item=>item.id==this.productId )['buyCount']+1;
+			for (var i = 0; i < _this.shopCarList.length; i++) {
+				if(_this.shopCarList[i].id  == _this.productId){
+					 buyCount =  _this.shopCarList[i].buyCount;
+					 _this.shopCarList[i].buyCount += 1;
+				}
+			}
+			let postAddCars = await _this.$apis.postAddCars({
+				storeId:_this.storeId,
+				productId:_this.productId,
+				buyCount:buyCount+1
+			})
+			if(postAddCars.code=='1'){
+				_this.totalNum++;
+			}
 		},
 		//跳转确认订单页面
 // 		toConfirmation(){
@@ -1053,10 +1112,19 @@ page {
 				width: 1px;
 				height: 60upx;
 				background:#f0f0f0;
-				
 				right: 0;
 				top: 10upx;
 			}
+			&:nth-of-type(2):after{
+				content:"";
+				display:block;
+				position: absolute;
+				width: 1px;
+				height: 60upx;
+				background:#f0f0f0;
+				right: 0;
+				top: 10upx;
+			} 
 			.icon {
 				font-size: 40upx;
 				color: #828282;
@@ -1068,10 +1136,24 @@ page {
 				font-size: 22upx;
 				color: #666;
 			}
+			.m-num{
+				color:#ff582b;
+				font-size: 24upx;
+				position: absolute;
+				left:85rpx;
+				top:0rpx;
+				z-index: 100;
+				width: 30upx;
+				height: 30upx;
+				border-radius: 50%;
+				border: 1upx solid #ff582b;
+				text-align: center;
+				line-height: 30upx;
+			}
 		}
 	}
 	.btn {
-		flex:2;
+		flex:1;
 		height:100%;
 		display: flex;
 		.joinCart,

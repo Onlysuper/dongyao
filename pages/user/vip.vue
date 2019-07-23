@@ -1,50 +1,51 @@
 <template>
 	<view class="m-myvip-page">
 		<view class="m-header">
-			<view class="m-user-box">
-				<view class="m-container">
-					<view class="m-user">
-						<view class="m-img">
-							<image style="width:100%;height:100%" :src="userData.avatarUrl" mode="aspectFull"></image>
+			<swiper style="height: 200px;" class="swiper" :indicator-dots="indicatorDots" :autoplay="autoplay" :interval="interval" :duration="duration" previous-margin="15" next-margin="15"
+			@change="handlerChange">
+				<template v-for="(item,index) in members">
+					<swiper-item :key="index">
+						<view class="m-card m-card-A" v-if="item.type == 1">
+							<m-card-vip :key="index" :item="item" ></m-card-vip>
 						</view>
-						<view class="m-text">
-							<view class="m-username">
-								{{userData.nickName}}
-							</view>
+						<view class="m-card m-card-B" v-if="item.type == 2">
+							<m-card-vip :key="index" :item="item" ></m-card-vip>
 						</view>
-					</view>
-					<view v-if="isVip" class="m-date">
-						<view class="m-text">
-							续费>
+						<view class="m-card m-card-C" v-if="item.type == 3">
+							<m-card-vip :key="index" :item="item" ></m-card-vip>
 						</view>
-						<view class="m-time">
-							{{myMember.dueTime}}到期
+						<view class="m-card m-card-D" v-if="item.type == 4">
+							<m-card-vip :key="index" :item="item" ></m-card-vip>
 						</view>
-					</view>
-				</view>
-				<view v-if="isVip" class="m-footer">
-					<view class="m-title">
-						{{myMember.memberDesc}}
-					</view>
-					<view class="m-describe">
-						<image style="width:59upx;height:59upx;margin-right: 10upx;" src="/static/img/icon/me_icon_VIP.png" mode="aspectFit"></image>
-						{{myMember.memberSynopsis}}
-					</view>
-				</view>
-			</view>
+					</swiper-item>
+				</template>
+			</swiper>
 		</view>
 		<view class="m-main">
-			<m-title title="VIP折扣卡" @titleHandle=""></m-title>
-			<view v-for="(item,index) in members" :key="index" style="padding-bottom: 30upx">
-				<m-vip-card @chooseVip="chooseVip" :describes="item.describes" :chooseVipId="chooseVipId" :id="item.id" :state="item.type"  :synopsis="item.synopsis" :price="item.price" ></m-vip-card>
-			</view>
-			<view class="m-button" @tap="buyVipFn">立即续费/购买</view>
 			<view class="m-card-describe">
 				<view class="m-title">
-					<view class="line"></view>{{vieName}}介绍<view class="line"></view>
+					<view>V{{vipName}}等级特权</view>
 				</view>
 				<view class="m-content">
-					<rich-text :nodes="vipDescribes"></rich-text>
+					<!-- <rich-text :nodes="vipDescribes"></rich-text> -->
+					<view class="m-name">A、生日祝福</view>
+					<view class="m-describes">可享受“千畦”商城的生日祝福。</view>
+					<view class="m-name">B、健康咨询</view>
+					<view class="m-describes">可享受“千畦”定期免费赠送的健康知识、保健、时尚等资讯</view>
+					<view class="m-name">C、节日福利</view>
+					<view class="m-describes">有权参加“千畦”推出的积分抵扣现金、积分抽奖、积分换购及节假日特供等活动。</view>
+					<view v-if="vipType > 1" class="m-name">D、节日礼物</view>
+					<view v-if="vipType> 1" class="m-describes">会员生日当月，千畦赠送特别的生日礼物；</view>
+					<view v-if="vipType > 1" class="m-name">E、积分赠送</view>
+					<view v-if="vipType == 2" class="m-describes"> 购买商城中的商品可额外获得积分10%。</view>
+					<view v-if="vipType >= 3" class="m-describes"> 购买商城中的商品可额外获得积分20%。</view>
+					<view v-if="vipType == 3" class="m-name">F、享受会员日</view>
+					<view v-if="vipType == 3" class="m-describes">每周随机抽取一位会员以其名义制定会员日的促销产品优惠，只有“千畦班委”可参与抽取。会员日方案：购物满59元+20积分（可商榷），换购进价3元的产品；购物满79元+20积分（可商榷），换购进价5元的产品；
+					购物；购物满99元+20积分（可商榷），换购进价8元的产品。</view>
+					<view v-if="vipType == 4" class="m-name">F、享受感恩日</view>
+					<view v-if="vipType == 4" class="m-describes">每周随机抽取一位会员（也可以不抽取以新晋级的会员）以其名义制定会员日的特价产品优惠，只有“千畦江湖”可参与抽取。感恩日方案:主体为感恩“张国全”超值套餐组合销售：给客户感受超值无限，震撼首推！限购每人一套，选择2种产品组合套餐，可用自有品牌产品和名牌产品组合，两种产品组合后感觉让利大幅销售，商品上标明原价和捆绑价格，让客户一目了然的感受感恩大幅优惠。分为：欢乐家庭套装、关爱家庭套装、幸福家庭套装。</view>
+					<view v-if="vipType == 4" class="m-name">G、亲情伙伴</view>
+					<view v-if="vipType == 4" class="m-describes">可享受亲情相伴，邀请一名家属成为同级别会员，只有一个名额。</view>
 				</view>
 			</view>
 		</view>
@@ -53,15 +54,18 @@
 <script>
 	import mTitle from '@/components/m-title'
 	import mVipCard from '@/components/m-vip-card'
+	import mCardVip from '@/components/m-card-vip'
 	export default {
 		components: {
 			mTitle,
-			mVipCard
+			mVipCard,
+			mCardVip
 		},
 		data() {
 			return {
 				chooseVipId:0,
 				isVip:false,//是否为会员
+				vipInfo:{},
 				myMember:{
 					nickName:'',
 					dueTime:'',
@@ -69,10 +73,13 @@
 					discount:'',
 					memberSynopsis:''
 				},
+				nextMember:{},
 				members:[],
 				userData:{},
 				vipName:"",
-				vipDescribes:"" //会员卡权益
+				vipDescribes:"" ,//会员卡权益
+				vipType:undefined,
+				curIntegration:undefined
 			};
 		},
 		methods:{
@@ -86,16 +93,53 @@
 				}
 			},
 			// 会员列表
-			getVips(){
+			async getVips(){
 				let _this = this;
-				this.$apis.postMembers({}).then(res=>{
-						_this.members=res.data.members;
-						if(!_this.isVip){
-							//非会员
-							this.chooseVipId=_this.members[0].id;
-							this.vipName=_this.members[0].synopsis;
-							this.vipDescribes=_this.members[0].describes;
+				await this.$apis.postMembers({}).then(res=>{
+					let temps = res.data.members
+					let tempLst = [];
+					let flag  = 0;
+					for (var i = 0; i < temps.length; i++) {
+						let info = {};
+						info.type = temps[i].type;
+						info.describes = temps[i].describes;
+						info.childs = [];
+						info.totalScore = 0;
+						if(_this.vipInfo.type == temps[i].type){
+							info.currentLevel = _this.vipInfo.grade;
+							info.current = 1;
+						}else if(_this.vipInfo.type > temps[i].type){
+							info.currentLevel = info.childs.length;
+							info.current = 0;
+						}else{
+							info.currentLevel = 0;
+							info.current = 2;
 						}
+						if(flag ==  temps[i].type){
+							continue;
+						}
+						flag = temps[i].type;
+						for (var j = 0; j < temps.length; j++) {
+							if(temps[i].type == temps[j].type){
+								let d = {};
+								d.name = temps[j].name;
+								d.integration = temps[j].integration;
+								info.totalScore += temps[j].integration;
+								if(_this.nextMember.id == temps[j].id){
+									let tData = ((this.curIntegration-_this.vipInfo.integration)/ (temps[j].integration-_this.vipInfo.integration))*100;
+									d.showPercent = true;
+									d.percent = tData;
+								}
+								info.childs.push(d);
+							}
+						}
+						tempLst.push(info);
+					}
+					console.log(tempLst);
+					_this.members = tempLst;
+					_this.vipDescribes = _this.members[0].describes;
+					_this.vipName = _this.members[0].type;
+					
 				})
 			},
 			// 选择会员卡
@@ -118,30 +162,12 @@
 				}
 			},
 			//我的会员
-			myVips(){
+			async myVips(){
 				let _this = this;
-				this.$apis.postMyMember({}).then(res=>{
-					
+				 await this.$apis.postMyMember({}).then(res=>{
 						let data = res.data.myMember;
-						if(data){
-							// 会员
-							_this.isVip = true
-							if(data&&data['memberType']){
-								data['memberType']= _this.changeType(data['memberType']);
-							}
-							if(data&&data['discount']){
-								data['discount']=data['discount'];
-							}
-							_this.myMember=data;
-							_this.chooseVipId=data['memberId'];
-							_this.vipName=data['discount'];
-							_this.vipDescribes=data['memberSynopsis'];
-						}else{
-							// 非会员
-							_this.isVip = false
-						}
-						this.getVips();
-					
+						_this.vipInfo = data;
+						_this.nextMember = res.data.nextMember;
 				})
 			},
 			//购买vip
@@ -190,14 +216,26 @@
 					console.log(err)
 				})
 			},
+			handlerChange(event){
+				this.vipDescribes = this.members[event.detail.current].describes;
+				this.vipName = this.members[event.detail.current].type;
+				this.vipType = event.detail.current+1;
+			},
 			initData(){
 				this.getUser();
 				
 				this.myVips();
+
+				this.getVips();
+				
+				
 			}
 		},
 		onLoad(options){
 			this.initData()
+			if(options.integration){
+				this.curIntegration = options.integration
+			}		
 		}
 	}
 </script>
@@ -207,13 +245,39 @@
 .m-myvip-page{
 	.m-header{
 		width: 100%;
-		background: url("../../static/img/me_bg_top.png") no-repeat top left;
-		background-size: 100% 350upx;
-		padding-top: 40upx;
-		margin-bottom: 20upx;
+		// background: url("../../static/img/me_bg_top.png") no-repeat top left;
+		// background-size: 100% 350upx;
+		padding:45upx 0upx;
+		// margin-bottom: 20upx;
+		// padding-bottom: 55upx;
+		background-color:#FFFAF0;
+		// box-shadow: 0px 10px 10px #FFFAF0;
+		.m-card-A{
+			background: url("https://dongyaoxiaoxiaochegnxu.oss-cn-beijing.aliyuncs.com/bg1.png") no-repeat top left;
+		}
+		.m-card-B{
+			background: url("https://dongyaoxiaoxiaochegnxu.oss-cn-beijing.aliyuncs.com/bg2.png") no-repeat top left;
+		}
+		.m-card-C{
+			color: 	#6495ED;
+			background: url("https://dongyaoxiaoxiaochegnxu.oss-cn-beijing.aliyuncs.com/bg3.png") no-repeat top left;
+		}
+		.m-card-D{
+			background: url("https://dongyaoxiaoxiaochegnxu.oss-cn-beijing.aliyuncs.com/bg4.png") no-repeat top left;
+		}
+		.m-card{
+			display: flex;
+			flex-direction: column;
+			justify-content: space-between;
+			padding:60upx 30upx;
+			width:90%;
+			background-size: cover;
+			font-size: 18upx;
+			height: 270upx;
+		}
 	}
 	.m-user-box{
-		background: #4e4e4e;
+		// background: #4e4e4e;
 		margin: 0 30upx;
 		// padding-bottom: 58upx;
 		border-radius: 10upx;
@@ -282,6 +346,10 @@
 	}
 	.m-main{
 		padding:30upx 30upx;
+		border-top-left-radius: 20upx;
+		border-top-right-radius: 20upx;
+		margin-top: -10upx;
+		box-shadow:0px -3px 3px #D3D3D3;
 		.m-button{
 			background: #635749;
 			color:#faf1cc;
@@ -290,33 +358,45 @@
 			border-radius: 50upx;
 			height: 100upx;
 			line-height: 100upx;
-			margin-top: 30upx;
+			// margin-top: 30upx;
 		}
 		.m-card-describe{
-			margin-top: 30upx;
+			// margin-top: 30upx;
 			padding-bottom: 100upx;
 			.m-title{
-				margin-top: 58upx;
-				color:$color-5;
-				font-size: $fontsize-2;
-				text-align: center;
+				// margin-top: 58upx;
+				color:#303030;
+				font-size:36upx;
 				// display: inline-block;
 				display: flex;
-				align-items: center;
-				justify-content: space-around;
+				align-items: flex-start;
+				// justify-content: space-around;
 				height: 88upx;
 				line-height: 88upx;
-				color:$color-5;
-				font-size: $fontsize-5;
-				.line{
-					height: 1px;
-					background:$color-border3;
-					width: 200upx;
-				}
+				font-weight: 600;
+				width: 100%;
+				// border-bottom:#303030 1upx solid;
+				// .line{
+				// 	height: 1px;
+				// 	background:$color-border3;
+				// 	width: 200upx;
+				// }
 			}
 			.m-content{
 				color:$color-5;
 				font-size: $fontsize-5;
+				.m-name{
+					font-size:32upx;
+					color:#474747;
+					font-weight:600;
+					padding:25rpx 0rpx;
+
+				}
+				.m-describes{
+					font-size: 28upx;
+					color: #303030;
+					padding-left:50rpx;
+				}
 			}
 			.m-list{
 				position: relative;

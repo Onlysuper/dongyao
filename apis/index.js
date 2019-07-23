@@ -1,5 +1,6 @@
 import http from "./http.js";
 const baseUrl = 'https://dy.gantangerbus.com/dy'; 
+const testBaseUrl = 'http://localhost:6090/'; 
 
 
 
@@ -37,6 +38,9 @@ export const postUsableCoupons = (data) => http.POST(`${baseUrl}/server/co/usabl
 
 // 清空购物车
 export const clearShopCar = (data) => http.POST(`${baseUrl}/server/sc/delete/all`, data);
+
+// 清空购物车
+export const delShopCarByProductId = (data) => http.POST(`${baseUrl}/server/sc/delete/cart`, data);
 
 // 门店详情
 export const postStore = (data) => http.POST(`${baseUrl}/server/s/storeById`, data);
@@ -77,25 +81,60 @@ export const postProductType=(data) => http.POST(`${baseUrl}/server/t/types`, da
 // 热卖商品
 export const postHotProduct=(data) => http.POST(`${baseUrl}/server/p/hot/products`, data);
 
+// 净菜商品
+export const postJCProduct=(data) => http.POST(`${baseUrl}/server/p/jc/products`, data);
+
+
 // 门店列表
 export const postStoreList=(data) => http.POST(`${baseUrl}/server/s/vicinity/stores`, data);
 
 // 我的订单
 export const postMyOrders=(data) => http.POST(`${baseUrl}/server/o/myOrders`, data);
 
-// 我的会员
-export const postMyMember=(data) => http.POST(`${baseUrl}/server/m/myMember`, data);
+// 取消订单
+export const postOrderCancel=(data) => http.POST(`${baseUrl}/server/o/orderCancel`, data);
 
-// 我的会员
+// 删除订单
+export const postOrderDel=(data) => http.POST(`${baseUrl}/server/o/orderDel`, data);
+
+// 退款
+export const postOrderRefund=(data) => http.POST(`${baseUrl}/server/o/orderRefund`, data);
+
+// 确认收货
+export const postReceivedGoods=(data) => http.POST(`${baseUrl}/server/o/receivedGoods`, data);
+
+// 获取连续签到天数和积分数
+export const postMySign=(data) => http.POST(`${baseUrl}/server/sign/continueDay`, data);
+
+// 签到
+export const postSigning=(data) => http.POST(`${baseUrl}/server/sign/signing`, data);
+
+// 积分明细
+export const postScoeDetail=(data) => http.POST(`${baseUrl}/server/integra/myDetails`, data);
+
+// 我的优惠券
 export const postMyCoupons=(data) => http.POST(`${baseUrl}/server/co/myCoupons`, data);
 
 //会员列表
 export const postMembers=(data) => http.POST(`${baseUrl}/server/m/members`, data);
 
+//会员列表
+export const postMyMember=(data) => http.POST(`${baseUrl}/server/m/myMember`, data);
 
 //购买会员
 export const postBuyMember=(data) => http.POST(`${baseUrl}/server/m/buyMember`, data);
 
+//保存收获地址
+export const postSaveAddress=(data) => http.POST(`${baseUrl}/server/ad/save`, data);
+
+//编辑收获地址
+export const postEditAddress=(data) => http.POST(`${baseUrl}/server/ad/edit`, data);
+
+//删除收获地址
+export const postDelAddress=(data) => http.POST(`${baseUrl}/server/ad/delete`, data);
+
+//查询收获地址
+export const postSelAddress=(data) => http.POST(`${baseUrl}/server/ad/list`, data);
 
 
 

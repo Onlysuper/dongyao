@@ -5,27 +5,32 @@
 			<!--  商品支付下单 -->
 			<view class="m-top-map">
 				<view class="m-container">
-					<view class="m-title">
-						到店自取
+					<view class="m-header test">
+						<view  v-bind:class="{ 'm-title': zActive, 'm-title-unsel': unZActive }" @tap="ziqu">
+							自取
+						</view>
+						<view v-bind:class="{ 'm-title-right': zrActive, 'm-title-right-unsel': unZrActive }" @tap="peisong">
+							配送
+						</view>
 					</view>
-					<view class="m-content">
+					<view class="m-content" v-if="pickType == 1">
 						<view class="m-address">
 							{{storeData.address}}
 						</view>
 						<m-map :latitude="storeData.lat" :longitude="storeData.lng" :userlat="latitude" :userlng="longitude" :distance="geoDistance(latitude,longitude,storeData.lat,storeData.lng)"></m-map>
 						<view class="m-footer">
 							<view class="m-item">
-
-								<view class="m-text picktime_text">
+								<view class="m-text">
 									自取时间
 								</view>
 								<view class="m-light">
-									
-									 <picker mode="date" :value="date" :start="startDate" :end="endDate" @change="bindDateChange">
-										<view class="uni-input">{{date}}</view>
+									 <picker ref="date_btn"  mode="date" :disabled="mDisabled" :value="date" :start="startDate" :end="endDate" @cancel="dateCancel" @change="bindDateChange">
+										<view class="uni-input picktime_text" >{{date}}</view>
+										<button v-if="showBtn==1" :loading="payLoading" :disabled="payLoading"  @tap="payFn" class="m-footer-but" type="primary">立即支付￥{{payPrice}}</button>
 									 </picker>
-									 <picker mode="time" :value="time" start="09:01" end="21:01" @change="bindTimeChange">
-										<view class="uni-input">{{time}}</view>
+									 <picker mode="time" :disabled="mDisabled" :value="time" start="09:01" end="21:01" @cancel="timeCancel" @change="bindTimeChange">
+										<view class="uni-input picktime_text">{{time}}</view>
+										<button v-if="showBtn==2" :loading="payLoading" :disabled="payLoading"  @tap="payFn" class="m-footer-but" type="primary">立即支付￥{{payPrice}}</button>
 									 </picker>
 								</view>
 							</view>
@@ -35,11 +40,24 @@
 								</view>
 								<view class="m-light">
 									<input style="" type="text" v-model="reserveTel" />
-									
 								</view>
 							</view>
 						</view>
 					</view>
+					<view class="m-sel-address" v-if="pickType == 2 && addressInfo " @tap="toAddressList">
+						<view class="m-left">
+							<view class="m-address">{{addressInfo.address}}</view>
+							<view class="m-info">{{addressInfo.name}}&nbsp;&nbsp;{{addressInfo.mobile}}</view>
+						</view>
+						<view class="m-right"> 
+							<image src="../../static/img/icon/order_down_icon1.png" mode="aspectFit"></image>
+						</view>
+					</view>
+					<view class="m-un-address" v-if="pickType == 2 && !addressInfo "  @tap="toAddressEdit">
+						<view>新建收获地址</view>
+						<view> > </view>
+					</view>
+					
 				</view>
 			</view>
 			<!-- 商品列表 -->
@@ -100,6 +118,17 @@
 						选择优惠券>
 					</view>
 				</view>
+				<view class="m-row m-row-bottom">
+					<view class="m-label-num">
+						<!-- 积分 共<view class="m-num">900</view>, 满 <view class="m-num">1000</view>可用 -->
+						{{integration}}
+					</view>
+					<!-- <view class="m-label-num" v-else>
+					</view> -->
+					<view  v-if="usedIntegration" style="display: flex;justify-content: flex-end;">
+						<switch v-if="usedIntegration > 0" :checked="useIntegration" @change="switchChange" class="m-switch" />
+					</view>
+				</view>
 				<view class="m-footer">
 					合计<view class="count">￥{{payPrice}}</view>
 				</view>
@@ -130,7 +159,7 @@
 		<!-- <view @tap="payFn" class="m-footer-but">
 			立即支付￥{{payPrice}}
 		</view> -->
-		<button :loading="payLoading" :disabled="payLoading"  @tap="payFn" class="m-footer-but" type="primary">立即支付￥{{payPrice}}</button>
+		<button v-if="showBtn==0" :loading="payLoading" :disabled="payLoading"  @tap="payFn" class="m-footer-but" type="primary">立即支付￥{{payPrice}}</button>
 	</view>
 </template>
 
@@ -171,6 +200,10 @@
 			return {
 				payLoading:false,
 				storeid:'',
+				zActive:true,
+				unZActive:false,
+				zrActive:true,
+				unZrActive:false,
 				storeData:{},
 				distance:'',
 				today:dateFtt("yyyy-MM-dd hh:mm",new Date()),
@@ -195,8 +228,17 @@
 				haveTokenCard:false,
 				// 优惠券end
 				date: "选择日期",
-				time: "选择时间"
-			};
+				time: "选择时间",
+				pickType:1,
+				addressInfo:undefined,
+				proUrlData:undefined,
+				flag:false,
+				useIntegration:false,
+				integration:"",//抵扣的描述
+				usedIntegration:false,
+				mDisabled:false,
+				showBtn:1
+			}
 		},
 		methods:{ 
 			startDate() {
@@ -206,10 +248,12 @@
 				return this.getDate('end');
 			},
 			 bindDateChange: function(e) {
-				this.date = e.target.value
+				this.date = e.target.value;
+				this.showBtn = 2;
 			},
 			bindTimeChange: function(e) {
-				this.time = e.target.value
+				this.time = e.target.value;
+				this.showBtn = 0;
 			},
 			getDate(type) {
 				const date = new Date();
@@ -284,6 +328,7 @@
 					type:_this.type,
 					couponId:_this.couponId,
 					products:products, 
+					useIntegration:this.useIntegration, 
 				}
 				
 				_this.$apis.postCalOrderPrice(sendData).then(res=>{
@@ -294,19 +339,44 @@
 						_this.yhPrice=data.yhPrice;
 						_this.discount=data.discount;
 						_this.payPrice=data.payPrice;
+						_this.integration = data.integration;
+						_this.usedIntegration = data.usedIntegration;
 					}
 				})
+			},
+			switchChange(){
+				if(!this.useIntegration)
+					this.useIntegration = true;
+				else
+					this.useIntegration = false;
+				this.orderInit();
+			},
+			dateCancel(){
+				if(this.date == '选择日期'){
+					this.showBtn = 1;
+				}
+			},
+			timeCancel(){
+				if(this.date == '选择时间'){
+					this.showBtn = 2;
+				}
 			},
 			// 立即支付
 			payFn(){
 				let _this=this;
-				this.aboutPickingTime = this.date +" "+this.time;
-				if(this.date == '选择日期' || this.time == '选择时间'){
-					uni.showToast({
-						title:  "请选择取货日期",
-						icon: "none"
-					});
-					return false
+				this.aboutPickingTime = "";
+				if(this.pickType == 1){
+					if(this.date == '选择日期' && this.time == '选择时间'){
+						this.showBtn = 2;
+						return;
+					}else if( this.date != '选择日期' && this.time == '选择时间'){
+						this.showBtn = 0;
+						return;
+					}else if( this.date == '选择日期' && this.time != '选择时间'){
+						this.showBtn = 1;
+						return;
+					}
+					this.aboutPickingTime = this.date +" "+this.time;
 				}
 				_this.payLoading=true;
 				let products=_this.shopCarList.map(item=>{return {
@@ -320,7 +390,12 @@
 					couponId:_this.couponId,//优惠券id,
 					aboutPickingTime:_this.aboutPickingTime?_this.aboutPickingTime+":00":"",//预计取货时间 yyyy-MM-dd hh:mm
 					reserveTel:_this.reserveTel,//预留手机号
-					products:products//商品数组对象
+					products:products,//商品数组对象
+					carryType:_this.pickType,//配送类型
+					useIntegration:_this.useIntegration
+				}
+				if(this.pickType == 2){
+					sendData.addressId = _this.addressInfo.id;
 				}
 				if(_this.couponId){
 					sendData['couponId']=this.couponId;
@@ -433,33 +508,110 @@
 				// console.log('获取到优惠券id回调');
 				this.couponId=data.id;
 				this.getData();
-			}
+			},
+			ziqu(){
+				this.zActive = true;
+				this.unZActive = false;
+				this.zrActive = true;
+				this.unZrActive = false;
+				this.pickType = 1;
+				if(this.date == '选择日期'){
+					this.showBtn = 1;
+				}else if(this.time=='选择时间'){
+					this.showBtn = 2;
+				}else{
+					this.showBtn = 0;
+				}
+			},
+			peisong(){
+				this.zActive = false;
+				this.unZActive = true;
+				this.zrActive = false;
+				this.unZrActive =  true;
+				this.pickType = 2;
+				this.showBtn = 0;
+			},
+			toAddressEdit(){
+				uni.navigateTo({
+					url:"/pages/address/edit"
+				})
+			},
+			getAddress(){
+				let _this = this;
+				this.$apis.postSelAddress(
+				).then(res=>{ 
+					if(res.code == 1){
+						if(res.data.list.length>0){
+							_this.addressInfo = res.data.list[0];
+						}
+					}
+				}).catch(error=>{
+				})
+			},
+			toAddressList(){
+				if(this.date != '选择日期' && this.time != '选择时间'){
+					this.aboutPickingTime = this.date +" "+this.time;
+				}
+				uni.navigateTo({
+					url:"/pages/address/list?storeid="+this.storeid+"&totalCount="+this.totalCount+"&type="+this.type+"&userid="+this.userid+'&proUrlData='+this.proUrlData+'&flag=1'+'&aboutPickingTime='+this.aboutPickingTime
+				})
+			},
 		},
 		// 
 		onLoad(option){
-			if(option.aboutPickingTime){
+			if(option.aboutPickingTime && option.aboutPickingTime!="undefined" && option.aboutPickingTime!="null"){
 				let tempTime = option.aboutPickingTime.split(" ");
-				this.date = tempTime[0],
-				this.time = tempTime[1].substring(0,tempTime[1].length-3);
+				this.date = tempTime[0];
+				if(tempTime[1].length>6){
+					this.time = tempTime[1].substring(0,tempTime[1].length-3);
+				}else{
+					this.time =tempTime[1];
+				}
+				this.aboutPickingTime = option.aboutPickingTime
+				this.showBtn = 0;
+			}
+			if(option.addressInfo){
+				let addressInfoTemp = decodeURI(option.addressInfo);
+				this.addressInfo = JSON.parse(addressInfoTemp);
+			}
+			if(option.flag){
+				this.flag = true;
+			}
+			if(option.carryType && option.carryType!='undefined' && option.carryType!='null'){
+				if(option.carryType == 2){
+					this.peisong();
+				}
 			}
 			this.reserveTel=option.reserveTel||uni.getStorageSync('phone')||"";
 			this.couponId=option.couponId|| "",
 			this.storeid=option.storeid;
-			this.totalCount=option.totalCount,
+			this.totalCount=option.totalCount;
+			this.proUrlData=option.proUrlData;
 			// 位置
 			this.type=option.type
+			if(this.type == 2){
+				this.mDisabled = true;
+				this.showBtn = 0;
+			}
 			this.storeLocation();
 			//店铺详情
 			this.storeDetail();
 			//购买商品清单
 			this.getData(option);
 			//商家优惠券
-			
 			this.tokenCard();
+			if(!this.flag){
+				//获取地址
+				this.getAddress();
+				
+			}else{
+				this.peisong();
+			}
 			Event.addNoticeFun(Event.UPDATA_TOKEN, "UPDATA_TOKEN", this)
 		},
+		
 		onUnload(){
-				Event.removeNoticeFun(Event.UPDATA_TOKEN)
+			Event.removeNoticeFun(Event.UPDATA_TOKEN)
 		}
 	}
 </script>
@@ -472,8 +624,8 @@
 	top: 0;
 	left: 0;
 	background:gray;
-	height:204upx;
-	background:#34c191;
+	height:350upx;
+	background: linear-gradient(#34c191,#FFF);
 	z-index: 1;
 }
 .place{
@@ -498,29 +650,120 @@
 			margin-left: 30upx;
 			margin-right: 30upx;
 			// margin-top: 30upx;
-			padding-top: 72upx;
-			.m-title{
-				background:url('../../static/img/icon/Apay_button10.png') no-repeat;
-				background-size: 270upx 82upx;
-				// height: 72upx;
-				line-height: 72upx;
-				font-size: $fontsize-2;
-				color:$color-2;
-				padding-left: 30upx;
-				position: relative;
-				width: 240upx;
-				padding-bottom: 10upx;
-				position: absolute;
-				left: 0;
-				top: 0;
-				
-				z-index: -1;
+			padding-top: 50upx;
+			.m-header{
+				display: flex;
+				flex-direction: row;
+				justify-content: space-between;
+				background-color: #f7f7f7;
+				width:100%;
+				height:65upx;
+				border-top-left-radius: 10upx;
+				border-top-right-radius: 10upx;
+				.m-title{
+					background:url('../../static/img/icon/Apay_button10.png') no-repeat;
+					background-size: 100% 100%;
+					line-height: 100upx;
+					font-size: $fontsize-2;
+					color:$color-2;
+					padding-left: 30upx;
+					position: relative;
+					width: 50%;
+					padding-bottom: 10upx;
+					position: absolute;
+					left: 0;
+					z-index: 1;
+					margin-top: -12px;
+				}
+				.m-title-unsel{
+					line-height: 72upx;
+					font-size: $fontsize-2;
+					color:$color-2;
+					padding-left: 30upx;
+					position: relative;
+					width: 45%;
+					padding-bottom: 10upx;
+					position: absolute;
+					left: 0;
+					z-index: 1;
+				}
+				.m-title-right{
+					line-height: 72upx;
+					font-size: $fontsize-2;
+					color:$color-2;
+					padding-left: 30upx;
+					position: relative;
+					width: 45%;
+					padding-bottom: 10upx;
+					position: absolute;
+					right: 0;
+					z-index: 1;
+				}
+				.m-title-right-unsel{
+					background:url('../../static/img/icon/order_button_2.png') no-repeat;
+					background-size: 100% 100%;
+					line-height: 100upx;
+					font-size: $fontsize-2;
+					color:$color-2;
+					padding-left:60rpx;
+					position: relative;
+					width: 50%;
+					padding-bottom: 20upx;
+					position: absolute;
+					right: 0;
+					z-index: 1;
+					margin-top: -12px;
+					margin-right:-5px;
+				}
+			}
+			.m-un-address{
+				background: #fff;
+				box-shadow:0upx 5upx 10upx rgba(0,0,0,0.2);
+				border-bottom-right-radius: 10upx;
+				border-bottom-left-radius: 10upx;
+				display: flex;
+				justify-content: space-between;
+				padding:75upx 20upx;
+				font-size:$fontsize-4;
+			}
+			.m-sel-address{
+				background: #fff;
+				box-shadow:0upx 5upx 10upx rgba(0,0,0,0.2);
+				border-bottom-right-radius: 10upx;
+				border-bottom-left-radius: 10upx;
+				display: flex;
+				justify-content: space-between;
+				padding: 30upx;
+				align-items: center;
+				.m-left{
+					display: flex;
+					flex-direction:column;
+					flex-grow: 1;
+					.m-address{
+						font-size: $fontsize-2;
+						color: $color-black;
+						margin-top: 20upx;
+						margin-bottom: 20upx;
+					}
+					.m-info{
+						margin-bottom: 30upx;
+						font-size: $fontsize-4;
+						color: $color-9;
+					}
+				}
+				.m-right{
+					display: flex;
+					flex-direction: row;
+					align-items: center;
+					width:18upx;
+					height:18upx;
+				}
 			}
 			.m-content{
 				background: #fff;
 				box-shadow:0upx 5upx 10upx rgba(0,0,0,0.2);
-				border-top-left-radius: 10upx;
-				border-top-right-radius: 10upx;
+				// border-top-left-radius: 10upx;
+				// border-top-right-radius: 10upx;
 				border-bottom-right-radius: 10upx;
 				border-bottom-left-radius: 10upx;
 				padding: 20upx;
@@ -541,10 +784,10 @@
 						}
 						.picktime_text{
 							color:$color-price;
-							font-size: $fontsize-3
+							font-size: $fontsize-4;
 						}
 						.m-light{
-							color:$color-5;
+							color: $color-5;
 							font-size: $fontsize-5;
 							height: 40upx;
 							display: flex;
@@ -569,8 +812,6 @@
 			}
 			
 		}
-		
-		
 	}
 	.m-pro-container{
 		padding:0 30upx;
@@ -653,9 +894,27 @@
 					color:$color-active;
 				}
 			}
+			.m-label-num{
+				display: flex;
+				flex-direction: row;
+				// align-items: center;
+				justify-content: space-between;
+				.m-num{
+					color:black;
+					font-weight: 600;
+					margin: 8upx;
+				}
+			}
+			.m-switch{
+				transform:scale(0.75);
+			}
+		}
+		.m-row-bottom{
+			height:65rpx;
+			line-height:65rpx;
 		}
 		.m-footer{
-			margin-top:20upx;
+			margin-top:35upx;
 			border-top: 1px solid $color-border3;
 			text-align: right;
 			display: flex;
@@ -668,6 +927,7 @@
 			font-size: $fontsize-4;
 			.count{
 				font-size: $fontsize-1;
+				font-weight: 600;
 			}
 		}
 	}
@@ -714,5 +974,8 @@
 		background:$color-active;
 		border-radius: 0;
 	}
+}
+.test{
+	// border-bottom: 1px solid red;
 }
 </style>

@@ -1,18 +1,18 @@
 <template>
 	<view class="">
-		<m-empty v-if="nearStoreList.length==0"></m-empty>
-		<view v-else class="">
+		<view v-if="nearStoreList.length > 0" class="">
 			<view v-for="(item,index) in nearStoreList" :key="index">
 				<view @tap="goStore(item)"  class="m-store-list">
 					<m-store-list  :title="item.name" :img="item.imgUrl" :fencingRange="item.fencingRange" :address="item.address"></m-store-list>
 				</view>
 			</view>
 		</view>
+		<m-empty v-else></m-empty>
 	</view>
 </template>
 <script>
-	import mEmpty from "@/components/m-result/m-empty.vue";
 	import mStoreList from '@/components/m-store-list'
+	import mEmpty from "@/components/m-result/m-empty.vue";
 	export default {
 		data() {
 			return {
@@ -33,6 +33,9 @@
 				}
 		},
 		onLoad(){
+			uni.showLoading({
+				title: '正在查找门店...'
+			});
 			let _that=this;
 			uni.authorize({
 				scope: 'scope.userLocation',
@@ -48,8 +51,10 @@
 										let data = res.data;
 										_that.nearStoreList = data;
 									}
+									uni.hideLoading();
 							}).catch(err=>{
 								console.log(err);
+								uni.hideLoading();
 							});
 						}
 					})

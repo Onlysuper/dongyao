@@ -1,16 +1,66 @@
 <template>
 	<view class="m-user-page">
 		<view class="m-header">
-			<view v-if="isLogin" class="m-user">
-				<view class="m-img">
+			<view v-if="isLogin" class="m-user" @tap="toVip">
+				<view class="m-img" @tap="toUserEdit">
 					<image style="width:100%;height:100%" :src="userData.avatarUrl" mode="aspectFit"></image>
 				</view>
 				<view class="m-text">
-					<view class="m-username">
+					<view class="m-member">
+						{{myMember.synopsis}}
+						<view class="m-icon" v-if="myMember.type!=3">
+							<template v-for="(i,index) in myMember.grade">
+								<image v-if="myMember.type == 1" :key="index" class="m-item" src="../../static/img/card/icon_star1.png" mode="aspectFit"></image>
+								<image v-else-if="myMember.type == 2" :key="index" class="m-item" src="../../static/img/card/icon_sterall.png" mode="aspectFit"></image>
+								<image v-else-if="myMember.type == 4" :key="index" class="m-item" src="../../static/img/card/icon_Diamonds.png" mode="aspectFit"></image>
+							</template>
+						</view>
+						<view class="m-icon" v-else-if="myMember.grade == 1 && myMember.type==3">
+							<image  class="m-item" src="../../static/img/card/icon_1.png" mode="aspectFit"></image>
+						</view>
+						<view class="m-icon" v-else-if="myMember.grade == 2 && myMember.type==3">
+							<image  class="m-item" src="../../static/img/card/icon_1.png" mode="aspectFit"></image>
+							<image  class="m-item" src="../../static/img/card/icon_2.png" mode="aspectFit"></image>
+						</view>
+						<view class="m-icon" v-else-if="myMember.grade == 3 && myMember.type==3">
+							<image  class="m-item" src="../../static/img/card/icon_1.png" mode="aspectFit"></image>
+							<image  class="m-item" src="../../static/img/card/icon_2.png" mode="aspectFit"></image>
+							<image  class="m-item" src="../../static/img/card/icon_3.png" mode="aspectFit"></image>
+						</view>
+						<view class="m-icon" v-else-if="myMember.grade == 4 && myMember.type==3">
+							<image  class="m-item" src="../../static/img/card/icon_1.png" mode="aspectFit"></image>
+							<image  class="m-item" src="../../static/img/card/icon_2.png" mode="aspectFit"></image>
+							<image  class="m-item" src="../../static/img/card/icon_3.png" mode="aspectFit"></image>
+							<image  class="m-item" src="../../static/img/card/icon_4.png" mode="aspectFit"></image>
+						</view>
+						<view class="m-icon" v-else-if="myMember.grade == 5 && myMember.type==3">
+							<image  class="m-item" src="../../static/img/card/icon_1.png" mode="aspectFit"></image>
+							<image  class="m-item" src="../../static/img/card/icon_2.png" mode="aspectFit"></image>
+							<image  class="m-item" src="../../static/img/card/icon_3.png" mode="aspectFit"></image>
+							<image  class="m-item" src="../../static/img/card/icon_4.png" mode="aspectFit"></image>
+							<image  class="m-item" src="../../static/img/card/icon_5.png" mode="aspectFit"></image>
+						</view>
+						<view class="m-icon" v-else>
+						</view>
+					</view>
+					<view class="m-nickname">
 						{{userData.nickName}}
 					</view>
-					<image v-if="isVip" style="width:57upx;height:33upx" src="/static/img/icon/me_icon_VIP.png" mode="aspectFit"></image>
-					<image v-else style="width:57upx;height:33upx" src="/static/img/icon/me_icon_VIP_lose.png" mode="aspectFit"></image>
+					<!-- <image v-if="isVip" style="width:57upx;height:33upx" src="/static/img/icon/me_icon_VIP.png" mode="aspectFit"></image>
+					<image v-else style="width:57upx;height:33upx" src="/static/img/icon/me_icon_VIP_lose.png" mode="aspectFit"></image> -->
+				</view>
+				<view class="m-qiandao">
+					<view  v-if="signInfo.signed">
+						已签到
+					</view>
+					<view @tap.stop="signing" class="m-btn" v-else>
+						签到
+					</view>
+					<view class="m-text">
+						<view>连续签到</view>
+						<view class="m-num">{{signInfo.continueDay}}</view>
+						<view>天</view>
+					</view>
 				</view>
 			</view>
 			
@@ -26,7 +76,19 @@
 					</view>
 				</view>
 			</view>
-			<view v-if="isVip" class="m-card" @tap="linkTo('/pages/user/vip')">
+			<view class="m-jifen" >
+				<view class="m-left">
+					<view class="m-text">积分</view>
+					<view class="m-num">{{signInfo.curIntegration}}</view>
+				</view>
+				<view class="m-right" @tap="toDetail">
+					<view class="m-text">积分明细</view>
+					<view class="m-img">
+						<image src="../../static/img/icon/order_down_icon1.png" mode="aspectFit"></image>
+					</view>
+				</view>
+			</view>
+			<!-- <view  class="m-card" @tap="linkTo('/pages/user/vip')">
 				<m-vip-top>
 					<view slot="name">{{myMember.memberDesc}}</view>
 					<view slot="label"></view>
@@ -35,8 +97,8 @@
 						立即续费>
 					</view>
 				</m-vip-top>
-			</view>
-			<view v-else class="m-card" @tap="linkTo('/pages/user/vip')">
+			</view> -->
+			<!-- <view v-else class="m-card" @tap="linkTo('/pages/user/vip')">
 				<m-vip-top>
 					<view slot="name">VIP会员</view>
 					<view slot="label"></view>
@@ -45,7 +107,7 @@
 						立即开通>
 					</view>
 				</m-vip-top>
-			</view>
+			</view> -->
 			<view class="m-order-chose">
 				<view class="m-title">
 					<view class="m-text">
@@ -83,6 +145,9 @@
 				</view>
 			</view>
 			<view class="m-cell-list">
+				<m-cell @handleFn="linkTo('/pages/address/list')" label="我的地址" :link='true'>
+					<image  style="width:36upx;height:36upx;" src="/static/img/icon/me_icon_preferential.png" mode="aspectFull"></image>
+				</m-cell>
 				<m-cell @handleFn="linkTo('/pages/user/tokencard')" label="我的优惠券" :link='true'>
 					<image  style="width:36upx;height:36upx;" src="/static/img/icon/me_icon_preferential.png" mode="aspectFull"></image>
 				</m-cell>
@@ -108,6 +173,7 @@
 				isVip:false, // 是否是会员
 				myMember:{}, // 会员信息
 				userData:{},
+				signInfo:{}
 			}
 		},
 		methods:{
@@ -126,6 +192,33 @@
 						_this.isVip = false
 					}
 				
+				})
+			},
+			//签到信息
+			mySigns(){
+				let _this = this;
+				this.$apis.postMySign({}).then(res=>{
+						let data = res.data;
+						console.log(data)
+						this.signInfo = data;
+				})
+			},
+			//签到
+			signing(){
+				let _this = this;
+				this.$apis.postSigning({}).then(res=>{
+					let data = res.data;
+					this.signInfo = data;
+				})
+			},
+			toDetail(){
+				uni.navigateTo({
+					url:"/pages/user/score_detail"
+				})
+			},
+			toVip(){
+				uni.navigateTo({
+					url:"/pages/user/vip?integration="+this.signInfo.integration
 				})
 			},
 			linkToOrderTab(index){
@@ -168,6 +261,7 @@
 					this.$set(this.userData,'nickName',this.userData.nickname||'')
 				}
 				this.myVips();	
+				this.mySigns();
 			},
 			//是否登录了
 			async checkLogin(){
@@ -176,6 +270,11 @@
 				if(islogin){
 					this.initData();
 				}
+			},
+			toUserEdit(){
+				uni.navigateTo({
+					url:"/pages/user/edit"
+				})
 			}
 		},
 		onLoad(){
@@ -214,7 +313,7 @@
 				color:#fff;
 				margin-left: 10upx;
 				display: flex;
-				align-items: center;
+				flex-direction: column;
 				.m-username{
 					margin-right: 10upx;
 					.m-login-but{
@@ -224,6 +323,87 @@
 						margin-left: 10upx;
 						background:rgba(255,255,255,0.2)
 					}
+				}
+				.m-member{
+					margin-right: 10upx;
+					color: #333;
+					font-size: 30upx;
+					margin-bottom: 8upx;
+					display: flex;
+					align-items: center;
+					align-content: center;
+					.m-icon{
+						display: flex;
+						align-items: center;
+						align-content: center;
+					}
+					.m-item{
+						width:30upx;
+						height: 30upx;
+					}
+				}
+				.m-nickname{
+					color: #FFF;
+					font-size: 26upx;
+				}
+			}
+			.m-qiandao{
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				.m-btn{
+					background:#f9ad39;
+					border-radius:35upx;
+					padding:8upx 35upx;
+					color:#FFF;
+					font-size:28upx;
+					margin-bottom: 8upx;
+				}
+				.m-text{
+					display: flex;
+					flex-direction: row;
+					align-items: center;
+					color: #333;
+					font-size: 26upx;
+					.m-num{
+						color: #f9ad39;
+						margin-top: 8upx;
+						margin-right: 8upx;
+						font-size: 36upx;
+					}
+				}
+			}
+		}
+		.m-jifen{
+			display: flex;
+			justify-content:space-between;
+			align-items: center;
+			padding: 60upx 60upx;
+			background:url('../../static/img/icon/me_bg.png') no-repeat;
+			background-size: 100% 100%;
+			font-size: 28upx;
+			.m-left{
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				.m-num{
+					font-size:34upx;
+					margin-top:8upx;
+				}
+			}
+			.m-right{
+				display: flex;
+				flex-direction: row;
+				align-items: center;
+				align-content: center;
+				font-size: 24upx;
+				.m-img{
+					display: flex;
+					flex-direction: row;
+					align-items: center;
+					width:13upx;
+					height:13upx;
+					margin-left: 10upx;
 				}
 			}
 		}

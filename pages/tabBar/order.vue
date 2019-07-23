@@ -13,6 +13,7 @@
 			@payGood="payGood"
 			@againGood="againGood"
 			@commentGood="commentGood"
+			@receivedGoods="receivedGoods"
 			 :rowData="item"
 			 :key="index"
 			 :status="item.order.state"
@@ -20,6 +21,7 @@
 			 :num="item.order.totalCount"
 			 :createTime="item.order.createTime"
 			 :extrctime="item.order.actualPickingTime"
+			 :carryType="item.order.carryType"
 			 :aboutPickingTime="item.order.aboutPickingTime"
 			 :title="item.store.name"
 			 :productList="item.productList"
@@ -93,10 +95,19 @@
 				let couponId = newOrder.couponId; // 优惠券id
 				let reserveTel=newOrder.reserveTel;//预留电话
 				let aboutPickingTime = newOrder.aboutPickingTime; //取货时间
+				let carryType = newOrder.carryType;
 				let proArr = [...data.productList];
 				let proUrlData = encodeURI(JSON.stringify({proUrlData:proArr}));
+				let adUrlData = {
+					id:undefined
+				};
+				if(carryType==2){
+					adUrlData = Object.assign({},data.orderAddress);
+					adUrlData.id = data.orderAddress.addressId;
+					adUrlData = encodeURI(JSON.stringify(adUrlData));
+				}
 				uni.navigateTo({
-					url:`/pages/order/pay?storeid=${storeId}&totalCount=${totalCount}&type=${type}&couponId=${couponId}&where=orderPage&reserveTel=${reserveTel}&aboutPickingTime=${aboutPickingTime}&proUrlData=${proUrlData}`
+					url:`/pages/order/pay?storeid=${storeId}&totalCount=${totalCount}&type=${type}&couponId=${couponId}&where=orderPage&reserveTel=${reserveTel}&aboutPickingTime=${aboutPickingTime}&proUrlData=${proUrlData}&flag=1&addressInfo=${adUrlData}&carryType=${carryType}`
 				})
 			},
 			// 评论
@@ -104,9 +115,22 @@
 				let data = res.data;
 				let orderid = data.order.id;
 				let newProduct = [...data.productList];
+				console.log(newProduct)
 				let ProductUrlData = encodeURI(JSON.stringify({ProductUrlData:newProduct}));
 				uni.navigateTo({
 					url:"/pages/order/comment?orderid="+orderid+"&ProductUrlData="+ProductUrlData
+				})
+			},
+			//确认收获
+			receivedGoods(){
+				let orderid = res.data.order.id;
+				this.$apis.postReceivedGoods(orderid).then(res=>{
+					if(res.code == 1){
+						this.getOrders();
+					}
+					
+				}).catch(err=>{
+					console.log(err)
 				})
 			},
 			 // 取货

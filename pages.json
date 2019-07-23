@@ -26,6 +26,19 @@
                     "bounce" : "none"
                 }
             }
+        },{
+            // 购物车
+            "path" : "pages/tabBar/buy_cart",
+            "style" : {
+                "navigationBarTitleText" : "千畦优品",
+                "navigationBarTextStyle" : "black",
+                "enablePullDownRefresh" : false,
+                "onReachBottomDistance" : 50,
+                "app-plus" : {
+                    "titleNView" : false, //禁用原生导航栏
+                    "softinputNavBar" : "none"
+                }
+            }
         },
         {
             // 商家主页
@@ -232,6 +245,50 @@
 		        }
 		    }
 		}
+        ,{
+            "path" : "pages/address/list",
+            "style" : {
+				"navigationBarTitleText" : "收获地址",
+				"app-plus" : {
+				    "titleNView" : false, //禁用原生导航栏
+				    "softinputNavBar" : "none"
+				}
+			}
+        }
+        ,{
+            "path" : "pages/address/edit",
+            "style" : {
+				"navigationBarTitleText" : "编辑收获地址",
+				"app-plus" : {
+				    "titleNView" : false, //禁用原生导航栏
+				    "softinputNavBar" : "none"
+				}
+			}
+        }
+        ,{
+            "path" : "pages/user/edit",
+             "style" : {
+            	"navigationBarTitleText" : "编辑",
+            	"app-plus" : {
+            	    "titleNView" : false, //禁用原生导航栏
+            	    "softinputNavBar" : "none"
+            	}
+            }
+        }
+        ,{
+            "path" : "pages/user/score_detail",
+            "style" : {
+            	"navigationBarTitleText" : "积分明细",
+            	"app-plus" : {
+            	    "titleNView" : false, //禁用原生导航栏
+            	    "softinputNavBar" : "none"
+            	}
+            }
+        }
+        ,{
+            "path" : "pages/user/strategy",
+            "style" : {}
+        }
     ],
     // 	"globalStyle": {
     // 		"navigationBarTextStyle": "black",
@@ -265,6 +322,12 @@
                 "selectedIconPath" : "static/img/tabBar/order-on.png",
 				"onReachBottomDistance" : 100,
                 "text" : "订单"
+            },
+            {
+                "pagePath" : "pages/tabBar/buy_cart",
+                "iconPath" : "static/img/tabBar/buy_cart.png",
+                "selectedIconPath" : "static/img/tabBar/buy_cart_select.png",
+                "text" : "购物车"
             },
             {
                 "pagePath" : "pages/tabBar/user",

@@ -41,12 +41,12 @@ function HTTP(obj, config) {
 					else if (data.code == "1") {
 							resolve(data || true)
 					}  else {
-						uni.showToast({
-							title: data.msg,
-							icon: "none",
-							duration: 2000
-						})
-						reject(data.msg);
+						// uni.showToast({
+						// 	title: data.message,
+						// 	icon: "none",
+						// 	duration: 2000
+						// })
+						reject(data.message);
 					}
 				} else {
 					reject("HTTP:状态码异常！");
