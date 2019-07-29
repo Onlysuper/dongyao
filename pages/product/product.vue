@@ -220,7 +220,7 @@
 							{{item.commentContent}}
 						</view>
 						<view v-if="item.replyContent!=''" class="m-reply">
-							{{item.replyContent}}
+							商家回复:{{item.replyContent}}
 						</view>
 					</view>
 				</view>

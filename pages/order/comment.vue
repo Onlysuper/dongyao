@@ -226,6 +226,16 @@
 			},
 			commentFn(){
 				let _this = this;
+				for (var i = 0; i < _this.productList.length; i++) {
+					if(!_this.textAreaVals[i]){
+						uni.showToast({
+							icon:'none',
+							title: '您还没有填写评论内容~',
+							duration: 2000
+						});
+						return;
+					}
+				}
 				this.productList.forEach((pro,index)=>{
 					// 将选择的图片组成一个Promise数组，准备进行并行上传
 					let formData={

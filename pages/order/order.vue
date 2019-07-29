@@ -120,9 +120,11 @@
 					<!-- 已经提货 -->
 					提货时间：{{order.actualPickingTime}}
 				</view>
+				<view v-else-if="carryType==2 && state == 7" class="m-time">
+					预计配送时间：{{order.aboutPickingTime}}
+				</view>
 				<view v-else-if="carryType==2" class="m-time">
-					<!-- 预计提货 -->
-					<!-- 提货时间：{{order.aboutPickingTime}} -->
+					<!-- 预计配送时间：{{order.actualPickingTime}} -->
 				</view>
 				<view v-else class="m-time">
 					<!-- 预计提货 -->

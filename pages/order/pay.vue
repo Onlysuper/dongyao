@@ -366,7 +366,7 @@
 			payFn(){
 				let _this=this;
 				this.aboutPickingTime = "";
-				if(this.pickType == 1){
+				if(this.pickType == 1 || (this.pickType == 2 && this.type==2)){
 					if(this.date == '选择日期' && this.time == '选择时间'){
 						this.showBtn = 2;
 						return;
