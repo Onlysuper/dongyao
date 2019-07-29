@@ -235,7 +235,7 @@
 						starLevel:_this.levels[index]||5,
 						commentContent:_this.textAreaVals[index],
 					}
-					
+					console.log("评价的内容",formData)
 					if((this.imgsUrl[index])&&this.imgsUrl[index].length>0){
 						const arr = this.imgsUrl[index].forEach(path => {
 							let sendData = {

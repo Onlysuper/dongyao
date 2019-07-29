@@ -1,34 +1,39 @@
 <template>
-	<view class="m_buy_cart_list">
-		<view class="m_title" v-if="buyCartsList.length > 0">
-			<view class=""></view>
-			<view class="m_title_text"></view>
-			<view v-if="isEdit" @tap="edit" class="m_opt">编辑</view>
-			<view v-else class="m_opt" @tap="finish" >完成</view>
-		</view>
-		<view class="m_body" >
-			<view class="" v-if="buyCartsList.length > 0">
-				<template v-for="(item, index) in buyCartsList">
-					<m-buy-carts :key="index" :rowData="item" :isDisplay="isDisplay" @toStoreState="showStoreState" @totalPrice="getTotalPrice"></m-buy-carts>
-				</template>
+	<view class="">
+		<view class="m_buy_cart_list" v-if="buyCartsList.length > 0">
+			<view class="m_title" v-if="buyCartsList.length > 0">
+				<view class=""></view>
+				<view class="m_title_text"></view>
+				<view v-if="isEdit" @tap="edit" class="m_opt">编辑</view>
+				<view v-else class="m_opt" @tap="finish" >完成</view>
 			</view>
-			<view v-else class="empty-row">~暂无加入任何商品~</view>
-		</view>
-		
-		<view v-if="isDisplay && buyCartsList.length > 0" class="m_footer" >
-			<view class="m_text">
-				<radio value="r1" :checked="checkedAll"  @tap="selectAll()"/>全选
+			<view class="m_body" >
+				<view class="" v-if="buyCartsList.length > 0">
+					<template v-for="(item, index) in buyCartsList">
+						<m-buy-carts :key="index" :rowData="item" :isDisplay="isDisplay" @toStoreState="showStoreState" @totalPrice="getTotalPrice"></m-buy-carts>
+					</template>
+				</view>
 			</view>
-			<view class=""></view>
-			<view class="m_opt" @tap="deleteCartProduct">删除</view>
+			<view v-if="isDisplay && buyCartsList.length > 0" class="m_footer" >
+				<view class="m_text">
+					<radio value="r1" style="transform:scale(0.8)" :checked="checkedAll"  @tap="selectAll()"/>
+					<view>全选</view>
+					
+				</view>
+				<view class=""></view>
+				<view class="m_opt" @tap="deleteCartProduct">删除</view>
+			</view>
 		</view>
+		<m-empty v-else-if="buyCartsList.length == 0"></m-empty>
 	</view>
 </template>
 <script>
 	import mBuyCarts from '@/components/m-buy_cart.vue';
+	import mEmpty from "@/components/m-result/m-empty.vue";
 	export default {
 		components:{
-			mBuyCarts
+			mBuyCarts,
+			mEmpty
 		},
 		data() {
 			return {
@@ -42,8 +47,11 @@
 		},
 		methods:{
 			// 购物车查询
-		 initBuyCars(){
+			initBuyCars(){
 				let _this = this;
+				uni.showLoading({
+					title: '加载中'
+				});
 				this.$apis.postCars({
 					storeId:-1
 				}).then(res=>{
@@ -51,6 +59,7 @@
 						this.buyCartsList=res.data;
 						this.getTotalPrice();
 					}
+					uni.hideLoading();
 				})
 			},
 			getTotalPrice(){
@@ -186,10 +195,14 @@
 		.m_text{
 			margin-left:20rpx;
 			padding:15rpx 30rpx;
+			display: flex;
+			flex-direction: row;
+			justify-content: space-between;
+			align-items: center;
 		}
 		.m_opt{
 			margin-right:20rpx;
-			padding:15rpx 30rpx;
+			padding:10rpx 30rpx;
 			background-color: #ff9900;
 			color: white;
 			border-radius: 35upx;

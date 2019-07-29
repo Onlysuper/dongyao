@@ -64,9 +64,9 @@
 
 		<!-- 超值热卖 -->
 		<view class="m-container">
-			<m-title title="超值热卖" label="换一换 >" @titleHandle="getHotsellList"></m-title>
+			<m-title title="超值热卖" label="" ></m-title>
 			<view v-if="hotProList.length > 0" class="m-content .m-chaozhi">
-				<scroll-view class="scroll-view" scroll-x="true" scroll-left="0">
+				<scroll-view class="scroll-view" scroll-x="true" @scrolltolower="nextHotList">
 					<view class="m-togethoer">
 						<template v-for="(item, index) in hotProList">
 							<m-home-hotpro @handleFn="hotProDetail(item)" :key="index" :rowData="item"></m-home-hotpro>
@@ -103,6 +103,8 @@ export default {
 			mode: 'long',
 			afterHeaderOpacity: 1, //不透明度
 			headerPosition: 'fixed',
+			upperThreshold:50,
+			lowerThreshold:0,
 			headerTop: null,
 			statusTop: null,
 			// 轮播图片
@@ -164,19 +166,41 @@ export default {
 					console.log(err);
 				});
 		},
+		nextHotList(){
+			this.getHotsellList(this.hotsellPage);
+		},
+		upHotList(){
+			let tPage =  this.hotsellPage-1;
+			if(tPage < 1){
+				tPage = 1;
+			}
+			this.getHotsellList(tPage);
+		},
+		HandleScroll(event){
+			console.log(event.detail);
+			this.lowerThreshold =  event.detail.scrollWidth;
+		},
 		//热卖列表
-		getHotsellList() {
+		getHotsellList(page) {
+			uni.showLoading({
+				title: '加载中'
+			});
 			this.$apis
 				.postHotProduct({
-					start: this.hotsellPage,
+					start: page,
 					length: 6
 				})
 				.then(res => {
 					if (res.data) {
 						let data = res.data;
-						this.hotProList = data.list;
+						this.hotProList = this.hotProList.concat(data.list);
 						this.hotsellPage = data.nextPage;
+						if(data.nextPage == data.page){
+							this.hotsellPage = 1;
+							this.hotProList=[];
+						}
 					}
+					 uni.hideLoading();
 				})
 				.catch(err => {
 					console.log(err);
@@ -274,7 +298,7 @@ export default {
 			}
 		});
 		this.getBanners();
-		this.getHotsellList();
+		this.getHotsellList(1);
 		this.getJcsellList();
 		this.getGroupsellList();
 	},

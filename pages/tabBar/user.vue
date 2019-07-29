@@ -151,9 +151,9 @@
 				<m-cell @handleFn="linkTo('/pages/user/tokencard')" label="我的优惠券" :link='true'>
 					<image  style="width:36upx;height:36upx;" src="/static/img/icon/me_icon_preferential.png" mode="aspectFull"></image>
 				</m-cell>
-				<m-cell @handleFn="linkTo('/pages/user/aboutme')" label="关于我们" :link='true'>
+				<!-- <m-cell @handleFn="linkTo('/pages/user/aboutme')" label="关于我们" :link='true'>
 					<image style="width:36upx;height:36upx;" src="/static/img/icon/me_icon_about.png" mode="aspectFull"></image>
-				</m-cell>
+				</m-cell> -->
 			</view>
 		</view>
 	</view>
@@ -207,6 +207,10 @@
 			signing(){
 				let _this = this;
 				this.$apis.postSigning({}).then(res=>{
+					uni.showToast({
+						title: '您已签到成功~',
+						duration: 2000
+					});
 					let data = res.data;
 					this.signInfo = data;
 				})

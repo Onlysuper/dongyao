@@ -11,6 +11,8 @@
 			@detailGood="detailGood"
 			@takeGood="takeGood"
 			@payGood="payGood"
+			@orderCancel="orderCancel"
+			@orderDel="orderDel"
 			@againGood="againGood"
 			@commentGood="commentGood"
 			@receivedGoods="receivedGoods"
@@ -98,17 +100,23 @@
 				let carryType = newOrder.carryType;
 				let proArr = [...data.productList];
 				let proUrlData = encodeURI(JSON.stringify({proUrlData:proArr}));
-				let adUrlData = {
-					id:undefined
-				};
+				let adUrlData = null;
 				if(carryType==2){
+					 adUrlData = {
+						id:undefined
+					};
 					adUrlData = Object.assign({},data.orderAddress);
 					adUrlData.id = data.orderAddress.addressId;
 					adUrlData = encodeURI(JSON.stringify(adUrlData));
+					uni.navigateTo({
+						url:`/pages/order/pay?storeid=${storeId}&totalCount=${totalCount}&type=${type}&couponId=${couponId}&where=orderPage&reserveTel=${reserveTel}&aboutPickingTime=${aboutPickingTime}&proUrlData=${proUrlData}&flag=1&addressInfo=${adUrlData}&carryType=${carryType}`
+					})
+				}else{
+					uni.navigateTo({
+						url:`/pages/order/pay?storeid=${storeId}&totalCount=${totalCount}&type=${type}&couponId=${couponId}&where=orderPage&reserveTel=${reserveTel}&aboutPickingTime=${aboutPickingTime}&proUrlData=${proUrlData}&carryType=${carryType}`
+					})
 				}
-				uni.navigateTo({
-					url:`/pages/order/pay?storeid=${storeId}&totalCount=${totalCount}&type=${type}&couponId=${couponId}&where=orderPage&reserveTel=${reserveTel}&aboutPickingTime=${aboutPickingTime}&proUrlData=${proUrlData}&flag=1&addressInfo=${adUrlData}&carryType=${carryType}`
-				})
+			
 			},
 			// 评论
 			commentGood(res){
@@ -122,13 +130,15 @@
 				})
 			},
 			//确认收获
-			receivedGoods(){
+			receivedGoods(res){
+				let that = this;
 				let orderid = res.data.order.id;
 				this.$apis.postReceivedGoods(orderid).then(res=>{
 					if(res.code == 1){
+						page = 1;
+						this.orderList = [];
 						this.getOrders();
 					}
-					
 				}).catch(err=>{
 					console.log(err)
 				})
@@ -140,12 +150,71 @@
 					url:"/pages/order/order?orderid="+orderid
 				})
 			},
-		
+			//取消订单
+			orderCancel(res){
+				let orderid = res.data.order.id;
+				let _this = this;
+				uni.showModal({
+					title: '提示',
+					content: '您确定要取消订单吗?',
+					success: function (res) {
+						if (res.confirm) {
+							uni.showLoading({
+								title: '退款中'
+							});
+							_this.$apis.postOrderRefund(orderid).then(res=>{
+								if(res.code == 1){
+									uni.showToast({
+										title: '退款成功',
+										duration: 2000
+									});
+									page = 1;
+									_this.orderList = [];
+									_this.getOrders();
+								}
+								uni.hideLoading();
+							}).catch(err=>{
+								console.log(err)
+							})
+						} else if (res.cancel) {
+						}
+					}
+				});
+			},
+			//删除订单
+			orderDel(res){
+				let orderid = res.data.order.id;
+				let that = this;
+				uni.showModal({
+					title: '提示',
+					content: '您确定要删除订单吗?',
+					success: function (res) {
+						if (res.confirm) {
+							that.$apis.postOrderDel(orderid).then(res=>{
+								if(res.code == 1){
+									uni.showToast({
+										title: '删除订单成功~',
+										duration: 2000
+									});
+									page = 1;
+									that.orderList = [];
+									that.getOrders();
+								}
+							}).catch(err=>{
+								console.log(err)
+							})
+						} else if (res.cancel) {
+						}
+					}
+				});
+				
+			},
 			//是否登录了
 			async checkLogin(){
 				let islogin = await this.globelIsLogin();
 				this.isLogin = islogin;
 				if(islogin){
+					console.log("获取订单列表")
 					//获取订单
 					page = 1;
 					this.orderList = [];
@@ -192,13 +261,10 @@
 				this.getOrders();
 			}
 		},
-	
 		onLoad(option){
-			this.tabActive=uni.getStorageSync('orderTab')|| 1;
-			this.checkLogin();
-		
+			//this.tabActive=uni.getStorageSync('orderTab')|| 1;
+			//this.checkLogin();
 		},
-		// 加载更多
 		onReachBottom(){
 			this.mloading='loading';
 			this.getOrders();
@@ -210,9 +276,9 @@
 			this.getOrders();
 		},
 		onShow(){
+			console.log("判断是否登录")
 			this.tabActive=uni.getStorageSync('orderTab')||1;
 			this.checkLogin();
-			
 		}
 	}
 </script>

@@ -1,7 +1,7 @@
 <template>
 	<view class="m-myvip-page">
 		<view class="m-header">
-			<swiper style="height: 200px;" class="swiper" :indicator-dots="indicatorDots" :autoplay="autoplay" :interval="interval" :duration="duration" previous-margin="15" next-margin="15"
+			<swiper style="height: 200px;" :current="currentIndex" class="swiper" :indicator-dots="indicatorDots" :autoplay="autoplay" :interval="interval" :duration="duration" previous-margin="15" next-margin="15"
 			@change="handlerChange">
 				<template v-for="(item,index) in members">
 					<swiper-item :key="index">
@@ -66,6 +66,7 @@
 				chooseVipId:0,
 				isVip:false,//是否为会员
 				vipInfo:{},
+				currentIndex:0,
 				myMember:{
 					nickName:'',
 					dueTime:'',
@@ -168,6 +169,7 @@
 						let data = res.data.myMember;
 						_this.vipInfo = data;
 						_this.nextMember = res.data.nextMember;
+						_this.currentIndex = data.type-1;
 				})
 			},
 			//购买vip

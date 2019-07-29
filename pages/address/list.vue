@@ -1,17 +1,20 @@
 <template>
 	<view class="m-main">
-		<template v-for="(item,index) in addressList">
-			<view class="m-content" :key="index">
-				<view class="m-left" @tap="toDetil(item)">
-					<view class="m-address">{{item.address}}</view>
-					<view class="m-info">{{item.name}}&nbsp;&nbsp;{{item.mobile}}</view>
+		<view class="" v-if="addressList.length>0">
+			<template v-for="(item,index) in addressList">
+				<view class="m-content" :key="index">
+					<view class="m-left" @tap="toDetil(item)">
+						<view class="m-address">{{item.address}}</view>
+						<view class="m-info">{{item.name}}&nbsp;&nbsp;{{item.mobile}}</view>
+					</view>
+					<view class="m-right" @tap="toDetil(item)"> 
+						<image src="../../static/img/icon/order_down_icon1.png" mode="aspectFit"></image>
+					</view>
 				</view>
-				<view class="m-right" @tap="toDetil(item)"> 
-					<image src="../../static/img/icon/order_down_icon1.png" mode="aspectFit"></image>
-				</view>
-			</view>
-		</template>
-		<view class="but" @tap="toDetil">
+			</template>
+		</view>
+		<view class="empty-row" v-else>~暂未添加地址~</view>
+		<view class="but" @tap="toEdit">
 			<!-- <view class="m-icon">
 				<image src="../../static/img/icon/shop_icon_add.png" mode="aspectFit"></image>
 			</view> -->
@@ -44,6 +47,12 @@
 						this.addressList = res.data.list;
 					}
 				}).catch(error=>{
+				})
+			},
+			toEdit(){
+				let adUrlData = null;
+				uni.navigateTo({
+					url:"/pages/address/edit?adUrlData="+adUrlData
 				})
 			},
 			toDetil(item){
@@ -132,5 +141,11 @@
 	text-align:center;
 }
 
-
+.empty-row {
+	text-align: center;
+	font-size: $fontsize-9;
+	color: $color-1;
+	padding: 66upx 20px;
+	background: #f9f9f9;
+}
 </style>

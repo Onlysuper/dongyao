@@ -100,7 +100,7 @@
 			
 		},
 		onLoad(option) {
-			if(option){
+			if(option && option.adUrlData && option.adUrlData!="null"){
 				let adUrlData = decodeURI(option.adUrlData);
 				let temp = JSON.parse(adUrlData);
 				this.id = temp.id;

@@ -25,12 +25,12 @@
 			mEmpty
 		},
 		methods:{
-				//跳转到商家
-				goStore(item){
-					uni.navigateTo({
-						url:"/pages/store/store?storeid="+item.id
-					})
-				}
+			//跳转到商家
+			goStore(item){
+				uni.navigateTo({
+					url:"/pages/store/store?storeid="+item.id
+				})
+			}
 		},
 		onLoad(){
 			uni.showLoading({

@@ -2,16 +2,16 @@
 	<view class="m-pay-page">
 		<!-- <scroll-view  scroll-y="true" class="content" > -->
 			<view class="m-top-back"></view>
-			<view v-if="state == 1" class="m-top-state">待取货</view>
+			<!-- <view v-if="state == 1" class="m-top-state">待取货</view>
 			<view v-if="state == 2" class="m-top-state">待付款</view>
 			<view v-if="state == 3" class="m-top-state">待评价</view>
 			<view v-if="state == 4" class="m-top-state">已退款</view>
 			<view v-if="state == 5" class="m-top-state">已取消</view>
 			<view v-if="state == 6" class="m-top-state">已失效</view>
-			<view v-if="state == 7" class="m-top-state">代发货</view>
+			<view v-if="state == 7" class="m-top-state">待发货</view>
 			<view v-if="state == 8" class="m-top-state">配送中</view>
 			<view v-if="state == 9" class="m-top-state">已完成</view>
-			
+			 -->
 			<!-- <view class="m-top-state">订单已完成</view> -->
 			<!--  商品支付下单 -->
 			<view class="m-top-map">
@@ -27,9 +27,9 @@
 					</view>
 					<!-- 待支付 -->
 					<view v-else-if="state==2" class="m-content waitepay">
-						<!-- <view class="m-title">
+						<view class="m-title" v-if="carryType == 1">
 							待支付
-						</view> -->
+						</view>
 						<view class="m-describe" v-if="carryType == 1">
 							支付成功后显示提货码 
 						</view>
@@ -47,10 +47,42 @@
 					<!-- 待评价-->
 					<view v-else-if="state==3" class="m-content">
 						<view class="m-comment-btn" @tap="commentGood">
-							评价
+							评价一下
 						</view>
 						<view class="m-describe">
 							对我们还算满意吗?评价一下吧~
+						</view>
+					</view>
+					<view v-else-if="state==4" class="m-content">
+						<view class="m-title">
+							已退款
+						</view>
+						<view class="m-describe">
+							感谢您对东尧蔬菜的信任，您已退款成功~
+						</view>
+					</view>
+					<view v-else-if="state==5" class="m-content">
+						<view class="m-title">
+							已取消
+						</view>
+						<view class="m-describe">
+							感谢您对东尧蔬菜的信任，您的订单已取消~
+						</view>
+					</view>
+					<view v-else-if="state==6" class="m-content">
+						<view class="m-title">
+							已失效
+						</view>
+						<view class="m-describe">
+							感谢您对东尧蔬菜的信任，您的订单已失效~
+						</view>
+					</view>
+					<view v-else-if="state==7" class="m-content">
+						<view class="m-title">
+							待发货
+						</view>
+						<view class="m-describe">
+							商家已在配货，马上为您发货~
 						</view>
 					</view>
 					<!-- 待评价-->
@@ -59,29 +91,13 @@
 							确认收货
 						</view>
 						<view class="m-describe">
-							很高兴为您服务，收到商品了吗?
-						</view>
-					</view>
-					<view v-else-if="state==5" class="m-content">
-						<!-- <view class="m-title">
-							订单详情
-						</view> -->
-						<view class="m-describe">
-							订单已取消~
-						</view>
-					</view>
-					<view v-else-if="state==6" class="m-content">
-						<!-- <view class="m-title">
-							订单详情
-						</view> -->
-						<view class="m-describe">
-							订单已失效~
+							商品已发货，您收到了吗?
 						</view>
 					</view>
 					<view v-else class="m-content">
-						<!-- <view class="m-title">
-							订单详情
-						</view> -->
+						<view class="m-title">
+							订单已完成
+						</view>
 						<view class="m-describe">
 							感谢您对东尧蔬菜的信任
 						</view>
@@ -100,9 +116,13 @@
 				<view class="address">
 					{{store.address}}
 				</view>
-				<view v-if="state==3" class="m-time">
+				<view v-if="state==3 && carryType ==1" class="m-time">
 					<!-- 已经提货 -->
 					提货时间：{{order.actualPickingTime}}
+				</view>
+				<view v-else-if="carryType==2" class="m-time">
+					<!-- 预计提货 -->
+					<!-- 提货时间：{{order.aboutPickingTime}} -->
 				</view>
 				<view v-else class="m-time">
 					<!-- 预计提货 -->
@@ -144,7 +164,7 @@
 			<!-- 订单操作 -->
 			<view class="m-order-opt">
 				<view class="m-delete" v-if="state==2||state==3||state==4||state==5||state==6||state==9" @tap="orderDel">删除订单</view>
-				<view class="m-cancel" v-if="state==1||state==7" @tap="orderCancel">取消订单</view>
+				<view class="m-cancel" v-if="state==1||state==7" @tap="orderCancel">申请退款</view>
 			</view>
 			
 		<view class="place"></view>
@@ -234,15 +254,24 @@
 			//取消订单
 			orderCancel(){
 				let orderid=this.orderid||''
+				let _this = this;
 				uni.showModal({
 					title: '提示',
 					content: '您确定要取消订单吗?',
 					success: function (res) {
 						if (res.confirm) {
-							this.$apis.postOrderRefund(orderid).then(res=>{
+							uni.showLoading({
+								title: '退款中'
+							});
+							_this.$apis.postOrderRefund(orderid).then(res=>{
 								if(res.code == 1){
-									this.getOrder();
+									uni.showToast({
+										title: '退款成功',
+										duration: 2000
+									});
+									_this.getOrder();
 								}
+								uni.hideLoading();
 							}).catch(err=>{
 								console.log(err)
 							})
@@ -253,14 +282,19 @@
 			},
 			//删除订单
 			orderDel(){
-				let orderid=this.orderid||''
+				let orderid= this.orderid||'';
+				let that = this;
 				uni.showModal({
 					title: '提示',
 					content: '您确定要删除订单吗?',
 					success: function (res) {
 						if (res.confirm) {
-							this.$apis.postOrderDel(orderid).then(res=>{
+							that.$apis.postOrderDel(orderid).then(res=>{
 								if(res.code == 1){
+									uni.showToast({
+										title: '删除订单成功~',
+										duration: 2000
+									});
 									uni.switchTab({  
 										url: '/pages/tabBar/order'  
 									}); 
@@ -388,7 +422,8 @@
 	position: absolute;
 	top: 0;
 	left: 0;
-	height:270upx;
+	background:gray;
+	height:204upx;
 	background:#34c191;
 	z-index: 1;
 }
@@ -402,18 +437,18 @@
 	bottom: 0;
 	right: 0;
 	background:#f7f7f7;
-	.m-top-state{
-		font-weight: 900;
-		color: #333;
-		font-size: 36upx;
-		padding: 30upx;
-		position: relative;
-		z-index: 2;
-		letter-spacing:2rpx;
-		padding-top:30upx;
-	}
+	// .m-top-state{
+	// 	font-weight: 900;
+	// 	color: #333;
+	// 	font-size: 36upx;
+	// 	padding: 30upx;
+	// 	position: relative;
+	// 	z-index: 2;
+	// 	letter-spacing:2rpx;
+	// 	padding-top:30upx;
+	// }
 	.m-top-map{
-		// padding-top:20upx;
+		padding-top:30upx;
 		background:#fff;
 		position: relative;
 		.m-container{
@@ -488,9 +523,11 @@
 		padding:30upx 30upx;
 		background:#fff;
 		.m-name{
+			margin-bottom: 10upx;
 			padding:0upx 30upx;
-			color:$color-4;
-			font-size: $fontsize-2;
+			color:$color-5;
+			font-size: 34upx;
+			font-weight: 600;
 			display: flex;
 			flex-direction: row;
 			align-items: flex-end;
@@ -501,7 +538,7 @@
 		}
 		.address{
 			padding:0upx 30upx;
-			color:$color-4;
+			color:$color-5;
 			font-size: $fontsize-5;
 		}
 		.m-time{

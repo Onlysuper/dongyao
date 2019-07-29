@@ -40,7 +40,13 @@
 				markers: []
 			}
 		},
-		onReady(){
+		mounted (){
+			// console.log("初始化地图",this.latitude,this.longitude,this.userlat,this.userlng)
+			// if(!this.latitude || !this.longitude){
+			// 	this.latitude = 39.72684;
+			// 	this.longitude = 116.34159;
+			// }
+			// console.log("初始化地图",this.latitude,this.longitude,this.userlat,this.userlng)
 			this.markers=[{
 				latitude: this.latitude,
 				longitude: this.longitude,

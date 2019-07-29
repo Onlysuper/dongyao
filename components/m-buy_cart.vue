@@ -1,13 +1,13 @@
 <template>
 	<view class="m_content">
 		<view class="m_header"> 
-			<radio value="r1" :checked="rowData.checked" @tap="changeStore(rowData)"/>
+			<radio value="r1" class="m-radio" :checked="rowData.checked" @tap="changeStore(rowData)"/>
 			<view class="store_name">{{rowData.sName}}</view>
 		</view>
 		<template v-for="(item,index) in rowData.productList">
 			<view class="m_product" :key="index">
 				<view class="m_select" @tap="changeProduct(item,rowData)">
-					 <radio value="r1" :checked="item.checked" />
+					 <radio value="r1"  class="m-radio" :checked="item.checked" />
 				</view>
 				<view class="m_img">
 					<image :src="item.pictureUrl" mode="aspectFit"></image>
@@ -194,6 +194,9 @@
 	background-color: #fff;
 	margin-bottom: 20upx;
 	padding:5upx 20upx;
+	.m-radio{
+		transform:scale(0.8);
+	}
 	.m_header{
 		display: flex;
 		flex-direction: row;
@@ -264,8 +267,9 @@
 				width: 80upx;
 				border: 1upx solid #ebebeb;
 				box-sizing: border-box;
-				min-height:50rpx;
-				height:50rpx;
+				// min-height:50rpx;
+				// height:50rpx;
+				padding:6upx 20upx;
 			}
 		}
 	}
@@ -286,14 +290,16 @@
 		border-top:1px solid #ebebeb;
 		.z_price{
 			color: #ff6633;
-			padding: 15upx;
+			padding: 10upx;
 			font-weight: 600;
 		}
 		.but{
 			background-color: #ff9900;
-			padding: 15upx;
+			padding: 10upx 20upx;
 			color: white;
 			border-radius: 35upx;
+			font-size: 28upx;
+			// line-height: 30upx;
 		}
 	}
 	

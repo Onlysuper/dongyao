@@ -17,7 +17,7 @@
 						<view class="m-address">
 							{{storeData.address}}
 						</view>
-						<m-map :latitude="storeData.lat" :longitude="storeData.lng" :userlat="latitude" :userlng="longitude" :distance="geoDistance(latitude,longitude,storeData.lat,storeData.lng)"></m-map>
+						<m-map v-if="showMap" :latitude="storeData.lat" :longitude="storeData.lng" :userlat="latitude" :userlng="longitude" :distance="geoDistance(latitude,longitude,storeData.lat,storeData.lng)"></m-map>
 						<view class="m-footer">
 							<view class="m-item">
 								<view class="m-text">
@@ -237,7 +237,8 @@
 				integration:"",//抵扣的描述
 				usedIntegration:false,
 				mDisabled:false,
-				showBtn:1
+				showBtn:1,
+				showMap:false
 			}
 		},
 		methods:{ 
@@ -482,17 +483,15 @@
 			},
 			//门店详情
 			storeDetail(){
-				
 				this.$apis.postStore({
-					id:this.storeid
+					id:1
 				}).then(res=>{
 					this.storeData = res.data;
-					console.log(res)
+					this.storeLocation();
 				}).catch(error=>{
 					console.log(error)
 				})
 			},
-			
 			storeLocation(){
 				let _this = this;
 				uni.getLocation({//获取当前的位置坐标
@@ -500,6 +499,7 @@
 					success: function (res) {
 						_this.latitude=res.latitude;
 						_this.longitude=res.longitude;
+						_this.showMap = true;
 					}
 				});
 			},
@@ -557,8 +557,12 @@
 				})
 			},
 		},
+		created(option){
+			console.log("先执行了。。。。。。。。。。。。。。。。。。。。");
+		},
 		// 
 		onLoad(option){
+			this.ziqu()
 			if(option.aboutPickingTime && option.aboutPickingTime!="undefined" && option.aboutPickingTime!="null"){
 				let tempTime = option.aboutPickingTime.split(" ");
 				this.date = tempTime[0];
@@ -570,13 +574,14 @@
 				this.aboutPickingTime = option.aboutPickingTime
 				this.showBtn = 0;
 			}
-			if(option.addressInfo){
+			if(option.addressInfo && option.addressInfo!="null"){
 				let addressInfoTemp = decodeURI(option.addressInfo);
 				this.addressInfo = JSON.parse(addressInfoTemp);
 			}
 			if(option.flag){
 				this.flag = true;
 			}
+			
 			if(option.carryType && option.carryType!='undefined' && option.carryType!='null'){
 				if(option.carryType == 2){
 					this.peisong();
@@ -593,7 +598,6 @@
 				this.mDisabled = true;
 				this.showBtn = 0;
 			}
-			this.storeLocation();
 			//店铺详情
 			this.storeDetail();
 			//购买商品清单
@@ -603,7 +607,6 @@
 			if(!this.flag){
 				//获取地址
 				this.getAddress();
-				
 			}else{
 				this.peisong();
 			}

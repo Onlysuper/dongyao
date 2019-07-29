@@ -205,7 +205,7 @@
 		}
 		.m-total-score{
 			margin-top: 5px;
-			font-size: 20upx;
+			font-size: 24upx;
 		}
 	}
 	.m-right{

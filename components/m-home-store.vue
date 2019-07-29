@@ -19,8 +19,11 @@
 				{{rowData.address}}
 			</view>
 		</view>
-		<view class="m-distance">
+		<view class="m-distance" v-if="rowData.fencingRange>50">
 			{{rowData.fencingRange}}km
+		</view>
+		<view class="m-distance" v-else>
+			附近
 		</view>
 	</view>
 </template>
@@ -107,8 +110,8 @@
 	}
 	.m-distance{
 		flex: 0 1 100upx;
-		color:#b2b2b2;
-		font-size: 20upx;
+		color:#333333;
+		font-size: 22upx;
 		text-align: right
 	}
 }

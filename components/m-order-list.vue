@@ -1,7 +1,7 @@
 <template>
 	<!-- 公用商品列表 -->
-	<view class="m-order-pro-list">
-		<view class="m-header">
+	<view class="m-order-pro-list"  >
+		<view class="m-header" @tap="detailGood">
 			<view class="m-title">
 				{{title}}
 				<view class="m-time">
@@ -36,8 +36,8 @@
 				已完成
 			</view>
 		</view>
-		<view class="m-body">
-			<view  @tap="detailGood" class="m-img-container">
+		<view class="m-body" @tap="detailGood">
+			<view   class="m-img-container">
 				<view class="m-img-box" v-for="(item) in productListNew" :key="item.id">
 					<image style="width:100%;height:100%" :src="item.pictures[0].pictureUrl" mode="aspectFit"></image>
 				</view>
@@ -48,7 +48,7 @@
 					<image style="width:100%;height:100%" :src="productList[0].pictures[0].pictureUrl" mode="aspectFull"></image>
 				</view> -->
 			</view>
-			<view @tap="detailGood" class="m-text-right">
+			<view  class="m-text-right">
 				<view class="price">
 					￥{{price}}
 				</view>
@@ -67,10 +67,10 @@
 					<view v-if="status==3" class="m-describe">
 						提货时间:{{extrctime}}
 					</view>
-					<view v-else-if="carryType ==2" class="m-describe">
-						<!-- 提货时间:{{aboutPickingTime}} -->
+					<view v-else-if="status == 7" class="m-describe">
+						预计配送时间:{{aboutPickingTime}}
 					</view>
-					<view v-else="carryType ==2" class="m-describe">
+					<view v-else-if="carryType ==1" class="m-describe">
 						提货时间:{{aboutPickingTime}}
 					</view>
 					<view class="m-describe">
@@ -79,24 +79,43 @@
 				</view> 
 			</view>
 			<view class="footright">
-				<view @tap="takeGood" v-if="status==1">
-					<view class="but " style="background-color: #ff9900; color:#FFFFFF;border:1px solid #ff9900;">
+				<view  v-if="status==1">
+					<view class="but m-cancel" @tap="orderCancel">
+						申请退款
+					</view>
+					<view class="but" @tap="takeGood" style="background-color: #ff9900; color:#FFFFFF;border:1px solid #ff9900;padding: 10upx 20upx;">
 						取货
 					</view>
 				</view>
-				<view @tap="payGood" v-else-if="status==2">
-					<view  class="but" style="color:#FF4500;border:1px solid #FF4500;">
+				<view v-else-if="status==2">
+					<view  class="but" @tap="payGood" style="color:#FF4500;border:1px solid #FF4500;">
 						立即付款
+					</view>
+					<view  class="but m-delete" @tap="orderDel" >
+						删除订单
 					</view>
 				</view>
 				<view  v-else-if="status==3">
 					<view @tap="commentGood" class="but" style="color:#32CD32;border:1px solid #32CD32;margin-left: 10upx;">
-						评论
+						评论一下
+					</view>
+					<view @tap="orderDel" class="but m-delete" >
+						删除订单
+					</view>
+				</view>
+				<view  v-else-if="status==7">
+					<view @tap="orderCancel" class="but m-cancel">
+						申请退款
 					</view>
 				</view>
 				<view  v-else-if="status==8">
 					<view @tap="receivedGoods" class="but" style="color:#32CD32;border:1px solid #32CD32;margin-left: 10upx;">
 						确认收货
+					</view>
+				</view>
+				<view  v-else-if="status== 4 || status== 5 || status==6 || status==9">
+					<view @tap="orderDel" class="but m-delete" >
+						删除订单
 					</view>
 				</view>
 			</view>
@@ -204,6 +223,14 @@
 		 commentGood(){
 		 	this.$emit('commentGood',{data:this.rowData})	 	 
 		 },
+		 //取消订单
+		 orderCancel(){
+			 this.$emit('orderCancel',{data:this.rowData})	
+		 },
+		 //删除订单
+		 orderDel(){
+		 	this.$emit('orderDel',{data:this.rowData})	
+		 },
 		  // 评论
 		 receivedGoods(){
 		 	this.$emit('receivedGoods',{data:this.rowData})	 	 
@@ -296,20 +323,33 @@
 			font-size: 26upx;
 			.m-describe{
 				white-space:nowrap;
-				font-size: $fontsize-3;
+				font-size: 28upx;
 				color:$color-5;
 			}
 		}
 		.footright{
 			flex:1;
 			font-size: 26upx;
-			text-align: right;
+			// text-align: right;
+			display: flex;
+			flex-direction: row;
+			justify-content: flex-end;
 			.but{
 				display: inline-block;
-				padding: 10upx 30upx;
+				padding: 10upx 20upx;
 				border-radius: 80upx;
 				border: 1px solid $color-border2;
 				color:$color-5;
+			}
+			.m-cancel{
+				color:#555;
+				border:1px solid #CCC;
+				margin-right: 5upx;
+			}
+			.m-delete{
+				color:red;
+				border: 1px solid red;
+				margin-left: 5upx;
 			}
 		}
 	}
