@@ -4,7 +4,7 @@
 			<template v-for="(item,index) in details">
 				<view class="m-row" :key="index">  
 					<view class="m-left">
-						<view class="m-text">{{item.opType}}</view>
+						<view class="m-text">{{item.opTypeStr}}</view>
 						<view class="m-time">{{item.createTime}}</view>
 					</view>
 					<view class="m-right" v-if="item.addSub == 1">
