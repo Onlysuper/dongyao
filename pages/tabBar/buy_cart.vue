@@ -24,16 +24,19 @@
 				<view class="m_opt" @tap="deleteCartProduct">删除</view>
 			</view>
 		</view>
-		<m-empty v-else-if="buyCartsList.length == 0"></m-empty>
+		<m-empty v-else-if="buyCartsList.length == 0 && isLogin"></m-empty>
+		<m-need-login v-if="!isLogin"></m-need-login>
 	</view>
 </template>
 <script>
 	import mBuyCarts from '@/components/m-buy_cart.vue';
+	import mNeedLogin from "@/components/m-need-login.vue";
 	import mEmpty from "@/components/m-result/m-empty.vue";
 	export default {
 		components:{
 			mBuyCarts,
-			mEmpty
+			mEmpty,
+			mNeedLogin
 		},
 		data() {
 			return {
@@ -41,6 +44,7 @@
 				checkedAll:true,
 				isDisplay:false,
 				isEdit:true,
+				isLogin
 			}
 		},
 		computed:{
@@ -150,10 +154,21 @@
 						this.buyCartsList[i].productList[j].checked = true;
 					}
 				}
+			},
+			//是否登录了
+			async checkLogin(){
+				let islogin = await this.globelIsLogin();
+				this.isLogin = islogin;
+				if(islogin){
+					this.initBuyCars();
+				}
 			}
 		},
 		onLoad(){
-			this.initBuyCars();
+			// this.initBuyCars();
+		},
+		onShow(){
+			this.checkLogin();
 		}
 	}	
 </script>
