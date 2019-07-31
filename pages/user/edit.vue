@@ -5,7 +5,7 @@
                 <view class="m-row">
                     <view class="m-title">姓名</view>
                     <view class="m-input">
-                        <input class="uni-inpu" name="input" placeholder="l姓名" />
+                        <input class="uni-inpu" name="input" placeholder="姓名" />
                     </view>
                 </view>
 				<view class="m-row">

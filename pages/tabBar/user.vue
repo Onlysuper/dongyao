@@ -2,7 +2,7 @@
 	<view class="m-user-page">
 		<view class="m-header">
 			<view v-if="isLogin" class="m-user" @tap="toVip">
-				<view class="m-img" @tap="toUserEdit">
+				<view class="m-img" @tap.stop="toUserEdit">
 					<image style="width:100%;height:100%" :src="userData.avatarUrl" mode="aspectFit"></image>
 				</view>
 				<view class="m-text">

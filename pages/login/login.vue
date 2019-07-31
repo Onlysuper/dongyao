@@ -67,6 +67,8 @@
 											url: '/pages/tabBar/home'  
 										});
 									},1000)
+								}else{
+									uni.hideLoading();
 								}
 							}
 						})

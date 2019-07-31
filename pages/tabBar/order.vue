@@ -10,7 +10,7 @@
 			<m-order-list v-for="(item,index) in orderList" 
 			@detailGood="detailGood"
 			@takeGood="takeGood"
-			@payGood="payGood"
+			@payGood="payFn"
 			@orderCancel="orderCancel"
 			@orderDel="orderDel"
 			@againGood="againGood"
@@ -255,11 +255,92 @@
 			},
 			// tab栏点击
 			tabChange(item){
+				console.log("// tab栏点击")
 				this.tabActive= item.id;
 				page = 1;
 				this.orderList = [];
 				this.getOrders();
+			},
+			// 立即支付
+			payFn(res){
+				// _this.payLoading=false;
+				let _this= this;
+				let torder = res.data.order;
+				let tstore =  res.data.store;
+				let products=res.data.productList.map(item=>{return {
+					productId:item.id,
+					cou:item.buyCount,
+				}})
+				let sendData ={
+					storeId:torder.storeId,//门店id
+					totalCount:torder.discount,//商品总数量
+					type:torder.is_assemble,//标识是普通下单还是拼团下单 1：普通 2：拼团
+					couponId:torder.couponId,//优惠券id,
+					products:products,//商品数组对象
+					aboutPickingTime:tstore.aboutPickingTime,//预计取货时间 yyyy-MM-dd hh:mm
+					outTradeNo:torder.id,
+					reserveTel:torder.reserveTel,//预留手机号
+				}
+				_this.$apis.postWxpay(sendData).then(res=>{
+						let data = res.data;
+						// 调起支付
+						let _package = data.prepay_id;
+						let paydata = {
+							provider: 'wxpay',
+							timeStamp: data.timeStamp+'',
+							nonceStr: data.nonceStr,
+							package: data.package,
+							signType: data.signType,
+							paySign: data.paySign,
+						}
+						_this.payLoading=true;
+						uni.requestPayment({
+							...paydata,
+							success: function(res) {
+								uni.showModal({
+									title: '支付成功',
+									content: '可在我的订单中查看订单详情',
+									// showCancel:false,
+									confirmText:'查看订单',
+									success: function (res) {
+										if (res.confirm) {
+											// uni.reLaunch({url: '/pages/tabBar/order'})
+											uni.switchTab({  
+												url: '/pages/tabBar/order'  
+											});  
+										} else if (res.cancel) {
+											console.log('用户点击取消');
+										}
+									}
+								});
+								_this.payLoading=false;
+							},
+							fail: function(err) {
+								uni.showModal({
+									title: '支付失败',
+									content: '请您在重新尝试一下支付',
+									// showCancel:false,
+									confirmText:'重新支付',
+									success: function (res) {
+										if (res.confirm) {
+											_this.payFn();
+										} else if (res.cancel) {
+											console.log('用户点击取消');
+										}
+									}
+								});
+								// _this.payLoading=false;
+							},
+							complete() {
+								// _this.payLoading=false;
+							}
+						});
+					// _this.payLoading=false;
+				}).catch(err=>{
+					// _this.payLoading=false;
+				})
 			}
+			
 		},
 		onLoad(option){
 			//this.tabActive=uni.getStorageSync('orderTab')|| 1;
@@ -277,6 +358,7 @@
 		},
 		onShow(){
 			console.log("判断是否登录")
+			console.log("// tab栏点击")
 			this.tabActive=uni.getStorageSync('orderTab')||1;
 			this.checkLogin();
 		}

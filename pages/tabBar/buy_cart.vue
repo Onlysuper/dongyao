@@ -44,7 +44,7 @@
 				checkedAll:true,
 				isDisplay:false,
 				isEdit:true,
-				isLogin
+				isLogin:false
 			}
 		},
 		computed:{
