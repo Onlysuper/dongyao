@@ -323,7 +323,7 @@
 									confirmText:'重新支付',
 									success: function (res) {
 										if (res.confirm) {
-											_this.payFn();
+											_this.payFn(res);
 										} else if (res.cancel) {
 											console.log('用户点击取消');
 										}
