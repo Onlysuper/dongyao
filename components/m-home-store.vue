@@ -19,7 +19,7 @@
 				{{rowData.address}}
 			</view>
 		</view>
-		<view class="m-distance" v-if="rowData.fencingRange>50">
+		<view class="m-distance" v-if="rowData.fencingRange > 0.5">
 			{{rowData.fencingRange}}km
 		</view>
 		<view class="m-distance" v-else>
