@@ -15,33 +15,64 @@
 					</view>
 				</view>
 			</template>
+			<uni-load-more :status="mloading"></uni-load-more> 
 		</view>
 		<view v-else class="empty-row">
 			~暂无明细~
 		</view>
-		
 	</view>
 </template>
 <script>
+	import uniLoadMore from "@/components/uni-load-more/uni-load-more.vue";
+	var page = 1,totalpage=1;
 	export default {
 		components: {
+			uniLoadMore
 		},
 		data() {
 			return {
-				details:[]
+				details:[],
+				mloading:'more'
 			};
 		},
 		methods:{
 			getScoreDetails(){
 				let _this = this;
-				this.$apis.postScoeDetail({}).then(res=>{
-					_this.details = res.data.details.list
-				})
+				uni.showLoading({});
+				if(totalpage&&page > totalpage){
+					// uni.showToast({"title":"已经加载全部", icon:"none"});
+					_this.mloading='noMore';
+					uni.hideLoading();
+					uni.stopPullDownRefresh();
+					return ;
+				}
+				this.$apis.postScoeDetail({
+					start:page,
+					length:15
+				}).then(res=>{
+					_this.details = _this.details.concat(res.data.details.list);
+					page++;
+					uni.hideLoading();
+					uni.stopPullDownRefresh();
+				}).catch(err=>{
+					uni.hideLoading();
+					uni.stopPullDownRefresh();
+				});
 			}
 		},
 		onLoad(options){
 			this.getScoreDetails();
-		}
+		},
+		onReachBottom(){
+			this.mloading='loading';
+			this.getScoreDetails();
+		},
+		// 重置分页及数据
+		onPullDownRefresh(){
+			page = 1;
+			this.details = [];
+			this.getScoreDetails();
+		},
 	}
 </script>
 

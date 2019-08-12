@@ -222,7 +222,7 @@
 				}
 			},
 			// 获取订单
-			getOrders(){
+			async getOrders(){
 				let _this = this;
 				uni.showLoading({});
 				if(totalpage&&page > totalpage){
@@ -232,7 +232,7 @@
 					uni.stopPullDownRefresh();
 					return ;
 				}
-				this.$apis.postMyOrders({
+				await this.$apis.postMyOrders({
 					state:_this.tabActive,
 					start:page,
 					length:20
@@ -316,19 +316,19 @@
 								_this.payLoading=false;
 							},
 							fail: function(err) {
-								uni.showModal({
-									title: '支付失败',
-									content: '请您在重新尝试一下支付',
-									// showCancel:false,
-									confirmText:'重新支付',
-									success: function (res) {
-										if (res.confirm) {
-											_this.payFn(res);
-										} else if (res.cancel) {
-											console.log('用户点击取消');
-										}
-									}
-								});
+								// uni.showModal({
+								// 	title: '支付失败',
+								// 	content: '请您在重新尝试一下支付',
+								// 	// showCancel:false,
+								// 	confirmText:'重新支付',
+								// 	success: function (fRes) {
+								// 		if (fRes.confirm) {
+								// 			_this.payFn(res);
+								// 		} else if (fRes.cancel) {
+								// 			console.log('用户点击取消');
+								// 		}
+								// 	}
+								// });
 								// _this.payLoading=false;
 							},
 							complete() {
@@ -357,9 +357,7 @@
 			this.getOrders();
 		},
 		onShow(){
-			console.log("判断是否登录")
-			console.log("// tab栏点击")
-			this.tabActive=uni.getStorageSync('orderTab')||1;
+			this.tabActive= uni.getStorageSync('orderTab')||1;
 			this.checkLogin();
 		}
 	}

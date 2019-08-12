@@ -40,10 +40,9 @@
 					<view v-if="vipType == 2" class="m-describes"> 购买商城中的商品可额外获得积分10%。</view>
 					<view v-if="vipType >= 3" class="m-describes"> 购买商城中的商品可额外获得积分20%。</view>
 					<view v-if="vipType == 3" class="m-name">F、享受会员日</view>
-					<view v-if="vipType == 3" class="m-describes">每周随机抽取一位会员以其名义制定会员日的促销产品优惠，只有“千畦班委”可参与抽取。会员日方案：购物满59元+20积分（可商榷），换购进价3元的产品；购物满79元+20积分（可商榷），换购进价5元的产品；
-					购物；购物满99元+20积分（可商榷），换购进价8元的产品。</view>
-					<view v-if="vipType == 4" class="m-name">F、享受感恩日</view>
-					<view v-if="vipType == 4" class="m-describes">每周随机抽取一位会员（也可以不抽取以新晋级的会员）以其名义制定会员日的特价产品优惠，只有“千畦江湖”可参与抽取。感恩日方案:主体为感恩“张国全”超值套餐组合销售：给客户感受超值无限，震撼首推！限购每人一套，选择2种产品组合套餐，可用自有品牌产品和名牌产品组合，两种产品组合后感觉让利大幅销售，商品上标明原价和捆绑价格，让客户一目了然的感受感恩大幅优惠。分为：欢乐家庭套装、关爱家庭套装、幸福家庭套装。</view>
+					<view v-if="vipType == 3" class="m-describes">每周随机抽取一位会员以其名义制定会员日的促销产品优惠，只有“千畦班委”可参与抽取。被选中的会员可以指定一款产品作为当日的促销产品。。</view>
+					<view v-if="vipType == 4" class="m-name">F、会员享受感恩日</view>
+					<view v-if="vipType == 4" class="m-describes">每周随机抽取一位会员，以其名义制定会员日的特价产品优惠，只有“千畦江湖”可参与抽取。感恩限购每人一套，选择2种产品组合套餐，自有品牌产品和名牌产品组合，组合为：欢乐家庭套装、关爱家庭套装、幸福家庭套装。</view>
 					<view v-if="vipType == 4" class="m-name">G、亲情伙伴</view>
 					<view v-if="vipType == 4" class="m-describes">可享受亲情相伴，邀请一名家属成为同级别会员，只有一个名额。</view>
 				</view>

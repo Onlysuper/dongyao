@@ -191,16 +191,16 @@
 						// 非会员
 						_this.isVip = false
 					}
-				
-				})
+				}).catch(err=>{
+				});
 			},
 			//签到信息
 			mySigns(){
 				let _this = this;
 				this.$apis.postMySign({}).then(res=>{
-						let data = res.data;
-						console.log(data)
-						this.signInfo = data;
+					let data = res.data;
+					console.log(data)
+					this.signInfo = data;
 				})
 			},
 			//签到
@@ -213,7 +213,8 @@
 					});
 					let data = res.data;
 					this.signInfo = data;
-				})
+				}).catch(err=>{
+				});
 			},
 			toDetail(){
 				uni.navigateTo({
