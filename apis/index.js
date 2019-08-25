@@ -15,6 +15,12 @@ export const postWxLogin = (data) => http.POST('https://dy.gantangerbus.com/da/a
 // 储存用户信息
 export const postWxUserInfo = (data) => http.POST('https://dy.gantangerbus.com/da/auth/wxUserInfo', data);
 
+// 获取用户信息
+export const postGetUserInfo = (data) => http.POST(`${baseUrl}/server/fu/info`, data);
+
+// 编辑用户信息
+export const postEditUser = (data) => http.POST(`${baseUrl}/server/fu/edit`, data);
+
 // 储存用户手机号
 export const postWxBindPhone = (data) => http.POST('https://dy.gantangerbus.com/da/auth/wxBindPhone', data);
 
