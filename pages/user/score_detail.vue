@@ -61,6 +61,7 @@
 			}
 		},
 		onLoad(options){
+			page = 1;
 			this.getScoreDetails();
 		},
 		onReachBottom(){

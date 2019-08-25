@@ -51,7 +51,7 @@
 				})
 			},
 			choseTokenFn(data){
-				console.log('优惠间id：'+data);
+				console.log('优惠券id：'+data);
 				Event.noticeFun(Event.UPDATA_TOKEN, {id:data});
 				uni.navigateBack({
 					delta:1

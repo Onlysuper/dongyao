@@ -41,7 +41,6 @@
 		},
 		methods: {
 			formSubmit(event){
-				debugger;
 				let data = event.detail.value;
 				if(data && data.name == "" && data.mobile == "" &&  data.address == ""){
 					uni.showToast({

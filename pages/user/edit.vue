@@ -5,21 +5,21 @@
                 <view class="m-row">
                     <view class="m-title">姓名</view>
                     <view class="m-input">
-                        <input class="uni-inpu" name="input" placeholder="姓名" />
+                        <input class="uni-inpu" name="realName" :value="realName" placeholder="姓名" />
                     </view>
                 </view>
 				<view class="m-row">
 				    <view class="m-title">昵称</view>
 				    <view class="m-input">
-				        <input class="uni-input" name="input" placeholder="昵称" />
+				        <input class="uni-input" name="nickname" :value="nickname" placeholder="昵称" />
 				    </view>
 				</view>
 				<view class="m-row">
 				    <view class="m-title">性别</view>
 				    <view class="m-input">
 						<radio-group @change="radioChange" class="m-sex">
-							<radio value="0" checked  /><view class="m-sex-man">男</view>
-							<radio value="1" /><view class="m-sex-woman">女</view>
+							<radio value="0" name="sex" :checked="sex_man" /><view class="m-sex-man">男</view>
+							<radio value="1" name="sex" :checked="sex_woman"/><view class="m-sex-woman">女</view>
 						 </radio-group>
 				    </view>
 				</view>
@@ -47,7 +47,13 @@
 			})
 			return {
 				title: 'picker',
-				date: currentDate
+				date: currentDate,
+				id:undefined,
+				realName:"",
+				nickname:"",
+				sex:undefined,
+				sex_man:false,
+				sex_woman:false
 			}
 		},
 		 computed: {
@@ -61,7 +67,54 @@
 		methods: {
 			bindDateChange: function(e) {
 				this.date = e.target.value
-			},			
+			},		
+				
+			//获取用户信息
+			getUserInfo(){
+				let _this = this;
+				this.$apis.postGetUserInfo({
+				}).then(res=>{
+					if(res.code == 1){
+						_this.id = res.data.id;
+						_this.realName = res.data.realName;
+						_this.nickname = res.data.nickname;
+						if(res.data.birthday){
+							_this.date = res.data.birthday;
+						}
+						if(res.data.sex == 1){
+							_this.sex_man = true;
+						}else{
+							_this.sex_woman = true;
+						}
+						
+					}
+				})
+			},
+			formSubmit(event){
+				let data = event.detail.value;
+				if(this.id){
+					data.id = this.id;
+					data.birthday = this.date;
+					this.$apis.postEditUser(
+						data
+					).then(res=>{
+						uni.showToast({
+							title: '编辑成功',
+							icon: 'none',
+							duration: 2000
+						});
+						uni.switchTab({
+							url: '/pages/tabBar/user'  
+						});  
+					}).catch(error=>{
+						uni.showToast({
+							title: '编辑失败',
+							icon: 'none',
+							duration: 2000
+						});
+					})
+				}
+			},
 			getDate(type) {
 				const date = new Date();
 				let year = date.getFullYear();
@@ -80,6 +133,9 @@
 			radioChange: function(evt) {
 				console.log(evt.target.value);
 			}
+		},
+		onLoad() {
+			this.getUserInfo();
 		}
 	}
 </script>

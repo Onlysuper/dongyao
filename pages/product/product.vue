@@ -45,7 +45,7 @@
 				</view>
 			</view>
 			<view class="btn">
-				<view v-if="isAssemble" class="joinCart" @tap="pintuan">我要拼</view>
+				<view v-if="isAssemble" class="joinCart" @tap="pintuan">成交</view>
 				<view v-else class="buy" @tap="buy">加入购物车</view>
 			</view>
 		</view>
@@ -113,7 +113,8 @@
 			</view>
 			<view class="price-box">
 				<view class="price">￥{{goodsData.presentPrice}}</view>
-				<view class="oldprice">￥{{goodsData.originalPrice}}</view>
+				<view class="oldprice">{{details.specs}}</view>
+				<!-- <view class="oldprice"></view> -->
 				<view class="num">
 					商品库存：{{goodsData.stock}}
 				</view>
@@ -161,7 +162,7 @@
 					</swiper-item>
 				</swiper>
 			</view>
-			<view class="user-list-box" v-if="pintuanData.length > 0 && pintuanData.length < 3">
+			<view class="user-list-box" v-else-if="pintuanData.length > 0 && pintuanData.length < 3">
 				<template v-for="(item, index) in pintuanData">
 					<view class="item-box"  :key="item.id">
 						<view class="img-box">
@@ -188,7 +189,7 @@
 		<!-- 评价 -->
 		<view v-if="commentData.length > 0" class="info-box comments" id="comments">
 			<view class="m-header">
-				<view class="m-label">
+				<view class="m-label" style="font-weight: bold">
 					商品评价
 				</view>
 				<view class="m-detail">
@@ -227,7 +228,7 @@
 			</view>
 		</view>
 		<view v-else class="info-box comments" id="comments">
-			<view class="m-label">
+			<view class="m-label" style="font-weight: bold; font-size: 32upx;">
 				商品评价
 			</view>
 			<view  class="empty-row">
@@ -236,7 +237,7 @@
 		</view>
 		<view class="info-box pro-detail">
 			<view class="m-header">
-				<view class="m-label">
+				<view class="m-label" style="font-weight: bold;">
 					商品介绍
 				</view>
 			</view>
@@ -262,7 +263,7 @@
 		<!-- 详情 -->
 		<view class="description">
 			<!-- <view class="title">———— 商品详情 ————</view> -->
-			<view class="content" style="padding: 20upx 0;text-align:center;">
+			<view class="" style="padding: 20upx 0;">
 				<rich-text :nodes="descriptionStr"></rich-text>
 			</view>
 		</view>
@@ -334,7 +335,7 @@ export default {
 		_this.showBack = false;
 		// #endif
 		//option为object类型，会序列化上个页面传递的参数
-		let id=option.id;
+		let id= parseInt(option.id);
 		// 商品基本信息
 		_this.$apis.postProducts({
 			id:id,
@@ -379,6 +380,14 @@ export default {
 		//切换层级
 		this.beforeHeaderzIndex = e.scrollTop > 0 ? 10 : 11;
 		this.afterHeaderzIndex = e.scrollTop > 0 ? 11 : 10;
+	},
+	onShareAppMessage(res) {
+	    if (res.from === 'button') {// 来自页面内分享按钮
+	    }
+	    return {
+	      title: this.goodsData.synopsis,
+	      path:"/pages/product/product?id="+this.productId
+	    }
 	},
 	methods: {
 		goHome(){
@@ -851,15 +860,16 @@ page {
 
 .goods-info {
 	.title {
-		font-size: $fontsize-2;
+		font-size: $fontsize-1;
 		color:$color-2;
+		font-weight: bold;
 	}
 	.tip-box{
 		margin-top: 10upx;
 		display: flex;
 		flex-direction:row;
 		color:$color-5;
-		font-size: $fontsize-3;
+		font-size: 28upx;
 		.item{
 			display: inline-block;
 			padding-right: 30upx;
@@ -878,14 +888,14 @@ page {
 		}
 		.oldprice{
 			display: inline-block;
-			margin-left: 20upx;
+			margin-left: 12upx;
 			font-size: $fontsize-5;
-			color:$color-6;
+			color:#2C405A;
 		}
 		.num{
 			display: inline-block;
-			margin-left:30upx;
-			padding-left: 20upx;
+			margin-left:12upx;
+			padding-left: 12upx;
 			font-size: $fontsize-5;
 			border-left: 1px solid $color-3;
 		}
@@ -950,6 +960,7 @@ page {
 	.m-row{
 		display: flex;
 		flex-direction: row;
+		margin-bottom: 18rpx;
 		.m-cell{
 			flex: 1;
 			font-size: $fontsize-9;

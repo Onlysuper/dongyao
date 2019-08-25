@@ -197,6 +197,14 @@
 		},
 		computed:{
 		},
+		onShareAppMessage(res) {
+		    if (res.from === 'button') {// 来自页面内分享按钮
+		    }
+		    return {
+		      title: this.storeData.name,
+		      path:"/pages/store/store?storeid="+this.storeid
+		    }
+		},
 		methods:{
 // 			isAdd(id){
 // 				let _index = this.shopCarList.findIndex(item=>item.id==id);
@@ -294,7 +302,7 @@
 			
 			//分类切换显示
 			showCategory(){
-				console.log('切换');
+				console.log('切换',page);
 				uni.showLoading({
 					title: '加载中'
 				});
@@ -791,7 +799,8 @@
 						font-size: 28upx;
 						display: flex;
 						justify-content: center;
-						color:#999999;
+						color:#2F4F4F;
+						font-weight:700;
 						.block{
 							position: absolute;
 							width: 0upx;

@@ -108,6 +108,8 @@
 						if(_this.vipInfo.type == temps[i].type){
 							info.currentLevel = _this.vipInfo.grade;
 							info.current = 1;
+							_this.vipName = temps[i].type;
+							_this.vipType = temps[i].type;
 						}else if(_this.vipInfo.type > temps[i].type){
 							info.currentLevel = info.childs.length;
 							info.current = 0;
@@ -138,8 +140,9 @@
 					console.log(tempLst);
 					_this.members = tempLst;
 					_this.vipDescribes = _this.members[0].describes;
-					_this.vipName = _this.members[0].type;
-					
+					if(_this.vipName == ""){
+						_this.vipName = _this.members[0].type;
+					}
 				})
 			},
 			// 选择会员卡
@@ -228,8 +231,6 @@
 				this.myVips();
 
 				this.getVips();
-				
-				
 			}
 		},
 		onLoad(options){

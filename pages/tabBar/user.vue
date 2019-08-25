@@ -2,8 +2,13 @@
 	<view class="m-user-page">
 		<view class="m-header">
 			<view v-if="isLogin" class="m-user" @tap="toVip">
-				<view class="m-img" @tap.stop="toUserEdit">
-					<image style="width:100%;height:100%" :src="userData.avatarUrl" mode="aspectFit"></image>
+				<view>
+					<view class="m-img" @tap.stop="toUserEdit">
+						<image style="width:100%;height:100%" :src="userData.avatarUrl" mode="aspectFit"></image>
+					</view>
+					<view class="m-info" @tap.stop="toUserEdit">
+						完善资料
+					</view>
 				</view>
 				<view class="m-text">
 					<view class="m-member">
@@ -42,6 +47,7 @@
 						</view>
 						<view class="m-icon" v-else>
 						</view>
+						<view class="m-img1"> &GT; </view>
 					</view>
 					<view class="m-nickname">
 						{{userData.nickName}}
@@ -76,12 +82,12 @@
 					</view>
 				</view>
 			</view>
-			<view class="m-jifen" >
+			<view class="m-jifen" @tap="toDetail">
 				<view class="m-left">
 					<view class="m-text">积分</view>
 					<view class="m-num">{{signInfo.curIntegration}}</view>
 				</view>
-				<view class="m-right" @tap="toDetail">
+				<view class="m-right" >
 					<view class="m-text">积分明细</view>
 					<view class="m-img">
 						<image src="../../static/img/icon/order_down_icon1.png" mode="aspectFit"></image>
@@ -302,7 +308,7 @@
 			display:flex;
 			padding: 52upx 30upx 42upx;
 			justify-items: flex-start;
-			align-items: center;
+			align-items: flex-start;
 			.m-img{
 				margin-left: 10upx;
 				width: 92upx;
@@ -312,11 +318,19 @@
 				background: #fff;
 				
 			}
+			.m-info{
+				font-size: 24upx;
+				color: #333333;
+				margin: 5upx;
+				padding: 5upx 10upx;
+				background: #F6F6F6;
+				border-radius: 15upx;
+			}
 			.m-text{
 				flex: 1;
 				font-size: 36upx;
 				color:#fff;
-				margin-left: 10upx;
+				// margin-left: 10upx;
 				display: flex;
 				flex-direction: column;
 				.m-username{
@@ -341,6 +355,16 @@
 						display: flex;
 						align-items: center;
 						align-content: center;
+						height: 30upx;
+						
+					}
+					.m-img1{
+						display: flex;
+						flex-direction: row;
+						align-items: center;
+						width:13upx;
+						height: 30upx;
+						margin-left: 10upx;
 					}
 					.m-item{
 						width:30upx;
@@ -373,7 +397,7 @@
 					.m-num{
 						color: #f9ad39;
 						margin-top: 8upx;
-						margin-right: 8upx;
+						margin: 0upx 5upx;
 						font-size: 36upx;
 					}
 				}

@@ -166,6 +166,7 @@
 			<!-- 订单操作 -->
 			<view class="m-order-opt">
 				<view class="m-delete" v-if="state==2||state==3||state==4||state==5||state==6||state==9" @tap="orderDel">删除订单</view>
+				<view class="m-return-des" @tap="toReturnExplain">退货说明</view>
 				<view class="m-cancel" v-if="state==1||state==7" @tap="orderCancel">申请退款</view>
 			</view>
 			
@@ -239,6 +240,11 @@
 					this.carryType = this.order.carryType
 				}).catch(err=>{
 					console.log(err)
+				})
+			},
+			toReturnExplain(){
+				uni.navigateTo({
+					url:"/pages/order/return_explain"
 				})
 			},
 			//确认收获
@@ -650,6 +656,11 @@
 			padding:15rpx 15upx;
 			text-align:center;
 			line-height:30upx;
+		}
+		.m-return-des{
+			color: #A7A7A7;
+			font-size: 26upx;
+			margin-right: 10upx;
 		}
 		.m-cancel{
 			color:white;

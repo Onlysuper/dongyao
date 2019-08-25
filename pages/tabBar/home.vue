@@ -22,28 +22,53 @@
 			<uni-swiper-dot :info="swiperList" :current="current" field="content" :mode="mode">
 				<swiper class="swiper-box" @change="change" :autoplay="true" :indicator-dots="false" :interval="3000" :duration="500" :circular="true">
 					<swiper-item v-for="(item, index) in swiperList" :key="index">
-						<view class="swiper-item"><image :src="item.imgUrl" @tap="swiperChange(index)"></image></view>
+						<view class="swiper-item"><image :src="item.imgUrl" @tap="swiperChange(item)"></image></view>
 					</swiper-item>
 				</swiper>
 			</uni-swiper-dot>
 		</view>
-		<!-- 净购热卖 -->
-		<view class="m-container">
-			<m-title title="净菜购买" labelColor="#666666" label="换一换" @titleHandle="getJcsellList">
-				<image style="width:30upx;height:20upx;margin-right:10upx;" src="../../static/img/icon/home_icon_refresh.png" mode="aspectFit"></image>
-			</m-title>
-			<view v-if="jcProList.length > 0" class="m-content m-hotsell">
-				<template v-for="(item, index) in jcProList">
-					<m-home-jinmai @handleFn="hotProDetail(item)" :key="index" :rowData="item"></m-home-jinmai>
-				</template>
+		<view class="my-swiper">
+			<swiper  style="height: 35px;" :display-multiple-items='1' :indicator-dots="false" circular="true" autoplay="true" interval="1500" duration="500" vertical="false">
+				<swiper-item v-for="(item, index) in pintuanData" :key="item.id">
+					<view class="m-swiper-content">
+						<view class="body-box">
+							{{item.nickname}}
+						</view>
+						<view class="body-box">
+							{{item.pickingTime}}
+						</view>
+						<view class="body-box">
+							预购了
+						</view>
+						<view class="body-box" style="flex-grow: 1;">
+							{{item.pName}}
+						</view>
+					</view>
+				</swiper-item>
+			</swiper>
+		</view>
+		<!-- 净菜购买 -->
+		<view class="m-container new-pin">
+			<view class="m-header" style="background: url('https://dongyaoxiaoxiaochegnxu.oss-cn-beijing.aliyuncs.com/jincai.jpg') center;">
+				<view  style="font-weight: bold;color: #228B22;">还原自然味道</view>
+				<view class="text-small"></view>
+			</view>
+			<view v-if="jcProList.length > 0" class="m-content .m-chaozhi">
+				<scroll-view class="scroll-view" scroll-x="true" @scrolltolower="nextNexList">
+					<view class="m-togethoer">
+						<template v-for="(item, index) in jcProList">
+							<m-home-hotpro @handleFn="hotProDetail(item)" :key="index" :rowData="item"></m-home-hotpro>
+						</template>
+					</view>
+				</scroll-view>
 			</view>
 			<view v-else class="empty-row">~暂无商品~</view>
 		</view>
 		<view class="m-container new-pin">
 			<view class="m-header" style="background: url('https://dongyaoxiaoxiaochegnxu.oss-cn-beijing.aliyuncs.com/css/home_list_bg.png') center;">
-				<view class="">今日必拼</view>
+				<view  style="font-weight: bold;">时令优品预选</view>
 				|
-				<view class="text-small">拼着买更新鲜</view>
+				<view class="text-small">地理标识 应季水果产地直供到家</view>
 			</view>
 			<view class="m-container">
 				<view class="m-together">
@@ -61,18 +86,20 @@
 				</view>
 			</view>
 		</view>
-
 		<!-- 超值热卖 -->
-		<view class="m-container">
-			<m-title title="超值热卖" label="" ></m-title>
-			<view v-if="hotProList.length > 0" class="m-content .m-chaozhi">
-				<scroll-view class="scroll-view" scroll-x="true" @scrolltolower="nextHotList">
-					<view class="m-togethoer">
-						<template v-for="(item, index) in hotProList">
-							<m-home-hotpro @handleFn="hotProDetail(item)" :key="index" :rowData="item"></m-home-hotpro>
-						</template>
-					</view>
-				</scroll-view>
+		<view class="m-container new-pin">
+			<!-- <m-title title="极致好货抢先购" labelColor="#666666" label="换一换" @titleHandle="getHotsellList">
+				<image style="width:30upx;height:20upx;margin-right:10upx;" src="../../static/img/icon/home_icon_refresh.png" mode="aspectFit"></image>
+			</m-title> -->
+			<view class="m-header" style="background: url('https://dongyaoxiaoxiaochegnxu.oss-cn-beijing.aliyuncs.com/chaozhi.jpg') center;">
+				<view  style="font-weight: bold;color:#8A2BE2;">极致好货抢先购</view>
+				<!-- | -->
+				<view class="text-small"></view>
+			</view>
+			<view v-if="hotProList.length > 0" class="m-content m-hotsell">
+				<template v-for="(item, index) in hotProList">
+					<m-home-jinmai @handleFn="hotProDetail(item)" :key="index" :rowData="item"></m-home-jinmai>
+				</template>
 			</view>
 			<view v-else class="empty-row">~暂无商品~</view>
 		</view>
@@ -117,7 +144,8 @@ export default {
 			// 拼团列表
 			groupsellList: [],
 			// 附近门店
-			nearStoreList: []
+			nearStoreList: [],
+			pintuanData:{}
 		};
 	},
 	components: {
@@ -137,6 +165,18 @@ export default {
 		toSearch() {
 			this.linkTo('/pages/product/productlist?search=' + this.searchValue);
 		},
+		// 拼团用户列表
+		getPintuanUsers(){
+			let _this = this;
+			this.$apis.postGroupBuyUsers({
+				start:0,
+				length:100
+			}).then(res=>{
+				if(res.data){
+					_this.pintuanData=res.data.list;
+				}
+			})
+		},
 		// banner图片
 		getBanners() {
 			this.$apis
@@ -149,25 +189,34 @@ export default {
 				});
 		},
 		//净菜列表
-		getJcsellList() {
+		getJcsellList(page) {
+			uni.showLoading({
+				title: '加载中'
+			});
 			this.$apis
 				.postJCProduct({
-					start: this.jcsellPage,
-					length: 6
+					start: page,
+					length: 20
 				})
 				.then(res => {
 					if (res.data) {
 						let data = res.data;
-						this.jcProList = data.list;
+						this.jcProList = this.jcProList.concat(data.list);
 						this.jcsellPage = data.nextPage;
+						if(data.nextPage == data.page){
+							this.jcsellPage = 1;
+							this.jcProList=[];
+						}
 					}
+					 uni.hideLoading();
 				})
 				.catch(err => {
 					console.log(err);
+					 uni.hideLoading();
 				});
 		},
-		nextHotList(){
-			this.getHotsellList(this.hotsellPage);
+		nextNexList(){
+			// this.getJcsellList(this.jcsellPage);
 		},
 		upHotList(){
 			let tPage =  this.hotsellPage-1;
@@ -181,24 +230,20 @@ export default {
 			this.lowerThreshold =  event.detail.scrollWidth;
 		},
 		//热卖列表
-		getHotsellList(page) {
+		getHotsellList() {
 			uni.showLoading({
 				title: '加载中'
 			});
 			this.$apis
 				.postHotProduct({
-					start: page,
+					start: this.hotsellPage,
 					length: 6
 				})
 				.then(res => {
 					if (res.data) {
 						let data = res.data;
-						this.hotProList = this.hotProList.concat(data.list);
+						this.hotProList = data.list;
 						this.hotsellPage = data.nextPage;
-						if(data.nextPage == data.page){
-							this.hotsellPage = 1;
-							this.hotProList=[];
-						}
 					}
 					 uni.hideLoading();
 				})
@@ -262,9 +307,12 @@ export default {
 		storeDetail(id) {
 			this.linkTo('/pages/store/store?storeid=' + id);
 		},
-		swiperChange(e) {
-			this.current = e;
-			this.current = e.detail.current;
+		swiperChange(item) {
+			this.current = item;
+			if(item.forwardUrl){
+				this.linkTo('/pages/product/product?id=' + item.forwardUrl);
+			}
+			// this.current = e.detail.current;
 		},
 		// 拼团
 		pintuanHandle() {
@@ -288,6 +336,14 @@ export default {
 			}
 		}
 	},
+	onShareAppMessage(res) {
+	    if (res.from === 'button') {// 来自页面内分享按钮
+	    }
+	    return {
+	      title: '千畦优品首页',
+	      path: '/pages/tabBar/home'
+	    }
+	},
 	onLoad() {
 		let _this = this;
 		uni.getLocation({
@@ -298,9 +354,10 @@ export default {
 			}
 		});
 		this.getBanners();
-		this.getHotsellList(1);
-		this.getJcsellList();
+		this.getHotsellList();
+		this.getJcsellList(1);
 		this.getGroupsellList();
+		this.getPintuanUsers();
 	},
 	onPullDownRefresh() {
 		let _this = this;
@@ -311,10 +368,24 @@ export default {
 
 <style lang="scss">
 @import '../../common/globel.scss';
+.my-swiper{
+	padding: 20upx;
+	height: 55upx;
+	color: red;
+	font-size: 28upx;
+	line-height: 80upx;
+	.m-swiper-content{
+		display: flex;
+		flex-direction: row;
+		.body-box{
+			margin-right: 10upx;
+		}
+	}
+}
 .new-pin {
 	// display: flex;
-	border-radius: 20rpx;
-	margin: 0 20upx;
+	border-radius: 20upx;
+	margin: 20upx 20upx;
 	box-shadow: 0px 0px 10px #eee;
 	overflow: hidden;
 	.m-header {
@@ -741,6 +812,7 @@ export default {
 		display: flex;
 		flex-wrap: wrap;
 		flex-direction: row;
+		justify-content:space-between;
 		margin-left: 0;
 		width: 100%;
 	}
@@ -757,11 +829,11 @@ export default {
 		display: flex;
 		flex-wrap: wrap;
 		flex-direction: row;
-		background: #f5f5f5;
+		// background: #f5f5f5;
 		justify-content: space-between;
 		align-items: center;
-		padding: 15upx;
-		// padding-top: 15upx;
+		padding:20upx 0upx;
+		padding-top: 0upx;
 	}
 	// 	&.m-today-pin{
 	// 		padding-left: 20upx;
