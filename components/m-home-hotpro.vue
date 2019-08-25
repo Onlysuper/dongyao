@@ -5,13 +5,14 @@
 			<view class="m-img" >
 				<image style="width: 100%;height: 100%;" :src="rowData.pictureUrl" mode="aspectFit"></image>
 			</view>
+			<view class="m-pro-back"></view>
 			<view class="m-pro">
 				<view class="m-title">
 					{{rowData.synopsis}}
 				</view>
 				<view class="m-price">
-					<view class="new">{{rowData.presentPrice}}</view>
-					<view class="old">{{rowData.originalPrice}}</view>
+					<view class="new">￥{{rowData.presentPrice}}</view>
+					<!-- <view class="old">{{rowData.originalPrice}}</view> -->
 				</view>
 			</view>
 		</view>
@@ -68,45 +69,70 @@
 		position: relative;
 		z-index: 10;
 		width: 100%;
-		padding: 20upx; 
+		padding: 20upx 10upx; 
 		// height: 225upx;
+		.m-pro-back{
+			width: 91%;
+			height: 100upx;
+			opacity: 0.3;
+			background-color: #000000;
+			position: absolute;
+			z-index: 11;
+			bottom: 20upx;
+		}
+		.m-pro{
+			width: 91%;
+			height: 100upx;
+			position: absolute;
+			z-index: 12;
+			bottom: 20upx;
+			color: #FFFFFF;
+			padding: 15upx;
+		}
 	}
-	::before{
-		content: "";
-		display: block;
-		position: absolute;
-		left:0px;
-		right: 2px;
-		top: 1px;
-		bottom: 1px;
-		box-sizing: border-box;
-		box-shadow: 0px 0px 3px rgba(241,241,241,0.6);
-		z-index: 1;
-		border-radius: 12upx;
-		// box-shadow: 0px 1px 3px rgba(247,247,247,1);
-	}
+	// ::before{
+	// 	content: "";
+	// 	display: block;
+	// 	position: absolute;
+	// 	left:0px;
+	// 	right: 2px;
+	// 	top: 1px;
+	// 	bottom: 1px;
+	// 	box-sizing: border-box;
+	// 	box-shadow: 0px 0px 3px rgba(241,241,241,0.6);
+	// 	z-index: 1;
+	// 	border-radius: 12upx;
+	// 	// box-shadow: 0px 1px 3px rgba(247,247,247,1);
+	// }
 	.m-img{
 		box-sizing: border-box;
-		flex:0 0 170upx;
-		height: 170upx;
+		flex:0 0 235upx;
+		height: 235upx;
+		image{
+			border-radius: 12upx;
+		}
 		// background:#eee;
 	}
 	.m-title{
 		font-size: $fontsize-9;
 		// font-size: 20upx;
-		color:#4c4c4c;
+		// color:#4c4c4c;
 		margin-top: 20upx;
 		overflow: hidden;
-	  text-overflow: ellipsis;
-	  display: -webkit-box;
-	  -webkit-line-clamp: 1;
-	  -webkit-box-orient: vertical;
+	    text-overflow: ellipsis;
+	    display: -webkit-box;
+	    -webkit-line-clamp: 1;
+	    -webkit-box-orient: vertical;
 	}
 	.m-price{
 		display: flex;
 		margin-top: 10upx;
 		justify-content: flex-start;
 		align-items: center;
+		background-color:#242424;
+		border-radius:25upx;
+		opacity: 0.7;
+		width:85%;
 		.new{
 			font-size: 28upx;
 			font-weight: bold;
@@ -115,7 +141,7 @@
 		.old{
 			font-size: 22upx;
 			margin-left: 10upx;
-			color:#b2b2b2;
+			// color:#b2b2b2;
 			text-decoration: line-through
 		}
 	}

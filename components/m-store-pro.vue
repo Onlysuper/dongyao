@@ -2,7 +2,7 @@
 	<!-- 门店商品图文 -->
 	<view class="m-store-item">
 		<view class="m-img" @tap="proDetail">
-			<image style="width: 100%;height: 100%;border-radius: 100%;" :src="pictureUrl" mode="aspectFill"></image>
+			<image style="width: 100%;height: 100%;" :src="pictureUrl" mode="aspectFill"></image>
 			<view v-if="isAssemble==1" class="m-pin">
 				拼团商品
 			</view>
@@ -19,10 +19,10 @@
 			</view>
 			<view @tap="proDetail" class="m-old-price">
 				<view class="">
-					非会员价
+					<!-- 非会员价 -->
 				</view>
 				<view class="m-num">
-					{{originalPrice}}
+					<!-- {{originalPrice}} -->
 				</view>
 			</view>
 		</view>
@@ -53,7 +53,7 @@
 				type:[String,Number],
 				default:""
 			},
-			labelNames:{
+			labelName:{
 				type:[String,Number],
 				default:""
 			},

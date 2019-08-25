@@ -5,7 +5,7 @@
 			<view class="m-title">
 				{{title}}
 				<view class="m-time">
-					{{createTime}}
+					<!-- {{createTime}} -->
 				</view>
 			</view>
 			<view style="color:#ee6641" v-if="status==1">
@@ -92,15 +92,15 @@
 						立即付款
 					</view>
 					<view  class="but m-delete" @tap="orderDel" >
-						删除订单
+						删除
 					</view>
 				</view>
 				<view  v-else-if="status==3">
 					<view @tap="commentGood" class="but" style="color:#32CD32;border:1px solid #32CD32;margin-left: 10upx;">
-						评论一下
+						评论
 					</view>
 					<view @tap="orderDel" class="but m-delete" >
-						删除订单
+						删除
 					</view>
 				</view>
 				<view  v-else-if="status==7">
@@ -115,7 +115,7 @@
 				</view>
 				<view  v-else-if="status== 4 || status== 5 || status==6 || status==9">
 					<view @tap="orderDel" class="but m-delete" >
-						删除订单
+						删除
 					</view>
 				</view>
 			</view>
@@ -193,6 +193,7 @@
 		},
 		computed:{
 			productListNew(){
+				// console.log(this.productList.slice(0,4))
 				return this.productList.slice(0,4);
 			}
 		},

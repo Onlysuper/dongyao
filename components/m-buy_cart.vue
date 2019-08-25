@@ -86,8 +86,9 @@
 									buyCount:0
 								}).then(res=>{
 									if(res.code=='1'){
+										rowData.totalPrice-=item.presentPrice;
 										rowData.productList.splice(index,1);
-										this.$emit("totalPrice",true);
+										that.$emit("totalPrice",true);
 									}
 								})
 							} else if (res.cancel) {
@@ -95,20 +96,22 @@
 						}
 					});
 				}else{
-					this.$apis.postSubCars({
+					that.$apis.postSubCars({
 						storeId:item.storeId,
 						productId:item.id,
 						buyCount:item.buyCount-1
 					}).then(res=>{
 						if(res.code=='1'){
 							item.buyCount-=1;
-							this.$emit("totalPrice",true);
+							rowData.totalPrice-=item.presentPrice;
+							that.$emit("totalPrice",true);
 						}
 					})
 				}
 				
 			},
 			handAddFn(item,rowData){
+				var this_ = this;
 				this.$apis.postAddCars({
 					storeId:item.storeId,
 					productId:item.id,
@@ -116,7 +119,8 @@
 				}).then(res=>{
 					if(res.code=='1'){
 						item.buyCount+=1;
-						this.$emit("totalPrice",true);
+						rowData.totalPrice+=item.presentPrice;
+						this_.$emit("totalPrice",true);
 					}
 				})
 			},

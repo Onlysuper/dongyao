@@ -6,11 +6,11 @@
 				<image style="width: 100%;height: 100%;" :src="rowData.pictureUrl" mode="aspectFull"></image>
 			</view>
 			<view class="m-pro">
-				<!-- <view class="m-title">
+				<view class="m-title">
 					{{rowData.synopsis}}
-				</view> -->
+				</view>
 				<view class="m-price">
-					<view class="new">{{rowData.presentPrice}}</view>
+					<view class="new">￥{{rowData.presentPrice}}</view>
 					<!-- <view class="old">{{rowData.originalPrice}}</view> -->
 				</view>
 			</view>
@@ -99,7 +99,7 @@
 		height: 150upx;
 		// background:#eee;
 		image{
-			border-radius: 100%;
+			// border-radius: 100%;
 		}
 	}
 	.m-title{
@@ -108,10 +108,10 @@
 		color:#4c4c4c;
 		margin-top: 20upx;
 		overflow: hidden;
-	  text-overflow: ellipsis;
-	  display: -webkit-box;
-	  -webkit-line-clamp: 1;
-	  -webkit-box-orient: vertical;
+		text-overflow: ellipsis;
+		display: -webkit-box;
+		-webkit-line-clamp: 1;
+		-webkit-box-orient: vertical;
 	}
 	.m-price{
 		display: flex;

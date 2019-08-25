@@ -3,15 +3,15 @@
 	<view class="m-jinmai-item">
 		<view @tap="handleFn" class="m-content">
 			<view class="m-img" >
-				<image :src="rowData.pictureUrl" mode="aspectFull"></image>
+				<image :src="rowData.pictureUrl" mode="aspectFit"></image>
 			</view>
 			<view class="m-pro">
 				<view class="m-title">
 					{{rowData.synopsis}}
 				</view>
 				<view class="m-price">
-					<view class="new">{{rowData.presentPrice}}</view>
-					<view class="old">{{rowData.originalPrice}}</view>
+					<view class="new">￥{{rowData.presentPrice}}</view>
+					<!-- <view class="old">{{rowData.originalPrice}}</view> -->
 				</view>
 			</view>
 		</view>
@@ -49,14 +49,14 @@
 @import "../common/globel.scss";
 .m-jinmai-item{
 	flex-direction: column;
-	margin-left: 10upx;
+	// margin-left: 10upx;
 	margin-right: 0upx;
 	margin-bottom: 30upx;
 	// box-shadow: 0px 1px 3px rgba(0,0,0,0.2);
 	
 	box-sizing: border-box;
 	border-radius: 12upx;
-	flex:0 0 225upx;
+	// flex:0 0 200upx;
 	margin-top: 2px;
 	box-sizing: border-box;
 	position: relative;
@@ -69,6 +69,8 @@
 		z-index: 10;
 		width: 100%;
 		padding: 20upx; 
+		// border: 1upx solid #EEEEEE;
+		border-radius: 10rpx;
 		// height: 225upx;
 	}
 // 	::before{
@@ -90,7 +92,7 @@
 		flex:0 0 170upx;
 		height: 170upx;
 		image{
-			border-radius: 100%;
+			// border-radius: 100%;
 			height: 170upx;
 			width:170upx
 		}
@@ -102,10 +104,10 @@
 		color:#4c4c4c;
 		margin-top: 20upx;
 		overflow: hidden;
-	  text-overflow: ellipsis;
-	  display: -webkit-box;
-	  -webkit-line-clamp: 1;
-	  -webkit-box-orient: vertical;
+		text-overflow: ellipsis;
+		display: -webkit-box;
+		-webkit-line-clamp: 1;
+		-webkit-box-orient: vertical;
 	}
 	.m-price{
 		display: flex;
