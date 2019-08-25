@@ -13,6 +13,7 @@
                     "titleNView" : false, //禁用原生导航栏
                     "softinputNavBar" : "none"
                 }
+				
             }
         },
         {
@@ -287,6 +288,10 @@
         }
         ,{
             "path" : "pages/user/strategy",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/order/return_explain",
             "style" : {}
         }
     ],
