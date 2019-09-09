@@ -51,10 +51,12 @@
 		<view class="m-container new-pin">
 			<view class="m-header" style="background: url('https://dongyaoxiaoxiaochegnxu.oss-cn-beijing.aliyuncs.com/jincai.jpg') center;">
 				<view  style="font-weight: bold;color: #228B22;">还原自然味道</view>
-				<view class="text-small"></view>
+				<view class="text-small" style="color: #228B22;" @tap="nextNexList">
+					<view class="text-btn">换一换</view>
+				</view>
 			</view>
 			<view v-if="jcProList.length > 0" class="m-content .m-chaozhi">
-				<scroll-view class="scroll-view" scroll-x="true" @scrolltolower="nextNexList">
+				<scroll-view class="scroll-view" scroll-x="true" @scrolltolower="">
 					<view class="m-togethoer">
 						<template v-for="(item, index) in jcProList">
 							<m-home-hotpro @handleFn="hotProDetail(item)" :key="index" :rowData="item"></m-home-hotpro>
@@ -65,7 +67,7 @@
 			<view v-else class="empty-row">~暂无商品~</view>
 		</view>
 		<view class="m-container new-pin">
-			<view class="m-header" style="background: url('https://dongyaoxiaoxiaochegnxu.oss-cn-beijing.aliyuncs.com/css/home_list_bg.png') center;">
+			<view class="m-header" style="background: url('https://dongyaoxiaoxiaochegnxu.oss-cn-beijing.aliyuncs.com/css/home_list_bg.png') center;justify-content: flex-start;">
 				<view  style="font-weight: bold;">时令优品预选</view>
 				|
 				<view class="text-small">地理标识 应季水果产地直供到家</view>
@@ -94,7 +96,9 @@
 			<view class="m-header" style="background: url('https://dongyaoxiaoxiaochegnxu.oss-cn-beijing.aliyuncs.com/chaozhi.jpg') center;">
 				<view  style="font-weight: bold;color:#8A2BE2;">极致好货抢先购</view>
 				<!-- | -->
-				<view class="text-small"></view>
+				<view class="text-small" style="color: #8A2BE2;" @tap="getHotsellList">
+					<view class="text-btn">换一换</view>
+				</view>
 			</view>
 			<view v-if="hotProList.length > 0" class="m-content m-hotsell">
 				<template v-for="(item, index) in hotProList">
@@ -145,7 +149,9 @@ export default {
 			groupsellList: [],
 			// 附近门店
 			nearStoreList: [],
-			pintuanData:{}
+			pintuanData:{},
+			myLat:"",
+			myLng:""
 		};
 	},
 	components: {
@@ -193,10 +199,13 @@ export default {
 			uni.showLoading({
 				title: '加载中'
 			});
+			let _this = this;
 			this.$apis
 				.postJCProduct({
 					start: page,
-					length: 20
+					length: 20,
+					lng:_this.myLng,
+					lat:_this.myLat
 				})
 				.then(res => {
 					if (res.data) {
@@ -216,7 +225,7 @@ export default {
 				});
 		},
 		nextNexList(){
-			// this.getJcsellList(this.jcsellPage);
+			 this.getJcsellList(this.jcsellPage++);
 		},
 		upHotList(){
 			let tPage =  this.hotsellPage-1;
@@ -234,10 +243,13 @@ export default {
 			uni.showLoading({
 				title: '加载中'
 			});
+			let _this = this;
 			this.$apis
 				.postHotProduct({
 					start: this.hotsellPage,
-					length: 6
+					length: 6,
+					lng:_this.myLng,
+					lat:_this.myLat
 				})
 				.then(res => {
 					if (res.data) {
@@ -257,7 +269,9 @@ export default {
 			this.$apis
 				.postGroupProducts({
 					start: this.hotsellPage,
-					length: 3
+					length: 3,
+					lng:_this.myLng,
+					lat:_this.myLat
 				})
 				.then(res => {
 					console.log(res);
@@ -316,7 +330,7 @@ export default {
 		},
 		// 拼团
 		pintuanHandle() {
-			this.linkTo('/pages/groupbuy/groupbuy');
+			this.linkTo('/pages/groupbuy/groupbuy?lng='+this.myLng+'&lat='+this.myLat);
 		},
 		//附近门店
 		storeHandle() {
@@ -350,14 +364,21 @@ export default {
 			//获取当前的位置坐标
 			type: 'wgs84',
 			success: function(res) {
-				_this.getStoreList(res.longitude, res.latitude);
+				_this.getStoreList(res.longitude, res.latitude);	
+				_this.myLng = res.longitude;
+				_this.myLat = res.latitude;
+				_this.getHotsellList();
+				_this.getJcsellList(1);
+				_this.getGroupsellList();
 			}
 		});
 		this.getBanners();
-		this.getHotsellList();
-		this.getJcsellList(1);
-		this.getGroupsellList();
 		this.getPintuanUsers();
+		// this.getHotsellList();
+		// this.getJcsellList(1);
+		// this.getGroupsellList();
+			
+		
 	},
 	onPullDownRefresh() {
 		let _this = this;
@@ -396,12 +417,19 @@ export default {
 		// background:#3c3c3c;
 		background-size: cover;
 		align-items: center;
+		justify-content: space-between;
 		// padding: 20upx;
 		view {
 			padding: 20upx;
 		}
 		.text-small {
-			font-size: 24upx;
+			font-size: 30upx;
+			.text-btn{
+				border: 0.5px solid #8A2BE2;
+				background-color: #FFFFFF;
+				border-radius: 25px 8px;
+				padding: 5px 10px;
+			}
 		}
 	}
 	.m-container {

@@ -18,8 +18,8 @@
 				    <view class="m-title">性别</view>
 				    <view class="m-input">
 						<radio-group @change="radioChange" class="m-sex">
-							<radio value="0" name="sex" :checked="sex_man" /><view class="m-sex-man">男</view>
-							<radio value="1" name="sex" :checked="sex_woman"/><view class="m-sex-woman">女</view>
+							<radio value="1" name="sex" :checked="sex_man" /><view class="m-sex-man">男</view>
+							<radio value="2" name="sex" :checked="sex_woman"/><view class="m-sex-woman">女</view>
 						 </radio-group>
 				    </view>
 				</view>
@@ -53,7 +53,8 @@
 				nickname:"",
 				sex:undefined,
 				sex_man:false,
-				sex_woman:false
+				sex_woman:false,
+				userInfo:{}
 			}
 		},
 		 computed: {
@@ -86,17 +87,20 @@
 						}else{
 							_this.sex_woman = true;
 						}
-						
+						_this.userInfo = res.data;
 					}
 				})
 			},
 			formSubmit(event){
 				let data = event.detail.value;
 				if(this.id){
-					data.id = this.id;
-					data.birthday = this.date;
+					this.userInfo.birthday =  this.date;
+					this.userInfo.realName = data.realName;
+					this.userInfo.nickname = data.nickname;
+					this.userInfo.sex = this.sex;
+					var _this = this;
 					this.$apis.postEditUser(
-						data
+						_this.userInfo
 					).then(res=>{
 						uni.showToast({
 							title: '编辑成功',
@@ -131,7 +135,8 @@
 				return `${year}-${month}-${day}`;
 			},
 			radioChange: function(evt) {
-				console.log(evt.target.value);
+				this.sex = evt.target.value;
+				console.log(this.sex)
 			}
 		},
 		onLoad() {

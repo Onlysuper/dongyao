@@ -33,7 +33,9 @@
 			return {
 				// 附近门店
 				groupsellList:[],
-				mloading:'more'
+				mloading:'more',
+				myLat:"",
+				myLng:""
 			}
 		},
 		components: {
@@ -54,6 +56,8 @@
 					start:page,
 					length:20,
 					isAssemble:1,
+					lng:this.myLng,
+					lat:this.myLat
 				}).then(res=>{
 						if(res.data){
 							let data = res.data;
@@ -85,7 +89,9 @@
 			this.groupsellList =[];
 			this.getGroupsellList();
 		},
-		onLoad(){
+		onLoad(option){
+			this.myLng = option.lng;
+			this.myLat = option.lat;
 			page = 1;
 			groupsellList:[];
 			this.getGroupsellList();

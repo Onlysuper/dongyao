@@ -20,7 +20,7 @@
 					</view>
 					<textarea @input="textAreaChange($event,proIndex)" class="m-textarea" placeholder-style="color:$color-2" placeholder="产品你还满意吗？有什么想对我们说的吗？让更多人知道吧"/>
 				</view>
-				<view class="m-img">
+				<!-- <view class="m-img">
 					<view v-for="(item,index) in imgsUrl[proIndex]" :key="index" class="m-img-item">
 						<image style="width:120upx;height:120upx"  :src="item" mode="" @tap="handleImagePreview(proIndex,index)"></image>
 						<view class="delete" @tap="removeImage(proIndex,index)">
@@ -30,7 +30,7 @@
 					<view @click="chooseImg(proIndex)" class="m-img-item">
 						<view class="m-img-but"></view>
 					</view>
-				</view>
+				</view> -->
 			</view>
 			<view class="m-footer">
 				是否匿名 <switch type="checkbox" style="margin-left: 20upx;" @change="switchChange($event,proIndex)" />
@@ -247,6 +247,7 @@
 					}
 					console.log("评价的内容",formData)
 					if((this.imgsUrl[index])&&this.imgsUrl[index].length>0){
+						const funArr = [];
 						const arr = this.imgsUrl[index].forEach(path => {
 							let sendData = {
 							  url: _this.apiurl+"/server/o/commentOn",
@@ -258,9 +259,10 @@
 							  formData:formData,
 							  name: 'file',
 							}
-							return uni.uploadFile({...sendData})
+							let tFun = uni.uploadFile({...sendData})
+							funArr.push(tFun)
 						})
-						Promise.all(arr).then(res => {
+						Promise.all(funArr).then(res => {
 							  //上传成功
 							uni.showModal({
 							  	title: '评论成功',

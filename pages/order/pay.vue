@@ -184,6 +184,7 @@
 	  fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));   
 	  return fmt;   
 	}
+	var date = new Date();
 	import mMap from '@/components/m-map'
 	import mOrderPro from '@/components/m-order-pro'
 	import ruiDatePicker from '@/components/rattenking-dtpicker/rattenking-dtpicker.vue';
@@ -229,6 +230,8 @@
 				// 优惠券end
 				date: "选择日期",
 				time: "选择时间",
+				startDate:dateFtt("yyyy-MM-dd hh:mm",new Date()),
+				endDate:"",
 				pickType:1,
 				addressInfo:undefined,
 				proUrlData:undefined,

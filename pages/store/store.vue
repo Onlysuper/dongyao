@@ -439,24 +439,23 @@
 			// 加入购物车
 			async addGoodSum (_data,num=1,type){
 				let _id = _data.id;
-				let data= this.productList.find(item=>item.id==_id);
+				// let data= this.productList.find(item=>item.id==_id);
 				let _this=this;
 				let buyCount=num;
 				let objIndex = this.shopCarList.findIndex(item=>item.id==_id);
 				if(objIndex!=-1 && type=='change'){
-					console.log()
 					buyCount=this.shopCarList.find(item=>item.id==_id)['buyCount']+1;
 				}
-				if(buyCount>data.stock){
-					uni.showToast({
-						title:  "库存不足",
-						icon: "none"
-					});
-					buyCount=data.stock;
-				}
+				// if(buyCount>data.stock){
+				// 	uni.showToast({
+				// 		title:  "库存不足",
+				// 		icon: "none"
+				// 	});
+				// 	buyCount=data.stock;
+				// }
 				let postAddCars = await _this.$apis.postAddCars({
-					storeId:data.storeId,
-					productId:data.id,
+					storeId:_this.storeid,
+					productId:_data.id,
 					buyCount:buyCount
 				})
 				if(postAddCars.code=='1'){
@@ -468,21 +467,21 @@
 				let _this=this;
 				let buyCount=num;
 				let _id = _data.id;
-				let data= this.productList.find(item=>item.id==_id);
+				// let data= this.productList.find(item=>item.id==_id);
 				let objIndex = this.shopCarList.findIndex(item=>item.id==_id);
 				if(objIndex!=-1 && type=='change'){
 					buyCount=this.shopCarList.find(item=>item.id==_id)['buyCount']-1;
 				}
-				if(buyCount>data.stock){
-					uni.showToast({
-						title:  "库存不足",
-						icon: "none"
-					});
-					buyCount=data.stock;
-				}
+				// if(buyCount>data.stock){
+				// 	uni.showToast({
+				// 		title:  "库存不足",
+				// 		icon: "none"
+				// 	});
+				// 	buyCount=data.stock;
+				// }
 				await _this.$apis.postSubCars({
-					storeId:data.storeId,
-					productId:data.id,
+					storeId:_this.storeid,
+					productId:_data.id,
 					buyCount:buyCount
 				}).then(res=>{
 						_this.showShopCar();
