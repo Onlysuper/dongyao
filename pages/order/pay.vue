@@ -245,12 +245,12 @@
 			}
 		},
 		methods:{ 
-			startDate() {
-				return this.getDate('start');
-			},
-			endDate() {
-				return this.getDate('end');
-			},
+			// startDate() {
+			// 	return this.getDate('start');
+			// },
+			// endDate() {
+			// 	return this.getDate('end');
+			// },
 			 bindDateChange: function(e) {
 				this.date = e.target.value;
 				this.showBtn = 2;
