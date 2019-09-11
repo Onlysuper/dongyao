@@ -52,7 +52,7 @@
 			<view class="m-header" style="background: url('https://dongyaoxiaoxiaochegnxu.oss-cn-beijing.aliyuncs.com/jincai.jpg') center;">
 				<view  style="font-weight: bold;color: #228B22;">还原自然味道</view>
 				<view class="text-small" style="color: #228B22;" @tap="nextNexList">
-					<view class="text-btn">换一换</view>
+					<view class="text-btn" style="border: 0.5px solid #228B22;">换一换</view>
 				</view>
 			</view>
 			<view v-if="jcProList.length > 0" class="m-content .m-chaozhi">
