@@ -230,7 +230,7 @@
 				// 优惠券end
 				date: "选择日期",
 				time: "选择时间",
-				startDate:dateFtt("yyyy-MM-dd hh:mm",new Date()),
+				startDate:dateFtt("yyyy-MM-dd",new Date()),
 				endDate:"",
 				pickType:1,
 				addressInfo:undefined,
