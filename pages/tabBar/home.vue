@@ -203,19 +203,24 @@ export default {
 			this.$apis
 				.postJCProduct({
 					start: page,
-					length: 20,
+					length: 5,
 					lng:_this.myLng,
 					lat:_this.myLat
 				})
 				.then(res => {
 					if (res.data) {
 						let data = res.data;
-						this.jcProList = this.jcProList.concat(data.list);
+						this.jcProList = data.list;
 						this.jcsellPage = data.nextPage;
-						if(data.nextPage == data.page){
-							this.jcsellPage = 1;
-							this.jcProList=[];
-						}
+						
+						//滑动分页开始
+						// this.jcProList = this.jcProList.concat(data.list);
+						// this.jcsellPage = data.nextPage;
+						// if(data.nextPage == data.page){
+						// 	this.jcsellPage = 1;
+						// 	this.jcProList=[];
+						// }
+						//滑动分页结束
 					}
 					 uni.hideLoading();
 				})
