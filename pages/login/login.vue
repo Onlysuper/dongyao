@@ -9,7 +9,7 @@
 		</view>
 		<view class="m-but">
 			<!-- #ifdef MP-WEIXIN -->  
-			<button :disabled="!needAllow" type="primary" open-type="getUserInfo" @getuserinfo="getuserinfo" withCredentials="true">授权</button>
+			<button :disabled="!needAllow" type="primary" open-type="getUserInfo" @getuserinfo="getuserinfo" withCredentials="true">登录</button>
 			<!-- <button @tap="goback" style="margin-top: 20upx;">取消</button> -->
 			<!-- #endif -->  
 			
@@ -59,7 +59,7 @@
 									uni.setStorageSync('userData', JSON.stringify(saveData.userInfo));
 									uni.setStorageSync('phone',  saveData.userInfo.mobile);
 									uni.showToast({
-										title: "授权成功",
+										title: "登录成功",
 										icon: "none"
 									});
 									setTimeout(()=>{
