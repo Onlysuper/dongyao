@@ -70,7 +70,7 @@
 			<view class="m-header" style="background: url('https://dongyaoxiaoxiaochegnxu.oss-cn-beijing.aliyuncs.com/css/home_list_bg.png') center;justify-content: flex-start;">
 				<view  style="font-weight: bold;">时令优品预选</view>
 				|
-				<view class="text-small">地理标识 应季水果产地直供到家</view>
+				<view class="text-small">地理标识产品  产地直供到家</view>
 			</view>
 			<view class="m-container">
 				<view class="m-together">
