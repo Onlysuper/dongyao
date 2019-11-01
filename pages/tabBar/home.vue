@@ -3,20 +3,31 @@
 		<!-- 状态栏 -->
 		<view class="status" :style="{ position: headerPosition, top: statusTop, opacity: afterHeaderOpacity }"></view>
 		<!-- 顶部导航栏 -->
-		<view class="header" :style="{ position: headerPosition, top: headerTop, opacity: afterHeaderOpacity }">
+		<view class="header header-nv" :style="{ position: headerPosition, top: headerTop, opacity: afterHeaderOpacity }">
 			<!-- 定位城市 -->
-			<view class="addr" @tap="choseStore">
-				<view class="icon"><image style="width:100%;height:100%" src="../../static/img/icon/home_icon_gps.png" mode="aspectFit"></image></view>
-				请选择门店
+			<view class="addr" @tap="chooseLocation">
+				<!-- <view class="icon"><image style="width:100%;height:100%" src="../../static/img/icon/home_icon_gps.png" mode="aspectFit"></image></view> -->
+				<uni-icons type="location" size="22"></uni-icons>
+				<text style="text-overflow: ellipsis;white-space: nowrap; overflow: hidden;">{{addressName}}</text>
+				<view class="top"></view>
 			</view>
-			<!-- 搜索框 -->
-			<view class="input-box">
-				<input v-model="searchValue" placeholder="默认关键字" placeholder-style="color:#c0c0c0;" />
-				<image @tap="toSearch()" class="icon" style="width:13px;height:100%" src="../../static/img/icon/home_icon_search.png" mode="aspectFit"></image>
+			<view class="store" @tap="choseStore">
+				<!-- <view class="icon"><image style="width:100%;height:100%" src="../../static/img/icon/home_icon_gps.png" mode="aspectFit"></image></view> -->
+				当前门店:{{storeName}}
+				<view class="top" style="margin-top: 10upx;"></view>
 			</view>
+			
 		</view>
 		<!-- 占位 -->
 		<view class="place"></view>
+		<!-- 搜索框 -->
+		<view class="input-main">
+			<view class="input-box">
+				<input style="width: 100%;" v-model="searchValue" placeholder="默认关键字" placeholder-style="color:#c0c0c0;" />
+				<!-- <image @tap="toSearch()" class="icon" style="width:13px;height:360upx;" src="../../static/img/icon/home_icon_search.png" mode="aspectFit"></image> -->
+				<uni-icons type="search" @tap="toSearch()" size="22"></uni-icons>
+			</view>
+		</view>
 		<!-- 轮播图 -->
 		<view class="swiper-box">
 			<uni-swiper-dot :info="swiperList" :current="current" field="content" :mode="mode">
@@ -49,14 +60,17 @@
 		</view>
 		<!-- 净菜购买 -->
 		<view class="m-container new-pin">
-			<view class="m-header" style="background: url('https://dongyaoxiaoxiaochegnxu.oss-cn-beijing.aliyuncs.com/jincai.jpg') center;">
+			<!-- <view class="m-header" style="background: url('https://dongyaoxiaoxiaochegnxu.oss-cn-beijing.aliyuncs.com/jincai.jpg') center;"> -->
+			<view class="m-header header-jcai">
 				<view  style="font-weight: bold;color: #228B22;">还原自然味道</view>
-				<view class="text-small" style="color: #228B22;" @tap="nextNexList">
-					<view class="text-btn" style="border: 0.5px solid #228B22;">换一换</view>
+				<view class="text-small" style="color: #2F4F4F;">
+					<!-- <view class="text-btn" style="border: 0.5px solid #228B22;">换一换</view> -->
+					<view style="padding: 5px 10px;" >更多 >
+					</view>
 				</view>
 			</view>
 			<view v-if="jcProList.length > 0" class="m-content .m-chaozhi">
-				<scroll-view class="scroll-view" scroll-x="true" @scrolltolower="">
+				<scroll-view class="scroll-view" scroll-x="true" @scrolltolower="nextNexList()">
 					<view class="m-togethoer">
 						<template v-for="(item, index) in jcProList">
 							<m-home-hotpro @handleFn="hotProDetail(item)" :key="index" :rowData="item"></m-home-hotpro>
@@ -66,13 +80,26 @@
 			</view>
 			<view v-else class="empty-row">~暂无商品~</view>
 		</view>
+		<view class="m-container-center">
+			<view class="item item-left" >
+				<view class="" style="font-size: 30upx;;color: #663366;">限时抢券</view>
+				<view class="" style="font-size: 34upx; font-weight: 600;color: #663366;margin-top:8upx;">满169减50神券</view>
+				<view style="margin-top:15upx;">限量领 ></view>
+			</view>
+			<view class="item item-right" >
+				<view class="" style="font-size: 30upx;;color: #8B4513;">今日特价</view>
+				<view class="" style="font-size: 34upx; font-weight: 600;color: #8B4513;margin-top:8upx;">食材特惠，抓紧抢购</view>
+				<view style="margin-top:15upx;">立即抢购 ></view>
+			</view>
+		</view>
 		<view class="m-container new-pin">
-			<view class="m-header" style="background: url('https://dongyaoxiaoxiaochegnxu.oss-cn-beijing.aliyuncs.com/css/home_list_bg.png') center;justify-content: flex-start;">
+			<!-- <view class="m-header" style="background: url('https://dongyaoxiaoxiaochegnxu.oss-cn-beijing.aliyuncs.com/css/home_list_bg.png') center;justify-content: flex-start;"> -->
+				<view class="m-header header-pintuan" style="">
 				<view  style="font-weight: bold;">时令优品预选</view>
 				|
 				<view class="text-small">地理标识产品  产地直供到家</view>
 			</view>
-			<view class="m-container">
+			<view class="m-container" v-if="jcProList.length > 0">
 				<view class="m-together">
 					<template v-for="(item, index) in groupsellList">
 						<m-home-pro @handleFn="groupProDetail(item)" :key="index" :rowData="item"></m-home-pro>
@@ -87,19 +114,19 @@
 					<image style="width: 40upx;height: 40upx;" src="/static/img/home_icon_down1.png" mode="aspectFull"></image>
 				</view>
 			</view>
+			<view v-else class="empty-row">~暂无拼团商品~</view>
 		</view>
 		<!-- 超值热卖 -->
 		<view class="m-container new-pin">
-			<!-- <m-title title="极致好货抢先购" labelColor="#666666" label="换一换" @titleHandle="getHotsellList">
+			<m-title title="极致好货抢先购" labelColor="#666666" label="换一换" @titleHandle="getHotsellList">
 				<image style="width:30upx;height:20upx;margin-right:10upx;" src="../../static/img/icon/home_icon_refresh.png" mode="aspectFit"></image>
-			</m-title> -->
-			<view class="m-header" style="background: url('https://dongyaoxiaoxiaochegnxu.oss-cn-beijing.aliyuncs.com/chaozhi.jpg') center;">
+			</m-title>
+			<!-- <view class="m-header" style="background: url('https://dongyaoxiaoxiaochegnxu.oss-cn-beijing.aliyuncs.com/chaozhi.jpg') center;">
 				<view  style="font-weight: bold;color:#8A2BE2;">极致好货抢先购</view>
-				<!-- | -->
 				<view class="text-small" style="color: #8A2BE2;" @tap="getHotsellList">
 					<view class="text-btn">换一换</view>
 				</view>
-			</view>
+			</view> -->
 			<view v-if="hotProList.length > 0" class="m-content m-hotsell">
 				<template v-for="(item, index) in hotProList">
 					<m-home-jinmai @handleFn="hotProDetail(item)" :key="index" :rowData="item"></m-home-jinmai>
@@ -127,6 +154,8 @@ import mHomeHotpro from '@/components/m-home-hotpro';
 import mHomeJinmai from '@/components/m-home-jinmai';
 import mHomeStore from '@/components/m-home-store';
 import mSwiper from '@/components/m-swiper/m-swiper.vue';
+import amap from '../../common/amap-wx.js';  
+import uniIcons from "@/components/uni-icon/uni-icon.vue"
 export default {
 	data() {
 		return {
@@ -150,9 +179,23 @@ export default {
 			// 附近门店
 			nearStoreList: [],
 			pintuanData:{},
+			searchValue:"",
 			myLat:"",
-			myLng:""
+			myLng:"",
+			amapPlugin: null,  
+			key: '3b083182f608fc7ea5739e570d2b00f9',
+			addressName: '正在获取位置...',
+			storeName:'正在获取门店名称...'
 		};
+	},
+	filters:{
+		addressNameTemp(value){
+			if (!value) return '';
+			if (value.length > 18) {
+				return value.slice(0,18) + '...'
+			}
+			return value
+		}
 	},
 	components: {
 		uniSwiperDot,
@@ -160,7 +203,8 @@ export default {
 		mHomePro,
 		mHomeHotpro,
 		mHomeStore,
-		mHomeJinmai
+		mHomeJinmai,
+		uniIcons
 	},
 	methods: {
 		change(e) {
@@ -210,16 +254,15 @@ export default {
 				.then(res => {
 					if (res.data) {
 						let data = res.data;
-						this.jcProList = data.list;
-						this.jcsellPage = data.nextPage;
-						
-						//滑动分页开始
-						// this.jcProList = this.jcProList.concat(data.list);
+						// this.jcProList = data.list;
 						// this.jcsellPage = data.nextPage;
-						// if(data.nextPage == data.page){
-						// 	this.jcsellPage = 1;
-						// 	this.jcProList=[];
-						// }
+						//滑动分页开始
+						this.jcProList = this.jcProList.concat(data.list);
+						this.jcsellPage = data.nextPage;
+						if(data.nextPage == data.page){
+							this.jcsellPage = 1;
+							this.jcProList=[];
+						}
 						//滑动分页结束
 					}
 					 uni.hideLoading();
@@ -300,9 +343,20 @@ export default {
 					lat: lat || 39.762155
 				})
 				.then(res => {
-					if (res.data) {
+					if (res.data && res.data.length) {
 						let data = res.data;
 						_this.nearStoreList = data;
+						_this.storeName = data[0].name;
+					}else{
+						uni.showModal({
+						    title: '提示',
+						    content: '当前区域暂未开放服务,选择其他门店~',
+						    success: function (res) {
+						        if (res.confirm) {
+									_this.linkTo('/pages/store/list');
+						        }
+						    }
+						});
 					}
 				})
 				.catch(err => {
@@ -353,7 +407,34 @@ export default {
 					url: '/pages/login/login'
 				});
 			}
-		}
+		},
+		getRegeo() {  
+			this.amapPlugin.getRegeo({  
+				success: (data) => {
+					console.log(data)  
+					this.addressName = data[0].name+"("+data[0].desc+")";  
+				}  
+			});  
+		}, 
+		chooseLocation(){
+			var _this = this;
+			// this.linkTo('/pages/address/choosemap');
+			uni.chooseLocation({
+			    success: function (res) {
+					_this.addressName = res.name+"("+res.address+")";
+					_this.getStoreList(res.longitude, res.latitude);
+					_this.myLng = res.longitude;
+					_this.myLat = res.latitude;
+					_this.getHotsellList();
+					_this.getJcsellList(1);
+					_this.getGroupsellList();
+			        console.log('位置名称：' + res.name);
+			        console.log('详细地址：' + res.address);
+			        console.log('纬度：' + res.latitude);
+			        console.log('经度：' + res.longitude);
+			    }
+			});
+		},
 	},
 	onShareAppMessage(res) {
 	    if (res.from === 'button') {// 来自页面内分享按钮
@@ -365,6 +446,9 @@ export default {
 	},
 	onLoad() {
 		let _this = this;
+		this.amapPlugin = new amap.AMapWX({  
+		     key: this.key  
+		});  
 		uni.getLocation({
 			//获取当前的位置坐标
 			type: 'wgs84',
@@ -375,6 +459,7 @@ export default {
 				_this.getHotsellList();
 				_this.getJcsellList(1);
 				_this.getGroupsellList();
+				_this.getRegeo();
 			}
 		});
 		this.getBanners();
@@ -395,17 +480,42 @@ export default {
 <style lang="scss">
 @import '../../common/globel.scss';
 .my-swiper{
-	padding: 20upx;
-	height: 55upx;
-	color: red;
+	padding:10px 20upx;
+	height: 60upx;
+	// color: red;
 	font-size: 28upx;
-	line-height: 80upx;
+	line-height: 60upx;
+	margin: 10upx 20upx;
+	background-color: #F5F5F5;
+	border-radius: 15upx;
 	.m-swiper-content{
 		display: flex;
 		flex-direction: row;
 		.body-box{
 			margin-right: 10upx;
 		}
+	}
+}
+.m-container-center{
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	padding: 20upx;
+	align-items: center;
+	align-content: center;
+	font-size: 24upx;
+	.item{
+		padding: 20upx;
+		width: 44%;
+		background-color: #EEEEEE;
+		border-radius: 15upx;
+		
+	}
+	.item-left{
+		background: linear-gradient(to right, #E6E6FA 0%, #FFF 100%);
+	}
+	.item-right{
+		background: linear-gradient(to right, #FFEFD5 0%, #FFF 100%);
 	}
 }
 .new-pin {
@@ -419,11 +529,13 @@ export default {
 		flex-direction: row;
 		color: #fff;
 		// background:url('~@static/img/home_list_bg1.png') center;
-		// background:#3c3c3c;
+		background:#3c3c3c;
 		background-size: cover;
 		align-items: center;
 		justify-content: space-between;
+		//background: linear-gradient(to bottom, #000000 0%,#ffffff 100%);
 		// padding: 20upx;
+		
 		view {
 			padding: 20upx;
 		}
@@ -437,6 +549,14 @@ export default {
 			}
 		}
 	}
+	.header-jcai{
+		background: linear-gradient(to left, #98F898 0%, #F0FFF0 100%);
+	}
+	.header-pintuan{
+		background-color:#4CD964;
+		justify-content: flex-start;
+	}
+	
 	.m-container {
 		display: flex;
 		flex-direction: row;
@@ -446,7 +566,7 @@ export default {
 			flex-direction: row;
 		}
 		.m-operation {
-			flex: 0 0 180rpx;
+			flex: 0 0 140rpx;
 			text-align: center;
 			font-weight: bold;
 			font-size: 32upx;
@@ -457,7 +577,7 @@ export default {
 			align-items: center;
 			justify-content: center;
 			position: relative;
-			margin-left: 30upx;
+			// margin-left: 30upx;
 			&:after {
 				content: '';
 				display: block;
@@ -581,16 +701,30 @@ export default {
 	/*  #ifdef  APP-PLUS  */
 	top: var(--status-bar-height);
 	/*  #endif  */
-
-	.addr {
+	.store{
 		margin-right: 20upx;
-		// width: 120upx;
-		height: 60upx;
 		flex-shrink: 0;
 		display: flex;
+		font-size: 30upx;
+		// font-weight: 600;
+		color: #003300;
+		margin-top: 20upx;
+		border-radius: 15upx;
+		padding: 8upx 20upx;
+		background-color: #009966;
+		
+	}
+	.addr {
+		// margin-right: 20upx;
+		// width: 120upx;
+		// height: 60upx;
+		flex-shrink: 0;
+		display: flex;
+		font-size: 36upx;
+		// font-weight: 600;
+		color: #003300;
 		align-items: center;
-		font-size: 26upx;
-		color: #4c4c4c;
+		width: 98%;
 		.icon {
 			height: 35upx;
 			margin-right: 5upx;
@@ -600,15 +734,20 @@ export default {
 			color: #6aba4e;
 		}
 	}
+	
+}
+.input-main{
+	background: #4EB87D;
+	padding: 20upx 20upx;
 	.input-box {
-		width: 100%;
-		height: 60upx;
+		width: 98%;
+		// height: 60upx;
 		background-color: #f5f5f5;
 		border-radius: 30upx;
-		position: relative;
+		// position: relative;
+		padding-right: 10upx;
 		display: flex;
 		align-items: center;
-
 		.icon {
 			display: flex;
 			align-items: center;
@@ -619,17 +758,37 @@ export default {
 			height: 60upx;
 			font-size: 34upx;
 			color: #c0c0c0;
+			
 		}
 		input {
 			padding-left: 28upx;
-			height: 28upx;
+			height: 60upx;
 			font-size: 28upx;
 		}
 	}
 }
+
+.header-nv{
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: flex-start;
+	align-content: center;
+	background: #4EB87D;
+	height: 130upx;
+	.top {
+		display: inline-block;
+		width: 12upx;
+		height: 12upx;
+		border-top: 1upx solid #003300;
+		border-right: 1upx solid #003300;
+		transform: rotate(135deg);
+		margin-left: 15upx;
+		margin-top: -8upx;
+	}
+}
 .place {
-	background-color: #ffffff;
-	height: 100upx;
+	background: #4EB87D;
+	height: 130upx;
 	/*  #ifdef  APP-PLUS  */
 	margin-top: var(--status-bar-height);
 	/*  #endif  */
@@ -705,7 +864,7 @@ export default {
 				height: 40upx;
 				display: flex;
 				align-items: center;
-				margin-bottom: 5upx;
+				margin-bottom: 8upx;
 				.title {
 					font-size: 30upx;
 				}
@@ -839,7 +998,7 @@ export default {
 	margin-left: 2%;
 	padding-top: 0;
 	box-sizing: border-box;
-	padding: 20upx;
+	padding: 10upx;
 	// 净
 	&.m-hotsell {
 		display: flex;
@@ -863,9 +1022,10 @@ export default {
 		flex-wrap: wrap;
 		flex-direction: row;
 		// background: #f5f5f5;
-		justify-content: space-between;
-		align-items: center;
-		padding:20upx 0upx;
+		justify-content: flex-start;
+		margin-left: 0upx;
+		// align-items: center;
+		// padding:20upx 0upx;
 		padding-top: 0upx;
 	}
 	// 	&.m-today-pin{

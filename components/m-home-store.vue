@@ -13,7 +13,7 @@
 					{{item}}
 				</view>
 				<slot name="tip"></slot>
-				{{rowData.describel}}
+				{{rowData.notice}}
 			</view>
 			<view class="m-address">
 				{{rowData.address}}

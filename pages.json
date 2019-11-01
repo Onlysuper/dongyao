@@ -9,8 +9,9 @@
                 "navigationBarTextStyle" : "black",
                 "enablePullDownRefresh" : false,
                 "onReachBottomDistance" : 50,
+				"navigationBarBackgroundColor":"#4EB87D",
                 "app-plus" : {
-                    "titleNView" : false, //禁用原生导航栏
+                    "titleNView" : true, //禁用原生导航栏
                     "softinputNavBar" : "none"
                 }
 				
@@ -22,6 +23,7 @@
             "style" : {
                 "navigationBarTitleText" : "商家",
                 "navigationBarTextStyle" : "black",
+				"navigationBarBackgroundColor":"#4EB87D",
                 "app-plus" : {
                     "titleNView" : false, //禁用原生导航栏
                     "bounce" : "none"
@@ -35,6 +37,7 @@
                 "navigationBarTextStyle" : "black",
                 "enablePullDownRefresh" : false,
                 "onReachBottomDistance" : 50,
+				"navigationBarBackgroundColor":"#4EB87D",
                 "app-plus" : {
                     "titleNView" : false, //禁用原生导航栏
                     "softinputNavBar" : "none"
@@ -47,6 +50,7 @@
             "style" : {
                 "navigationBarTitleText" : "商家",
                 "navigationBarTextStyle" : "black",
+				"navigationBarBackgroundColor":"#4EB87D",
                 "app-plus" : {
                     "titleNView" : false, //禁用原生导航栏
                     "bounce" : "none"
@@ -59,6 +63,7 @@
             "style" : {
                 "navigationBarTitleText" : "商品",
                 "navigationBarTextStyle" : "black",
+				"navigationBarBackgroundColor":"#4EB87D",
                 "app-plus" : {
                     "titleNView" : false, //禁用原生导航栏
                     "bounce" : "none"
@@ -73,6 +78,7 @@
                 "navigationBarTextStyle" : "black",
                 "enablePullDownRefresh" : true,
                 "onReachBottomDistance" : 50,
+				"navigationBarBackgroundColor":"#4EB87D",
                 "app-plus" : {
                     "titleNView" : false, //禁用原生导航栏
                     "softinputNavBar" : "none"
@@ -87,6 +93,7 @@
                 "navigationBarTextStyle" : "black",
                 "enablePullDownRefresh" : false,
                 "onReachBottomDistance" : 50,
+				"navigationBarBackgroundColor":"#4EB87D",
                 "app-plus" : {
                     "titleNView" : false, //禁用原生导航栏
                     "softinputNavBar" : "none"
@@ -98,6 +105,7 @@
             "path" : "pages/groupbuy/groupbuy",
             "style" : {
                 "navigationBarTitleText" : "商品拼团",
+				"navigationBarBackgroundColor":"#4EB87D",
                 "app-plus" : {
                     "titleNView" : false, //禁用原生导航栏
                     "softinputNavBar" : "none"
@@ -108,6 +116,7 @@
             "path" : "pages/product/productlist",
             "style" : {
                 "navigationBarTitleText" : "商品",
+				"navigationBarBackgroundColor":"#4EB87D",
                 "app-plus" : {
                     "titleNView" : false, //禁用原生导航栏
                     "softinputNavBar" : "none"
@@ -119,6 +128,7 @@
             "path" : "pages/user/tokencard",
             "style" : {
                 "navigationBarTitleText" : "我的优惠券",
+				"navigationBarBackgroundColor":"#4EB87D",
                 "app-plus" : {
                     "titleNView" : false, //禁用原生导航栏
                     "softinputNavBar" : "none"
@@ -130,6 +140,7 @@
             "path" : "pages/user/aboutme",
             "style" : {
                 "navigationBarTitleText" : "关于我们",
+				"navigationBarBackgroundColor":"#4EB87D",
                 "app-plus" : {
                     "titleNView" : false, //禁用原生导航栏
                     "softinputNavBar" : "none"
@@ -141,6 +152,7 @@
             "path" : "pages/user/vip",
             "style" : {
                 "navigationBarTitleText" : "会员中心",
+				"navigationBarBackgroundColor":"#4EB87D",
                 "app-plus" : {
                     "titleNView" : false, //禁用原生导航栏
                     "softinputNavBar" : "none"
@@ -152,6 +164,7 @@
             "path" : "pages/empty/empty",
             "style" : {
                 "navigationBarTitleText" : "请求出错",
+				
                 "app-plus" : {
                     "titleNView" : false, //禁用原生导航栏
                     "softinputNavBar" : "none"
@@ -183,6 +196,7 @@
             "path" : "pages/order/pay",
             "style" : {
                 "navigationBarTitleText" : "千畦优品",
+				"navigationBarBackgroundColor":"#4EB87D",
                 "app-plus" : {
                     "titleNView" : false, //禁用原生导航栏
                     "softinputNavBar" : "none"
@@ -199,6 +213,7 @@
 		    "path" : "pages/order/tokens",
 		    "style" : {
 		        "navigationBarTitleText" : "我的优惠券",
+				"navigationBarBackgroundColor":"#4EB87D",
 		        "app-plus" : {
 		            "titleNView" : false, //禁用原生导航栏
 		            "softinputNavBar" : "none"
@@ -210,6 +225,7 @@
             "path" : "pages/order/order",
             "style" : {
                 "navigationBarTitleText" : "订单详情",
+				"navigationBarBackgroundColor":"#4EB87D",
                 "app-plus" : {
                     "titleNView" : false, //禁用原生导航栏
                     "softinputNavBar" : "none"
@@ -220,6 +236,7 @@
 		    "path" : "pages/order/comment",
 		    "style" : {
 		        "navigationBarTitleText" : "我要评论",
+				"navigationBarBackgroundColor":"#4EB87D",
 		        "app-plus" : {
 		            "titleNView" : false, //禁用原生导航栏
 		            "softinputNavBar" : "none"
@@ -230,6 +247,7 @@
             "path" : "pages/login/login",
             "style" : {
                 "navigationBarTitleText" : "千畦优品",
+				"navigationBarBackgroundColor":"#4EB87D",
                 "app-plus" : {
                     "titleNView" : false, //禁用原生导航栏
                     "softinputNavBar" : "none"
@@ -240,6 +258,7 @@
 		    "path" : "pages/login/register",
 		    "style" : {
 		        "navigationBarTitleText" : "千畦优品",
+				"navigationBarBackgroundColor":"#4EB87D",
 		        "app-plus" : {
 		            "titleNView" : false, //禁用原生导航栏
 		            "softinputNavBar" : "none"
@@ -250,6 +269,7 @@
             "path" : "pages/address/list",
             "style" : {
 				"navigationBarTitleText" : "收获地址",
+				"navigationBarBackgroundColor":"#4EB87D",
 				"app-plus" : {
 				    "titleNView" : false, //禁用原生导航栏
 				    "softinputNavBar" : "none"
@@ -260,6 +280,7 @@
             "path" : "pages/address/edit",
             "style" : {
 				"navigationBarTitleText" : "编辑收获地址",
+				"navigationBarBackgroundColor":"#4EB87D",
 				"app-plus" : {
 				    "titleNView" : false, //禁用原生导航栏
 				    "softinputNavBar" : "none"
@@ -270,6 +291,7 @@
             "path" : "pages/user/edit",
              "style" : {
             	"navigationBarTitleText" : "编辑",
+				"navigationBarBackgroundColor":"#4EB87D",
             	"app-plus" : {
             	    "titleNView" : false, //禁用原生导航栏
             	    "softinputNavBar" : "none"
@@ -280,6 +302,7 @@
             "path" : "pages/user/score_detail",
             "style" : {
             	"navigationBarTitleText" : "积分明细",
+				"navigationBarBackgroundColor":"#4EB87D",
             	"app-plus" : {
             	    "titleNView" : false, //禁用原生导航栏
             	    "softinputNavBar" : "none"
@@ -293,6 +316,16 @@
         ,{
             "path" : "pages/order/return_explain",
             "style" : {}
+        },{
+            "path" : "pages/address/choosemap",
+            "style" : {
+            	"navigationBarTitleText" : "地址选择",
+            	"navigationBarBackgroundColor":"#4EB87D",
+            	"app-plus" : {
+            	    "titleNView" : false, //禁用原生导航栏
+            	    "softinputNavBar" : "none"
+            	}
+            }
         }
     ],
     // 	"globalStyle": {
@@ -321,18 +354,18 @@
                 "selectedIconPath" : "static/img/tabBar/home-on.png",
                 "text" : "首页"
             },
+			{
+			    "pagePath" : "pages/tabBar/buy_cart",
+			    "iconPath" : "static/img/tabBar/buy_cart.png",
+			    "selectedIconPath" : "static/img/tabBar/buy_cart_select.png",
+			    "text" : "购物车"
+			},
             {
                 "pagePath" : "pages/tabBar/order",
                 "iconPath" : "static/img/tabBar/order.png",
                 "selectedIconPath" : "static/img/tabBar/order-on.png",
 				"onReachBottomDistance" : 100,
                 "text" : "订单"
-            },
-            {
-                "pagePath" : "pages/tabBar/buy_cart",
-                "iconPath" : "static/img/tabBar/buy_cart.png",
-                "selectedIconPath" : "static/img/tabBar/buy_cart_select.png",
-                "text" : "购物车"
             },
             {
                 "pagePath" : "pages/tabBar/user",

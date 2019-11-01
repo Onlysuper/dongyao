@@ -3,17 +3,33 @@
 		<m-empty v-if="nearStoreList.length==0"></m-empty>
 		<view v-else class="">
 			<view v-for="(item,index) in nearStoreList" @click="goPro(item.id)" :key="index">
-				<view class="m-page-title">
-					{{item.sName}}
+				<view class="m-store-main">
+					<view class="left">
+						<image :src="item.imgUrl" style="width:120upx;height: 90upx;" mode="aspectFill"></image>
+					</view>
+					<view class="center">
+						<view class="text_title">{{item.name}}</view>
+						<view class="text_addr">{{item.address}}</view>
+						<!-- {{item.sName}} -->
+					</view>
+					<view class="right"  v-if="rowData.fencingRange > 500">
+						{{rowData.fencingRange/1000}}km
+					</view>
+					<view class="right" v-else>
+						附近
+					</view>
 				</view>
-				<m-product-list 
-				:title="item.synopsis" 
-				:labelName="item.labelName" 
-				:img="item.pictureUrl" 
-				:price="item.presentPrice" 
-				:oldprice="item.originalPrice"
-				:isAssemble="item.isAssemble"
-				></m-product-list>
+				<template v-for="(product, pIndex) in item.products">
+					<m-product-list 
+					:key="pIndex"
+					:title="product.synopsis" 
+					:labelName="product.labelName" 
+					:img="product.pictureUrl" 
+					:price="product.presentPrice" 
+					:oldprice="product.originalPrice"
+					:isAssemble="product.isAssemble"
+					></m-product-list>
+				</template>
 			</view>
 		</view>
 		 <uni-load-more :status="mloading"></uni-load-more> 
@@ -49,17 +65,21 @@
 			},
 			getProducts(){
 				let _this = this;
-				uni.showLoading({});
+				uni.showLoading({
+					title:"加载中..."
+				});
 				if(totalpage&&page > totalpage){
 					_this.mloading='noMore';
 					uni.hideLoading();
 					uni.stopPullDownRefresh();
 					return ;
 				}
-				this.$apis.postSearchProducts({
+				this.$apis.postSearchProductsHome({
 					start:page,
 					length:20,
 					name:_this.search,
+					lat:"116.342737",
+					lng:"39.868725"
 				}).then(res=>{
 					let data = res.data;
 					if(data.list){
@@ -100,15 +120,44 @@
 	@import "../../common/globel.scss";
 	.m-product-list{
 		// padding: 30upx;
-		.m-page-title{
+		.m-store-main{
 			margin-top: 28upx;
 			// margin-bottom: 30upx;
 			margin-left: 40upx;
 			margin-right: 40upx;
-			border-bottom: 1px solid #ebebeb;
+			// border-bottom: 1px solid #ebebeb;
 			padding:34upx 0;
 			font-size: $fontsize-2;
 			color:#333333;
+			display:flex;
+			flex-direction: row;
+			justify-content: space-between;
+			align-items: center;
+			align-content: center;
+			.left{
+				width: 20%;
+			}
+			.center{
+				flex-grow: 1;
+				display:flex;
+				flex-direction: column;
+				justify-content: flex-start;
+				.text_title{
+					font-size: 34upx;
+					font-weight: 600;
+					color: #4D4D4D;
+					margin-bottom: 20upx;
+				}
+				.text_addr{
+					font-size: 26upx;
+					color: #4D4D4D;
+				}
+			}
+			.right{
+				font-size: 22upx;
+				width: 8%;
+				color: #3F536E;
+			}
 		}
 	}
 </style>

@@ -63,8 +63,11 @@ export const postComments = (data) => http.POST(`${baseUrl}/server/c/comments`, 
 // 好评度
 export const postDegree = (data) => http.POST(`${baseUrl}/server/c/praise/degree`, data);
 
-// 搜索商品
+// 搜索查询
 export const postSearchProducts= (data) => http.POST(`${baseUrl}/server/p/search/products`, data);
+
+// (首页)搜索商品
+export const postSearchProductsHome= (data) => http.POST(`${baseUrl}/server/p/home/search/products`, data);
 
 // 附近门店
 export const postSelectStores= (data) => http.POST(`${baseUrl}/server/s/select/stores`, data);

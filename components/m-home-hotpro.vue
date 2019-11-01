@@ -12,7 +12,6 @@
 				</view>
 				<view class="m-price">
 					<view class="new">￥{{rowData.presentPrice}}</view>
-					<!-- <view class="old">{{rowData.originalPrice}}</view> -->
 				</view>
 			</view>
 		</view>
@@ -57,7 +56,7 @@
 	
 	box-sizing: border-box;
 	border-radius: 12upx;
-	flex:0 0 225upx;
+	flex:0 0 235upx;
 	margin-top: 2px;
 	box-sizing: border-box;
 	position: relative;
@@ -68,14 +67,15 @@
 	.m-content{
 		position: relative;
 		z-index: 10;
-		width: 100%;
-		padding: 20upx 10upx; 
-		// height: 225upx;
+		width: 200upx;
+		padding: 10upx 10upx; 
+		height: 340upx;
+		background-color: #EEEEEE;
 		.m-pro-back{
 			width: 91%;
 			height: 100upx;
 			opacity: 0.3;
-			background-color: #000000;
+			background-color: #CCC;
 			position: absolute;
 			z-index: 11;
 			bottom: 20upx;
@@ -86,7 +86,7 @@
 			position: absolute;
 			z-index: 12;
 			bottom: 20upx;
-			color: #FFFFFF;
+			// color: #FFFFFF;
 			padding: 15upx;
 		}
 	}
@@ -106,8 +106,8 @@
 	// }
 	.m-img{
 		box-sizing: border-box;
-		flex:0 0 235upx;
-		height: 235upx;
+		flex:0 0 225upx;
+		height: 225upx;
 		image{
 			border-radius: 12upx;
 		}
@@ -129,9 +129,9 @@
 		margin-top: 10upx;
 		justify-content: flex-start;
 		align-items: center;
-		background-color:#242424;
+		background-color:#CCC;
 		border-radius:25upx;
-		opacity: 0.7;
+		// opacity: 0.7;
 		width:85%;
 		.new{
 			font-size: 28upx;

@@ -2,7 +2,7 @@
 	<!-- 门店列表 -->
 	<view class="m-groupbuy-list" @tap="goStore">
 		<view class="m-img">
-			<image style="width: 100%;height: 100%;border-radius: 100%;background: #f5f5f5;" :src="img" mode="aspectFill"></image>
+			<image style="width: 80upx;height:80upx;border-radius: 100%;background: #f5f5f5;" :src="img" mode="aspectFill"></image>
 			<view v-if="isAssemble==1" class="m-pin">
 				可拼团
 			</view>
@@ -14,12 +14,15 @@
 			<view class="m-describe">
 				{{labelName}}
 			</view>
-			<view class="m-price">
-				￥{{price}}
+			<view class="price-box">
+				<view class="m-oldprice">
+					原价￥{{oldprice}}
+				</view>
+				<view class="m-price">
+					￥{{price}}
+				</view>
 			</view>
-			<view class="m-oldprice">
-				原价￥{{oldprice}}
-			</view>
+			
 		</view>
 		<!-- <view class="m-addition">
 			<image style="width:164upx;height:60upx;" src="../../static/img/icon/purchase_button_buy.png" mode="aspectFit"></image>
@@ -78,7 +81,6 @@
 				this.$emit("goStore",{
 					storeid:this.storeid,
 					typeid:this.typeid
-					
 				});
 			}
 		}
@@ -91,17 +93,20 @@
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
-	align-items: flex-end;
-	padding:40upx 20upx 40upx 40upx;
+	align-items: center;
+	align-content: center;
+	// padding:40upx 20upx 40upx 40upx;
 	// border-bottom: 1px solid #ebebeb;
+	margin-bottom: 20upx;
 	&:last-of-type{
 		border: 0px;
 	}
 	.m-img{
-		flex: 0 0 150upx;
-		height: 150upx;
+		// flex: 0 0 150upx;
+		// height: 150upx;
 		overflow: hidden;
 		position: relative;
+		margin-left: 20%;
 		.m-pin{
 			background:#eb5555;
 			color:#fff;
@@ -128,16 +133,24 @@
 			margin-top: 10upx;
 			color:#4c4c4c;
 		}
-		.m-price{
-			color:#ff582b;
-			font-size: $fontsize-9;
-			margin-top:10upx;
-			font-weight: bold;
+		.price-box{
+			display:flex;
+			flex-direction: row;
+			justify-content: flex-start;
+			align-items: center;
+			align-content: center;
+			.m-price{
+				color:#ff582b;
+				font-size: $fontsize-9;
+				font-weight: bold;
+			}
+			.m-oldprice{
+				color:#999;
+				margin-right: 10upx;
+				font-size: $fontsize-5;
+			}
 		}
-		.m-oldprice{
-			color:#999;
-			font-size: $fontsize-5;
-		}
+		
 	}
 }
 </style>
